@@ -1,0 +1,17 @@
+{
+  "name": "reddit-bot",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": ">=6.2.1"
+  },
+  "main": "compile-pages.js",
+  "dependencies": {
+    "deasync": "^0.1.10",
+    "js-yaml": "^3.9.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
