@@ -35,7 +35,7 @@ function getRedditComments() {
   return yaml.safeLoad(content)['data']['children'].map(yaml => {
     const commentData = yaml['data'];
     return {
-      'commentBody': commentData['body'],
+      'commentBody': commentData['body_html'],
       'id': commentData['name']
     }
   });
