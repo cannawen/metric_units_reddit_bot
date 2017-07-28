@@ -1300,7 +1300,7 @@
         "approved_by": null,
         "over_18": false,
         "collapsed": false,
-        "body": "Still kind of lost, can I get a Lotr-based explanation? ",
+        "body": "Still kind of lost, can I get a Lotr-based explanation? 10˚F",
         "link_title": "Escaping Prison with Dungeons &amp; Dragons - All across America hardened criminals are donning the cloaks of elves and slaying dragons all in orange jumpsuits, under blazing fluorescent lights and behind bars (2017)",
         "author_flair_css_class": null,
         "downs": 0,

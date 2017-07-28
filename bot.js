@@ -5,43 +5,50 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 function getRedditComments() {
-  let content = null;
+  // let content = null;
 
-  const url = "https://www.reddit.com/r/all/comments.json";
-  https.get(url, function(res) {
-    res.setEncoding('utf8');
+  // const url = "https://www.reddit.com/r/all/comments.json";
+  // https.get(url, function(res) {
+  //   res.setEncoding('utf8');
 
-    let chunks = "";
-    res.on('data', function(chunk) { 
-      chunks += chunk;
-    });
-    res.on('end', function() {
-      content = chunks;
-    });
+  //   let chunks = "";
+  //   res.on('data', function(chunk) { 
+  //     chunks += chunk;
+  //   });
+  //   res.on('end', function() {
+  //     content = chunks;
+  //   });
 
-  }).on("error", function(e){
-    content = undefined;
-  });
+  // }).on("error", function(e){
+  //   content = undefined;
+  // });
 
-  while(content === null) {
-    deasync.sleep(50);
-  }
+  // while(content === null) {
+  //   deasync.sleep(50);
+  // }
 
-  // let content = fs.readFileSync("./comments.js", "utf8");
+  let content = fs.readFileSync('./comments.js', 'utf8');
 
 
-  return yaml.safeLoad(content)["data"]["children"].map(yaml => {
-    const commentData = yaml["data"];
+  return yaml.safeLoad(content)['data']['children'].map(yaml => {
+    const commentData = yaml['data'];
     return {
-      "commentBody": commentData["body"],
-      "id": commentData["name"]
+      'commentBody': commentData['body'],
+      'id': commentData['name']
     }
   });
 }
 
-const comments = getRedditComments();
+function commentsContaining(target, comments) {
+  return comments.filter(comment => {
+    return comment['commentBody'].indexOf(target) != -1;
+  })
+}
 
-console.log(comments);
+const comments = getRedditComments();
+const relevantComments = commentsContaining('˚F', comments);
+
+console.log(relevantComments);
 
 
 
