@@ -4,6 +4,8 @@ const https = require('https');
 const path = require('path');
 const yaml = require('js-yaml');
 
+const converter = require('./converter')
+
 function getRedditComments() {
   // let content = null;
 
@@ -40,15 +42,22 @@ function getRedditComments() {
 }
 
 function commentsContaining(target, comments) {
-  return comments.filter(comment => {
-    return comment['commentBody'].indexOf(target) != -1;
-  })
+  return comments.reduce((memo, comment) => {
+    const commentBody = comment['commentBody'];
+    if (converter.shouldConvert(commentBody)) {
+      memo.push({
+        'commentBody' : converter.convertString(commentBody),
+        'id' : comment['id']
+      })
+    }
+    return memo;
+  }, [])
 }
 
 const comments = getRedditComments();
-const relevantComments = commentsContaining('˚F', comments);
+const modifiedComments = commentsContaining('˚F', comments);
 
-console.log(relevantComments);
+console.log(modifiedComments);
 
 
 
