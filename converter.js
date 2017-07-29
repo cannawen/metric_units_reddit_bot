@@ -1,7 +1,7 @@
 const regularExpressions = [{
   "description" : "˚F to ˚C",
-  "regex" : /(-?\d+(?:\.\d*)?)˚F\b/g, 
-  "replacement" : (_, input) => Math.round(((input - 32) * 5/9)) + '˚C'
+  "regex" : /(-?\d+)(˚?)F/g, 
+  "replacement" : (_, p1, p2, offset, string) => Math.round(((p1 - 32) * 5/9)) + p2 + 'C'
 }];
 
 function shouldConvert(input) {
