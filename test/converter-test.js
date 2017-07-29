@@ -9,7 +9,12 @@ describe('Converter', () => {
     context('Has temperature to convert', () => {
       it('should convert while keeping context', () => {
         converter.shouldConvert("It's 32F outside").should.equal(true);
+
         converter.convertString("It's 32F outside").should.equal("It's 0C outside");
+        converter.convertString("It's cold (-40 °F) outside").should.equal("It's cold (-40 °C) outside");
+        converter.convertString("It's about ~32 F outside").should.equal("It's about ~0 C outside");
+        converter.convertString("It's >32F outside").should.equal("It's >0C outside");
+        converter.convertString("It's <32°F outside").should.equal("It's <0°C outside");
       });
 
       it('should convert without a degree symbol (32F)', () => {

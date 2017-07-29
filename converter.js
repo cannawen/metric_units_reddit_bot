@@ -1,6 +1,6 @@
 const regularExpressions = [{
   "description" : "˚F to ˚C",
-  "regex" : /(^|\s)(-?\d+)( ?)(˚|°?)F\b/g, 
+  "regex" : /(^|\s|\(|~|>|<)(-?\d+)( ?)(˚|°?)F\b/g, 
   "replacement" : (_, p0, p1, p2, p3, offset, string) => p0 + Math.round(((p1 - 32) * 5/9)) + p2  + p3 + 'C'
 }];
 //℃
