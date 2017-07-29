@@ -2,6 +2,7 @@ const deasync = require('deasync');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
+const request = require('request');
 const yaml = require('js-yaml');
 
 const converter = require('./converter')
@@ -54,10 +55,47 @@ function convertComments(comments) {
   }, [])
 }
 
-const comments = getRedditComments();
-const modifiedComments = convertComments(comments);
+function postComments(comments) {
+  request({
+    url: 'https://www.reddit.com/api/v1/access_token',
+    headers: {
+      'User-Agent': 'SIUnits/0.1 by SI_units_bot'
+    },
+    method: 'POST',
+    auth: {
+      user: 'lNQBbnDfqX9p6Q',
+      pass: '4wAQS41IV9gllE4kECo-v2gUM7Q'
+    },
+    form: {
+      'grant_type': 'password',
+      'username': 'SI_units_bot',
+      'password': 'cocktail-pupa-ably'
+    }
+  }, function(err, res) {
+    var json = JSON.parse(res.body);
+    var accessToken = json.access_token;
+    console.log("Access Token:", accessToken);
+   
+    request({
+      url: 'https://oauth.reddit.com/api/v1/me',
+      headers: {
+        'User-Agent': 'SIUnits/0.1 by SI_units_bot'
+      },
+      auth: {
+        'bearer': accessToken
+      }
+    }, function(err, res) {
+      console.log(res.body);
+    });
 
-console.log(modifiedComments);
+  });
+}
 
+// const comments = getRedditComments();
+// const modifiedComments = convertComments(comments);
+
+// console.log(modifiedComments);
+
+postComments();
 
 
