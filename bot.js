@@ -41,7 +41,7 @@ function getRedditComments() {
   });
 }
 
-function commentsContaining(target, comments) {
+function convertComments(comments) {
   return comments.reduce((memo, comment) => {
     const commentBody = comment['commentBody'];
     if (converter.shouldConvert(commentBody)) {
@@ -55,7 +55,7 @@ function commentsContaining(target, comments) {
 }
 
 const comments = getRedditComments();
-const modifiedComments = commentsContaining('˚F', comments);
+const modifiedComments = convertComments(comments);
 
 console.log(modifiedComments);
 
