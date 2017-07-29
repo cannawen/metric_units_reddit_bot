@@ -44,6 +44,20 @@ describe('Converter', () => {
         converter.shouldConvert("-32 ˚F").should.equal(true);
         converter.convertString("-32 ˚F").should.equal("-36 ˚C");
       });
+
+      it('should convert all temperatures in a string', () => {
+        converter.shouldConvert("32 F, -32°F").should.equal(true);
+        converter.convertString("32 F, -32°F").should.equal("0 C, -36°C");
+      });
+
+      it('should convert temperature ranges', () => {
+        converter.shouldConvert("32 - -32°F").should.equal(true);
+        converter.shouldConvert("32-32F").should.equal(true);
+
+        converter.convertString("32 - -32°F").should.equal("0 to -36°C");
+        converter.convertString("(32-32F)").should.equal("(0 to 0C)");
+      });
+
     });
 
     context('No temperature to convert', () => {
@@ -53,8 +67,8 @@ describe('Converter', () => {
 
       it('should not convert mid-string', () => {
         converter.shouldConvert("A7F").should.equal(false);
+        converter.shouldConvert("8FF").should.equal(false);
       });
     });
-
   });
 });
