@@ -6,6 +6,45 @@ const converter = require('../converter');
 describe('Converter', () => {
   describe('#convertString()', () => {
 
+    context('Has distance to convert', () => {
+      it('should convert while keeping context', () => {
+        converter.shouldConvert("I would walk 10000 miles").should.equal(true);
+
+        converter.convertString("I would walk 10000 miles").should.equal("I would walk **16093 kilometers**");
+        converter.convertString("I would walk 10000miles").should.equal("I would walk **16093kilometers**");
+      });
+
+      it('should convert distances less than 5 miles with more accuracy', () => {
+        converter.shouldConvert("2 miles").should.equal(true);
+        converter.convertString("2 miles").should.equal("**3.2 kilometers**");
+      });
+
+      // it('should convert decimal miles', () => {
+
+      // });
+
+      it('should handle commas', () => {
+        converter.shouldConvert("999,000 miles").should.equal(true);
+
+        converter.convertString("999,123,456 miles").should.equal("**1,607,933,339 kilometers**");
+      });
+    });
+
+    context('Has no distance to convert', () => {
+      it('should not convert with no number', () => {
+        converter.shouldConvert("some miles").should.equal(false);
+      });
+
+      it('should not convert kilometers', () => {
+        converter.shouldConvert("800 kilometers").should.equal(false);
+        converter.shouldConvert("800km").should.equal(false);
+      });
+
+      it('should not convert deformed numbers', () => {
+        converter.shouldConvert("1,10,2 miles").should.equal(false);
+      });
+    });
+
     context('Has temperature to convert', () => {
       it('should convert while keeping context', () => {
         converter.shouldConvert("It's 32F outside").should.equal(true);

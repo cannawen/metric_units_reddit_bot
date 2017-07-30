@@ -8,6 +8,12 @@ const yaml = require('js-yaml');
 const converter = require('./converter');
 const network = require('./network');
 
+//TODO not yet implemented
+const excludedSubreddits = [
+  'nanny', 
+  'relationships'
+];
+
 function convertComments(comments) {
   return comments.reduce((memo, comment) => {
     const commentBody = comment['commentBody'];

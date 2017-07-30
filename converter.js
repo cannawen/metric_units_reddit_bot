@@ -2,19 +2,47 @@ function f2c(f) {
   return Math.round(((f - 32) * 5/9));
 }
 
-function styleConverted(string) {
+function mi2km(s) {
+  if (s < 5) {
+    return Math.round(s * 1.609344 * 10)/10;
+  } else {
+    return Math.round(s * 1.609344);
+  }
+}
+
+function removeCommas(x) {
+  return x.replace(/,/g,'');
+}
+
+function addCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+}
+
+function style(string) {
   return "**" + string + "**";
 }
 
 const regularExpressions = [{
   "description" : "˚F range to ˚C range",
   "regex" : /(^|\s|\()(-?\d+) ?- ?(-?\d+)( ?)(˚|°?)F\b/g,
-  "replacement" : (_, start, firstTemp, secondTemp, space, degrees, offset, string) => start + styleConverted(f2c(firstTemp) + ' to ' + f2c(secondTemp) + space + degrees + 'C')
+  "replacement" : (_, start, firstTemp, secondTemp, space, degrees, offset, string) => start + style(f2c(firstTemp) + ' to ' + f2c(secondTemp) + space + degrees + 'C')
 },
 {
   "description" : "˚F to ˚C",
   "regex" : /(^|\s|\(|~|>|<)(-?\d+)( ?)(˚|°?)F\b/g, 
-  "replacement" : (_, p0, p1, p2, p3, offset, string) => p0 + styleConverted(f2c(p1) + p2  + p3 + 'C')
+  "replacement" : (_, p0, p1, p2, p3, offset, string) => p0 + style(f2c(p1) + p2  + p3 + 'C')
+},
+{
+  "description" : "miles with commas to kilometers",
+  "regex" : /(\d{1,3}(,\d{3})+)( ?)miles/g,
+  "replacement" : (_, number, triplet, space, offset, string) => style(addCommas(mi2km(removeCommas(number))) + space + "kilometers")
+},
+{
+  "description" : "miles to kilometers",
+  "regex" : /(^|[^,])(\d+)( ?)miles/g,
+  "replacement" : (_, start, miles, space, offset, string) => start + style(mi2km(miles) + space + "kilometers")
 }];
 
 function shouldConvert(input) {
