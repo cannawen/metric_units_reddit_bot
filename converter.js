@@ -20,6 +20,18 @@ function addCommas(x) {
     return parts.join(".");
 }
 
+function kmString(miles) {
+  switch (miles) {
+    case "mph":
+      return "km/h";
+    case "mi":
+      return "km";
+    case "miles":
+    default:
+      return "kilometers";
+  }
+}
+
 function style(string) {
   return "**" + string + "**";
 }
@@ -36,23 +48,23 @@ const regularExpressions = [{
 },
 {
   "description" : "miles with commas, decimals kilometers",
-  "regex" : /(\d{1,3}(?:,\d{3})+\.(\d+))( ?)miles/g,
-  "replacement" : (_, number, decimalPoints, space, offset, string) => style(addCommas(mi2km(removeCommas(number), decimalPoints.length)) + space + "kilometers")
+  "regex" : /(^|\s|\(|~|>|<)(\d{1,3}(?:,\d{3})+\.(\d+))( ?)(miles|mph|mi)\b/g,
+  "replacement" : (_, start, number, decimalPoints, space, miles, offset, string) => start + style(addCommas(mi2km(removeCommas(number), decimalPoints.length)) + space + kmString(miles))
 },
 {
   "description" : "miles with decimals kilometers",
-  "regex" : /(\d+\.(\d+))( ?)miles/g,
-  "replacement" : (_, number, decimalPoints, space, offset, string) => style(mi2km(number, decimalPoints.length) + space + "kilometers")
+  "regex" : /(^|\s|\(|~|>|<)(\d+\.(\d+))( ?)(miles|mph|mi)\b/g,
+  "replacement" : (_, start, number, decimalPoints, space, miles, offset, string) => start + style(mi2km(number, decimalPoints.length) + space + kmString(miles))
 },
 {
   "description" : "miles with commas to kilometers",
-  "regex" : /(\d{1,3}(,\d{3})+)( ?)miles/g,
-  "replacement" : (_, number, triplet, space, offset, string) => style(addCommas(mi2km(removeCommas(number))) + space + "kilometers")
+  "regex" : /(^|\s|\(|~|>|<)(\d{1,3}(,\d{3})+)( ?)(miles|mph|mi)\b/g,
+  "replacement" : (_, start, number, triplet, space, miles, offset, string) => start + style(addCommas(mi2km(removeCommas(number))) + space + kmString(miles))
 },
 {
   "description" : "miles to kilometers",
-  "regex" : /(^|[^,])(\d+)( ?)miles/g,
-  "replacement" : (_, start, miles, space, offset, string) => start + style(mi2km(miles) + space + "kilometers")
+  "regex" : /(^|\s|\(|~|>|<)(\d+)( ?)(miles|mph|mi)\b/g,
+  "replacement" : (_, start, number, space, miles, offset, string) => start + style(mi2km(number) + space + kmString(miles))
 }];
 
 function shouldConvert(input) {

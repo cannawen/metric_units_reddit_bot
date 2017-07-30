@@ -15,8 +15,8 @@ describe('Converter', () => {
       });
 
       it('should convert distances less than 5 miles with more accuracy', () => {
-        converter.shouldConvert("2 miles").should.equal(true);
-        converter.convertString("2 miles").should.equal("**3.2 kilometers**");
+        converter.shouldConvert("2 mi").should.equal(true);
+        converter.convertString("2 mi").should.equal("**3.2 km**");
       });
 
       it('should convert decimal miles with similar precision', () => {
@@ -30,8 +30,8 @@ describe('Converter', () => {
       });
 
       it('should convert comma and decimal numbers', () => {
-        converter.shouldConvert("around 1,000.4 miles or so").should.equal(true);
-        converter.convertString("around 1,000.4 miles or so").should.equal("around **1,610 kilometers** or so");
+        converter.shouldConvert("around 1,000.4mph or so").should.equal(true);
+        converter.convertString("around 1,000.4mph or so").should.equal("around **1,610km/h** or so");
       });
     });
 
@@ -47,6 +47,13 @@ describe('Converter', () => {
 
       it('should not convert deformed numbers', () => {
         converter.shouldConvert("1,10,2 miles").should.equal(false);
+      });
+
+      it('should not convert mid-word', () => {
+        converter.shouldConvert("catch22 microscope").should.equal(false);
+        converter.shouldConvert("catch 22 microscope").should.equal(false);
+        converter.shouldConvert("catch22 mi croscope").should.equal(false);
+        converter.shouldConvert("catch22microscope").should.equal(false);
       });
     });
 
