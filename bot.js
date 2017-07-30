@@ -28,7 +28,7 @@ function convertComments(comments) {
 }
 
 function appendBotMessage(message) {
-  return message + "\n\n----\nBeep boop, I am a bot that converts posts to SI units"
+  return "Beep boop, I am a bot that converts posts to SI units" + "\n----\n" + message + "\n----\nProblem with this conversion? Please send me a message and let me know!"
 }
 
 function postComments(comments) {
