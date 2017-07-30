@@ -27,13 +27,11 @@ function postComments(comments) {
   })
 }
 
-// network.refreshToken();
 
-const comments = network.getRedditComments();
-const modifiedComments = convertComments(comments);
-postComments(modifiedComments);
+setInterval(() => {
+  network.refreshToken();
 
-// network.get("/api/v1/me")
-
-
-
+  const comments = network.getRedditComments();
+  const modifiedComments = convertComments(comments);
+  postComments(modifiedComments);
+}, 5*1000);  
