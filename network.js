@@ -120,7 +120,6 @@ function postComment(parentId, markdownBody) {
     'parent' : parentId,
     'text' : markdownBody
   }
-  console.log(form);
   post('/api/comment', form);
 }
 

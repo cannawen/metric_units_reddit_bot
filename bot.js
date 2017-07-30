@@ -13,12 +13,16 @@ function convertComments(comments) {
     const commentBody = comment['commentBody'];
     if (converter.shouldConvert(commentBody)) {
       memo.push({
-        'commentBody' : converter.convertString(commentBody),
+        'commentBody' : appendBotMessage(converter.convertString(commentBody)),
         'id' : comment['id']
       })
     }
     return memo;
   }, [])
+}
+
+function appendBotMessage(message) {
+  return message + "\n\n----\nBeep boop, I am a bot that converts posts to SI units"
 }
 
 function postComments(comments) {
@@ -27,11 +31,10 @@ function postComments(comments) {
   })
 }
 
-
 setInterval(() => {
   network.refreshToken();
 
-  const comments = network.getRedditComments("cooking");
+  const comments = network.getRedditComments("all");
   const modifiedComments = convertComments(comments);
   postComments(modifiedComments);
-}, 5*1000);  
+}, 2*1000);  
