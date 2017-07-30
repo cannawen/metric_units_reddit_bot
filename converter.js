@@ -2,15 +2,19 @@ function f2c(f) {
   return Math.round(((f - 32) * 5/9));
 }
 
+function styleConverted(string) {
+  return "**" + string + "**";
+}
+
 const regularExpressions = [{
   "description" : "˚F range to ˚C range",
   "regex" : /(^|\s|\()(-?\d+) ?- ?(-?\d+)( ?)(˚|°?)F\b/g,
-  "replacement" : (_, start, firstTemp, secondTemp, space, degrees, offset, string) => start + f2c(firstTemp) + ' to ' + f2c(secondTemp) + space + degrees + 'C'
+  "replacement" : (_, start, firstTemp, secondTemp, space, degrees, offset, string) => start + styleConverted(f2c(firstTemp) + ' to ' + f2c(secondTemp) + space + degrees + 'C')
 },
 {
   "description" : "˚F to ˚C",
   "regex" : /(^|\s|\(|~|>|<)(-?\d+)( ?)(˚|°?)F\b/g, 
-  "replacement" : (_, p0, p1, p2, p3, offset, string) => p0 + f2c(p1) + p2  + p3 + 'C'
+  "replacement" : (_, p0, p1, p2, p3, offset, string) => p0 + styleConverted(f2c(p1) + p2  + p3 + 'C')
 }];
 
 function shouldConvert(input) {

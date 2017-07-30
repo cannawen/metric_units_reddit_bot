@@ -52,6 +52,7 @@ function post(urlPath, form) {
     },
     form: form
   }, function(err, res) {
+    if (err) console.log(err);
     var json = JSON.parse(res.body);
     return json;
   });
@@ -67,15 +68,16 @@ function get(urlPath) {
       'bearer': oauthAccessToken
     },
   }, function(err, res) {
+    if (err) console.log(err);
     var json = JSON.parse(res.body);
     return json;
   });
 }
 
-function getRedditComments() {
+function getRedditComments(subreddit) {
   let content = null;
 
-  const url = "https://www.reddit.com/r/TestPostPleaseIgnore/comments.json";
+  const url = "https://www.reddit.com/r/" + subreddit + "/comments.json";
   https.get(url, function(res) {
     res.setEncoding('utf8');
 
@@ -88,6 +90,7 @@ function getRedditComments() {
     });
 
   }).on("error", function(e){
+    if (e) console.log(e);
     content = undefined;
   });
 
@@ -117,6 +120,7 @@ function postComment(parentId, markdownBody) {
     'parent' : parentId,
     'text' : markdownBody
   }
+  console.log(form);
   post('/api/comment', form);
 }
 

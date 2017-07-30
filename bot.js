@@ -31,7 +31,7 @@ function postComments(comments) {
 setInterval(() => {
   network.refreshToken();
 
-  const comments = network.getRedditComments();
+  const comments = network.getRedditComments("cooking");
   const modifiedComments = convertComments(comments);
   postComments(modifiedComments);
 }, 5*1000);  
