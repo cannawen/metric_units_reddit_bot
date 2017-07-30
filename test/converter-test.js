@@ -91,9 +91,14 @@ describe('Converter', () => {
         converter.convertString("32 F").should.equal("**0 C**");
       });
 
-      it('should convert negative temperatures with a space and degree symbol (-32 ˚F)', () => {
-        converter.shouldConvert("-32 ˚F").should.equal(true);
-        converter.convertString("-32 ˚F").should.equal("**-36 ˚C**");
+      it('should convert Fahrenheit', () => {
+        converter.shouldConvert("32 Fahrenheit").should.equal(true);
+        converter.convertString("32 Fahrenheit").should.equal("**0 C**");
+      });
+
+      it('should convert negative temperatures degrees fahrenheit', () => {
+        converter.shouldConvert("-32 degrees fahrenheit").should.equal(true);
+        converter.convertString("-32 degrees fahrenheit").should.equal("**-36 degrees C**");
       });
 
       it('should convert all temperatures in a string', () => {

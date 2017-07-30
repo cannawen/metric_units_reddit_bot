@@ -38,12 +38,12 @@ function style(string) {
 
 const regularExpressions = [{
   "description" : "˚F range to ˚C range",
-  "regex" : /(^|\s|\()(-?\d+) ?- ?(-?\d+)( ?)(˚|°?)F\b/g,
+  "regex" : /(^|\s|\()(-?\d+) ?- ?(-?\d+)( ?)(˚|°|(degrees )?)(?:F|fahrenheit|Fahrenheit)\b/g,
   "replacement" : (_, start, firstTemp, secondTemp, space, degrees, offset, string) => start + style(f2c(firstTemp) + ' to ' + f2c(secondTemp) + space + degrees + 'C')
 },
 {
   "description" : "˚F to ˚C",
-  "regex" : /(^|\s|\(|~|>|<)(-?\d+)( ?)(˚|°?)F\b/g, 
+  "regex" : /(^|\s|\(|~|>|<)(-?\d+)( ?)(˚|°|(degrees )?)(?:F|fahrenheit|Fahrenheit)\b/g, 
   "replacement" : (_, p0, p1, p2, p3, offset, string) => p0 + style(f2c(p1) + p2  + p3 + 'C')
 },
 {
