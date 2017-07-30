@@ -19,14 +19,19 @@ describe('Converter', () => {
         converter.convertString("2 miles").should.equal("**3.2 kilometers**");
       });
 
-      // it('should convert decimal miles', () => {
+      it('should convert decimal miles with similar precision', () => {
+        converter.shouldConvert("6.789 miles").should.equal(true);
+        converter.convertString("6.789 miles").should.equal("**10.926 kilometers**");
+      });
 
-      // });
-
-      it('should handle commas', () => {
+      it('should convert numbers with commas', () => {
         converter.shouldConvert("999,000 miles").should.equal(true);
-
         converter.convertString("999,123,456 miles").should.equal("**1,607,933,339 kilometers**");
+      });
+
+      it('should convert comma and decimal numbers', () => {
+        converter.shouldConvert("around 1,000.4 miles or so").should.equal(true);
+        converter.convertString("around 1,000.4 miles or so").should.equal("around **1,610 kilometers** or so");
       });
     });
 

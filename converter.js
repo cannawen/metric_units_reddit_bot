@@ -2,12 +2,12 @@ function f2c(f) {
   return Math.round(((f - 32) * 5/9));
 }
 
-function mi2km(s) {
-  if (s < 5) {
-    return Math.round(s * 1.609344 * 10)/10;
-  } else {
-    return Math.round(s * 1.609344);
+function mi2km(s, decimals) {
+  if (decimals === undefined) {
+    decimals = s < 5 ? 1 : 0;
   }
+  const multiplier = Math.pow(10, decimals);
+  return Math.round(s * 1.609344 * multiplier)/multiplier;
 }
 
 function removeCommas(x) {
@@ -33,6 +33,16 @@ const regularExpressions = [{
   "description" : "˚F to ˚C",
   "regex" : /(^|\s|\(|~|>|<)(-?\d+)( ?)(˚|°?)F\b/g, 
   "replacement" : (_, p0, p1, p2, p3, offset, string) => p0 + style(f2c(p1) + p2  + p3 + 'C')
+},
+{
+  "description" : "miles with commas, decimals kilometers",
+  "regex" : /(\d{1,3}(?:,\d{3})+\.(\d+))( ?)miles/g,
+  "replacement" : (_, number, decimalPoints, space, offset, string) => style(addCommas(mi2km(removeCommas(number), decimalPoints.length)) + space + "kilometers")
+},
+{
+  "description" : "miles with decimals kilometers",
+  "regex" : /(\d+\.(\d+))( ?)miles/g,
+  "replacement" : (_, number, decimalPoints, space, offset, string) => style(mi2km(number, decimalPoints.length) + space + "kilometers")
 },
 {
   "description" : "miles with commas to kilometers",
