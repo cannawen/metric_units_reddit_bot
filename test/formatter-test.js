@@ -3,7 +3,6 @@ const should = require('chai').should();
 
 const formatter = require('../formatter');
 
-
 describe('Formatter', () => {
   describe('#formatReply()', () => {
 

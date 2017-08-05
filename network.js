@@ -105,7 +105,9 @@ function getRedditComments(subreddit) {
     if (commentData['created_utc'] > lastProcessedCommentTimestamp) {
       memo.push({
         'commentBody': commentData['body'],
-        'id': commentData['name']
+        'author': commentData['author'],
+        'id': commentData['name'],
+        'subreddit': commentData['subreddit']
       });
     }
     return memo;

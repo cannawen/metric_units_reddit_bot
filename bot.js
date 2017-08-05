@@ -9,13 +9,24 @@ const converter = require('./converter');
 const formatter = require('./formatter');
 const network = require('./network');
 
-//TODO not yet implemented
+const MY_NAME_IS = "si_units_bot";
+
+//TODO
 //Add USA-based subreddits
 const excludedSubreddits = [
-
+  "denver",
+  "veterans"
 ];
 
-function convertComments(comments) {
+function filterComments(comments) {
+  return comments.filter(comment => {
+    const thisBotWroteComment = comment['author'].toLowerCase() === MY_NAME_IS.toLowerCase();
+    const commentFromExcludedSubreddit = excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) !== -1;
+    return !(thisBotWroteComment || commentFromExcludedSubreddit);
+  });
+}
+
+function constructReplies(comments) {
   return comments.reduce((memo, comment) => {
     const commentBody = comment['commentBody'];
     if (converter.shouldConvert(commentBody)) {
@@ -38,6 +49,7 @@ setInterval(() => {
   network.refreshToken();
 
   const comments = network.getRedditComments("all");
-  const modifiedComments = convertComments(comments);
-  postComments(modifiedComments);
+  const filteredComments = filterComments(comments);
+  const replies = constructReplies(filteredComments);
+  postComments(replies);
 }, 2*1000);  
