@@ -9,6 +9,7 @@ const converter = require('./converter');
 const network = require('./network');
 
 //TODO not yet implemented
+//Add USA-based subreddits
 const excludedSubreddits = [
   'nanny', 
   'relationships'
@@ -28,7 +29,7 @@ function convertComments(comments) {
 }
 
 function appendBotMessage(message) {
-  return "Beep boop, I am a bot that converts posts to SI units" + "\n\n----\n" + message + "\n\n----\nQuestions or concerns? Please send me a message and let me know!"
+  return message + "\n\n----\n^Beep ^boop, ^I ^am ^a ^bot ^that ^converts ^posts ^to ^SI ^units"
 }
 
 function postComments(comments) {
