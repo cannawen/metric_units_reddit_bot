@@ -11,8 +11,7 @@ const network = require('./network');
 //TODO not yet implemented
 //Add USA-based subreddits
 const excludedSubreddits = [
-  'nanny', 
-  'relationships'
+
 ];
 
 function convertComments(comments) {
@@ -20,7 +19,7 @@ function convertComments(comments) {
     const commentBody = comment['commentBody'];
     if (converter.shouldConvert(commentBody)) {
       memo.push({
-        'commentBody' : appendBotMessage(converter.convertString(commentBody)),
+        'commentBody' : createReply(commentBody),
         'id' : comment['id']
       })
     }
@@ -28,7 +27,22 @@ function convertComments(comments) {
   }, [])
 }
 
-function appendBotMessage(message) {
+function createReply(originalComment) {
+  const conversions = converter.convertString(originalComment);
+  var message;
+  if (originalComment.length > 100) {
+    //Tabular data
+    message = Object.keys(conversions).reduce((memo, nonSIvalue) => {
+      const SIvalue = conversions[nonSIvalue];
+      return memo + nonSIvalue + "|" + SIvalue | "\n";
+    }, "Original measurement | SI measurement\n---|---\n")
+  } else {
+    message = Object.keys(conversions).sort(function(a, b) {
+      return b.length - a.length;
+    }).reduce((memo, nonSIvalue) => {
+      return memo.replace(new RegExp(nonSIvalue, 'g'), conversions[nonSIvalue]);
+    }, originalComment);
+  }
   return message + "\n\n----\n^Beep ^boop, ^I ^am ^a ^bot ^that ^converts ^posts ^to ^SI ^units"
 }
 
