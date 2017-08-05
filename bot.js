@@ -40,4 +40,4 @@ setInterval(() => {
   const comments = network.getRedditComments("all");
   const modifiedComments = convertComments(comments);
   postComments(modifiedComments);
-}, 1*1000);  
+}, 2*1000);  
