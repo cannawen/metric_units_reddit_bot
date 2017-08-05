@@ -98,7 +98,6 @@ function getRedditComments(subreddit) {
     deasync.sleep(50);
   }
 
-  // let content = fs.readFileSync('./comments.js', 'utf8');
   const commentsData = yaml.safeLoad(content)['data']['children'];
 
   const unprocessedComments = commentsData.reduce((memo, yaml) => {
@@ -120,8 +119,8 @@ function postComment(parentId, markdownBody) {
     'parent' : parentId,
     'text' : markdownBody
   }
-  console.log(form);
-  // post('/api/comment', form);
+  // console.log(form);
+  post('/api/comment', form);
 }
 
 module.exports = {
