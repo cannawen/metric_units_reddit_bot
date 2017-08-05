@@ -72,14 +72,15 @@ const regularExpressions = [{
 
 function shouldConvert(input) {
   for (var i = 0; i < regularExpressions.length; i++) {
-    if (input.match(regularExpressions[i]["regex"]) != null) {
+    const matches = input.match(regularExpressions[i]["regex"]);
+    if (matches != null) {
       return true;
     }
   }
   return false;
 }
 
-function convertString(input) {
+function conversions(input) {
   return regularExpressions.reduce((memo, regex) => {
     const matches = input.match(regex["regex"]);
 
@@ -102,5 +103,5 @@ function convertString(input) {
 
 module.exports = {
   "shouldConvert" : shouldConvert,
-  "convertString" : convertString
+  "conversions" : conversions
 }

@@ -13,7 +13,7 @@ function testConvertTrue(entireInput, expectedConversion, inputConversion) {
   var expected = {};
   expected[inputConversion] = expectedConversion;
 
-  const actual = converter.convertString(entireInput);
+  const actual = converter.conversions(entireInput);
   actual.should.deep.equal(expected);
 }
 
@@ -22,7 +22,7 @@ function testConvertFalse(input) {
 }
 
 describe('Converter', () => {
-  describe('#convertString()', () => {
+  describe('#conversions()', () => {
 
     context('Has distance to convert', () => {
       it('should convert text with context', () => {
@@ -46,7 +46,13 @@ describe('Converter', () => {
         testConvertTrue("around 1,000.4mph or so", "1,610.0 km/h", "1,000.4mph");
       });
     });
-    
+
+    // context('Distance is too convenient', () => {
+    //   it('should not convert distance if it is too round', () => {
+    //     testConvertFalse("I would walk 1000 miles");
+    //   })
+    // })
+
     context('Has no distance to convert', () => {
       it('should not convert with no number', () => {
         testConvertFalse("some miles");
@@ -128,7 +134,7 @@ describe('Converter', () => {
     context('Has distance and temperature', () => {
       it('should convert all units in a string', () => {
         converter.shouldConvert("32 °F, -32°F, 1 mile").should.equal(true);
-        converter.convertString("32 °F, -32°F, 1 mile").should.deep.equal({"32 °F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
+        converter.conversions("32 °F, -32°F, 1 mile").should.deep.equal({"32 °F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
       });
     })
   });
