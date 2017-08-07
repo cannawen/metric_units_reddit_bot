@@ -1,7 +1,7 @@
 const assert = require('assert');
 const should = require('chai').should();
 
-const formatter = require('../formatter');
+const formatter = require('../src/formatter');
 
 describe('Formatter', () => {
   describe('#formatReply()', () => {

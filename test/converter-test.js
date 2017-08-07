@@ -1,7 +1,7 @@
 const assert = require('assert');
 const should = require('chai').should();
 
-const converter = require('../converter');
+const converter = require('../src/converter');
 
 function testConvertTrue(entireInput, expectedConversion, inputConversion) {
   converter.shouldConvert(entireInput).should.equal(true);

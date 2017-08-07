@@ -15,7 +15,10 @@ const MY_NAME_IS = "si_units_bot";
 //Add USA-based subreddits
 const excludedSubreddits = [
   "denver",
-  "veterans"
+  "veterans",
+  "artc",
+  "baseball",
+  "asksciencediscussion"
 ];
 
 function filterComments(comments) {
