@@ -19,7 +19,10 @@ const excludedSubreddits = [
   "veterans",
   "artc",
   "baseball",
-  "asksciencediscussion"
+  "asksciencediscussion",
+  "churning",
+  "awardtravel",
+  "churningcanada"
 ];
 
 function filterComments(comments) {

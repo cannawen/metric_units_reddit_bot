@@ -80,7 +80,7 @@ const regularExpressions = [{
 }];
 
 function shouldConvert(input) {
-  if (hasPowerOfTenNumberOver10(input)) {
+  if (input.length > 300 || hasPowerOfTenNumberOver10(input)) {
     return false;
   }
   for (var i = 0; i < regularExpressions.length; i++) {
