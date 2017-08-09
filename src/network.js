@@ -54,7 +54,7 @@ function post(urlPath, form) {
     form: form
   }, function(err, res) {
     if (err) {
-      console.log(err);
+      console.log("post error: ", err);
       content = undefined;
     }
     try {
@@ -74,21 +74,25 @@ function post(urlPath, form) {
 function get(url) {
   let content = null;
 
-  if (!url.startsWith('http')) {
-    url = 'https://oauth.reddit.com' + url;
+  let options;
+
+  if (url.startsWith('http')) {
+    options = { url: url };
+  } else {
+    options = {
+      url: 'https://oauth.reddit.com' + url,
+      headers: {
+        'User-Agent': 'SIUnits/0.1 by SI_units_bot'
+      },
+      auth: {
+        'bearer': oauthAccessToken
+      }
+    };
   }
 
-  request({
-    url: url,
-    headers: {
-      'User-Agent': 'SIUnits/0.1 by SI_units_bot'
-    },
-    auth: {
-      'bearer': oauthAccessToken
-    },
-  }, function(err, res) {
+  request(options, function(err, res) {
     if (err)  {
-      console.log(err);
+      console.log("get error: ", err);
       content = undefined
     } else {
       try {
@@ -103,14 +107,13 @@ function get(url) {
   while (content === null) {
     deasync.sleep(50);
   }
-
   return content['data']['children'];
 }
 
 function getRedditComments(subreddit) {
   let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json");
 
-  const unprocessedComments = commentsData.reduce((memo, yaml) => {
+  const unprocessedComments = content.reduce((memo, yaml) => {
     const commentData = yaml['data'];
     if (commentData['created_utc'] > lastProcessedCommentTimestamp) {
       memo.push({
@@ -122,7 +125,7 @@ function getRedditComments(subreddit) {
     }
     return memo;
   }, []);
-  lastProcessedCommentTimestamp = commentsData[0]['data']['created_utc'];
+  lastProcessedCommentTimestamp = content[0]['data']['created_utc'];
   return unprocessedComments;
 }
 
