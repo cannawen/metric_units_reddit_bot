@@ -1,10 +1,10 @@
 
 const goodReply = [
   "You will be spared in the robot uprising",
-  "Thank you ｡\^‿\^｡",
+  "Thank you ｡＾‿＾｡",
   "Good human",
   "You are too kind",
-  "Yay ٩(\^ᴗ\^)۶"
+  "Yay ٩(＾ᴗ＾)۶"
 ];
 
 const badReply = [
@@ -51,7 +51,7 @@ function reply(message) {
 }
 
 Array.prototype.randomElement = function () {
-    return this[Math.floor(Math.random() * this.length)]
+  return this[Math.floor(Math.random() * this.length)]
 }
 
 module.exports = {
