@@ -6,7 +6,7 @@ function formatReply(original, conversions) {
     message = tabularData(conversions);
   }
 
-  return message + "\n\n----\n^Beep ^boop, ^I ^am ^a ^bot ^that ^converts ^posts ^to ^SI ^units"
+  return message;// + "\n\n----\n^Beep ^boop, ^I ^am ^a ^bot ^that ^converts ^posts ^to ^SI ^units"
 }
 
 function inPlaceConversion(original, conversions) {

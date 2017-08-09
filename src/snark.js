@@ -16,7 +16,6 @@ const badReply = [
 const loveReply = [
   "I don't think we are at that stage of our relationship yet",
   "I think we should just be friends",
-  "I love you too, as a friend!",
   "I love you too <3",
   "What is love?"
 ];

@@ -22,35 +22,13 @@ const excludedSubreddits = [
   "asksciencediscussion",
   "churning",
   "awardtravel",
-  "churningcanada"
+  "churningcanada",
+  "mlbtheshow",
+  "fitness",
+  "cars"
 ];
 
-function filterComments(comments) {
-  return comments.filter(comment => {
-    const thisBotWroteComment = comment['author'].toLowerCase() === MY_NAME_IS.toLowerCase();
-    const commentFromExcludedSubreddit = excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) !== -1;
-    return !(thisBotWroteComment || commentFromExcludedSubreddit);
-  });
-}
-
-function constructReplies(comments) {
-  return comments.reduce((memo, comment) => {
-    const commentBody = comment['commentBody'];
-    if (converter.shouldConvert(commentBody)) {
-      memo.push({
-        'commentBody' : formatter.formatReply(commentBody, converter.conversions(commentBody)),
-        'id' : comment['id']
-      })
-    }
-    return memo;
-  }, [])
-}
-
-function postComments(comments) {
-  comments.forEach(comment => {
-    network.postComment(comment['id'], comment['commentBody']);    
-  })
-}
+network.refreshToken();
 
 setInterval(() => {
   network.refreshToken();
@@ -63,12 +41,36 @@ setInterval(() => {
     .map(message => {
       const reply = snark.reply(message['body']);
       network.postComment(message['id'], reply);
+    });
+    
+}, 60*1000)
+
+setInterval(() => {
+  network
+    .getRedditComments("all")
+    .filter(comment => {
+      //Has value to convert
+      return converter.shouldConvert(comment['commentBody']);
     })
-
-
-    //TODO make this more chain-like
-  const comments = network.getRedditComments("all");
-  const filteredComments = filterComments(comments);
-  const replies = constructReplies(filteredComments);
-  postComments(replies);
+    .filter(comment => {
+      //I did not write it
+      return comment['author'].toLowerCase() !== MY_NAME_IS.toLowerCase();
+    })    
+    .filter(comment => {
+      //Is not part of excluded subreddits
+      return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
+    })
+    .map(comment => {
+      //Construct reply
+      const commentBody = comment['commentBody'];
+      const conversions = converter.conversions(commentBody);
+      return {
+        'commentBody' : formatter.formatReply(commentBody, conversions),
+        'id' : comment['id']
+      }
+    })
+    .forEach(comment => {
+      //Post reply
+      network.postComment(comment['id'], comment['commentBody']);    
+    });
 }, 2*1000);  
