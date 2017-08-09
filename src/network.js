@@ -138,8 +138,10 @@ function postComment(parentId, markdownBody) {
 }
 
 function getUnreadRepliesAndMarkAllAsRead() {
-  const messages = get("/message/unread")
-  .filter(raw => {
+  const messages = get("/message/unread");
+  post('/api/read_all_messages');
+
+  return messages.filter(raw => {
     return raw['kind'] === 't1';
   }).map(raw => {
     return {
@@ -147,10 +149,6 @@ function getUnreadRepliesAndMarkAllAsRead() {
       'id': raw['data']['name']
     }
   });
-
-  post('/api/read_all_messages');
-  
-  return messages;
 }
 
 module.exports = {
