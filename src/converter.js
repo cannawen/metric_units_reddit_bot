@@ -39,6 +39,15 @@ function addCommas(x) {
     return parts.join(".");
 }
 
+function hasPowerOfTenNumberOver10(input) {
+  const matches = input.match(/(?:\s|^)(100+|10{1,2}(?:,000))(?:\s|$|\b)/g)
+  if (matches) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const regularExpressions = [{
   "description" : "˚F range to ˚C range",
   "regex" : /(?:\s|^)(-?\d+) ?- ?(-?\d+) ?(?:degrees F|°F|(?:(?:degrees |°)?(?:Fahrenheit|fahrenheit)))(?:\s|$|\b)/g,
@@ -71,6 +80,9 @@ const regularExpressions = [{
 }];
 
 function shouldConvert(input) {
+  if (hasPowerOfTenNumberOver10(input)) {
+    return false;
+  }
   for (var i = 0; i < regularExpressions.length; i++) {
     const matches = input.match(regularExpressions[i]["regex"]);
     if (matches != null) {

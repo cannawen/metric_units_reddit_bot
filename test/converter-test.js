@@ -47,11 +47,14 @@ describe('Converter', () => {
       });
     });
 
-    // context('Distance is too convenient', () => {
-    //   it('should not convert distance if it is too round', () => {
-    //     testConvertFalse("I would walk 1000 miles");
-    //   })
-    // })
+    context('Distance is too convenient', () => {
+      it('should not convert distance in powers of 10 over 10 miles', () => {
+        testConvertFalse("I would walk 100 miles");
+        testConvertFalse("I would walk 1000 miles");
+        testConvertFalse("I would walk 10000 miles");
+        testConvertFalse("I would walk 100,000 miles");
+      });
+    });
 
     context('Has no distance to convert', () => {
       it('should not convert with no number', () => {
