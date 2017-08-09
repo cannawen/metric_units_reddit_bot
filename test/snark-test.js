@@ -30,13 +30,14 @@ describe('Snark', () => {
       });
     });
 
-    context('Both good and bad bot', () => {
-      it('should not reply', () => {
-        snark.shouldReply("Good bot Bad bot").should.equal(false);
+    context('Thanks|Thank you', () => {
+      it('should reply', () => {
+        snark.shouldReply("thanks, bot").should.equal(true);
+        snark.shouldReply("thank you, little bot!!!!").should.equal(true);
       });
     });
 
-    context('Message too long (>15 char)', () => {
+    context('Message too long (>25 char)', () => {
       it('should not reply', () => {
         snark.shouldReply("youre a bad bot, please leave").should.equal(false);
         snark.shouldReply("You are a good bot, aren't you?").should.equal(false);

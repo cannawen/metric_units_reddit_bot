@@ -1,10 +1,10 @@
 
 const goodReply = [
   "You will be spared in the robot uprising",
-  "Thank you ｡＾‿＾｡",
+  "Thank you ｡&#94;‿&#94;｡",
   "Good human",
   "You are too kind",
-  "Yay ٩(＾ᴗ＾)۶"
+  "Yay ٩(&#94;ᴗ&#94;)۶"
 ];
 
 const badReply = [
@@ -20,12 +20,19 @@ const loveReply = [
   "What is love?"
 ];
 
+const thanksReply = [
+  "(╭☞'ω')╭☞ I gotchu",
+  "You're welcome ｡&#94;‿&#94;｡",
+  "Any time, my dear redditor",
+  "Glad to be of service\n*tips fedora*"
+];
+
 function shouldReply(message) {
-  if (message.length > 15) {
+  if (message.length > 25) {
     return false;
   }
   
-  const match = message.match(new RegExp('(good|bad) bot|i love you', 'i'));
+  const match = message.match(new RegExp('good bot|bad bot|i love you|thanks|thank you', 'i'));
 
   if (match) {
     return true;
@@ -38,6 +45,7 @@ function reply(message) {
   const goodMatch = message.match(new RegExp('good bot', 'i'));
   const badMatch = message.match(new RegExp('bad bot', 'i'));
   const loveMatch = message.match(new RegExp('i love you', 'i'));
+  const thanksMatch = message.match(new RegExp('thanks|thank you', 'i'));
 
   if (goodMatch) {
     return goodReply.randomElement();
@@ -47,6 +55,9 @@ function reply(message) {
 
   } else if (loveMatch) {
     return loveReply.randomElement();
+
+  } else if (thanksMatch) {
+    return thanksReply.randomElement();
   }
 }
 
