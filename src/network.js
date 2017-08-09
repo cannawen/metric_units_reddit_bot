@@ -1,6 +1,5 @@
 const deasync = require('deasync');
 const fs = require('fs');
-const https = require('https');
 const path = require('path');
 const request = require('request');
 const yaml = require('js-yaml');
@@ -41,6 +40,8 @@ function refreshToken() {
 }
 
 function post(urlPath, form) {
+  var content = null;
+
   request({
     url: 'https://oauth.reddit.com' + urlPath,
     method: 'POST',
@@ -52,15 +53,33 @@ function post(urlPath, form) {
     },
     form: form
   }, function(err, res) {
-    if (err) console.log(err);
-    var json = JSON.parse(res.body);
-    return json;
+    if (err) {
+      console.log(err);
+      content = undefined;
+    }
+    try {
+      content = JSON.parse(res.body);
+    } catch (e) {
+      console.log(e);
+      content= undefined;
+    }
   });
+
+  while (content === null) {
+    deasync.sleep(50);
+  }
+  return content;
 }
 
-function get(urlPath) {
+function get(url) {
+  let content = null;
+
+  if (!url.startsWith('http')) {
+    url = 'https://oauth.reddit.com' + url;
+  }
+
   request({
-    url: 'https://oauth.reddit.com' + urlPath,
+    url: url,
     headers: {
       'User-Agent': 'SIUnits/0.1 by SI_units_bot'
     },
@@ -68,37 +87,28 @@ function get(urlPath) {
       'bearer': oauthAccessToken
     },
   }, function(err, res) {
-    if (err) console.log(err);
-    var json = JSON.parse(res.body);
-    return json;
-  });
-}
-
-function getRedditComments(subreddit) {
-  let content = null;
-
-  const url = "https://www.reddit.com/r/" + subreddit + "/comments.json";
-  https.get(url, function(res) {
-    res.setEncoding('utf8');
-
-    let chunks = "";
-    res.on('data', function(chunk) { 
-      chunks += chunk;
-    });
-    res.on('end', function() {
-      content = chunks;
-    });
-
-  }).on("error", function(e){
-    if (e) console.log(e);
-    content = undefined;
+    if (err)  {
+      console.log(err);
+      content = undefined
+    } else {
+      try {
+        content = JSON.parse(res.body);
+      } catch (e) {
+        console.log(e);
+        content = undefined;
+      }
+    }
   });
 
-  while(content === null) {
+  while (content === null) {
     deasync.sleep(50);
   }
 
-  const commentsData = yaml.safeLoad(content)['data']['children'];
+  return content['data']['children'];
+}
+
+function getRedditComments(subreddit) {
+  let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json");
 
   const unprocessedComments = commentsData.reduce((memo, yaml) => {
     const commentData = yaml['data'];
@@ -121,13 +131,29 @@ function postComment(parentId, markdownBody) {
     'parent' : parentId,
     'text' : markdownBody
   }
-  // console.log(form);
   post('/api/comment', form);
+}
+
+function getUnreadRepliesAndMarkAllAsRead() {
+  const messages = get("/message/unread")
+  .filter(raw => {
+    return raw['kind'] === 't1';
+  }).map(raw => {
+    return {
+      'body': raw['data']['body'],
+      'id': raw['data']['name']
+    }
+  });
+
+  post('/api/read_all_messages');
+  
+  return messages;
 }
 
 module.exports = {
   "get" : get,
   "refreshToken" : refreshToken,
   "postComment" : postComment,
-  "getRedditComments" : getRedditComments
+  "getRedditComments" : getRedditComments,
+  "getUnreadRepliesAndMarkAllAsRead" : getUnreadRepliesAndMarkAllAsRead 
 }

@@ -8,6 +8,7 @@ const yaml = require('js-yaml');
 const converter = require('./converter');
 const formatter = require('./formatter');
 const network = require('./network');
+const snark = require('./snark');
 
 const MY_NAME_IS = "si_units_bot";
 
@@ -51,6 +52,18 @@ function postComments(comments) {
 setInterval(() => {
   network.refreshToken();
 
+  network
+    .getUnreadRepliesAndMarkAllAsRead()
+    .filter(message => {
+      return snark.shouldReply(message['body']);
+    })
+    .map(message => {
+      const reply = snark.reply(message['body']);
+      network.postComment(message['id'], reply);
+    })
+
+
+    //TODO make this more chain-like
   const comments = network.getRedditComments("all");
   const filteredComments = filterComments(comments);
   const replies = constructReplies(filteredComments);
