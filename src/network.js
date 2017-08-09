@@ -60,7 +60,7 @@ function post(urlPath, form) {
     try {
       content = JSON.parse(res.body);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       content= undefined;
     }
   });
@@ -94,7 +94,7 @@ function get(url) {
       try {
         content = JSON.parse(res.body);
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         content = undefined;
       }
     }
