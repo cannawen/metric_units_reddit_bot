@@ -39,23 +39,14 @@ function addCommas(x) {
     return parts.join(".");
 }
 
-function hasPowerOfTenNumberOver10(input) {
-  const matches = input.match(/(?:\s|^)(100+|10{1,2}(?:,000))(?:\s|$|\b)/g)
-  if (matches) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 const regularExpressions = [{
   "description" : "˚F range to ˚C range",
-  "regex" : /(?:\s|^)(-?\d+) ?- ?(-?\d+) ?(?:degrees F|°F|(?:(?:degrees |°)?(?:Fahrenheit|fahrenheit)))(?:\s|$|\b)/g,
+  "regex" : /(?:\s|^)(-?\d+) ?- ?(-?\d+) ?(?:degrees? F|°F|(?:(?:degrees |°)?(?:Fahrenheit|fahrenheit)))(?:\s|$|\b)/g,
   "replacement" : (_, firstTemp, secondTemp, offset, string) => f2c(firstTemp) + " to " + f2c(secondTemp) + '°C'
 },
 {
   "description" : "°F to °C",
-  "regex" : /(?:\s|^)(-?\d+) ?(?:degrees F|°F|(?:(?:degrees |°)?(?:Fahrenheit|fahrenheit)))(?:\s|$|\b)/g, 
+  "regex" : /(?:\s|^)(-?\d+) ?(?:degrees? F|°F|(?:(?:degrees |°)?(?:Fahrenheit|fahrenheit)))(?:\s|$|\b)/g, 
   "replacement" : (_, number, offset, string) => f2c(number) + "°C"
 },
 {
@@ -80,15 +71,29 @@ const regularExpressions = [{
 }];
 
 function shouldConvert(input) {
-  if (input.length > 300 || hasPowerOfTenNumberOver10(input)) {
+
+  function hasPowerOfTenNumberOver10(input) {
+    return input.match(/(?:\s|^)(100+|10{1,2}(?:,000))(?:\s|$|\b)/g)
+  }
+
+  function writtenByAnotherBot(input) {
+    return input.match(/\bbot\b/g);
+  }
+
+  if (input.length > 300 
+    || hasPowerOfTenNumberOver10(input) 
+    || writtenByAnotherBot(input)) {
+
     return false;
   }
+
   for (var i = 0; i < regularExpressions.length; i++) {
     const matches = input.match(regularExpressions[i]["regex"]);
     if (matches != null) {
       return true;
     }
   }
+  
   return false;
 }
 
