@@ -24,7 +24,7 @@ describe('Formatter', () => {
       it('should create tabular response', () => {
         formatter.formatReply("Hello there foo how are you meep merp Hello there!", {"foo" : "bar", "hi" : "hey"})
           .should
-          .include("Original measurement | SI measurement\n---|---\n")
+          .include("Original measurement | Metric measurement\n---|---\n")
           .and
           .include("foo|bar\n")
           .and

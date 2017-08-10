@@ -1,6 +1,10 @@
 #!/bin/bash
 npm test
 
+if [[ $? -eq 1 ]]; then
+  exit 1
+fi
+
 # Don't allow console.log() statements to be committed.
 
 count=`grep -iR --include \*.js 'console\.log' ./src ./test | wc -l | awk '{print $1}'`
