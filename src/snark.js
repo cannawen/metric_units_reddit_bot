@@ -40,6 +40,7 @@ function shouldReply(message) {
       if (snarked[key] > yesterday) {
         memo[key] = now;
       }
+      return memo;
     }, {});
   };
 
