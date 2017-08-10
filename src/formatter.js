@@ -2,7 +2,9 @@ const environment = require('./helper').environment();
 
 function formatReply(original, conversions) {
   var message;
-  if (original.length < 50) {
+  const shorterThan50Chars = original.length < 50;
+
+  if (shorterThan50Chars) {
     message = inPlaceConversion(original, conversions);
   } else {
     message = tabularData(conversions);
@@ -10,7 +12,8 @@ function formatReply(original, conversions) {
 
   return message
     + "\n\n&nbsp;"
-    + "\n\n&nbsp;"
+    + "\n\n"
+    + shorterThan50Chars ? "" : "&nbsp;"
     + "^metric ^units ^bot" 
     + " ^|"
     + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is)"
