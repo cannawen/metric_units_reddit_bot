@@ -48,11 +48,9 @@ run `./lib/watch.sh` (uses [fswatch](https://github.com/emcrisostomo/fswatch))
 
 Git hooks
 ---
-You can copy the files in `./hooks` into your `./.git/hooks` directory to enable them
+The pre-commit hook will run tests before each commit, and only allow passing code to be committed. It will also reject any code with console.log statements in them
 
-The pre-commit hook will run tests before each commit, and only allow passing code to be committed
-
-The pre-push hook will deploy the app every time you push to master
+To enable git hooks, copy the file from the `./hooks` directory into the `./.git/hooks` directory
 
 
 Questions or Comments?

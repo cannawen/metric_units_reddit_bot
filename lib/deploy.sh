@@ -1,3 +1,3 @@
 #!/bin/bash
 npm install
-node ./src/bot.js
+node ./src/bot.js &
