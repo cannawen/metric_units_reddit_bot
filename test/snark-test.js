@@ -9,38 +9,35 @@ describe('Snark', () => {
   describe('#shouldReply()', () => {
 
     beforeEach(() => {
-      helperStub.random = function () { return 1 };
+      helperStub.random = function () { return 0 };
       snark = proxyquire('../src/snark', { './helper': helperStub });
     });
 
     context('Good bot', () => {
       it('should reply', () => {
-        snark.shouldReply("Good bot").should.equal(true);
-        snark.shouldReply("good bot").should.equal(true);
-        snark.shouldReply("Good bot!").should.equal(true);
-        snark.shouldReply("good bot.").should.equal(true);
+        snark.shouldReply("GOOD BOT!!").should.equal(true);
+        snark.reply("good bot").should.equal("Good human");
       });
     });
 
     context('Bad bot', () => {
       it('should reply', () => {
-        snark.shouldReply("Bad bot").should.equal(true);
-        snark.shouldReply("bad bot").should.equal(true);
-        snark.shouldReply("Bad bot.").should.equal(true);
-        snark.shouldReply("Bad bot!").should.equal(true);
+        snark.shouldReply("bad bot...").should.equal(true);
+        snark.reply("Bad bot!").should.equal("Bad carbon-based life form");
       });
     });
 
     context('I love you', () => {
       it('should reply', () => {
         snark.shouldReply("I love you").should.equal(true);
+        snark.reply("i love you, bot").should.equal("What is love?");
       });
     });
 
     context('Thanks|Thank you', () => {
       it('should reply', () => {
         snark.shouldReply("thanks, bot").should.equal(true);
-        snark.shouldReply("thank you, little bot!!!!").should.equal(true);
+        snark.reply("thank you, little bot!!!!").should.equal("Glad to be of service");
       });
     });
 

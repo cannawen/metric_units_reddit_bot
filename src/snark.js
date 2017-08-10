@@ -1,35 +1,35 @@
 const helper = require('./helper');
 
 const goodReply = [
+  [5, "Good human"],
   "You will be spared in the robot uprising",
-  "Thank you ｡&#94;‿&#94;｡",
-  "Good human",
-  "You are too kind",
-  "Yay ٩(&#94;ᴗ&#94;)۶"
+  [3, "Thank you ｡&#94;‿&#94;｡"],
+  [3, "You are too kind"],
+  [3, "Yay ٩(&#94;ᴗ&#94;)۶"]
 ];
 
 const badReply = [
-  "Sorry, I was just trying to help (◕‸ ◕✿)",
-  "Bots have feelings too, you know (ಥ﹏ಥ)",
-  "Bad carbon-based life form"
+  [2, "Bad carbon-based life form"],
+  [5, "Sorry, I was just trying to help (◕‸ ◕✿)"],
+  [4, "Bots have feelings too, you know (ಥ﹏ಥ)"]
 ];
 
 const loveReply = [
-  "I don't think we are at that stage of our relationship yet",
-  "I think we should just be friends",
-  "I love you too <3",
-  "What is love?"
+  [5, "What is love?"],
+  [2, "I don't think we are at that stage of our relationship yet"],
+  [4, "I think we should just be friends"],
+  [2, "I love you too <3"]
 ];
 
 const thanksReply = [
+  "Glad to be of service",
   "(╭☞'ω')╭☞ I gotchu",
   "You're welcome ｡&#94;‿&#94;｡",
-  "Any time, my dear redditor",
-  "Glad to be of service"
+  "Any time, my dear redditor"
 ];
 
 function shouldReply(message) {
-  if (helper.random() < 0.7 || message.length > 25) {
+  if (helper.random() > 0.3 || message.length > 25) {
     return false;
   }
   
@@ -63,7 +63,16 @@ function reply(message) {
 }
 
 Array.prototype.randomElement = function () {
-  return this[Math.floor(helper.random() * this.length)]
+  const weightedArray = this.reduce((memo, el) => {
+    if (Array.isArray(el)) {
+      const additions = Array(el[0]).fill(el[1]);
+      return memo.concat(additions);;
+    } else if(typeof el == 'string' || el instanceof String) {
+      memo.push(el)
+    }
+    return memo;
+  }, []);
+  return weightedArray[Math.floor(helper.random() * weightedArray.length)]
 }
 
 module.exports = {
