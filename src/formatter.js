@@ -34,7 +34,7 @@ function tabularData(conversions) {
   return Object.keys(conversions).reduce((memo, nonSIvalue) => {
     const SIvalue = conversions[nonSIvalue];
     return memo + nonSIvalue + "|" + SIvalue + "\n";
-  }, "Original measurement | SI measurement\n---|---\n")
+  }, "Original measurement | Metric measurement\n---|---\n")
 }
 
 module.exports = {
