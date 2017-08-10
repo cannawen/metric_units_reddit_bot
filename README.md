@@ -1,32 +1,34 @@
 What does the bot do?
 ---
-The bot finds comments with imperial units, and replies with metric units.
+The bot finds comments with imperial units, and replies with metric units. It also makes snarky replies to certain triggers.
 
-It also makes snarky replies to certain triggers
+See `./test/converter-test.js` for more specifications on what is currently supported.
 
 
 How does the code work?
 ---
 This is a javascript app built with [Node.js](https://nodejs.org/en/), and all of the app code is in directory `src`.
 
-The app starts in `bot.js`, this file is responsible for repeatedly checking for new comments and replying to messages in an infinite loop
+The app starts in `bot.js`, this file is responsible for repeatedly checking for new comments and replying to messages in an infinite loop. It uses the following modules:
 
 `converter.js` is responsible taking a message, and deciding which imperial units should be converted to which metric units (if any).
 
 `formatter.js` takes the conversions from above, and constructs a reply to the comment
 
-`helper.js` exists so we can easily mock external dependencies during test
+`helper.js` exists so external dependencies can be easily mocked during test
 
-`network.js` handles get, post, and OAuth network requests and parses the objects it gets back for easier consumption
+`network.js` handles get, post, and OAuth network requests and parses the responses for easier consumption
 
 `snark.js` creates snarky responses to certain trigger words
 
 
 Running the code
 ---
-Create a reddit `script` app through (your reddit preferences)[https://www.reddit.com/prefs/apps]. Use `http://localhost` as your redirect url, we don't need it. From there, you should be able to get your oauth username (line underneath `personal use script`) and secret
+Create a new reddit account (I would advise against linking bots to your main account, as it could get banned from certain subreddits).
 
-Create a file in directory `./private/environment.yaml` that looks like:
+Create a reddit `script` app through (your reddit preferences)[https://www.reddit.com/prefs/apps]. Use `http://localhost` as your redirect url, we don't need it. From there, you should be able to get your OAuth username (line underneath `personal use script`) and secret
+
+Clone the code, and create a file `./private/environment.yaml` that looks like:
 ```
 oauth-username: `your-oauth-username`
 oauth-secret: `your-oauth-secret`
@@ -34,7 +36,7 @@ reddit-username: `your-username-here`
 reddit-password: `your-password-here`
 version: `your-bot-version`
 ```
-run `./lib/deploy.sh`
+run `./lib/deploy.sh` and you should have the bot up and running!
 
 
 Running the tests
@@ -55,7 +57,9 @@ To enable git hooks, copy the file from the `./hooks` directory into the `./.git
 
 Questions or Comments?
 ---
-Feel free to message me :)
+Feel free to message [on reddit](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is) or email (cannawen@gmail.com)
+
+[See what's next on the to do list here](https://www.pivotaltracker.com/n/projects/2091572)
 
 
 License
