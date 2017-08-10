@@ -80,9 +80,14 @@ function shouldConvert(input) {
     return input.match(/\bbot\b/g);
   }
 
+  function has0Distance(input) {
+    return input.match(/\b0 (?:mi|mph)/g);
+  }
+
   if (input.length > 300 
     || hasPowerOfTenNumberOver10(input) 
-    || writtenByAnotherBot(input)) {
+    || writtenByAnotherBot(input)
+    || has0Distance(input)) {
 
     return false;
   }

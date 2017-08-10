@@ -55,8 +55,19 @@ describe('Converter', () => {
         testConvertTrue("999,123,456 miles", "1,607,933,339 km");
       });
 
+      // it('should convert miles per hour', () => {
+      //   testConvertTrue("999,123,456 miles per hour", "1,607,933,339 km/h");
+      // });
+
       it('should convert comma and decimal numbers', () => {
         testConvertTrue("around 1,000.4mph or so", "1,610.0 km/h", "1,000.4mph");
+      });
+
+      it('should not convert 0 distance', () => {
+        testConvertFalse("0 mile");
+        testConvertFalse("0 miles");
+        testConvertFalse("0 mph");
+        testConvertFalse("0 mi");
       });
     });
 
