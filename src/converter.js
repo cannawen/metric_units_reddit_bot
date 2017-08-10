@@ -57,7 +57,7 @@ const regularExpressions = [{
 {
   "description" : "decimal miles to kilometers",
   "regex" : /(?:\s|^)(\d+\.\d+)(?: ?)(miles?|mi|mph|miles? per hour)(?:\s|$|\b)/g,
-  "replacement" : (_, number, units, offset, string) => mi2km(number) + " " + kmString(units)
+  "replacement" : (_, number, units, offset, string) => addCommas(mi2km(number)) + " " + kmString(units)
 },
 {
   "description" : "miles with commas to kilometers",
@@ -67,7 +67,7 @@ const regularExpressions = [{
 {
   "description" : "miles to kilometers",
   "regex" : /(?:\s|^)(\d+)(?: ?)(miles?|mi|mph|miles? per hour)(?:\s|$|\b)/g,
-  "replacement" : (_, number, units, offset, string) => mi2km(number) + " " + kmString(units)
+  "replacement" : (_, number, units, offset, string) => addCommas(mi2km(number)) + " " + kmString(units)
 }];
 
 function shouldConvert(input) {

@@ -39,8 +39,8 @@ describe('Converter', () => {
 
     context('Has distance to convert', () => {
       it('should convert text with context', () => {
-        testConvertTrue("I would walk 10001 miles bottom", "16095 km", "10001 miles");
-        testConvertTrue("I would walk 10001mi", "16095 km", "10001mi");
+        testConvertTrue("I would walk 10001 miles bottom", "16,095 km", "10001 miles");
+        testConvertTrue("I would walk 10001mi", "16,095 km", "10001mi");
       });
 
       it('should convert distances less than 5 miles with more accuracy', () => {
