@@ -1,3 +1,4 @@
+const helper = require('./helper');
 
 const goodReply = [
   "You will be spared in the robot uprising",
@@ -24,11 +25,11 @@ const thanksReply = [
   "(╭☞'ω')╭☞ I gotchu",
   "You're welcome ｡&#94;‿&#94;｡",
   "Any time, my dear redditor",
-  "Glad to be of service\n*tips fedora*"
+  "Glad to be of service"
 ];
 
 function shouldReply(message) {
-  if (message.length > 25) {
+  if (helper.random() < 0.7 || message.length > 25) {
     return false;
   }
   
@@ -62,7 +63,7 @@ function reply(message) {
 }
 
 Array.prototype.randomElement = function () {
-  return this[Math.floor(Math.random() * this.length)]
+  return this[Math.floor(helper.random() * this.length)]
 }
 
 module.exports = {

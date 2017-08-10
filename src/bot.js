@@ -30,7 +30,9 @@ const excludedSubreddits = [
   "science",
   "dayton",
   "askscience",
-  "Tennesseetitans"
+  "Tennesseetitans",
+  "NASCAR",
+  "legaladvice"
 ].map(reddit => reddit.toLowerCase());
 
 network.refreshToken();

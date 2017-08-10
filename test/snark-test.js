@@ -1,10 +1,17 @@
 const assert = require('assert');
 const should = require('chai').should();
+const proxyquire =  require('proxyquire')
 
-const snark = require('../src/snark');
+var helperStub   =  { };
+var snark;
 
 describe('Snark', () => {
   describe('#shouldReply()', () => {
+
+    beforeEach(() => {
+      helperStub.random = function () { return 1 };
+      snark = proxyquire('../src/snark', { './helper': helperStub });
+    });
 
     context('Good bot', () => {
       it('should reply', () => {
