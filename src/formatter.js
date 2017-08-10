@@ -13,7 +13,7 @@ function formatReply(original, conversions) {
   return message
     + "\n\n&nbsp;"
     + "\n\n"
-    + shorterThan50Chars ? "" : "&nbsp;"
+    + (shorterThan50Chars ? "" : "&nbsp;")
     + "^metric ^units ^bot" 
     + " ^|"
     + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is)"
