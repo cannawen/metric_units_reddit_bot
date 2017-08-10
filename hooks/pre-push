@@ -1,0 +1,17 @@
+#!/bin/bash
+
+BRANCH_NAME=$(git symbolic-ref --short HEAD) 
+if [ -n "$BRANCH_NAME" ] && [ "$BRANCH_NAME" != "master" ]; then
+  exit 0;
+fi
+
+ORIGINAL_STASHED_COUNT=`git stash list | wc -l`
+git stash
+NEW_STASHED_COUNT=`git stash list | wc -l`
+
+./deploy.sh
+
+if [ $NEW_STASHED_COUNT -gt $ORIGINAL_STASHED_COUNT ]
+then
+  git stash pop
+fi

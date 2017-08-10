@@ -1,0 +1,10 @@
+#!/bin/bash
+npm test
+
+# Don't allow console.log() statements to be committed.
+
+count=`grep -iR --include \*.js 'console\.log' ./src ./test | wc -l | awk '{print $1}'`
+if [[ "$count" -ge 1 ]]; then 
+  echo "Remove $count console.log() statements"
+  exit 1
+fi

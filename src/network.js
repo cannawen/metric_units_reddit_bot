@@ -17,7 +17,6 @@ function refreshToken() {
   }
 
   var done = false;
-console.log(environment)
 
   request({
     url: 'https://www.reddit.com/api/v1/access_token',
@@ -38,7 +37,7 @@ console.log(environment)
     done = true;
   });
 
-  while(!done) {
+  while (!done) {
     deasync.sleep(100);
   }
 }
@@ -58,7 +57,7 @@ function post(urlPath, form) {
     form: form
   }, function(err, res) {
     if (err) {
-      console.log("post error: ", err);
+      console.error("post error: ", err);
       content = undefined;
     }
     try {
@@ -95,7 +94,7 @@ function get(url) {
 
   request(options, function(err, res) {
     if (err)  {
-      console.log("get error: ", err);
+      console.error("get error: ", err);
       content = undefined
     } else {
       try {

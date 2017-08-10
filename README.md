@@ -1,45 +1,58 @@
 What does the bot do?
 ---
-The bot checks for new reddit comments every 2 seconds with imperial units, and replies with metric units. It also makes snarky replies to certain triggers
+The bot finds comments with imperial units, and replies with metric units.
+
+It also makes snarky replies to certain triggers
 
 
 How does the code work?
 ---
-This is a javascript app built with Node.js
+This is a javascript app built with [Node.js](https://nodejs.org/en/), and all of the app code is in directory `src`.
 
-All of the app code is in directory `src`. The app starts in `bot.js`, this file is responsible for repeatedly checking for new comments and replying to messages in an infinite loop
+The app starts in `bot.js`, this file is responsible for repeatedly checking for new comments and replying to messages in an infinite loop
 
-`converter.js` is responsible taking a message, and deciding which conversions should be made (if any).
+`converter.js` is responsible taking a message, and deciding which imperial units should be converted to which metric units (if any).
 
 `formatter.js` takes the conversions from above, and constructs a reply to the comment
 
 `helper.js` exists so we can easily mock external dependencies during test
 
-`network.js` handles get, post, and OAuth requests and parses the objects it gets back for easier consumption
+`network.js` handles get, post, and OAuth network requests and parses the objects it gets back for easier consumption
 
 `snark.js` creates snarky responses to certain trigger words
 
 
 Running the code
 ---
+Create a reddit `script` app through (your reddit preferences)[https://www.reddit.com/prefs/apps]. Use `http://localhost` as your redirect url, we don't need it. From there, you should be able to get your oauth username (line underneath `personal use script`) and secret
+
 Create a file in directory `./private/environment.yaml` that looks like:
 ```
-oauth-username: lNQBbnDfqX9p6Q
-oauth-secret: 4wAQS41IV9gllE4kECo-v2gUM7Q
-reddit-username: SI_units_bot 
-reddit-password: cocktail-pupa-ably
-user-agent: script:SIUnits:0.1 (by /u/SI_units_bot)
+oauth-username: `your-oauth-username`
+oauth-secret: `your-oauth-secret`
+reddit-username: `your-username-here`
+reddit-password: `your-password-here`
+user-agent: script:`your-bot-name`:`your-bot-version` (by /u/`your-username-here`)
 ```
-run `./deploy.sh`
+run `./lib/deploy.sh`
 
 
 Running the tests
 ---
 run `npm test`
 
-Or, if you want the tests to automatically re-run when you change code
+Or, if you want the tests to automatically re-run when you save
 
-run `./watch.sh`
+run `./lib/watch.sh` (uses [fswatch](https://github.com/emcrisostomo/fswatch))
+
+
+Git hooks
+---
+You can copy the files in `./hooks` into your `./.git/hooks` directory to enable them
+
+The pre-commit hook will run tests before each commit, and only allow passing code to be committed
+
+The pre-push hook will deploy the app every time you push to master
 
 
 Questions or Comments?
