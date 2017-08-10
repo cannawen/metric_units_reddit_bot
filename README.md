@@ -1,8 +1,10 @@
 What does the bot do?
 ---
-The bot finds comments with imperial units, and replies with metric units. It also makes snarky replies to certain triggers.
+The bot finds comments with imperial units, and replies with metric units.
 
-See `./test/converter-test.js` for more specifications on what is currently supported.
+There is a chance it will reply to certain triggers like "good bot" or "bad bot"
+
+See `./test/converter-test.js` for what conversions are currently supported, and [see the Tracker for what's coming up](https://www.pivotaltracker.com/n/projects/2091572)
 
 
 How does the code work?
@@ -30,11 +32,11 @@ Create a reddit `script` app through [your reddit preferences](https://www.reddi
 
 Clone the code, and create a file `./private/environment.yaml` that looks like:
 ```
-oauth-username: `your-oauth-username`
-oauth-secret: `your-oauth-secret`
-reddit-username: `your-username-here`
-reddit-password: `your-password-here`
-version: `your-bot-version`
+oauth-username: your-oauth-username
+oauth-secret: your-oauth-secret
+reddit-username: your-username-here
+reddit-password: your-password-here
+version: your-bot-version
 ```
 run `./lib/deploy.sh` and you should have the bot up and running!
 
@@ -59,11 +61,10 @@ Questions or Comments?
 ---
 Feel free to message [on reddit](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is) or email (cannawen@gmail.com)
 
-[See what's next on the to do list here](https://www.pivotaltracker.com/n/projects/2091572)
-
 
 License
 ---
 This source is distributed under GNU GPLv3
 
 Pull requests or derivative works welcome
+
