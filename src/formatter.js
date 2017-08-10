@@ -8,8 +8,16 @@ function formatReply(original, conversions) {
     message = tabularData(conversions);
   }
 
-  return message; + "\n\n&nbsp;\n\n&nbsp;"
-    + "^I ^am ^a ^bot ^| ^[source](https://github.com/cannawen/metric_units_reddit_bot) ^| ^" + environment['version'];
+  return message
+    + "\n\n&nbsp;"
+    + "\n\n&nbsp;"
+    + "^metric ^units ^bot" 
+    + " ^|"
+    + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is)"
+    + " ^|"
+    + " ^[source](https://github.com/cannawen/metric_units_reddit_bot)"
+    + " ^|"
+    + " ^" + environment['version'];
 }
 
 function inPlaceConversion(original, conversions) {
