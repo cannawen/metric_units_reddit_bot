@@ -20,7 +20,7 @@ function formatReply(original, conversions) {
     + " ^|"
     + " ^[source](https://github.com/cannawen/metric_units_reddit_bot)"
     + " ^|"
-    + " ^" + environment['version'];
+    + " ^" + environment['version'] + " ^beta";
 }
 
 function inPlaceConversion(original, conversions) {
