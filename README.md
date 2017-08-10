@@ -26,7 +26,7 @@ Running the code
 ---
 Create a new reddit account (I would advise against linking bots to your main account, as it could get banned from certain subreddits).
 
-Create a reddit `script` app through (your reddit preferences)[https://www.reddit.com/prefs/apps]. Use `http://localhost` as your redirect url, we don't need it. From there, you should be able to get your OAuth username (line underneath `personal use script`) and secret
+Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). Use `http://localhost` as your redirect url, we don't need it. From there, you should be able to get your OAuth username (line underneath `personal use script`) and secret
 
 Clone the code, and create a file `./private/environment.yaml` that looks like:
 ```
