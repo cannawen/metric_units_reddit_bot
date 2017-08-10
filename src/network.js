@@ -5,6 +5,7 @@ const request = require('request');
 const yaml = require('js-yaml');
 
 const environment = require('./helper').environment();
+const helper = require('./helper');
 
 var oauthAccessToken = undefined;
 var oauthTokenValidUntil = undefined;
@@ -12,7 +13,7 @@ var lastProcessedCommentTimestamp = 0;
 
 
 function refreshToken() {
-  if (Date.now() < oauthTokenValidUntil) {
+  if (helper.now() < oauthTokenValidUntil) {
     return;
   }
 
@@ -33,7 +34,7 @@ function refreshToken() {
   }, function(err, res) {
     var json = JSON.parse(res.body);
     oauthAccessToken = json.access_token;
-    oauthTokenValidUntil = Date.now() + 55*60*1000;
+    oauthTokenValidUntil = helper.now() + 55*60*1000;
     done = true;
   });
 
@@ -153,7 +154,6 @@ function getUnreadRepliesAndMarkAllAsRead() {
 }
 
 module.exports = {
-  "get" : get,
   "refreshToken" : refreshToken,
   "postComment" : postComment,
   "getRedditComments" : getRedditComments,

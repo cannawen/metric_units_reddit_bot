@@ -11,8 +11,7 @@ const formatter = require('./formatter');
 const network = require('./network');
 const snark = require('./snark');
 
-//TODO
-//Add USA-based subreddits
+//Do not post in these subreddits
 const excludedSubreddits = [
   "denver",
   "veterans",
@@ -32,7 +31,7 @@ const excludedSubreddits = [
   "Tennesseetitans",
   "NASCAR",
   "legaladvice"
-].map(reddit => reddit.toLowerCase());
+].map(subreddit => subreddit.toLowerCase());
 
 network.refreshToken();
 
@@ -44,7 +43,7 @@ setInterval(() => {
     .filter(message => {
       return snark.shouldReply(message['body']);
     })
-    .map(message => {
+    .forEach(message => {
       const reply = snark.reply(message['body']);
       network.postComment(message['id'], reply);
     });
@@ -52,31 +51,31 @@ setInterval(() => {
 }, 60*1000)
 
 setInterval(() => {
+  function thisBotWroteComment(comment) {
+      return comment['author'].toLowerCase() !== environment['reddit-username'].toLowerCase();
+  }
+
+  function allowedToPostInSubreddit(comment) {
+      return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
+  }
+
   network
     .getRedditComments("all")
     .filter(comment => {
-      //Has value to convert
       return converter.shouldConvert(comment['commentBody']);
     })
     .filter(comment => {
-      //This bot did not write it
-      return comment['author'].toLowerCase() !== environment['reddit-username'].toLowerCase();
+      return thisBotWroteComment(comment);
     })    
     .filter(comment => {
-      //Is not part of excluded subreddits
-      return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
-    })
-    .map(comment => {
-      //Construct reply
-      const commentBody = comment['commentBody'];
-      const conversions = converter.conversions(commentBody);
-      return {
-        'commentBody' : formatter.formatReply(commentBody, conversions),
-        'id' : comment['id']
-      }
+      return allowedToPostInSubreddit(comment);
     })
     .forEach(comment => {
-      //Post reply
-      network.postComment(comment['id'], comment['commentBody']);    
-    });
+      const commentBody = comment['commentBody'];
+      
+      const conversions = converter.conversions(commentBody);
+      const reply = formatter.formatReply(commentBody, conversions);
+
+      network.postComment(comment['id'], reply);
+    })
 }, 2*1000);  
