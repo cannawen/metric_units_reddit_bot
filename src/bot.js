@@ -52,32 +52,32 @@ setInterval(() => {
 
 }, 60*1000)
 
-// setInterval(() => {
-//   network
-//     .getRedditComments("all")
-//     .filter(comment => {
-//       //Has value to convert
-//       return converter.shouldConvert(comment['commentBody']);
-//     })
-//     .filter(comment => {
-//       //I did not write it
-//       return comment['author'].toLowerCase() !== MY_NAME_IS.toLowerCase();
-//     })    
-//     .filter(comment => {
-//       //Is not part of excluded subreddits
-//       return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
-//     })
-//     .map(comment => {
-//       //Construct reply
-//       const commentBody = comment['commentBody'];
-//       const conversions = converter.conversions(commentBody);
-//       return {
-//         'commentBody' : formatter.formatReply(commentBody, conversions),
-//         'id' : comment['id']
-//       }
-//     })
-//     .forEach(comment => {
-//       //Post reply
-//       network.postComment(comment['id'], comment['commentBody']);    
-//     });
-// }, 2*1000);  
+setInterval(() => {
+  network
+    .getRedditComments("all")
+    .filter(comment => {
+      //Has value to convert
+      return converter.shouldConvert(comment['commentBody']);
+    })
+    .filter(comment => {
+      //I did not write it
+      return comment['author'].toLowerCase() !== MY_NAME_IS.toLowerCase();
+    })    
+    .filter(comment => {
+      //Is not part of excluded subreddits
+      return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
+    })
+    .map(comment => {
+      //Construct reply
+      const commentBody = comment['commentBody'];
+      const conversions = converter.conversions(commentBody);
+      return {
+        'commentBody' : formatter.formatReply(commentBody, conversions),
+        'id' : comment['id']
+      }
+    })
+    .forEach(comment => {
+      //Post reply
+      network.postComment(comment['id'], comment['commentBody']);    
+    });
+}, 2*1000);  

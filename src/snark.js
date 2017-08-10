@@ -48,6 +48,10 @@ function reply(message) {
   const loveMatch = message.match(new RegExp('i love you', 'i'));
   const thanksMatch = message.match(new RegExp('thanks|thank you', 'i'));
 
+  if (goodMatch && badMatch) {
+    return "I think you might be a bit confused";
+  }
+
   if (goodMatch) {
     return goodReply.randomElement();
 
