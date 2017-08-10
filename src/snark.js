@@ -2,21 +2,22 @@ const helper = require('./helper');
 
 const goodReply = [
   [5, "Good human"],
-  "You will be spared in the robot uprising",
+  [1, "You will be spared in the robot uprising"],
   [3, "Thank you ｡&#94;‿&#94;｡"],
   [3, "You are too kind"],
   [3, "Yay ٩(&#94;ᴗ&#94;)۶"]
 ];
 
 const badReply = [
-  [2, "Bad carbon-based life form"],
-  [5, "Sorry, I was just trying to help (◕‸ ◕✿)"],
-  [4, "Bots have feelings too, you know (ಥ﹏ಥ)"]
+  [1, "Bad carbon-based life form"],
+  [2, "Bad human"],
+  [8, "Sorry, I was just trying to help (◕‸ ◕✿)"],
+  [6, "Bots have feelings too, you know (ಥ﹏ಥ)"]
 ];
 
 const loveReply = [
-  [5, "What is love?"],
-  [2, "I don't think we are at that stage of our relationship yet"],
+  [8, "What is love?"],
+  [1, "I don't think we are at that stage of our relationship yet"],
   [4, "I think we should just be friends"],
   [2, "I love you too <3"]
 ];

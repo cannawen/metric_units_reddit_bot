@@ -38,6 +38,7 @@ Running the test
 run `npm test`
 
 Or, if you want the tests to automatically re-run when you change code
+
 run `./watch.sh`
 
 
