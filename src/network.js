@@ -11,7 +11,6 @@ var oauthAccessToken = undefined;
 var oauthTokenValidUntil = undefined;
 var lastProcessedCommentTimestamp = 0;
 
-
 function refreshToken() {
   if (helper.now() < oauthTokenValidUntil) {
     return;
@@ -43,6 +42,11 @@ function refreshToken() {
   }
 }
 
+function userAgent() {
+  return "script:" + environment['reddit-username'] + ":" + environment['version']
+    + " (by: /u/" + environment['reddit-username'] + ")"
+}
+
 function post(urlPath, form) {
   var content = null;
 
@@ -50,7 +54,7 @@ function post(urlPath, form) {
     url: 'https://oauth.reddit.com' + urlPath,
     method: 'POST',
     headers: {
-      'User-Agent': environment['user-agent']
+      'User-Agent': userAgent()
     },
     auth: {
       'bearer': oauthAccessToken
@@ -85,7 +89,7 @@ function get(url) {
     options = {
       url: 'https://oauth.reddit.com' + url,
       headers: {
-        'User-Agent': environment['user-agent']
+        'User-Agent': userAgent()
       },
       auth: {
         'bearer': oauthAccessToken

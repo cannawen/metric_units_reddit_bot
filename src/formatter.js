@@ -1,3 +1,5 @@
+const environment = require('./helper').environment();
+
 function formatReply(original, conversions) {
   var message;
   if (original.length < 50) {
@@ -6,7 +8,8 @@ function formatReply(original, conversions) {
     message = tabularData(conversions);
   }
 
-  return message;// + "\n\n----\n^Beep ^boop, ^I ^am ^a ^bot ^that ^converts ^posts ^to ^SI ^units"
+  return message; + "\n\n&nbsp;\n\n&nbsp;"
+    + "^I ^am ^a ^bot ^| ^[source](https://github.com/cannawen/metric_units_reddit_bot) ^| ^" + environment['version'];
 }
 
 function inPlaceConversion(original, conversions) {

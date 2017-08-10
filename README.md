@@ -32,7 +32,7 @@ oauth-username: `your-oauth-username`
 oauth-secret: `your-oauth-secret`
 reddit-username: `your-username-here`
 reddit-password: `your-password-here`
-user-agent: script:`your-bot-name`:`your-bot-version` (by /u/`your-username-here`)
+version: `your-bot-version`
 ```
 run `./lib/deploy.sh`
 
