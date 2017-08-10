@@ -13,7 +13,7 @@ All of the app code is in directory `src`. The app starts in `bot.js`, this file
 
 `formatter.js` takes the conversions from above, and constructs a reply to the comment
 
-`helper.js` exists so we can mock non-deterministic methods during test
+`helper.js` exists so we can easily mock external dependencies during test
 
 `network.js` handles get, post, and OAuth requests and parses the objects it gets back for easier consumption
 
@@ -33,7 +33,7 @@ user-agent: script:SIUnits:0.1 (by /u/SI_units_bot)
 run `./deploy.sh`
 
 
-Running the test
+Running the tests
 ---
 run `npm test`
 
@@ -42,6 +42,12 @@ Or, if you want the tests to automatically re-run when you change code
 run `./watch.sh`
 
 
+Questions or Comments?
+---
+Feel free to message me :)
+
+
 License
 ---
 This source is distributed under GNU GPLv3
+Pull requests or derivative works welcome

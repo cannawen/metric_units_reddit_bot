@@ -6,11 +6,10 @@ const request = require('request');
 const yaml = require('js-yaml');
 
 const converter = require('./converter');
+const environment = require('./helper').environment();
 const formatter = require('./formatter');
 const network = require('./network');
 const snark = require('./snark');
-
-const MY_NAME_IS = "si_units_bot";
 
 //TODO
 //Add USA-based subreddits
@@ -60,8 +59,8 @@ setInterval(() => {
       return converter.shouldConvert(comment['commentBody']);
     })
     .filter(comment => {
-      //I did not write it
-      return comment['author'].toLowerCase() !== MY_NAME_IS.toLowerCase();
+      //This bot did not write it
+      return comment['author'].toLowerCase() !== environment['reddit-username'].toLowerCase();
     })    
     .filter(comment => {
       //Is not part of excluded subreddits

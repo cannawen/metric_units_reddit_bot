@@ -4,9 +4,12 @@ const path = require('path');
 const request = require('request');
 const yaml = require('js-yaml');
 
+const environment = require('./helper').environment();
+
 var oauthAccessToken = undefined;
 var oauthTokenValidUntil = undefined;
 var lastProcessedCommentTimestamp = 0;
+
 
 function refreshToken() {
   if (Date.now() < oauthTokenValidUntil) {
@@ -14,18 +17,19 @@ function refreshToken() {
   }
 
   var done = false;
+console.log(environment)
 
   request({
     url: 'https://www.reddit.com/api/v1/access_token',
     method: 'POST',
     auth: {
-      user: 'lNQBbnDfqX9p6Q',
-      pass: '4wAQS41IV9gllE4kECo-v2gUM7Q'
+      user: environment['oauth-username'],
+      pass: environment['oauth-secret']
     },
     form: {
       'grant_type': 'password',
-      'username': 'SI_units_bot',
-      'password': 'cocktail-pupa-ably'
+      'username': environment['reddit-username'],
+      'password': environment['reddit-password']
     }
   }, function(err, res) {
     var json = JSON.parse(res.body);
@@ -46,7 +50,7 @@ function post(urlPath, form) {
     url: 'https://oauth.reddit.com' + urlPath,
     method: 'POST',
     headers: {
-      'User-Agent': 'script:SIUnits:0.1 (by /u/SI_units_bot)'
+      'User-Agent': environment['user-agent']
     },
     auth: {
       'bearer': oauthAccessToken
@@ -60,7 +64,6 @@ function post(urlPath, form) {
     try {
       content = JSON.parse(res.body);
     } catch (e) {
-      // console.log(e);
       content= undefined;
     }
   });
@@ -82,7 +85,7 @@ function get(url) {
     options = {
       url: 'https://oauth.reddit.com' + url,
       headers: {
-        'User-Agent': 'SIUnits/0.1 by SI_units_bot'
+        'User-Agent': environment['user-agent']
       },
       auth: {
         'bearer': oauthAccessToken
@@ -98,7 +101,6 @@ function get(url) {
       try {
         content = JSON.parse(res.body);
       } catch (e) {
-        // console.log(e);
         content = undefined;
       }
     }
