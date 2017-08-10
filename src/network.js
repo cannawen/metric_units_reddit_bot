@@ -152,7 +152,8 @@ function getUnreadRepliesAndMarkAllAsRead() {
   }).map(raw => {
     return {
       'body': raw['data']['body'],
-      'id': raw['data']['name']
+      'id': raw['data']['name'],
+      'submission': raw['data']['link_title']
     }
   });
 }

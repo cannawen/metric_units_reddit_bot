@@ -29,17 +29,37 @@ const thanksReply = [
   "Any time, my dear redditor"
 ];
 
+let snarked = {};
+
 function shouldReply(message) {
-  if (helper.random() > 0.3 || message.length > 25) {
+  const now = helper.now();
+
+  function cleanupOldSnarked() {
+    snarked = Object.keys(snarked).reduce((memo, key) => {
+      const yesterday = now - 24*60*60*1000;
+      if (snarked[key] > yesterday) {
+        memo[key] = now;
+      }
+    }, {});
+  };
+
+  cleanupOldSnarked();
+
+  if (message.length > 25) {
     return false;
   }
-  
-  const match = message.match(new RegExp('good bot|bad bot|i love you|thanks|thank you', 'i'));
 
-  if (match) {
+  const match = message.match(new RegExp('good bot|bad bot|i love you|thanks|thank you', 'i'));
+  const postTitle = message['submission'];
+
+  if (match && snarked[postTitle] === undefined) {
+    snarked[postTitle] = now;
+    return true;
+
+  } else if (match && helper.random() > 0.6) {
     return true;
   } else {
-    return false;
+    return false
   }
 }
 
