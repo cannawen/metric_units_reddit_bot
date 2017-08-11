@@ -1,8 +1,16 @@
-function f2c(f) {
-  return Math.round(((f - 32) * 5/9));
+Array.prototype.regexJoin = function() {
+  return "(?:" + this.map(el => el.source).join("|") + ")";
 }
 
-function mi2km(s) {
+String.prototype.regex = function() {
+  return new RegExp(this, "gi");
+}
+
+function fahrenheitToCelsius(f) {
+  return addCommas(Math.round(((f - 32) * 5/9)));
+}
+
+function milesToKilometers(s) {
   var decimals;
 
   if (s.indexOf('.') !== -1) {
@@ -14,19 +22,7 @@ function mi2km(s) {
   }
 
   const multiplier = Math.pow(10, decimals);
-  return (Math.round(s * 1.609344 * multiplier)/multiplier).toFixed(decimals);
-}
-
-function kmString(string) {
-  switch (string) {
-    case "mph":
-    case "miles per hour":
-      return "km/h";
-    case "miles":
-    case "mi":
-    default:
-      return "km"
-  }
+  return addCommas((Math.round(s * 1.609344 * multiplier)/multiplier).toFixed(decimals));
 }
 
 function removeCommas(x) {
@@ -39,91 +35,93 @@ function addCommas(x) {
     return parts.join(".");
 }
 
-const regularExpressions = [{
-  "description" : "˚F range to ˚C range",
-  "regex" : /(?:\s|^)(-?\d+) ?- ?(-?\d+) ?(?:degrees? F|°F|(?:(?:degrees |°)?(?:Fahrenheit|fahrenheit)))(?:\s|$|\b)/g,
-  "replacement" : (_, firstTemp, secondTemp, offset, string) => f2c(firstTemp) + " to " + f2c(secondTemp) + '°C'
-},
-{
-  "description" : "°F to °C",
-  "regex" : /(?:\s|^)(-?\d+) ?(?:degrees? F|°F|(?:(?:degrees |°)?(?:Fahrenheit|fahrenheit)))(?:\s|$|\b)/g, 
-  "replacement" : (_, number, offset, string) => f2c(number) + "°C"
-},
-{
-  "description" : "miles with commas and decimals to kilometers",
-  "regex" : /(?:\s|^)(\d{1,3}(?:,\d{3})+\.\d+)(?: ?)(miles?|mi|mph|miles? per hour)(?:\s|$|\b)/g,
-  "replacement" : (_, number, units, offset, string) => addCommas(mi2km(removeCommas(number))) + " " + kmString(units)
-},
-{
-  "description" : "decimal miles to kilometers",
-  "regex" : /(?:\s|^)(\d+\.\d+)(?: ?)(miles?|mi|mph|miles? per hour)(?:\s|$|\b)/g,
-  "replacement" : (_, number, units, offset, string) => addCommas(mi2km(number)) + " " + kmString(units)
-},
-{
-  "description" : "miles with commas to kilometers",
-  "regex" : /(?:\s|^)(\d{1,3}(?:,\d{3})+)(?: ?)(miles?|mi|mph|miles? per hour)(?:\s|$|\b)/g,
-  "replacement" : (_, number, units, offset, string) => addCommas(mi2km(removeCommas(number))) + " " + kmString(units)
-},
-{
-  "description" : "miles to kilometers",
-  "regex" : /(?:\s|^)(\d+)(?: ?)(miles?|mi|mph|miles? per hour)(?:\s|$|\b)/g,
-  "replacement" : (_, number, units, offset, string) => addCommas(mi2km(number)) + " " + kmString(units)
-}];
+const startEndRegex 
+  = /(?:^|$|[\s\(\)])/.source;
 
-function shouldConvert(input) {
+const numberRegex 
+  = /-?/.source
+  + [
+      /\d+/,
+      /\d{1,3}(?:,\d{3})+/
+    ].regexJoin() 
+  + /(?:\.\d+)?/.source;
 
-  function hasPowerOfTenNumberOver10(input) {
-    return input.match(/(?:\s|^)(100+|10{1,2}(?:,000))(?:\s|$|\b)/g)
+const unitsLookupMap = {
+  "°F to °C" : {
+    "unitRegex" : [
+                    /° ?f/, 
+                    /degrees? f/,
+                    /degrees? fahrenheit/,
+                    /fahrenheit/
+                  ].regexJoin(),
+    "conversionFunction" : fahrenheitToCelsius,
+    "inUnits" : "°F",
+    "outUnits" : "°C",
+    "excludeHyperbole" : false,
+    "excludeZeroValue" : false
+  },
+  "miles to kilometers": {
+    "unitRegex" : [/mi/, /miles?/].regexJoin(),
+    "conversionFunction" : milesToKilometers,
+    "inUnits" : " miles",
+    "outUnits" : " km",
+    "excludeHyperbole" : true,
+    "excludeZeroValue" : true
+  },
+  "miles per hour": {
+    "unitRegex" : "mph",
+    "conversionFunction" : milesToKilometers,
+    "inUnits" : " mph",
+    "outUnits" : " km/h",
+    "excludeHyperbole" : true,
+    "excludeZeroValue" : true
   }
-
-  function writtenByAnotherBot(input) {
-    return input.match(/\bbot\b/g);
-  }
-
-  function has0Distance(input) {
-    return input.match(/\b0 (?:mi|mph)/g);
-  }
-
-  if (input.length > 300 
-    || hasPowerOfTenNumberOver10(input) 
-    || writtenByAnotherBot(input)
-    || has0Distance(input)) {
-
-    return false;
-  }
-
-  for (var i = 0; i < regularExpressions.length; i++) {
-    const matches = input.match(regularExpressions[i]["regex"]);
-    if (matches != null) {
-      return true;
-    }
-  }
-  
-  return false;
 }
 
 function conversions(input) {
-  return regularExpressions.reduce((memo, regex) => {
-    const matches = input.match(regex["regex"]);
+  function shouldProcessInput(input) {
+    const hasNumber = input.match(numberRegex.regex());
+    const writtenByBot = input.match(/\bbot\b/g);
+    const postIsShort = input.length < 300;
 
-    if (matches) {
-      matches
-        .map(match => match.trim())
-        .filter(match => {
-          return Object.keys(memo).reduce((m, k) => {
-            return m && k.indexOf(match) === -1;
-          }, true)
-        })
-        .forEach(match => {
-          memo[match] = match.replace(regex["regex"], regex["replacement"]);
-        });
+    return hasNumber && !writtenByBot && postIsShort;
+  }
+
+  if (!shouldProcessInput(input)) {
+    return {};
+  }
+
+  return Object.keys(unitsLookupMap).reduce((memo, key) => {
+    const map = unitsLookupMap[key];
+    const unitRegex = map['unitRegex'];
+    const excludeHyperbole = map['excludeHyperbole'];
+
+    const completeRegex = (startEndRegex + numberRegex + "(?= ?" + unitRegex + startEndRegex + ")").regex();
+    const matches = input.match(completeRegex);
+
+    if (!matches) {
+      return memo;
     }
-    
+
+    function cleanupNumber(input) {
+      return input.replace(/[^\d.-]/g, '');
+    }
+    matches
+      .map(cleanupNumber)
+      .forEach(number => {
+        function shouldProcessNumber(number) {
+          const isInvalidHyperbole = map['excludeHyperbole'] && number.match(/^100+(?:\.0+)?$/);
+          const isInvalidZero = map['excludeZeroValue'] && number.match(/^0+(?:\.0+)$/);
+          return !isInvalidHyperbole && !isInvalidZero;
+        }
+        if (shouldProcessNumber(number)) {
+          memo[addCommas(number) + map['inUnits']] = map['conversionFunction'](number) + map['outUnits'];
+        }
+      });
     return memo;
   }, {});
 }
 
 module.exports = {
-  "shouldConvert" : shouldConvert,
   "conversions" : conversions
 }

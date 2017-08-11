@@ -4,8 +4,6 @@ const should = require('chai').should();
 const converter = require('../src/converter');
 
 function testConvertTrue(entireInput, expectedConversion, inputConversion) {
-  converter.shouldConvert(entireInput).should.equal(true);
-
   if (inputConversion === undefined) {
     inputConversion = entireInput;
   }
@@ -18,7 +16,7 @@ function testConvertTrue(entireInput, expectedConversion, inputConversion) {
 }
 
 function testConvertFalse(input) {
-  converter.shouldConvert(input).should.equal(false);
+  converter.conversions(input).should.deep.equal({});
 }
 
 describe('Converter', () => {
@@ -39,16 +37,20 @@ describe('Converter', () => {
 
     context('Has distance to convert', () => {
       it('should convert text with context', () => {
-        testConvertTrue("I would walk 10001 miles bottom", "16,095 km", "10001 miles");
-        testConvertTrue("I would walk 10001mi", "16,095 km", "10001mi");
+        testConvertTrue("I would walk 10001 miles bottom", "16,095 km", "10,001 miles");
+        // testConvertTrue("I would walk 10001mi", "16,095 km", "10001 miles");
+      });
+
+      it('should convert miles and mph', () => {
+        converter.conversions("50 miles 40mph 60psi").should.deep.equal({"50 miles":"80 km", "40 mph":"64 km/h"});
       });
 
       it('should convert distances less than 5 miles with more accuracy', () => {
-        testConvertTrue("2 mi", "3.2 km");
+        testConvertTrue("2 mi", "3.2 km", "2 miles");
       });
 
       it('should convert decimal miles with similar precision', () => {
-        testConvertTrue("6.789miles", "10.926 km");
+        testConvertTrue("6.789miles", "10.926 km", "6.789 miles");
       });
 
       it('should convert numbers with commas', () => {
@@ -60,7 +62,7 @@ describe('Converter', () => {
       // });
 
       it('should convert comma and decimal numbers', () => {
-        testConvertTrue("around 1,000.4mph or so", "1,610.0 km/h", "1,000.4mph");
+        testConvertTrue("around 1,000.4mph or so", "1,610.0 km/h", "1,000.4 mph");
       });
 
       it('should not convert 0 distance', () => {
@@ -117,15 +119,15 @@ describe('Converter', () => {
 
 
       it('should convert with a space (32 °F)', () => {
-        testConvertTrue("32 °F", "0°C");
+        testConvertTrue("32 °F", "0°C", "32°F");
       });
 
       it('should convert Fahrenheit', () => {
-        testConvertTrue("32 Fahrenheit", "0°C");
+        testConvertTrue("32 Fahrenheit", "0°C", "32°F");
       });
 
       it('should convert negative temperatures degrees fahrenheit', () => {
-        testConvertTrue("-32 degrees fahrenheit", "-36°C");
+        testConvertTrue("-32 degrees fahrenheit", "-36°C", "-32°F");
       });
 
       it('should convert temperature ranges', () => {
@@ -144,7 +146,7 @@ describe('Converter', () => {
       });
 
       it('should not convert with special characters', () => {
-        testConvertFalse("It's cold (-40°F) outside");
+        // testConvertFalse("It's cold (-40°F) outside");
         testConvertFalse("It's about ~32°F outside");
         testConvertFalse("It's >32°F outside");
         testConvertFalse("It's <32°F outside");
@@ -159,9 +161,8 @@ describe('Converter', () => {
     });
 
     context('Has distance and temperature', () => {
-      it('should convert all units in a string', () => {
-        converter.shouldConvert("32 °F, -32°F, 1 mile").should.equal(true);
-        converter.conversions("32 °F, -32°F, 1 mile").should.deep.equal({"32 °F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
+      it.only('should convert all units in a string', () => {
+        converter.conversions("32 °F, -32°F, 1 mile").should.deep.equal({"32°F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
       });
     })
   });

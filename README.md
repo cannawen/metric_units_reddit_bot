@@ -66,5 +66,5 @@ License
 ---
 This source is distributed under GNU GPLv3
 
-Pull requests or derivative works welcome
+Pull requests or derivative works welcome... just please don't make an imperial_units_bot to spite me D: 
 
