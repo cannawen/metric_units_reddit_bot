@@ -23,9 +23,9 @@ describe('Converter', () => {
   describe('#conversions()', () => {
 
     context('Current failing tests - bugs and edge cases', () => {
-      // it('should convert ranges and singles of different units', () => {
-      //   converter.conversions("100 miles 100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C", "100 miles" : "161 km" })
-      // })
+      it('should convert ranges and singles of different units', () => {
+        converter.conversions("100 miles 100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C", "100 miles" : "161 km" })
+      })
     })
 
     context('Post that is very long (>300 chars)', () => {
@@ -69,6 +69,10 @@ describe('Converter', () => {
 
       it('should convert comma and decimal numbers', () => {
         testConvertTrue("around 1,000.4mph or so", "1,610.0 km/h", "1,000.4 mph");
+      });
+
+      it('should convert ranges', () => {
+        converter.conversions("It was 1-10 miles long").should.deep.equal({"1 to 10 miles" : "1.6 to 16 km"});
       });
 
       it('should not convert 0 distance', () => {

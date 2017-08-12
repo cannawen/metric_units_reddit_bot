@@ -143,8 +143,7 @@ function conversions(input) {
           if (shouldProcessNumber(number)) {
             const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](number) : map['inUnits'];
             const alreadyConverted = Object.keys(memo).reduce((m, k) => {
-              //This logic is a bit shifty ... 100-101 degrees F 100 miles -> 100 miles will not be converted
-              return k.indexOf("to " + addCommas(number) + inUnits) != -1 || k.indexOf(addCommas(number) + " to" ) != -1|| m;
+              return k.indexOf("to " + addCommas(number) + inUnits) != -1 || m;
             }, false);
             if (alreadyConverted) {
               return;
