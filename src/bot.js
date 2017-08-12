@@ -84,12 +84,7 @@ setInterval(() => {
       return Object.keys(map['conversions']).length > 0
     })
     .forEach(map => {
-      const commentBody = map['comment']['commentBody'];
-      const conversions = map['conversions'];
-      const parentId = map['comment']['id'];
-
-      const reply = formatter.formatReply(commentBody, conversions);
-
-      network.postComment(parentId, reply);
+      const reply = formatter.formatReply(map['comment'], map['conversions']);
+      network.postComment(map['comment']['id'], reply);
     })
 }, 2*1000);  
