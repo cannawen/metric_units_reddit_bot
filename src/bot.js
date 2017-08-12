@@ -35,25 +35,26 @@ const excludedSubreddits = [
   "electricvehicles",
   "Portland",
   "politics",
-  "Omaha"
+  "Omaha",
+  "motorcycles"
 ].map(subreddit => subreddit.toLowerCase());
 
 network.refreshToken();
 
-// setInterval(() => {
-//   network.refreshToken();
+setInterval(() => {
+  network.refreshToken();
 
-//   network
-//     .getUnreadRepliesAndMarkAllAsRead()
-//     .filter(message => {
-//       return snark.shouldReply(message['body']);
-//     })
-//     .forEach(message => {
-//       const reply = snark.reply(message['body']);
-//       network.postComment(message['id'], reply);
-//     });
+  network
+    .getUnreadRepliesAndMarkAllAsRead()
+    .filter(message => {
+      return snark.shouldReply(message['body']);
+    })
+    .forEach(message => {
+      const reply = snark.reply(message['body']);
+      network.postComment(message['id'], reply);
+    });
 
-// }, 60*1000)
+}, 60*1000)
 
 setInterval(() => {
   function thisBotWroteComment(comment) {
