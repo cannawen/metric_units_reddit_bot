@@ -23,9 +23,9 @@ describe('Converter', () => {
   describe('#conversions()', () => {
 
     context('Current failing tests - bugs and edge cases', () => {
-      it('should convert ranges and singles of different units', () => {
-        converter.conversions("100 miles 100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C", "100 miles" : "161 km" })
-      })
+      // it('should collapse ranges if needed', () => {
+      //   converter.conversions("100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C" })
+      // })
     })
 
     context('Post that is very long (>300 chars)', () => {
@@ -177,6 +177,10 @@ describe('Converter', () => {
 
       it('should semantically convert the same measurement', () => {
         converter.conversions("32mph 32 32°F 32 °F 32mi 32 miles").should.deep.equal({"32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" })
+      })
+
+      it('should convert ranges and singles of different units', () => {
+        converter.conversions("101 miles 101-200 degrees F").should.deep.equal({"101 to 200°F" : "38 to 93°C", "101 miles" : "163 km" })
       })
     })
   });

@@ -118,9 +118,14 @@ function conversions(input) {
           const fromNumber = range.substring(0, toIndex);
           const toNumber = range.substring(toIndex + 1);
 
-          const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](number) : map['inUnits'];
-          const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](number) : map['outUnits'];
-          const outRange = map['conversionFunction'](fromNumber) + " to " + map['conversionFunction'](toNumber);
+          const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](toNumber) : map['inUnits'];
+          
+          const outFromNumber = map['conversionFunction'](fromNumber);
+          const outToNumber = map['conversionFunction'](toNumber);
+          const outRange = outFromNumber + " to " + outToNumber;
+
+          const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outToNumber) : map['outUnits'];
+
           memo[fromNumber + " to " + toNumber + inUnits] = outRange + outUnits;
         })
     }
@@ -140,6 +145,7 @@ function conversions(input) {
             const isInvalidZero = map['excludeZeroValue'] && number.match(/^0+(?:\.0+)?$/);
             return !isInvalidHyperbole && !isInvalidZero;
           }
+
           if (shouldProcessNumber(number)) {
             const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](number) : map['inUnits'];
             const alreadyConverted = Object.keys(memo).reduce((m, k) => {
@@ -148,8 +154,9 @@ function conversions(input) {
             if (alreadyConverted) {
               return;
             }
-            const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](number) : map['outUnits'];
-            memo[addCommas(number) + inUnits] = map['conversionFunction'](number) + outUnits;
+            const outNumber = map['conversionFunction'](number);
+            const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outNumber) : map['outUnits'];
+            memo[addCommas(number) + inUnits] = outNumber + outUnits;
           }
         });
     }
