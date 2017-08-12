@@ -1,19 +1,9 @@
 const environment = require('./helper').environment();
 
 function formatReply(original, conversions) {
-  var message;
-  const shorterThan50Chars = original.length < 50;
-
-  if (shorterThan50Chars) {
-    message = inPlaceConversion(original, conversions);
-  } else {
-    message = tabularData(conversions);
-  }
-
-  return message
+  return tabularData(conversions)
     + "\n\n&nbsp;"
-    + "\n\n"
-    + (shorterThan50Chars ? "" : "&nbsp;")
+    + "\n\n&nbsp;"
     + "^metric ^units ^bot" 
     + " ^|"
     + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is)"
@@ -21,16 +11,6 @@ function formatReply(original, conversions) {
     + " ^[source](https://github.com/cannawen/metric_units_reddit_bot)"
     + " ^|"
     + " ^" + environment['version'];
-}
-
-function inPlaceConversion(original, conversions) {
-  return Object.keys(conversions).sort(function(a, b) {
-      return b.length - a.length;
-    }).reduce((memo, nonSIvalue) => {
-      return memo.replace(
-        new RegExp(nonSIvalue, 'g'), 
-        "**" + conversions[nonSIvalue] + "**");
-    }, original);
 }
 
 function tabularData(conversions) {

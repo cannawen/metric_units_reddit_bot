@@ -26,6 +26,8 @@ describe('Converter', () => {
       // it('should collapse ranges if needed', () => {
       //   converter.conversions("100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C" })
       // })
+
+      //test "sub 8 mile" string
     })
 
     context('Post that is very long (>300 chars)', () => {
