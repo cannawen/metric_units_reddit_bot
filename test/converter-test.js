@@ -22,6 +22,12 @@ function testConvertFalse(input) {
 describe('Converter', () => {
   describe('#conversions()', () => {
 
+    context('Current failing tests - bugs and edge cases', () => {
+      // it('should convert ranges and singles of different units', () => {
+      //   converter.conversions("100 miles 100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C", "100 miles" : "161 km" })
+      // })
+    })
+
     context('Post that is very long (>300 chars)', () => {
       it('should not convert', () => {
         testConvertFalse("t the park, have you and your 5 miles kids make some silly faces for pictures on the Thunder Mountain and talk about how it would make great Christmas cards this year. Drink about 8 bud lights throughout the day but not really ever be buzzed. Go to Red Lobster that night for dinner even though there are other seafood options just because of the biscuits and eat at least 3 baskets worth");
@@ -38,7 +44,7 @@ describe('Converter', () => {
     context('Has distance to convert', () => {
       it('should convert text with context', () => {
         testConvertTrue("I would walk 10001 miles bottom", "16,095 km", "10,001 miles");
-        // testConvertTrue("I would walk 10001mi", "16,095 km", "10001 miles");
+        testConvertTrue("I would walk 10001mi", "16,095 km", "10,001 miles");
       });
 
       it('should convert miles and mph', () => {
@@ -131,8 +137,8 @@ describe('Converter', () => {
       });
 
       it('should convert temperature ranges', () => {
-        testConvertTrue("32 - -32°F", "0 to -36°C");
-        testConvertTrue("It is 32-32°F right now", "0 to 0°C", "32-32°F")
+        testConvertTrue("32 - -32°F", "0 to -36°C", "32 to -32°F");
+        testConvertTrue("It is 32-32°F right now", "0 to 0°C", "32 to 32°F")
       });
     });
 
@@ -146,7 +152,7 @@ describe('Converter', () => {
       });
 
       it('should not convert with special characters', () => {
-        // testConvertFalse("It's cold (-40°F) outside");
+        testConvertFalse("It's cold (-40°F) outside");//, "-40°C", "-40°F");
         testConvertFalse("It's about ~32°F outside");
         testConvertFalse("It's >32°F outside");
         testConvertFalse("It's <32°F outside");
@@ -161,9 +167,13 @@ describe('Converter', () => {
     });
 
     context('Has distance and temperature', () => {
-      it.only('should convert all units in a string', () => {
+      it('should convert all units in a string', () => {
         converter.conversions("32 °F, -32°F, 1 mile").should.deep.equal({"32°F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
       });
+
+      it('should semantically convert the same measurement', () => {
+        converter.conversions("32mph 32 32°F 32 °F 32mi 32 miles").should.deep.equal({"32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" })
+      })
     })
   });
 });

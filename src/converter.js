@@ -35,16 +35,24 @@ function addCommas(x) {
     return parts.join(".");
 }
 
-const startEndRegex 
-  = /(?:^|$|[\s\(\)])/.source;
+const startRegex 
+  = /(?:^|[\s-])/.source;
+
+const endRegex 
+  = /(?:$|[\s,-])/.source;
 
 const numberRegex 
-  = /-?/.source
+  = "(" + /-?/.source
   + [
       /\d+/,
       /\d{1,3}(?:,\d{3})+/
     ].regexJoin() 
-  + /(?:\.\d+)?/.source;
+  + /(?:\.\d+)?/.source + ")";
+
+const rangeRegex
+  = numberRegex
+  + / ?(?:-|to) ?/.source
+  + numberRegex;
 
 const unitsLookupMap = {
   "°F to °C" : {
@@ -63,7 +71,7 @@ const unitsLookupMap = {
   "miles to kilometers": {
     "unitRegex" : [/mi/, /miles?/].regexJoin(),
     "conversionFunction" : milesToKilometers,
-    "inUnits" : " miles",
+    "inUnits" : (num) => num == 1 ? " mile" : " miles",
     "outUnits" : " km",
     "excludeHyperbole" : true,
     "excludeZeroValue" : true
@@ -96,28 +104,56 @@ function conversions(input) {
     const unitRegex = map['unitRegex'];
     const excludeHyperbole = map['excludeHyperbole'];
 
-    const completeRegex = (startEndRegex + numberRegex + "(?= ?" + unitRegex + startEndRegex + ")").regex();
-    const matches = input.match(completeRegex);
+    const completeRangeRegex = (startRegex + rangeRegex + "(?= ?" + unitRegex + endRegex + ")").regex();
+    const rangeMatches = input.match(completeRangeRegex);
+    if (rangeMatches) {
+      rangeMatches
+        .map(range => {
+          input = input.replace((range + " ?" + unitRegex).regex(), '');
+          return range;
+        })
+        .map(range => range.replace(/to/g, "-").replace(/[^\d.-]/g, ''))
+        .forEach(range => {
+          const toIndex = range.match(/\d-(?=-?\d)/).index + 1;
+          const fromNumber = range.substring(0, toIndex);
+          const toNumber = range.substring(toIndex + 1);
 
-    if (!matches) {
-      return memo;
+          const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](number) : map['inUnits'];
+          const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](number) : map['outUnits'];
+          const outRange = map['conversionFunction'](fromNumber) + " to " + map['conversionFunction'](toNumber);
+          memo[fromNumber + " to " + toNumber + inUnits] = outRange + outUnits;
+        })
     }
 
-    function cleanupNumber(input) {
-      return input.replace(/[^\d.-]/g, '');
+    const completeNumberRegex = (startRegex + numberRegex + "(?= ?" + unitRegex + endRegex + ")").regex();
+    const numberMatches = input.match(completeNumberRegex);
+    if (numberMatches) {
+      numberMatches
+        .map(match => {
+          input = input.replace((match + " ?" + unitRegex).regex(), '');
+          return match;
+        })
+        .map(match => match.replace(/[^\d.-]/g, ''))
+        .forEach(number => {
+          function shouldProcessNumber(number) {
+            const isInvalidHyperbole = map['excludeHyperbole'] && number.match(/^100+(?:\.0+)?$/);
+            const isInvalidZero = map['excludeZeroValue'] && number.match(/^0+(?:\.0+)?$/);
+            return !isInvalidHyperbole && !isInvalidZero;
+          }
+          if (shouldProcessNumber(number)) {
+            const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](number) : map['inUnits'];
+            const alreadyConverted = Object.keys(memo).reduce((m, k) => {
+              //This logic is a bit shifty ... 100-101 degrees F 100 miles -> 100 miles will not be converted
+              return k.indexOf("to " + addCommas(number) + inUnits) != -1 || k.indexOf(addCommas(number) + " to" ) != -1|| m;
+            }, false);
+            if (alreadyConverted) {
+              return;
+            }
+            const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](number) : map['outUnits'];
+            memo[addCommas(number) + inUnits] = map['conversionFunction'](number) + outUnits;
+          }
+        });
     }
-    matches
-      .map(cleanupNumber)
-      .forEach(number => {
-        function shouldProcessNumber(number) {
-          const isInvalidHyperbole = map['excludeHyperbole'] && number.match(/^100+(?:\.0+)?$/);
-          const isInvalidZero = map['excludeZeroValue'] && number.match(/^0+(?:\.0+)$/);
-          return !isInvalidHyperbole && !isInvalidZero;
-        }
-        if (shouldProcessNumber(number)) {
-          memo[addCommas(number) + map['inUnits']] = map['conversionFunction'](number) + map['outUnits'];
-        }
-      });
     return memo;
   }, {});
 }
