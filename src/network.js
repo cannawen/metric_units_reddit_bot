@@ -140,7 +140,8 @@ function postComment(parentId, markdownBody) {
     'parent' : parentId,
     'text' : markdownBody
   }
-  post('/api/comment', form);
+  console.log(form);
+  // post('/api/comment', form);
 }
 
 function getUnreadRepliesAndMarkAllAsRead() {

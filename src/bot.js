@@ -40,20 +40,20 @@ const excludedSubreddits = [
 
 network.refreshToken();
 
-setInterval(() => {
-  network.refreshToken();
+// setInterval(() => {
+//   network.refreshToken();
 
-  network
-    .getUnreadRepliesAndMarkAllAsRead()
-    .filter(message => {
-      return snark.shouldReply(message['body']);
-    })
-    .forEach(message => {
-      const reply = snark.reply(message['body']);
-      network.postComment(message['id'], reply);
-    });
+//   network
+//     .getUnreadRepliesAndMarkAllAsRead()
+//     .filter(message => {
+//       return snark.shouldReply(message['body']);
+//     })
+//     .forEach(message => {
+//       const reply = snark.reply(message['body']);
+//       network.postComment(message['id'], reply);
+//     });
 
-}, 60*1000)
+// }, 60*1000)
 
 setInterval(() => {
   function thisBotWroteComment(comment) {
@@ -67,20 +67,28 @@ setInterval(() => {
   network
     .getRedditComments("all")
     .filter(comment => {
-      return converter.shouldConvert(comment['commentBody']);
-    })
-    .filter(comment => {
       return thisBotWroteComment(comment);
     })    
     .filter(comment => {
       return allowedToPostInSubreddit(comment);
     })
-    .forEach(comment => {
-      const commentBody = comment['commentBody'];
-      
-      const conversions = converter.conversions(commentBody);
+    .map(comment => {
+      const conversions = converter.conversions(comment['commentBody']);
+      return {
+        "comment" : comment,
+        "conversions" : conversions
+      }
+    })
+    .filter(map => {
+      return Object.keys(map['conversions']).length > 0
+    })
+    .forEach(map => {
+      const commentBody = map['comment']['commentBody'];
+      const conversions = map['conversions'];
+      const parentId = map['comment']['id'];
+
       const reply = formatter.formatReply(commentBody, conversions);
 
-      network.postComment(comment['id'], reply);
+      network.postComment(parentId, reply);
     })
 }, 2*1000);  
