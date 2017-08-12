@@ -39,7 +39,7 @@ const startRegex
   = /(?:^|[\s-])/.source;
 
 const endRegex 
-  = /(?:$|[\s,-])/.source;
+  = /(?:$|[\s,-\.])/.source;
 
 const numberRegex 
   = "(" + /-?/.source
