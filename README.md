@@ -37,6 +37,7 @@ oauth-secret: your-oauth-secret
 reddit-username: your-username-here
 reddit-password: your-password-here
 version: your-bot-version
+dev-mode: false #true will print comment replies to console instead of posting
 ```
 run `./lib/deploy.sh` and you should have the bot up and running!
 
