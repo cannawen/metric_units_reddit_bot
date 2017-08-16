@@ -30,20 +30,7 @@ describe('Converter', () => {
       // it('should convert miles per hour', () => {
       //   testConvertTrue("999,123,456 miles per hour", "1,607,933,339 km/h");
       // });
-    })
-
-    context('Post that is very long (>300 chars)', () => {
-      it('should not convert', () => {
-        testConvertFalse("t the park, have you and your 5 miles kids make some silly faces for pictures on the Thunder Mountain and talk about how it would make great Christmas cards this year. Drink about 8 bud lights throughout the day but not really ever be buzzed. Go to Red Lobster that night for dinner even though there are other seafood options just because of the biscuits and eat at least 3 baskets worth");
-      });
-    });
-
-    context('Posted by another bot', () => {
-      it('should not convert', () => {
-        testConvertFalse("90 degree F bot");
-        testConvertFalse("5 miles beep boop, I am a bot!");
-      });
-    });    
+    }) 
 
     context('Has distance to convert', () => {
       it('should convert text with context', () => {

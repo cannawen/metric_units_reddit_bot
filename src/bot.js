@@ -11,35 +11,12 @@ const formatter = require('./formatter');
 const network = require('./network');
 const snark = require('./snark');
 
-//Do not post in these subreddits
-const excludedSubreddits = [
-  "denver",
-  "veterans",
-  "artc",
-  "baseball",
-  "asksciencediscussion",
-  "churning",
-  "awardtravel",
-  "churningcanada",
-  "mlbtheshow",
-  "fitness",
-  "cars",
-  "UKPersonalFinance",
-  "science",
-  "dayton",
-  "askscience",
-  "Tennesseetitans",
-  "NASCAR",
-  "legaladvice",
-  "Cardinals",
-  "electricvehicles",
-  "Portland",
-  "politics",
-  "Omaha",
-  "motorcycles",
-  "funny",
-  "news"
-].map(subreddit => subreddit.toLowerCase());
+const excludedSubreddits 
+  = yaml
+    .safeLoad(
+      fs.readFileSync('./src/excluded-subreddits.yaml', 'utf8')
+    )
+    .map(subreddit => subreddit.toLowerCase());
 
 network.refreshToken();
 
@@ -53,13 +30,15 @@ setInterval(() => {
     })
     .forEach(message => {
       const reply = snark.reply(message['body']);
-      network.postComment(message['id'], reply);
+      if (reply !== undefined) {
+        network.postComment(message['id'], reply);
+      }
     });
 
 }, 60*1000)
 
 setInterval(() => {
-  function thisBotWroteComment(comment) {
+  function thisBotDidntWriteComment(comment) {
       return comment['author'].toLowerCase() !== environment['reddit-username'].toLowerCase();
   }
 
@@ -67,14 +46,25 @@ setInterval(() => {
       return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
   }
 
+  function commentDoesntMentionsBot(comment) {
+    return comment['commentBody'].match(/\bbot\b/gi) === null;
+  }
+
+  function postIsShort(comment) {
+    return comment['commentBody'].length < 300;
+  }
+
+  function hasNumber(comment) {
+    return comment['commentBody'].match(/\d/) !== null;
+  }
+
   network
     .getRedditComments("all")
-    .filter(comment => {
-      return thisBotWroteComment(comment);
-    })    
-    .filter(comment => {
-      return allowedToPostInSubreddit(comment);
-    })
+    .filter(thisBotDidntWriteComment)
+    .filter(allowedToPostInSubreddit)
+    .filter(commentDoesntMentionsBot)
+    .filter(postIsShort)
+    .filter(hasNumber)
     .map(comment => {
       const conversions = converter.conversions(comment['commentBody']);
       return {
@@ -82,9 +72,7 @@ setInterval(() => {
         "conversions" : conversions
       }
     })
-    .filter(map => {
-      return Object.keys(map['conversions']).length > 0
-    })
+    .filter(map => Object.keys(map['conversions']).length > 0)
     .forEach(map => {
       const reply = formatter.formatReply(map['comment'], map['conversions']);
       network.postComment(map['comment']['id'], reply);

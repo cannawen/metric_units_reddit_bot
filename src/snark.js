@@ -24,7 +24,7 @@ const loveReply = [
 
 const thanksReply = [
   "Glad to be of service",
-  "(╭☞'ω')╭☞ I gotchu",
+  "(╭☞'ω')╭☞ I gotchu fam",
   "You're welcome ｡&#94;‿&#94;｡",
   "Any time, my dear redditor"
 ];

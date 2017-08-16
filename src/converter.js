@@ -87,18 +87,6 @@ const unitsLookupMap = {
 }
 
 function conversions(input) {
-  function shouldProcessInput(input) {
-    const hasNumber = input.match(numberRegex.regex());
-    const writtenByBot = input.match(/\bbot\b/g);
-    const postIsShort = input.length < 300;
-
-    return hasNumber && !writtenByBot && postIsShort;
-  }
-
-  if (!shouldProcessInput(input)) {
-    return {};
-  }
-
   return Object.keys(unitsLookupMap).reduce((memo, key) => {
     const map = unitsLookupMap[key];
     const unitRegex = map['unitRegex'];
