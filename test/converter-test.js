@@ -42,6 +42,10 @@ describe('Converter', () => {
         converter.conversions("50 miles 40mph 60psi").should.deep.equal({"50 miles":"80 km", "40 mph":"64 km/h"});
       });
 
+      it('should convert miles per hour', () => {
+        testConvertTrue("50 miles per hour", "80 km/h", "50 mph");
+      });
+
       it('should convert distances less than 5 miles with more accuracy', () => {
         testConvertTrue("2 mi.", "3.2 km", "2 miles");
       });

@@ -55,6 +55,23 @@ const rangeRegex
   + numberRegex;
 
 const unitsLookupMap = {
+  //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
+  "miles per hour to km/h": {
+    "unitRegex" : [/mph/, /miles per hour/].regexJoin(),
+    "conversionFunction" : milesToKilometers,
+    "inUnits" : " mph",
+    "outUnits" : " km/h",
+    "excludeHyperbole" : true,
+    "excludeZeroValue" : true
+  },
+  "miles to km": {
+    "unitRegex" : [/mi/, /miles?/].regexJoin(),
+    "conversionFunction" : milesToKilometers,
+    "inUnits" : (num) => num == 1 ? " mile" : " miles",
+    "outUnits" : " km",
+    "excludeHyperbole" : true,
+    "excludeZeroValue" : true
+  },
   "°F to °C" : {
     "unitRegex" : [
                     /° ?f/, 
@@ -67,27 +84,14 @@ const unitsLookupMap = {
     "outUnits" : "°C",
     "excludeHyperbole" : false,
     "excludeZeroValue" : false
-  },
-  "miles to kilometers": {
-    "unitRegex" : [/mi/, /miles?/].regexJoin(),
-    "conversionFunction" : milesToKilometers,
-    "inUnits" : (num) => num == 1 ? " mile" : " miles",
-    "outUnits" : " km",
-    "excludeHyperbole" : true,
-    "excludeZeroValue" : true
-  },
-  "miles per hour": {
-    "unitRegex" : "mph",
-    "conversionFunction" : milesToKilometers,
-    "inUnits" : " mph",
-    "outUnits" : " km/h",
-    "excludeHyperbole" : true,
-    "excludeZeroValue" : true
   }
 }
 
 function conversions(input) {
-  return Object.keys(unitsLookupMap).reduce((memo, key) => {
+  return Object.keys(unitsLookupMap)
+  //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
+  .sort((a, b) => b.length - a.length)
+  .reduce((memo, key) => {
     const map = unitsLookupMap[key];
     const unitRegex = map['unitRegex'];
     const excludeHyperbole = map['excludeHyperbole'];
