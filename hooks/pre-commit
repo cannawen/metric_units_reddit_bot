@@ -12,3 +12,11 @@ if [[ "$count" -ne 1 ]]; then
   echo "Remove $count console.log() statements"
   exit 1
 fi
+
+# Don't allow .only() statements to be committed in tests
+
+count=`grep -iR --include \*.js '.only(' ./test | wc -l | awk '{print $1}'`
+if [[ "$count" -ne 0 ]]; then 
+  echo "Remove $count .only() statements from test"
+  exit 1
+fi
