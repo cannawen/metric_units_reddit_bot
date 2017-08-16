@@ -36,7 +36,9 @@ const excludedSubreddits = [
   "Portland",
   "politics",
   "Omaha",
-  "motorcycles"
+  "motorcycles",
+  "funny",
+  "news"
 ].map(subreddit => subreddit.toLowerCase());
 
 network.refreshToken();

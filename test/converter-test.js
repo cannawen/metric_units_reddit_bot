@@ -26,6 +26,10 @@ describe('Converter', () => {
       // it('should collapse ranges if needed', () => {
       //   converter.conversions("100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C" })
       // })
+
+      // it('should convert miles per hour', () => {
+      //   testConvertTrue("999,123,456 miles per hour", "1,607,933,339 km/h");
+      // });
     })
 
     context('Post that is very long (>300 chars)', () => {
@@ -62,10 +66,6 @@ describe('Converter', () => {
       it('should convert numbers with commas', () => {
         testConvertTrue("999,123,456 miles", "1,607,933,339 km");
       });
-
-      // it('should convert miles per hour', () => {
-      //   testConvertTrue("999,123,456 miles per hour", "1,607,933,339 km/h");
-      // });
 
       it('should convert comma and decimal numbers', () => {
         testConvertTrue("around 1,000.4mph or so", "1,610.0 km/h", "1,000.4 mph");
@@ -143,6 +143,7 @@ describe('Converter', () => {
       it('should convert temperature ranges', () => {
         testConvertTrue("32 - -32°F", "0 to -36°C", "32 to -32°F");
         testConvertTrue("It is 32-32°F right now", "0 to 0°C", "32 to 32°F")
+        testConvertTrue("Correct you'll need ~ 200 - 220 degrees f for a little while", "93 to 104°C", "200 to 220°F")
       });
     });
 
@@ -156,7 +157,7 @@ describe('Converter', () => {
       });
 
       it('should not convert with special characters', () => {
-        testConvertFalse("It's cold (-40°F) outside");//, "-40°C", "-40°F");
+        testConvertFalse("It's cold (-40°F) outside");
         testConvertFalse("It's about ~32°F outside");
         testConvertFalse("It's >32°F outside");
         testConvertFalse("It's <32°F outside");
@@ -172,16 +173,26 @@ describe('Converter', () => {
 
     context('Has distance and temperature', () => {
       it('should convert all units in a string', () => {
-        converter.conversions("32 °F, -32°F, 1 mile").should.deep.equal({"32°F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
+        converter.conversions("32 °F, -32°F, 1 mile").should.deep.equal({ "32°F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
       });
 
       it('should semantically convert the same measurement', () => {
-        converter.conversions("32mph 32 32°F 32 °F 32mi 32 miles").should.deep.equal({"32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" })
-      })
+        converter.conversions("32mph 32 32°F 32 °F 32mi 32 miles").should.deep.equal({ "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" })
+      });
 
       it('should convert ranges and singles of different units', () => {
-        converter.conversions("101 miles 101-200 degrees F").should.deep.equal({"101 to 200°F" : "38 to 93°C", "101 miles" : "163 km" })
-      })
+        converter.conversions("101 miles 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101 miles" : "163 km" })
+      });
+      
+      context('This is kinda weird behaviour, but not important to fix', () => {
+        it('should convert ranges and singles of the same units, if it is the first one', () => {
+          converter.conversions("101°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101°F" : "38°C" })
+        });
+
+        it('should not convert ranges and singles of the same units, if it is the last one', () => {
+          converter.conversions("200°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C" })
+        });
+      });
     })
   });
 });
