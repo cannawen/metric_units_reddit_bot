@@ -1,8 +1,14 @@
 #!/bin/bash
+ORIGINAL_STASHED_COUNT=`git stash list | wc -l`
+git stash --keep-index
+NEW_STASHED_COUNT=`git stash list | wc -l`
+
 npm test
 
+returnvalue=0
+
 if [[ $? -eq 1 ]]; then
-  exit 1
+  returnvalue=1
 fi
 
 # Don't allow console.log() statements to be committed.
@@ -10,7 +16,7 @@ fi
 count=`grep -iR --include \*.js 'console\.log' ./src ./test | wc -l | awk '{print $1}'`
 if [[ "$count" -ne 1 ]]; then 
   echo "Remove $count console.log() statements"
-  exit 1
+  returnvalue=1
 fi
 
 # Don't allow .only() statements to be committed in tests
@@ -18,5 +24,12 @@ fi
 count=`grep -iR --include \*.js '.only(' ./test | wc -l | awk '{print $1}'`
 if [[ "$count" -ne 0 ]]; then 
   echo "Remove $count .only() statements from test"
-  exit 1
+  returnvalue=1
 fi
+
+if [ $NEW_STASHED_COUNT -gt $ORIGINAL_STASHED_COUNT ]
+then
+  git stash pop
+fi
+
+exit $returnvalue
