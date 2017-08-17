@@ -16,10 +16,12 @@ function formatReply(comment, conversions) {
 }
 
 function tabularData(conversions) {
-  return Object.keys(conversions).reduce((memo, nonSIvalue) => {
-    const SIvalue = conversions[nonSIvalue];
-    return memo + nonSIvalue + "|" + SIvalue + "\n";
-  }, "Original measurement | Metric measurement\n---|---\n")
+  return Object
+    .keys(conversions)
+    .reduce((memo, nonSIvalue) => {
+      const SIvalue = conversions[nonSIvalue];
+      return memo + nonSIvalue + "|" + SIvalue + "\n";
+    }, "Original measurement | Metric measurement\n---|---\n");
 }
 
 module.exports = {

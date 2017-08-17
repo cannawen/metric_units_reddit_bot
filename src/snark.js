@@ -50,16 +50,16 @@ function reply(message) {
     return loveReply.randomElement();
 
   } else if (message.match(/^what is love.?$/i)) {
-    return "Baby don't hurt me"
+    return "Baby don't hurt me";
 
   } else if (message.match(/^baby,? don'?t hurt me.?$/i)) {
     return "Don't hurt me";
 
   } else if (message.match(/^don'?t hurt me.?$/i)) {
-    return "No more"
+    return "No more";
   
   } else if (message.match(/^no more.?$/i)) {
-    return "What is love?"
+    return "What is love?";
   }
 }
 
@@ -67,13 +67,13 @@ Array.prototype.randomElement = function () {
   const weightedArray = this.reduce((memo, el) => {
     if (Array.isArray(el)) {
       const additions = Array(el[0]).fill(el[1]);
-      return memo.concat(additions);;
+      return memo.concat(additions);
     } else if(typeof el == 'string' || el instanceof String) {
-      memo.push(el)
+      memo.push(el);
     }
     return memo;
   }, []);
-  return weightedArray[Math.floor(helper.random() * weightedArray.length)]
+  return weightedArray[Math.floor(helper.random() * weightedArray.length)];
 }
 
 module.exports = {

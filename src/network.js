@@ -44,9 +44,10 @@ function refreshToken() {
 
 function userAgent() {
   return "script:" + environment['reddit-username'] + ":" + environment['version']
-    + " (by: /u/" + environment['reddit-username'] + ")"
+    + " (by: /u/" + environment['reddit-username'] + ")";
 }
 
+// Some duplication in post and get, story #150343477
 function post(urlPath, form) {
   if (environment['dev-mode']) {
     helper.log(urlPath, form);
@@ -69,6 +70,7 @@ function post(urlPath, form) {
     if (err) {
       console.error("post error: ", err);
       content = undefined;
+      return;
     }
     try {
       content = JSON.parse(res.body);
@@ -83,6 +85,7 @@ function post(urlPath, form) {
   return content;
 }
 
+// Some duplication in post and get, story #150343477
 function get(url) {
   let content = null;
 
@@ -103,15 +106,15 @@ function get(url) {
   }
 
   request(options, function(err, res) {
-    if (err)  {
+    if (err) {
       console.error("get error: ", err);
-      content = undefined
-    } else {
-      try {
-        content = JSON.parse(res.body);
-      } catch (e) {
-        content = undefined;
-      }
+      content = undefined;
+      return;
+    }
+    try {
+      content = JSON.parse(res.body);
+    } catch (e) {
+      content = undefined;
     }
   });
 
@@ -142,30 +145,24 @@ function getRedditComments(subreddit) {
 }
 
 function postComment(parentId, markdownBody) {
-  const form = {
-    'parent' : parentId,
-    'text' : markdownBody
-  }
-
-  post('/api/comment', form);
+  post('/api/comment', { 'parent' : parentId, 'text' : markdownBody });
 }
 
 function getUnreadRepliesAndMarkAllAsRead() {
   const messages = get("/message/unread");
   post('/api/read_all_messages');
 
-  return messages.filter(raw => {
-    return raw['kind'] === 't1';
-  })
-  .map (raw => raw['data'])
-  .map(data => {
-    return {
-      'body': data['body'],
-      'id': data['name'],
-      'submission': data['link_title'],
-      'link': 'https://www.reddit.com' + data['context']
-    }
-  });
+  return messages
+    .filter(raw => raw['kind'] === 't1')
+    .map(raw => raw['data'])
+    .map(data => {
+      return {
+        'body': data['body'],
+        'id': data['name'],
+        'submission': data['link_title'],
+        'link': 'https://www.reddit.com' + data['context']
+      }
+    });
 }
 
 module.exports = {

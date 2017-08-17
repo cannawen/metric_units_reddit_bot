@@ -46,10 +46,10 @@ function addCommas(x) {
 }
 
 const startRegex 
-  = /(?:^|[\s~><])/.source;
+  = /(?:^|[\s~><\b])/.source;
 
 const endRegex 
-  = /(?:$|[\s-\.,;?!:])/.source;
+  = /(?:$|[\s-\.,;?!:\b])/.source;
 
 const numberRegex 
   = "((?:"
@@ -70,19 +70,19 @@ const rangeRegex
 
 const unitsLookupMap = {
   //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
-  "miles per hour to km/h": {
-    "unitRegex" : [/mph/, /miles per hour/].regexJoin(),
-    "conversionFunction" : milesToKilometers,
-    "inUnits" : " mph",
-    "outUnits" : " km/h",
-    "excludeHyperbole" : true,
-    "onlyPositiveValues" : true
-  },
   "miles per gallon to L/100km" : {
     "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
     "conversionFunction": mpgToLper100km,
     "inUnits" : " mpg (US)",
     "outUnits" : " L/100km",
+    "excludeHyperbole" : true,
+    "onlyPositiveValues" : true
+  },
+  "miles per hour to km/h": {
+    "unitRegex" : [/mph/, /miles per hour/].regexJoin(),
+    "conversionFunction" : milesToKilometers,
+    "inUnits" : " mph",
+    "outUnits" : " km/h",
     "excludeHyperbole" : true,
     "onlyPositiveValues" : true
   },

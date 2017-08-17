@@ -20,7 +20,7 @@ function track(category, action, label) {
     if (environment['dev-mode']) {
       helper.log(category, action, label);
     } else {
-      ga.event(category, action, label)
+      ga.event(category, action, label);
     }
   }
 }

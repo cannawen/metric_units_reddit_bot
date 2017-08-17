@@ -12,7 +12,7 @@ const helper = require('./helper');
 const network = require('./network');
 const snark = require('./snark');
 
-const environment = require('./helper').environment();
+const environment = helper.environment();
 const excludedSubreddits 
   = yaml
     .safeLoad(
@@ -29,13 +29,16 @@ setInterval(() => {
   }
   
   function cleanupOldSnarked() {
-    snarked = Object.keys(snarked).reduce((memo, key) => {
-      const yesterday = now - 24*60*60*1000;
-      if (snarked[key] > yesterday) {
-        memo[key] = now;
-      }
-      return memo;
-    }, {});
+    snarked = 
+      Object
+      .keys(snarked)
+      .reduce((memo, key) => {
+        const lessThan24hAgo = snarked[key] > now - 24*60*60*1000;
+        if (lessThan24hAgo) {
+          memo[key] = snarked[key];
+        }
+        return memo;
+      }, {});
   };
 
   const now = helper.now();
@@ -54,6 +57,9 @@ setInterval(() => {
       const postTitle = message['submission'];
 
       if (reply) {
+        // Always replies if no snark in post within the last 24h
+        // Replies 40% of the time otherwise
+        // Possible refactor candidate, story #150342011
         const shouldReply = snarked[postTitle] === undefined || helper.random() > 0.6;
         
         if (shouldReply) {
@@ -68,16 +74,16 @@ setInterval(() => {
 }, 60*1000)
 
 setInterval(() => {
-  function thisBotDidntWriteComment(comment) {
-      return comment['author'].toLowerCase() !== environment['reddit-username'].toLowerCase();
-  }
 
   function allowedToPostInSubreddit(comment) {
       return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
   }
 
-  function commentDoesntMentionsBot(comment) {
-    return comment['body'].match(/\bbot\b/gi) === null;
+  function commentIsntFromABot(comment) {
+    const noBotInCommentBody = comment['body'].match(/\bbot\b/gi) === null;
+    const noBotInAuthorName = comment['author'].match(/bot/gi) === null;
+    const thisBotDidntWriteComment = comment['author'].toLowerCase() !== environment['reddit-username'].toLowerCase();
+    return noBotInCommentBody && noBotInAuthorName && thisBotDidntWriteComment;
   }
 
   function postIsShort(comment) {
@@ -88,25 +94,29 @@ setInterval(() => {
     return comment['body'].match(/\d/) !== null;
   }
 
+  function hasConversions(map) {
+    return Object.keys(map['conversions']).length > 0;
+  }
+
   network
     .getRedditComments("all")
-    .filter(thisBotDidntWriteComment)
+    .filter(commentIsntFromABot)
     .filter(allowedToPostInSubreddit)
-    .filter(commentDoesntMentionsBot)
     .filter(postIsShort)
     .filter(hasNumber)
     .map(comment => {
-      const conversions = converter.conversions(comment['body']);
       return {
         "comment" : comment,
-        "conversions" : conversions
+        "conversions" : converter.conversions(comment['body'])
       }
     })
-    .filter(map => Object.keys(map['conversions']).length > 0)
+    .filter(hasConversions)
     .forEach(map => {
       const comment = map['comment'];
-      const reply = formatter.formatReply(comment, map['conversions']);
-      analytics.trackConversion(comment['link'], comment['body'], map['conversions']);
+      const conversions = map['conversions'];
+
+      const reply = formatter.formatReply(comment, conversions);
+      analytics.trackConversion(comment['link'], comment['body'], conversions);
       network.postComment(comment['id'], reply);
     })
 }, 2*1000);  

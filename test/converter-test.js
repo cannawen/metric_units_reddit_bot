@@ -1,4 +1,3 @@
-const assert = require('assert');
 const should = require('chai').should();
 
 const converter = require('../src/converter');
@@ -23,10 +22,11 @@ describe('Converter', () => {
   describe('#conversions()', () => {
 
     context('Current failing tests - bugs and edge cases', () => {
-      // it('should collapse ranges if needed', () => {
-      //   converter.conversions("100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C" })
-      // })
-    }) 
+      it.skip('should collapse ranges if needed', () => {
+        // Story #150197623
+        converter.conversions("100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C" });
+      });
+    });
 
     context('Has distance to convert', () => {
       it('should convert text with context', () => {
@@ -117,7 +117,7 @@ describe('Converter', () => {
       it('should convert miles per gallon range', () => {
         testConvertTrue(" 0 - 50 miles per gallon ", "Infinity to 4.7 L/100km", "0 to 50 mpg (US)");
       });
-    })
+    });
 
     context('Has temperature to convert', () => {
       it('should convert with context', () => {
@@ -149,8 +149,8 @@ describe('Converter', () => {
 
       it('should convert temperature ranges', () => {
         testConvertTrue("32 - -32°F", "0 to -36°C", "32 to -32°F");
-        testConvertTrue("It is 32-32°F right now", "0 to 0°C", "32 to 32°F")
-        testConvertTrue("Correct you'll need ~ 200 - 220 degrees f for a little while", "93 to 104°C", "200 to 220°F")
+        testConvertTrue("It is 32-32°F right now", "0 to 0°C", "32 to 32°F");
+        testConvertTrue("Correct you'll need ~ 200 - 220 degrees f for a little while", "93 to 104°C", "200 to 220°F");
       });
     });
 
@@ -165,7 +165,7 @@ describe('Converter', () => {
 
       it('should not convert with special characters', () => {
         testConvertFalse("It's cold (-40°F) outside");
-      })
+      });
 
       it('should not convert mid-string', () => {
         testConvertFalse("A7F");
@@ -181,20 +181,20 @@ describe('Converter', () => {
       });
 
       it('should semantically convert the same measurement', () => {
-        converter.conversions("32mph, 32, 32°F, 32 °F, -32°F, 32mi, 32 miles").should.deep.equal({ "-32°F" : "-36°C", "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" })
+        converter.conversions("32mph, 32, 32°F, 32 °F, -32°F, 32mi, 32 miles").should.deep.equal({ "-32°F" : "-36°C", "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" });
       });
 
       it('should convert ranges and singles of different units', () => {
-        converter.conversions("101 miles 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101 miles" : "163 km" })
+        converter.conversions("101 miles 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101 miles" : "163 km" });
       });
       
       context('This is kinda weird behaviour, but not important to fix', () => {
         it('should convert ranges and singles of the same units, if it is the first one', () => {
-          converter.conversions("101°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101°F" : "38°C" })
+          converter.conversions("101°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101°F" : "38°C" });
         });
 
         it('should not convert ranges and singles of the same units, if it is the last one', () => {
-          converter.conversions("200°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C" })
+          converter.conversions("200°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C" });
         });
       });
     })
