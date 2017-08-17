@@ -30,10 +30,8 @@ const thanksReply = [
 ];
 
 function reply(message) {
-  const goodMatch = message.match(new RegExp('good bot', 'i'));
-  const badMatch = message.match(new RegExp('bad bot', 'i'));
-  const loveMatch = message.match(new RegExp('i love you', 'i'));
-  const thanksMatch = message.match(new RegExp('thanks|thank you', 'i'));
+  const goodMatch = message.match(/good bot/i);
+  const badMatch = message.match(/bad bot/i);
 
   if (goodMatch && badMatch) {
     return "I think you might be a bit confused";
@@ -45,11 +43,23 @@ function reply(message) {
   } else if (badMatch) {
     return badReply.randomElement();
 
-  } else if (loveMatch) {
+  } else if (message.match(/thanks|thank you/i)) {
+    return thanksReply.randomElement();
+
+  } else if (message.match(/i love you/i)) {
     return loveReply.randomElement();
 
-  } else if (thanksMatch) {
-    return thanksReply.randomElement();
+  } else if (message.match(/^what is love.?$/i)) {
+    return "Baby don't hurt me"
+
+  } else if (message.match(/^baby,? don'?t hurt me.?$/i)) {
+    return "Don't hurt me";
+
+  } else if (message.match(/^don'?t hurt me.?$/i)) {
+    return "No more"
+  
+  } else if (message.match(/^no more.?$/i)) {
+    return "What is love?"
   }
 }
 

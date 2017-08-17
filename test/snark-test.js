@@ -25,15 +25,24 @@ describe('Snark', () => {
       });
     });
 
+    context('Thanks|Thank you', () => {
+      it('should reply', () => {
+        snark.reply("thank you, little bot!!!!").should.equal("Glad to be of service");
+      });
+    });
+
     context('I love you', () => {
       it('should reply', () => {
         snark.reply("i love you, bot").should.equal("What is love?");
       });
     });
 
-    context('Thanks|Thank you', () => {
-      it('should reply', () => {
-        snark.reply("thank you, little bot!!!!").should.equal("Glad to be of service");
+    context('What is love song easter egg', () => {
+      it('should know the lyrics to the song', () => {
+        snark.reply("What is love?").should.equal("Baby don't hurt me");
+        snark.reply("Baby don't hurt me").should.equal("Don't hurt me");
+        snark.reply("Don't hurt me").should.equal("No more");
+        snark.reply("No more").should.equal("What is love?");
       });
     });
 
