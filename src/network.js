@@ -4,8 +4,8 @@ const path = require('path');
 const request = require('request');
 const yaml = require('js-yaml');
 
-const environment = require('./helper').environment();
 const helper = require('./helper');
+const environment = helper.environment();
 
 var oauthAccessToken = undefined;
 var oauthTokenValidUntil = undefined;
@@ -48,6 +48,11 @@ function userAgent() {
 }
 
 function post(urlPath, form) {
+  if (environment['dev-mode']) {
+    helper.log(urlPath, form);
+    return;
+  }
+
   var content = null;
 
   request({
@@ -123,9 +128,10 @@ function getRedditComments(subreddit) {
     const commentData = yaml['data'];
     if (commentData['created_utc'] > lastProcessedCommentTimestamp) {
       memo.push({
-        'commentBody': commentData['body'],
+        'body': commentData['body'],
         'author': commentData['author'],
         'id': commentData['name'],
+        'link': commentData['link_permalink'] + "/" + commentData['id'],
         'subreddit': commentData['subreddit']
       });
     }
@@ -140,11 +146,8 @@ function postComment(parentId, markdownBody) {
     'parent' : parentId,
     'text' : markdownBody
   }
-  if (environment['dev-mode']) {
-    console.log(form);
-  } else {
-    post('/api/comment', form);
-  }
+
+  post('/api/comment', form);
 }
 
 function getUnreadRepliesAndMarkAllAsRead() {
@@ -153,11 +156,14 @@ function getUnreadRepliesAndMarkAllAsRead() {
 
   return messages.filter(raw => {
     return raw['kind'] === 't1';
-  }).map(raw => {
+  })
+  .map (raw => raw['data'])
+  .map(data => {
     return {
-      'body': raw['data']['body'],
-      'id': raw['data']['name'],
-      'submission': raw['data']['link_title']
+      'body': data['body'],
+      'id': data['name'],
+      'submission': data['link_title'],
+      'link': 'https://www.reddit.com' + data['context']
     }
   });
 }

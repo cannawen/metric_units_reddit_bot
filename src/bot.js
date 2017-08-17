@@ -5,33 +5,63 @@ const path = require('path');
 const request = require('request');
 const yaml = require('js-yaml');
 
+const analytics = require('./analytics');
 const converter = require('./converter');
-const environment = require('./helper').environment();
 const formatter = require('./formatter');
+const helper = require('./helper');
 const network = require('./network');
 const snark = require('./snark');
 
+const environment = require('./helper').environment();
 const excludedSubreddits 
   = yaml
     .safeLoad(
       fs.readFileSync('./src/excluded-subreddits.yaml', 'utf8')
     )
     .map(subreddit => subreddit.toLowerCase());
+let snarked = {};
 
 network.refreshToken();
 
 setInterval(() => {
+  function messageIsShort(message) {
+    return message['body'] < 25;
+  }
+  
+  function cleanupOldSnarked() {
+    snarked = Object.keys(snarked).reduce((memo, key) => {
+      const yesterday = now - 24*60*60*1000;
+      if (snarked[key] > yesterday) {
+        memo[key] = now;
+      }
+      return memo;
+    }, {});
+  };
+
+  const now = helper.now();
+
   network.refreshToken();
+  cleanupOldSnarked();
 
   network
     .getUnreadRepliesAndMarkAllAsRead()
-    .filter(message => {
-      return snark.shouldReply(message['body']);
-    })
+    .filter(messageIsShort)
     .forEach(message => {
       const reply = snark.reply(message['body']);
-      if (reply !== undefined) {
-        network.postComment(message['id'], reply);
+      if (reply === undefined) {
+        return;
+      }
+      const postTitle = message['submission'];
+
+      if (reply) {
+        const shouldReply = snarked[postTitle] === undefined || helper.random() > 0.6;
+        
+        if (shouldReply) {
+          snarked[postTitle] = now;
+          network.postComment(message['id'], reply);
+        }
+
+        analytics.trackSnark(message['link'], message['body'], shouldReply);
       }
     });
 
@@ -47,15 +77,15 @@ setInterval(() => {
   }
 
   function commentDoesntMentionsBot(comment) {
-    return comment['commentBody'].match(/\bbot\b/gi) === null;
+    return comment['body'].match(/\bbot\b/gi) === null;
   }
 
   function postIsShort(comment) {
-    return comment['commentBody'].length < 300;
+    return comment['body'].length < 300;
   }
 
   function hasNumber(comment) {
-    return comment['commentBody'].match(/\d/) !== null;
+    return comment['body'].match(/\d/) !== null;
   }
 
   network
@@ -66,7 +96,7 @@ setInterval(() => {
     .filter(postIsShort)
     .filter(hasNumber)
     .map(comment => {
-      const conversions = converter.conversions(comment['commentBody']);
+      const conversions = converter.conversions(comment['body']);
       return {
         "comment" : comment,
         "conversions" : conversions
@@ -74,7 +104,9 @@ setInterval(() => {
     })
     .filter(map => Object.keys(map['conversions']).length > 0)
     .forEach(map => {
-      const reply = formatter.formatReply(map['comment'], map['conversions']);
-      network.postComment(map['comment']['id'], reply);
+      const comment = map['comment'];
+      const reply = formatter.formatReply(comment, map['conversions']);
+      analytics.trackConversion(comment['link'], comment['body'], map['conversions']);
+      network.postComment(comment['id'], reply);
     })
 }, 2*1000);  

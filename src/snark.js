@@ -29,41 +29,6 @@ const thanksReply = [
   "Any time, my dear redditor"
 ];
 
-let snarked = {};
-
-function shouldReply(message) {
-  const now = helper.now();
-
-  function cleanupOldSnarked() {
-    snarked = Object.keys(snarked).reduce((memo, key) => {
-      const yesterday = now - 24*60*60*1000;
-      if (snarked[key] > yesterday) {
-        memo[key] = now;
-      }
-      return memo;
-    }, {});
-  };
-
-  cleanupOldSnarked();
-
-  if (message.length > 25) {
-    return false;
-  }
-
-  const match = message.match(new RegExp('good bot|bad bot|i love you|thanks|thank you', 'i'));
-  const postTitle = message['submission'];
-
-  if (match && snarked[postTitle] === undefined) {
-    snarked[postTitle] = now;
-    return true;
-
-  } else if (match && helper.random() > 0.6) {
-    return true;
-  } else {
-    return false
-  }
-}
-
 function reply(message) {
   const goodMatch = message.match(new RegExp('good bot', 'i'));
   const badMatch = message.match(new RegExp('bad bot', 'i'));
@@ -102,6 +67,5 @@ Array.prototype.randomElement = function () {
 }
 
 module.exports = {
-  "shouldReply" : shouldReply,
   "reply" : reply
 }
