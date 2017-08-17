@@ -44,6 +44,8 @@ describe('Converter', () => {
 
       it('should convert distances less than 5 miles with more accuracy', () => {
         testConvertTrue("~2 mi.", "3.2 km", "2 miles");
+        testConvertTrue("0.2 mi.", "0.3 km", "0.2 miles");
+        testConvertTrue(".2 mi.", "0.3 km", ".2 miles");
       });
 
       it('should convert decimal miles with similar precision', () => {

@@ -52,12 +52,16 @@ const endRegex
   = /(?:$|[\s-\.,;?!:])/.source;
 
 const numberRegex 
-  = "(" + /-?/.source
+  = "((?:"
+  + /-?/.source
   + [
       /\d+/,
       /\d{1,3}(?:,\d{3})+/
     ].regexJoin() 
-  + /(?:\.\d+)?/.source + ")";
+  + /(?:\.\d+)?/.source
+  + ")|(?:"
+  + /(?:\.\d+)/.source
+  + "))";
 
 const rangeRegex
   = numberRegex
