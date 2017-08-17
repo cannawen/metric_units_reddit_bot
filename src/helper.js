@@ -14,13 +14,9 @@ function environment() {
   return yaml.safeLoad(environmentString);
 }
 
-function log(message) {
-  console.log(message);
-}
-
 module.exports = {
   "random" : random,
   "now" : now,
   "environment" : environment,
-  "log" : log
+  "log" : console.log
 }
