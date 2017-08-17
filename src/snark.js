@@ -16,8 +16,8 @@ const badReply = [
 ];
 
 const loveReply = [
-  [8, "What is love?"],
-  [1, "I don't think we are at that stage of our relationship yet"],
+  [10, "What is love?"],
+  [3, "Robots do not love"],
   [4, "I think we should just be friends"],
   [2, "I love you too <3"]
 ];
