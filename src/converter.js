@@ -46,10 +46,10 @@ function addCommas(x) {
 }
 
 const startRegex 
-  = /(?:^|[\s-])/.source;
+  = /(?:^|[\s~><])/.source;
 
 const endRegex 
-  = /(?:$|[\s,-\.])/.source;
+  = /(?:$|[\s-\.,;?!:])/.source;
 
 const numberRegex 
   = "(" + /-?/.source
@@ -72,7 +72,7 @@ const unitsLookupMap = {
     "inUnits" : " mph",
     "outUnits" : " km/h",
     "excludeHyperbole" : true,
-    "excludeZeroValue" : true
+    "onlyPositiveValues" : true
   },
   "miles per gallon to L/100km" : {
     "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
@@ -80,7 +80,7 @@ const unitsLookupMap = {
     "inUnits" : " mpg (US)",
     "outUnits" : " L/100km",
     "excludeHyperbole" : true,
-    "excludeZeroValue" : true
+    "onlyPositiveValues" : true
   },
   "miles to km": {
     "unitRegex" : [/mi/, /miles?/].regexJoin(),
@@ -88,7 +88,7 @@ const unitsLookupMap = {
     "inUnits" : (num) => num == 1 ? " mile" : " miles",
     "outUnits" : " km",
     "excludeHyperbole" : true,
-    "excludeZeroValue" : true
+    "onlyPositiveValues" : true
   },
   "°F to °C" : {
     "unitRegex" : [
@@ -101,7 +101,7 @@ const unitsLookupMap = {
     "inUnits" : "°F",
     "outUnits" : "°C",
     "excludeHyperbole" : false,
-    "excludeZeroValue" : false
+    "onlyPositiveValues" : false
   }
 }
 
@@ -152,8 +152,8 @@ function conversions(input) {
         .forEach(number => {
           function shouldProcessNumber(number) {
             const isInvalidHyperbole = map['excludeHyperbole'] && number.match(/^100+(?:\.0+)?$/);
-            const isInvalidZero = map['excludeZeroValue'] && number.match(/^0+(?:\.0+)?$/);
-            return !isInvalidHyperbole && !isInvalidZero;
+            const isInvalidNegative = map['onlyPositiveValues'] && number <= 0;
+            return !isInvalidHyperbole && !isInvalidNegative;
           }
 
           if (shouldProcessNumber(number)) {

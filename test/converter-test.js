@@ -43,7 +43,7 @@ describe('Converter', () => {
       });
 
       it('should convert distances less than 5 miles with more accuracy', () => {
-        testConvertTrue("2 mi.", "3.2 km", "2 miles");
+        testConvertTrue("~2 mi.", "3.2 km", "2 miles");
       });
 
       it('should convert decimal miles with similar precision', () => {
@@ -70,16 +70,22 @@ describe('Converter', () => {
       });
     });
 
-    context('Distance is too convenient', () => {
-      it('should not convert distance in powers of 10 over 10 miles', () => {
-        testConvertFalse("I would walk 100 miles");
-        testConvertFalse("I would walk 1000 miles");
-        testConvertFalse("I would walk 10000 miles");
-        testConvertFalse("I would walk 100,000 miles");
-      });
-    });
-
     context('Has no distance to convert', () => {
+      context('Distance is too convenient', () => {
+        it('should not convert distance in powers of 10 over 10 miles', () => {
+          testConvertFalse("I would walk 100 miles");
+          testConvertFalse("I would walk 1000 miles");
+          testConvertFalse("I would walk 10000 miles");
+          testConvertFalse("I would walk 100,000 miles");
+        });
+      });
+
+      context('Negative miles', () => {
+        it('should not convert', () => {
+          testConvertFalse("I would walk -10 miles");
+        });
+      });
+
       it('should not convert with no number', () => {
         testConvertFalse("some miles");
       });
@@ -114,6 +120,9 @@ describe('Converter', () => {
     context('Has temperature to convert', () => {
       it('should convert with context', () => {
         testConvertTrue("It's 32°F outside", "0°C", "32°F");
+        testConvertTrue("It's about ~32°F outside", "0°C", "32°F");
+        testConvertTrue("It's >32°F outside", "0°C", "32°F");
+        testConvertTrue("It's <32°F outside", "0°C", "32°F");
       });
 
       it('should convert with a degree symbol (32°F)', () => {
@@ -123,7 +132,6 @@ describe('Converter', () => {
       it('should convert negative temperatures (-32°F)', () => {
         testConvertTrue("-32°F", "-36°C");
       });
-
 
       it('should convert with a space (32 °F)', () => {
         testConvertTrue("32 °F", "0°C", "32°F");
@@ -155,9 +163,6 @@ describe('Converter', () => {
 
       it('should not convert with special characters', () => {
         testConvertFalse("It's cold (-40°F) outside");
-        testConvertFalse("It's about ~32°F outside");
-        testConvertFalse("It's >32°F outside");
-        testConvertFalse("It's <32°F outside");
       })
 
       it('should not convert mid-string', () => {
@@ -174,7 +179,7 @@ describe('Converter', () => {
       });
 
       it('should semantically convert the same measurement', () => {
-        converter.conversions("32mph 32 32°F 32 °F 32mi 32 miles").should.deep.equal({ "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" })
+        converter.conversions("32mph, 32, 32°F, 32 °F, -32°F, 32mi, 32 miles").should.deep.equal({ "-32°F" : "-36°C", "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" })
       });
 
       it('should convert ranges and singles of different units', () => {
