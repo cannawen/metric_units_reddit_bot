@@ -6,23 +6,33 @@ String.prototype.regex = function() {
   return new RegExp(this, "gi");
 }
 
-function fahrenheitToCelsius(f) {
-  return addCommas(Math.round(((f - 32) * 5/9)));
+function fahrenheitToCelsius(input) {
+  return formatConversion(input, (i) => (i - 32) * 5/9);
 }
 
-function milesToKilometers(s) {
-  var decimals;
+function milesToKilometers(input) {
+  return formatConversion(input, (i) => i * 1.609344, 10);
+}
 
-  if (s.indexOf('.') !== -1) {
-    decimals = s.split(".")[1].length;
-  } else if (s < 5) {
+function mpgToLper100km(input) {
+  return formatConversion(input, (i) => 235.215 / i, 10);
+}
+
+function formatConversion(input, conversionFunction, threshold) {
+  let decimals;
+
+  const converted = conversionFunction(input);
+
+  if (input.indexOf('.') !== -1) {
+    decimals = input.split(".")[1].length;
+  } else if (threshold && converted < threshold) {
     decimals = 1;
   } else {
     decimals = 0;
   }
 
   const multiplier = Math.pow(10, decimals);
-  return addCommas((Math.round(s * 1.609344 * multiplier)/multiplier).toFixed(decimals));
+  return addCommas((Math.round(converted * multiplier)/multiplier).toFixed(decimals));
 }
 
 function removeCommas(x) {
@@ -61,6 +71,14 @@ const unitsLookupMap = {
     "conversionFunction" : milesToKilometers,
     "inUnits" : " mph",
     "outUnits" : " km/h",
+    "excludeHyperbole" : true,
+    "excludeZeroValue" : true
+  },
+  "miles per gallon to L/100km" : {
+    "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
+    "conversionFunction": mpgToLper100km,
+    "inUnits" : " mpg (US)",
+    "outUnits" : " L/100km",
     "excludeHyperbole" : true,
     "excludeZeroValue" : true
   },

@@ -26,10 +26,6 @@ describe('Converter', () => {
       // it('should collapse ranges if needed', () => {
       //   converter.conversions("100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C" })
       // })
-
-      // it('should convert miles per hour', () => {
-      //   testConvertTrue("999,123,456 miles per hour", "1,607,933,339 km/h");
-      // });
     }) 
 
     context('Has distance to convert', () => {
@@ -43,7 +39,7 @@ describe('Converter', () => {
       });
 
       it('should convert miles per hour', () => {
-        testConvertTrue("50 miles per hour", "80 km/h", "50 mph");
+        testConvertTrue("999,123,456 miles per hour", "1,607,933,339 km/h", "999,123,456 mph");
       });
 
       it('should convert distances less than 5 miles with more accuracy', () => {
@@ -104,6 +100,16 @@ describe('Converter', () => {
         testConvertFalse("catch22microscope");
       });
     });
+
+    context('Has fuel economy to convert', () => {
+      it('should convert miles per gallon', () => {
+        testConvertTrue("50 miles per gallon", "4.7 L/100km", "50 mpg (US)");
+      });      
+
+      it('should convert miles per gallon range', () => {
+        testConvertTrue(" 0 - 50 miles per gallon ", "Infinity to 4.7 L/100km", "0 to 50 mpg (US)");
+      });
+    })
 
     context('Has temperature to convert', () => {
       it('should convert with context', () => {
