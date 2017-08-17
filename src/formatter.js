@@ -6,7 +6,7 @@ function formatReply(comment, conversions) {
     + "\n\n&nbsp;"
     + "^metric ^units ^bot" 
     + " ^|"
-    + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is%20...%20(be%20sure%20to%20include%20a%20link%20if%20you%20are%20making%20a%20bug%20report%20about%20a%20specific%20comment))"
+    + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is...%20%5BPlease%20include%20a%20link%20if%20you%20are%20reporting%20a%20bug%20about%20a%20specific%20comment!%5D)"
     + " ^|"
     + " ^[source](https://github.com/cannawen/metric_units_reddit_bot)"
     + " ^|"
