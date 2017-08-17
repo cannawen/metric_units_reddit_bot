@@ -25,7 +25,7 @@ network.refreshToken();
 
 setInterval(() => {
   function messageIsShort(message) {
-    return message['body'] < 25;
+    return message['body'].length < 25;
   }
   
   function cleanupOldSnarked() {
