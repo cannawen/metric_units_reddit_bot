@@ -27,8 +27,12 @@ function formatConversion(input, conversionFunction, oneDecimalPointThreshold) {
     decimals = 0;
   }
 
-  const multiplier = Math.pow(10, decimals);
-  return addCommas((Math.round(convertedValue * multiplier)/multiplier).toFixed(decimals));
+  return addCommas(roundNumberToDecimalPlaces(convertedValue, decimals));
+}
+
+function roundNumberToDecimalPlaces(number, places) {
+  const multiplier = Math.pow(10, places);
+  return ((Math.round(number * multiplier)/multiplier).toFixed(places));
 }
 
 function removeCommas(x) {
@@ -56,16 +60,21 @@ const endRegex
   = /(?:$|[\s-\.,;?!:\b])/.source;
 
 const numberRegex 
-  = "((?:"
-  + /-?/.source
-  + [
-      /\d+/,
-      /\d{1,3}(?:,\d{3})+/
-    ].regexJoin() 
-  + /(?:\.\d+)?/.source
-  + ")|(?:"
-  + /(?:\.\d+)/.source
-  + "))";
+  = 
+  "("
+    + "(?:"
+      + /-?/.source
+      + [
+          /\d+/,
+          /\d{1,3}(?:,\d{3})+/
+        ].regexJoin() 
+      + /(?:\.\d+)?/.source
+    + ")"
+    + "|"
+    + "(?:"
+      + /(?:\.\d+)/.source
+    + ")"
+  + ")";
 
 const rangeRegex
   = numberRegex
@@ -83,7 +92,7 @@ const unitsLookupMap = {
     "onlyPositiveValues" : true
   },
   "miles per hour to km/h": {
-    "unitRegex" : [/mph/, /miles per hour/].regexJoin(),
+    "unitRegex" : [/mph/, /miles per hour/, /miles an hour/].regexJoin(),
     "conversionFunction" : milesToKilometers,
     "inUnits" : " mph",
     "outUnits" : " km/h",
@@ -96,7 +105,21 @@ const unitsLookupMap = {
     "inUnits" : (num) => num == 1 ? " foot" : " feet",
     "outUnits" : (num) => num == 1 ? " meter" : " meters",
     "excludeHyperbole" : true,
-    "onlyPositiveValues" : true
+    "onlyPositiveValues" : true,
+    "preprocess" : (input) => {
+      const feetAndInchesRegex = 
+        (
+          startRegex 
+          + numberRegex
+          + "(?:')"
+          + numberRegex
+          + "(?:\")"
+          + endRegex
+        ).regex();
+      return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
+        return roundNumberToDecimalPlaces(Number(feet) + Number(inches)/12, 1) + "ft";
+      });
+    }
   },
   "miles to km": {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
@@ -127,15 +150,17 @@ function conversions(input) {
   .sort((a, b) => b.length - a.length)
   .reduce((memo, key) => {
     const map = unitsLookupMap[key];
-    const unitRegex = map['unitRegex'];
-    const excludeHyperbole = map['excludeHyperbole'];
 
-    const completeRangeRegex = (startRegex + rangeRegex + "(?= ?" + unitRegex + endRegex + ")").regex();
+    if (map['preprocess']) {
+      input = map['preprocess'](input);
+    }
+
+    const completeRangeRegex = (startRegex + rangeRegex + "(?= ?" + map['unitRegex'] + endRegex + ")").regex();
     const rangeMatches = input.match(completeRangeRegex);
     if (rangeMatches) {
       rangeMatches
         .map(range => {
-          input = input.replace((range + " ?" + unitRegex).regex(), '');
+          input = input.replace((range + " ?" + map['unitRegex']).regex(), '');
           return range;
         })
         .map(range => range.replace(/to/g, "-").replace(/[^\d.-]/g, ''))
@@ -156,12 +181,12 @@ function conversions(input) {
         })
     }
 
-    const completeNumberRegex = (startRegex + numberRegex + "(?= ?" + unitRegex + endRegex + ")").regex();
+    const completeNumberRegex = (startRegex + numberRegex + "(?= ?" + map['unitRegex'] + endRegex + ")").regex();
     const numberMatches = input.match(completeNumberRegex);
     if (numberMatches) {
       numberMatches
         .map(match => {
-          input = input.replace((match + " ?" + unitRegex).regex(), '');
+          input = input.replace((match + " ?" + map['unitRegex']).regex(), '');
           return match;
         })
         .map(match => match.replace(/[^\d.-]/g, ''))

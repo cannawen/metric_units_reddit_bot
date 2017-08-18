@@ -24,7 +24,14 @@ describe('Converter', () => {
     context('Current failing tests - bugs and edge cases', () => {
       it.skip('should collapse ranges if needed', () => {
         // Story #150197623
-        converter.conversions("100-101 degrees F ").should.deep.equal({"100 to 101°F" : "38°C" });
+        converter.conversions("100-101 degrees F ").should.deep.equal({ "100 to 101°F" : "38°C" });
+      });
+
+      context('has feet and inches', () => {
+        it.skip('should convert', () => {
+          //Story #150355945
+          converter.conversions("3 foot 2 inches").should.deep.equal({ "3.3 feet" : "1.0 meters" });
+        });
       });
     });
 
@@ -37,6 +44,12 @@ describe('Converter', () => {
           "3 feet" : "0.9 meters",
           "4 to 5 feet" : "1.2 to 1.5 meters",
         });
+      });
+    });
+
+    context('has feet and inches', () => {
+      it('should convert', () => {
+        converter.conversions("1'2\", 3\"2'").should.deep.equal({ "1.2 feet" : "0.4 meters" });
       });
     });
 
@@ -69,7 +82,7 @@ describe('Converter', () => {
       });
 
       it('should convert comma and decimal numbers', () => {
-        testConvertTrue("around 1,000.4mph or so", "1,610.0 km/h", "1,000.4 mph");
+        testConvertTrue("around 1,000.4 miles an hour or so", "1,610.0 km/h", "1,000.4 mph");
       });
 
       it('should convert ranges', () => {
