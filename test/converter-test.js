@@ -47,6 +47,19 @@ describe('Converter', () => {
       });
     });
 
+    context('has inches', () => {
+      it('should convert', () => {
+        converter.conversions("1-inch, 2 inch, 3\", 4-5in, 6 inches")
+        .should.deep.equal({
+          "1 inch" : "2.5 cm",
+          "2 inches" : "5.1 cm",
+          "3 inches" : "7.6 cm",
+          "4 to 5 inches" : "10 to 13 cm",
+          "6 inches" : "15 cm"
+        });
+      });
+    });
+
     context('has feet and inches', () => {
       it('should convert', () => {
         converter.conversions("1'2\", 3\"2'").should.deep.equal({ "1.2 feet" : "0.4 meters" });

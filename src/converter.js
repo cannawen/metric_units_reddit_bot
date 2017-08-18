@@ -14,6 +14,10 @@ function feetToMeters(input) {
   return formatConversion(input, (i) => i * 0.3048, 3);
 }
 
+function inchesToCm(input) {
+  return formatConversion(input, (i) => i * 2.54, 10);
+}
+
 function formatConversion(input, conversionFunction, oneDecimalPointThreshold) {
   let decimals;
 
@@ -81,6 +85,7 @@ const rangeRegex
   + / ?(?:-|to) ?/.source
   + numberRegex;
 
+//Pull out this code into its own file, story #150356133
 const unitsLookupMap = {
   //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
   "miles per gallon to L/100km" : {
@@ -120,6 +125,14 @@ const unitsLookupMap = {
         return roundNumberToDecimalPlaces(Number(feet) + Number(inches)/12, 1) + "ft";
       });
     }
+  },
+  "in to cm": {
+    "unitRegex" : [/-?in/, /-?inch/, /-?inches/, /["]/].regexJoin(),
+    "conversionFunction" : inchesToCm,
+    "inUnits": (num) => num == 1 ? " inch" : " inches",
+    "outUnits": " cm",
+    "excludeHyperbole": true,
+    "onlyPositiveValues": true
   },
   "miles to km": {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
