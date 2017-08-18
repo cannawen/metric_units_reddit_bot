@@ -112,7 +112,7 @@ const unitsLookupMap = {
     "onlyPositiveValues" : true
   },
   "feet to meters": {
-    "unitRegex" : [/-?feet/, /-?ft/, /-?foot/, /'/].regexJoin(),
+    "unitRegex" : [/-?feet/, /-?ft/, /-?foot/].regexJoin(),
     "conversionFunction" : feetToMeters,
     "inUnits" : (num) => num == 1 ? " foot" : " feet",
     "outUnits" : (num) => num == 1 ? " meter" : " meters",
@@ -123,9 +123,9 @@ const unitsLookupMap = {
         (
           startRegex 
           + numberRegex
-          + [/[']/, "[ -]?" + unitsLookupMap['feet to meters']['unitRegex'] + "[ -]?"].regexJoin()
+          + [/['][ -]?/, "[ -]?" + unitsLookupMap['feet to meters']['unitRegex'] + "[ -]?"].regexJoin()
           + numberRegex
-          + [/["]/, "[ -]?(?:" + unitsLookupMap['in to cm']['unitRegex']].regexJoin() + "|in)"
+          + [/["]/, /[ -]?in/, "[ -]?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
           + endRegex
         ).regex();
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {

@@ -53,14 +53,12 @@ describe('Converter', () => {
               "2 feet",
               "3 foot",
               "4 ft",
-              "5'"
             ],
             {
               "1 foot" : "0.3 meters",
               "2 feet" : "0.6 meters",
               "3 feet" : "0.9 meters",
-              "4 feet" : "1.2 meters",
-              "5 feet" : "1.5 meters",
+              "4 feet" : "1.2 meters"
             }
           );
       });
