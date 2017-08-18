@@ -50,7 +50,14 @@ function addCommas(x) {
 }
 
 Array.prototype.regexJoin = function() {
-  return "(?:" + this.map(el => el.source).join("|") + ")";
+  return "(?:" + this.map(el => {
+    const source = el.source
+    if (source) {
+      return source;
+    } else {
+      return el;
+    }
+  }).join("|") + ")";
 }
 
 String.prototype.regex = function() {
@@ -116,13 +123,13 @@ const unitsLookupMap = {
         (
           startRegex 
           + numberRegex
-          + "(?:')"
+          + [/[']/, " ?" + unitsLookupMap['feet to meters']['unitRegex'] + " ?"].regexJoin()
           + numberRegex
-          + "(?:\")"
+          + [/["]/, " ?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
           + endRegex
         ).regex();
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
-        return roundNumberToDecimalPlaces(Number(feet) + Number(inches)/12, 1) + "ft";
+        return " " + roundNumberToDecimalPlaces(Number(feet) + Number(inches)/12, 1) + "ft";
       });
     }
   },

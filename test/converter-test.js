@@ -26,13 +26,6 @@ describe('Converter', () => {
         // Story #150197623
         converter.conversions("100-101 degrees F ").should.deep.equal({ "100 to 101°F" : "38°C" });
       });
-
-      context('has feet and inches', () => {
-        it.skip('should convert', () => {
-          //Story #150355945
-          converter.conversions("3 foot 2 inches").should.deep.equal({ "3.3 feet" : "1.0 meters" });
-        });
-      });
     });
 
     context('has feet', () => {
@@ -62,7 +55,11 @@ describe('Converter', () => {
 
     context('has feet and inches', () => {
       it('should convert', () => {
-        converter.conversions("1'2\", 3\"2'").should.deep.equal({ "1.2 feet" : "0.4 meters" });
+        converter.conversions("1'2\", 3\"2', 3 foot 2 inches")
+        .should.deep.equal({
+           "1.2 feet" : "0.4 meters",
+           "3.2 feet" : "1.0 meter"
+         });
       });
     });
 
