@@ -198,7 +198,7 @@ function conversions(input) {
           const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outToNumber) : map['outUnits'];
 
           memo[fromNumber + " to " + toNumber + inUnits] = outFromNumber + " to " + outToNumber + outUnits;
-        })
+        });
     }
 
     const completeNumberRegex = (startRegex + numberRegex + "(?= ?" + map['unitRegex'] + endRegex + ")").regex();

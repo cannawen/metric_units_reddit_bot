@@ -34,13 +34,13 @@ describe('Converter', () => {
   describe('#conversions()', () => {
 
     context('Current failing tests - bugs and edge cases', () => {
+      // Story #150197623
       it.skip('should collapse ranges if needed', () => {
-        // Story #150197623
         testConvert("100-101 degrees F ", { "100 to 101°F" : "38°C" });
       });
 
+      // Story #150335050
       it.skip('should convert parenthesized measurements', () => {
-        // Story #150335050
         testConvert("It's cold (-40°F) outside", { "-40°F" : "-40°C" });
       });
     });
@@ -340,36 +340,63 @@ describe('Converter', () => {
           "a 22°Fb",
           "a22°F b",
           "a22°Fb",
-          "22F",
-
+          "22F"
         ].join("  ");
 
         converter.conversions(inputString).should.deep.equal({ });
       });
     });
 
-    context('Has distance and temperature', () => {
-      it('should convert all units in a string', () => {
-        converter.conversions("32 °F, -32°F, 1 mile").should.deep.equal({ "32°F": "0°C", "-32°F" : "-36°C", "1 mile" : "1.6 km"});
+    context('interesting cases', () => {
+      it('converts ranges and singles of the same units, if it is the first one', () => {
+        testConvert(
+          [
+            "101°F",
+            "101-200°F",
+          ],
+          {
+            "101 to 200°F" : "38 to 93°C", 
+            "101°F" : "38°C"
+          }
+        );
       });
 
-      it('should semantically convert the same measurement', () => {
-        converter.conversions("32mph, 32, 32°F, -32°F, 32 °F, 32mi, 32 miles").should.deep.equal({ "-32°F" : "-36°C", "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" });
+      it('converts ranges but not single of the same units, if it is the last one', () => {
+        testConvert(
+          [
+            "200°F",
+            "101-200°F",
+          ],
+          {
+            "101 to 200°F" : "38 to 93°C"
+          }
+        );
       });
 
-      it('should convert ranges and singles of different units', () => {
-        converter.conversions("101 miles 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101 miles" : "163 km" });
+      it('converts ranges but not single of the same units, if it is the last one', () => {
+        testConvert(
+          [
+            "200 miles",
+            "101-200°F",
+          ],
+          {
+            "101 to 200°F" : "38 to 93°C",
+            "200 miles" : "322 km"
+          }
+        );
       });
-      
-      context('This is kinda weird behaviour, but not important to fix', () => {
-        it('should convert ranges and singles of the same units, if it is the first one', () => {
-          converter.conversions("101°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C", "101°F" : "38°C" });
-        });
 
-        it('should not convert ranges and singles of the same units, if it is the last one', () => {
-          converter.conversions("200°F 101-200 degrees F").should.deep.equal({ "101 to 200°F" : "38 to 93°C" });
-        });
+      it('should resolve all equivalent conversions to one outcome', () => {
+        testConvert(
+          [
+            "200 miles",
+            "200mi",
+          ],
+          {
+            "200 miles" : "322 km"
+          }
+        );
       });
-    })
+    });
   });
 });
