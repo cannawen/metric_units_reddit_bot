@@ -1,10 +1,9 @@
+# previously banned
 - denver
 - veterans
 - artc
 - baseball
 - asksciencediscussion
-- churning
-- awardtravel
 - churningcanada
 - mlbtheshow
 - fitness
@@ -17,6 +16,13 @@
 - NASCAR
 - legaladvice
 - Cardinals
+
+# voluntary exclusion
+- nba
+- churning
+- awardtravel
+
+# banned
 - electricvehicles
 - Portland
 - politics
@@ -29,3 +35,6 @@
 - Mariners
 - Arkansas
 - test
+- AskReddit
+- Nationals
+- personalfinance
