@@ -1,11 +1,3 @@
-Array.prototype.regexJoin = function() {
-  return "(?:" + this.map(el => el.source).join("|") + ")";
-}
-
-String.prototype.regex = function() {
-  return new RegExp(this, "gi");
-}
-
 function fahrenheitToCelsius(input) {
   return formatConversion(input, (i) => (i - 32) * 5/9);
 }
@@ -18,21 +10,25 @@ function mpgToLper100km(input) {
   return formatConversion(input, (i) => 235.215 / i, 10);
 }
 
-function formatConversion(input, conversionFunction, threshold) {
+function feetToMeters(input) {
+  return formatConversion(input, (i) => i * 0.3048, 3);
+}
+
+function formatConversion(input, conversionFunction, oneDecimalPointThreshold) {
   let decimals;
 
-  const converted = conversionFunction(input);
+  const convertedValue = conversionFunction(input);
 
   if (input.indexOf('.') !== -1) {
     decimals = input.split(".")[1].length;
-  } else if (threshold && converted < threshold) {
+  } else if (oneDecimalPointThreshold && convertedValue < oneDecimalPointThreshold) {
     decimals = 1;
   } else {
     decimals = 0;
   }
 
   const multiplier = Math.pow(10, decimals);
-  return addCommas((Math.round(converted * multiplier)/multiplier).toFixed(decimals));
+  return addCommas((Math.round(convertedValue * multiplier)/multiplier).toFixed(decimals));
 }
 
 function removeCommas(x) {
@@ -43,6 +39,14 @@ function addCommas(x) {
     var parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
+}
+
+Array.prototype.regexJoin = function() {
+  return "(?:" + this.map(el => el.source).join("|") + ")";
+}
+
+String.prototype.regex = function() {
+  return new RegExp(this, "gi");
 }
 
 const startRegex 
@@ -86,8 +90,16 @@ const unitsLookupMap = {
     "excludeHyperbole" : true,
     "onlyPositiveValues" : true
   },
+  "feet to meters": {
+    "unitRegex" : [/-?feet/, /-?ft/, /-?foot/, /'/].regexJoin(),
+    "conversionFunction" : feetToMeters,
+    "inUnits" : (num) => num == 1 ? " foot" : " feet",
+    "outUnits" : (num) => num == 1 ? " meter" : " meters",
+    "excludeHyperbole" : true,
+    "onlyPositiveValues" : true
+  },
   "miles to km": {
-    "unitRegex" : [/mi/, /miles?/].regexJoin(),
+    "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
     "conversionFunction" : milesToKilometers,
     "inUnits" : (num) => num == 1 ? " mile" : " miles",
     "outUnits" : " km",
@@ -129,6 +141,7 @@ function conversions(input) {
         .map(range => range.replace(/to/g, "-").replace(/[^\d.-]/g, ''))
         .forEach(range => {
           const toIndex = range.match(/\d-(?=-?\d)/).index + 1;
+
           const fromNumber = range.substring(0, toIndex);
           const toNumber = range.substring(toIndex + 1);
 
@@ -136,11 +149,10 @@ function conversions(input) {
           
           const outFromNumber = map['conversionFunction'](fromNumber);
           const outToNumber = map['conversionFunction'](toNumber);
-          const outRange = outFromNumber + " to " + outToNumber;
 
           const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outToNumber) : map['outUnits'];
 
-          memo[fromNumber + " to " + toNumber + inUnits] = outRange + outUnits;
+          memo[fromNumber + " to " + toNumber + inUnits] = outFromNumber + " to " + outToNumber + outUnits;
         })
     }
 

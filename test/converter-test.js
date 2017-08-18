@@ -28,6 +28,18 @@ describe('Converter', () => {
       });
     });
 
+    context('has feet', () => {
+      it('should convert', () => {
+        converter.conversions("1-foot, 2 feet, 3', 4-5ft, 5 foot")
+        .should.deep.equal({
+          "1 foot" : "0.3 meters",
+          "2 feet" : "0.6 meters",
+          "3 feet" : "0.9 meters",
+          "4 to 5 feet" : "1.2 to 1.5 meters",
+        });
+      });
+    });
+
     context('Has distance to convert', () => {
       it('should convert text with context', () => {
         testConvertTrue("I would walk 10001 miles bottom", "16,095 km", "10,001 miles");
@@ -45,7 +57,7 @@ describe('Converter', () => {
       it('should convert distances less than 5 miles with more accuracy', () => {
         testConvertTrue("~2 mi.", "3.2 km", "2 miles");
         testConvertTrue("0.2 mi.", "0.3 km", "0.2 miles");
-        testConvertTrue(".2 mi.", "0.3 km", ".2 miles");
+        testConvertTrue(".2-mile radius", "0.3 km", ".2 miles");
       });
 
       it('should convert decimal miles with similar precision', () => {
@@ -181,7 +193,7 @@ describe('Converter', () => {
       });
 
       it('should semantically convert the same measurement', () => {
-        converter.conversions("32mph, 32, 32°F, 32 °F, -32°F, 32mi, 32 miles").should.deep.equal({ "-32°F" : "-36°C", "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" });
+        converter.conversions("32mph, 32, 32°F, -32°F, 32 °F, 32mi, 32 miles").should.deep.equal({ "-32°F" : "-36°C", "32°F" : "0°C", "32 miles" : "51 km", "32 mph" : "51 km/h" });
       });
 
       it('should convert ranges and singles of different units', () => {
