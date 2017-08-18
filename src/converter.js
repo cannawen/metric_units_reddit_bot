@@ -123,9 +123,9 @@ const unitsLookupMap = {
         (
           startRegex 
           + numberRegex
-          + [/[']/, " ?" + unitsLookupMap['feet to meters']['unitRegex'] + " ?"].regexJoin()
+          + [/[']/, "[ -]?" + unitsLookupMap['feet to meters']['unitRegex'] + "[ -]?"].regexJoin()
           + numberRegex
-          + [/["]/, " ?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
+          + [/["]/, "[ -]?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
           + endRegex
         ).regex();
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
@@ -134,7 +134,7 @@ const unitsLookupMap = {
     }
   },
   "in to cm": {
-    "unitRegex" : [/-?in/, /-?inch/, /-?inches/, /["]/].regexJoin(),
+    "unitRegex" : [/-?in/, /-?inch/, /inches/, /["]/].regexJoin(),
     "conversionFunction" : inchesToCm,
     "inUnits": (num) => num == 1 ? " inch" : " inches",
     "outUnits": " cm",
