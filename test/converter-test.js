@@ -101,20 +101,18 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1in",
-            "2-in",
+            "1-in",
+            "2inch",
             "3 inch",
             "4-inch",
             "5 inches",
-            "6\""
           ],
           {
            "1 inch" : "2.5 cm",
            "2 inches" : "5.1 cm",
            "3 inches" : "7.6 cm",
            "4 inches" : "10 cm",
-           "5 inches" : "13 cm",
-           "6 inches" : "15 cm"
+           "5 inches" : "13 cm"
           }
         );
       });
