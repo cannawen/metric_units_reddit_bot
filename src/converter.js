@@ -111,11 +111,11 @@ const unitsLookupMap = {
     "excludeHyperbole" : true,
     "onlyPositiveValues" : true
   },
-  "feet to meters": {
+  "feet to metres": {
     "unitRegex" : [/-?feet/, /-?ft/, /-?foot/].regexJoin(),
     "conversionFunction" : feetToMeters,
     "inUnits" : (num) => num == 1 ? " foot" : " feet",
-    "outUnits" : (num) => num == 1 ? " meter" : " meters",
+    "outUnits" : (num) => num == 1 ? " metre" : " metres",
     "excludeHyperbole" : true,
     "onlyPositiveValues" : true,
     "preprocess" : (input) => {
@@ -123,7 +123,7 @@ const unitsLookupMap = {
         (
           startRegex 
           + numberRegex
-          + [/['][ -]?/, "[ -]?" + unitsLookupMap['feet to meters']['unitRegex'] + "[ -]?"].regexJoin()
+          + [/['][ -]?/, "[ -]?" + unitsLookupMap['feet to metres']['unitRegex'] + "[ -]?"].regexJoin()
           + numberRegex
           + [/["]/, /[ -]?in/, "[ -]?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
           + endRegex

@@ -55,10 +55,10 @@ describe('Converter', () => {
               "4 ft",
             ],
             {
-              "1 foot" : "0.3 meters",
-              "2 feet" : "0.6 meters",
-              "3 feet" : "0.9 meters",
-              "4 feet" : "1.2 meters"
+              "1 foot" : "0.3 metres",
+              "2 feet" : "0.6 metres",
+              "3 feet" : "0.9 metres",
+              "4 feet" : "1.2 metres"
             }
           );
       });
@@ -75,12 +75,12 @@ describe('Converter', () => {
               "11'12\""
             ],
             {
-             "1.2 feet" : "0.4 meters",
-             "3.3 feet" : "1.0 meter",
-             "5.5 feet" : "1.7 meters",
-             "7.7 feet" : "2.3 meters",
-             "9.9 feet" : "3.0 meters",
-             "12.0 feet" : "3.7 meters"
+             "1.2 feet" : "0.4 metres",
+             "3.3 feet" : "1.0 metre",
+             "5.5 feet" : "1.7 metres",
+             "7.7 feet" : "2.3 metres",
+             "9.9 feet" : "3.0 metres",
+             "12.0 feet" : "3.7 metres"
             }
           );
         });
