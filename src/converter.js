@@ -129,7 +129,7 @@ const unitsLookupMap = {
           + endRegex
         ).regex();
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
-        return " " + roundNumberToDecimalPlaces(Number(feet) + Number(inches)/12, 1) + "ft";
+        return " " + roundNumberToDecimalPlaces(Number(feet) + Number(inches)/12, 2) + "ft";
       });
     }
   },

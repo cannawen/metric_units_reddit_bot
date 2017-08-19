@@ -75,12 +75,12 @@ describe('Converter', () => {
               "11'12\""
             ],
             {
-             "1.2 feet" : "0.4 metres",
-             "3.3 feet" : "1.0 metre",
-             "5.5 feet" : "1.7 metres",
-             "7.7 feet" : "2.3 metres",
-             "9.9 feet" : "3.0 metres",
-             "12.0 feet" : "3.7 metres"
+	     "1.17 feet": "0.36 metres",
+	     "3.33 feet": "1.01 metres",
+             "5.50 feet": "1.68 metres",
+             "7.67 feet": "2.34 metres",
+             "9.88 feet": "3.01 metres",
+             "12.00 feet": "3.66 metres"
             }
           );
         });
