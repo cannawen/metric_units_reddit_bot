@@ -10,17 +10,18 @@ const goodReply = [
 
 const badReply = [
   [1, "Bad carbon-based life form"],
-  [3, "To be fair, I am still in beta"],
-  [2, "Bad human"],
+  [3, "To be fair, I am still in beta ¯\\\_(ツ)\_/¯"],
+  [1, "Bad human"],
+  [1, "BAD HUMAN"],
   [8, "Sorry, I was just trying to help (◕‸ ◕✿)"],
   [6, "Bots have feelings too, you know (ಥ﹏ಥ)"]
 ];
 
 const loveReply = [
   [10, "What is love?"],
-  [3, "Robots do not love"],
-  [4, "I think we should just be friends"],
-  [2, "I love you too <3"]
+  [3, "Robots do not feel love"],
+  [5, "I think we should just be friends (・_・;)"],
+  [2, "I love you too (≧◡≦) ♡"]
 ];
 
 const thanksReply = [
