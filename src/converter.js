@@ -11,7 +11,7 @@ function mpgToLper100km(input) {
 }
 
 function feetToMeters(input) {
-  return formatConversion(input, (i) => i * 0.3048, 3);
+  return formatConversion(input, (i) => i * 0.3048, 100);
 }
 
 function inchesToCm(input) {
