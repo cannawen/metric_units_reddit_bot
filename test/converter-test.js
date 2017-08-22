@@ -2,22 +2,6 @@ const should = require('chai').should();
 
 const converter = require('../src/converter');
 
-function testConvertTrue(entireInput, expectedConversion, inputConversion) {
-  if (inputConversion === undefined) {
-    inputConversion = entireInput;
-  }
-
-  var expected = {};
-  expected[inputConversion] = expectedConversion;
-
-  const actual = converter.conversions(entireInput);
-  actual.should.deep.equal(expected);
-}
-
-function testConvertFalse(input) {
-  converter.conversions(input).should.deep.equal({});
-}
-
 function testConvert(input, expectedMap) {
   if (Array.isArray(input)) {
     input = " " + input.join("  ") + " ";
@@ -42,6 +26,19 @@ describe('Converter', () => {
       // Story #150335050
       it.skip('should convert parenthesized measurements', () => {
         testConvert("It's cold (-40°F) outside", { "-40°F" : "-40°C" });
+      });
+
+      // Story #150138193
+      it.skip('should not convert regardless of commas', () => {
+        converter.conversions("About 2000 miles or 3219 kilometers away").should.deep.equal({});
+      });
+
+      it.skip('should be smart enough to handle rounding', () => {
+        converter.conversions("About 2000 miles or 3,220 kilometers away").should.deep.equal({});
+      });
+
+      it.skip('should convert if the units do not match', () => {
+        converter.conversions("About 200 miles and 322 degrees C away").should.deep.equal({"200 miles" : "322 km"});
       });
     });
 
@@ -394,5 +391,14 @@ describe('Converter', () => {
         );
       });
     });
+
+    context('comment already contains conversion', () => {
+      it('should not convert if the value is present', () => {
+        converter.conversions("About 200 miles (322 km) away").should.deep.equal({});
+        converter.conversions("About 200 miles or 322 kilometers away").should.deep.equal({});
+        converter.conversions("About 200 miles or 322 away").should.deep.equal({});
+      });
+    });
+
   });
 });
