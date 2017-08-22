@@ -2,7 +2,7 @@ What does the bot do?
 ---
 The bot finds comments with imperial units, and replies with metric units.
 
-There is a chance it will reply to certain triggers like "good bot" ([see spoilers for what the triggers are](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/snark-test.js)).
+There is a chance it will reply to certain triggers like "good bot" ([see here for what the triggers are](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/snark-test.js)).
 
 See [./test/converter-test.js](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/converter-test.js) for what conversions are currently supported, and [see the Tracker for what's coming up next](https://www.pivotaltracker.com/n/projects/2091572)
 
@@ -13,11 +13,11 @@ This is a javascript app built with [Node.js](https://nodejs.org/en/), and all o
 
 The app starts in `bot.js`, this file is responsible for repeatedly checking for new comments and replying to messages in an infinite loop. It uses the following modules:
 
-`converter.js` is responsible taking a message, and deciding which imperial units should be converted to which metric units (if any).
+`converter.js` and `units_lookup_map.js` are responsible for taking a message, and deciding which imperial units should be converted to which metric units (if any).
 
 `formatter.js` takes the conversions from above, and constructs a reply to the comment
 
-`helper.js` exists so external dependencies can be easily mocked during test
+`helper.js` helps with mocking external dependencies in tests
 
 `network.js` handles get, post, and OAuth network requests and parses the responses for easier consumption
 
