@@ -19,7 +19,7 @@ function trackUnsubscribe(data) {
 function track(category, data) {
   const dataString = data
     .map(d => JSON.stringify(d))
-    .map(d =>  d.replace(/[,\n]/gi, ''))
+    .map(d =>  d.replace(/[,\n"]/gi, ''))
     .join(",") + "\n";
 
   if (environment['dev-mode']) {
