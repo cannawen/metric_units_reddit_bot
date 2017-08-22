@@ -72,8 +72,8 @@ describe('Converter', () => {
               "11'12\""
             ],
             {
-	     "1.17 feet": "0.36 metres",
-	     "3.33 feet": "1.01 metres",
+	           "1.17 feet": "0.36 metres",
+	           "3.33 feet": "1.01 metres",
              "5.50 feet": "1.68 metres",
              "7.67 feet": "2.34 metres",
              "9.88 feet": "3.01 metres",
@@ -99,15 +99,15 @@ describe('Converter', () => {
             "1-in",
             "2inch",
             "3 inch",
-            "4-inch",
-            "5 inches",
+            "40-inch",
+            "50 inches",
           ],
           {
            "1 inch" : "2.5 cm",
            "2 inches" : "5.1 cm",
            "3 inches" : "7.6 cm",
-           "4 inches" : "10 cm",
-           "5 inches" : "13 cm"
+           "40 inches" : "102 cm",
+           "50 inches" : "127 cm"
           }
         );
       });

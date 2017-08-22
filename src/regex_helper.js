@@ -19,6 +19,11 @@ String.prototype.addCommas = function() {
     return parts.join(".");
 }
 
+function roundToDecimalPlaces(number, places) {
+  const multiplier = Math.pow(10, places);
+  return ((Math.round(number * multiplier)/multiplier).toFixed(places));
+}
+
 const startRegex 
   = /(?:^|[\s~><\b])/.source;
 
@@ -48,6 +53,7 @@ const rangeRegex
   + numberRegex;
 
 module.exports = {
+  "roundToDecimalPlaces" : roundToDecimalPlaces,
   startRegex,
   endRegex,
   numberRegex,

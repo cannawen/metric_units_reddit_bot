@@ -2,13 +2,29 @@ const rh = require('./regex_helper');
 
 const unitsLookupMap = require('./units_lookup_map').unitsLookupMap;
 
-
 function conversions(input) {
   return Object.keys(unitsLookupMap)
   //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
   .sort((a, b) => b.length - a.length)
   .reduce((memo, key) => {
     const map = unitsLookupMap[key];
+
+    function formattedConversion(input) {
+      const oneDecimalPointThreshold = map['precisionThreshold'];
+      const convertedValue = map['conversionFunction'](input);
+
+      let decimals;
+
+      if (input.indexOf('.') !== -1) {
+        decimals = input.split(".")[1].length;
+      } else if (oneDecimalPointThreshold && convertedValue < oneDecimalPointThreshold) {
+        decimals = 1;
+      } else {
+        decimals = 0;
+      }
+
+      return rh.roundToDecimalPlaces(convertedValue, decimals).addCommas();
+    }
 
     if (map['preprocess']) {
       input = map['preprocess'](input);
@@ -31,8 +47,8 @@ function conversions(input) {
 
           const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](toNumber) : map['inUnits'];
           
-          const outFromNumber = map['conversionFunction'](fromNumber);
-          const outToNumber = map['conversionFunction'](toNumber);
+          const outFromNumber = formattedConversion(fromNumber);
+          const outToNumber = formattedConversion(toNumber);
 
           const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outToNumber) : map['outUnits'];
 
@@ -50,13 +66,15 @@ function conversions(input) {
         })
         .map(match => match.replace(/[^\d.-]/g, ''))
         .forEach(number => {
-          const outNumber = map['conversionFunction'](number);
-          
+          const outNumber = formattedConversion(number);
+
           function shouldProcessNumber(number) {
-            const isInvalidHyperbole = map['excludeHyperbole'] && number.match(/^100+(?:\.0+)?$/);
-            const isInvalidNegative = map['onlyPositiveValues'] && number <= 0;
             const alreadyConvertedInComment = input.match(outNumber);
-            return !(isInvalidHyperbole || isInvalidNegative || alreadyConvertedInComment);
+            let shouldConvert = true;
+            if (map['shouldConvert']) {
+              shouldConvert = map['shouldConvert'](number);
+            }
+            return shouldConvert && !alreadyConvertedInComment;
           }
 
           if (shouldProcessNumber(number)) {
@@ -67,7 +85,6 @@ function conversions(input) {
             if (alreadyConverted) {
               return;
             }
-
             const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outNumber) : map['outUnits'];
             memo[number.addCommas() + inUnits] = outNumber + outUnits;
           }
