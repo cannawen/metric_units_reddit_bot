@@ -4,7 +4,7 @@ The bot finds comments with imperial units, and replies with metric units.
 
 There is a chance it will reply to certain triggers like "good bot" ([see here for what the triggers are](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/snark-test.js)).
 
-See [./test/converter-test.js](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/converter-test.js) for what conversions are currently supported, and [see the Tracker for what's coming up next](https://www.pivotaltracker.com/n/projects/2091572)
+See [./test/converter-test.js](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/converter-test.js) for what conversions are currently supported, and [see Pivotal Tracker for what's coming up next](https://www.pivotaltracker.com/n/projects/2091572)
 
 
 How does the code work?
@@ -22,6 +22,8 @@ The app starts in `bot.js`, this file is responsible for repeatedly checking for
 `network.js` handles get, post, and OAuth network requests and parses the responses for easier consumption
 
 `snark.js` creates snarky responses to certain trigger words
+
+`analytics.js` will save events in the `./private` directory
 
 
 Running the code
@@ -56,8 +58,6 @@ Git hooks
 The pre-commit hook will run tests before each commit. It will only allow code to be committed if all tests are passing successfully and there are no unnecessary console.log statements
 
 To enable git hooks, copy the file from the `./hooks` directory into the `./.git/hooks` directory
-
-To skip enabled hooks, include flag `--no-verify` when committing code
 
 
 Questions or Comments?

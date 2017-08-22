@@ -1,19 +1,14 @@
 const rh = require('./regex_helper');
 
-function isHyperbole(i) {
-  return i.toString().match(/^100+(?:\.0+)?$/);
+function isNotHyperbole(i) {
+  return i.toString().match(/^100+(?:\.0+)?$/) === null;
 }
 
 const unitsLookupMap = {
   //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
   "miles per gallon to L/100km" : {
     "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
-    "shouldConvert" : (i) => {
-      if (isHyperbole(i) || i < 10) {
-        return false;
-      }
-      return true;
-    },
+    "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10,
     "conversionFunction": (i) => 235.215 / i,
     "inUnits" : " mpg (US)",
     "outUnits" : " L/100km",
@@ -22,12 +17,7 @@ const unitsLookupMap = {
 
   "miles per hour to km/h": {
     "unitRegex" : [/mph/, /miles per hour/, /miles an hour/].regexJoin(),
-    "shouldConvert" : (i) => {
-      if (isHyperbole(i) || i <= 0 || i == 1) {
-        return false;
-      }
-      return true;
-    },
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "conversionFunction" : (i) => i * 1.609344,
     "inUnits" : " mph",
     "outUnits" : " km/h",
@@ -36,12 +26,7 @@ const unitsLookupMap = {
 
   "feet to metres": {
     "unitRegex" : [/-?feet/, /-?ft/, /-?foot/].regexJoin(),
-    "shouldConvert" : (i) => {
-      if (isHyperbole(i) || i <= 0) {
-        return false;
-      }
-      return true;
-    },
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
     "conversionFunction" : (i) => i * 0.3048,
     "inUnits" : (num) => num == 1 ? " foot" : " feet",
     "outUnits" : (num) => num == 1 ? " metre" : " metres",
@@ -64,12 +49,7 @@ const unitsLookupMap = {
 
   "in to cm": {
     "unitRegex" : [/-in/, /-?inch/, /inches/].regexJoin(),
-    "shouldConvert" : (i) => {
-      if (isHyperbole(i) || i <= 0 || i == 1) {
-        return false;
-      }
-      return true;
-    },
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "conversionFunction" : (i) => i * 2.54,
     "inUnits": " inches",
     "outUnits": " cm",
@@ -78,12 +58,7 @@ const unitsLookupMap = {
 
   "miles to km": {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
-    "shouldConvert" : (i) => {
-      if (isHyperbole(i) || i <= 0 || i == 1) {
-        return false;
-      } 
-      return true;
-    },
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "conversionFunction" : (i) => i * 1.609344,
     "inUnits" : " miles",
     "outUnits" : " km",

@@ -16,32 +16,6 @@ function shouldNotConvert(numArr, units) {
 
 describe('Converter', () => {
   describe('#conversions()', () => {
-
-    context('Current failing tests - bugs and edge cases', () => {
-      // Story #150197623
-      it.skip('should collapse ranges if needed', () => {
-        testConvert("100-101 degrees F ", { "100 to 101°F" : "38°C" });
-      });
-
-      // Story #150335050
-      it.skip('should convert parenthesized measurements', () => {
-        testConvert("It's cold (-40°F) outside", { "-40°F" : "-40°C" });
-      });
-
-      // Story #150138193
-      it.skip('should not convert regardless of commas', () => {
-        converter.conversions("About 2000 miles or 3219 kilometers away").should.deep.equal({});
-      });
-
-      it.skip('should be smart enough to handle rounding', () => {
-        converter.conversions("About 2000 miles or 3,220 kilometers away").should.deep.equal({});
-      });
-
-      it.skip('should convert if the units do not match', () => {
-        converter.conversions("About 200 miles and 322 degrees C away").should.deep.equal({"200 miles" : "322 km"});
-      });
-    });
-
     context('feet', () => {
       it('should convert', () => {
         testConvert(
@@ -416,6 +390,35 @@ describe('Converter', () => {
         converter.conversions("About 200 miles or 322 kilometers away").should.deep.equal({});
         converter.conversions("About 200 miles or 322 away").should.deep.equal({});
       });
+    });
+
+    context('Current failing tests - bugs and edge cases', () => {
+
+      // Story #150197623
+      it.skip('should collapse ranges if needed', () => {
+        testConvert("100-101 degrees F ", { "100 to 101°F" : "38°C" });
+      });
+
+      // Story #150335050
+      it.skip('should convert parenthesized measurements', () => {
+        testConvert("It's cold (-40°F) outside", { "-40°F" : "-40°C" });
+      });
+      
+      // Story #150138193
+      context('comment already contains conversion', () => {
+        it.skip('should not convert regardless of commas', () => {
+          converter.conversions("About 2000 miles or 3219 kilometers away").should.deep.equal({});
+        });
+
+        it.skip('should be smart enough to handle rounding', () => {
+          converter.conversions("About 2000 miles or 3,220 kilometers away").should.deep.equal({});
+        });
+
+        it.skip('should convert if the units do not match', () => {
+          converter.conversions("About 200 miles and 322 degrees C away").should.deep.equal({"200 miles" : "322 km"});
+        });
+      });
+
     });
 
   });

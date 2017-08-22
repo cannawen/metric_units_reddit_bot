@@ -16,7 +16,7 @@ const environment = helper.environment();
 const excludedSubreddits 
   = yaml
     .safeLoad(
-      fs.readFileSync('./src/excluded-subreddits.yaml', 'utf8')
+      fs.readFileSync('./src/excluded_subreddits.yaml', 'utf8')
     )
     .map(subreddit => subreddit.toLowerCase());
 let snarked = {};
