@@ -1,7 +1,7 @@
 const rh = require('./regex_helper');
 
-function isHyperboleOrZeroOrNegative(i) {
-  return i.toString().match(/^100+(?:\.0+)?$/) || i <= 0;
+function isHyperbole(i) {
+  return i.toString().match(/^100+(?:\.0+)?$/);
 }
 
 const unitsLookupMap = {
@@ -9,7 +9,7 @@ const unitsLookupMap = {
   "miles per gallon to L/100km" : {
     "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
     "shouldConvert" : (i) => {
-      if (isHyperboleOrZeroOrNegative(i) || i < 10) {
+      if (isHyperbole(i) || i < 10) {
         return false;
       }
       return true;
@@ -23,7 +23,7 @@ const unitsLookupMap = {
   "miles per hour to km/h": {
     "unitRegex" : [/mph/, /miles per hour/, /miles an hour/].regexJoin(),
     "shouldConvert" : (i) => {
-      if (isHyperboleOrZeroOrNegative(i)) {
+      if (isHyperbole(i) || i <= 0 || i == 1) {
         return false;
       }
       return true;
@@ -37,7 +37,7 @@ const unitsLookupMap = {
   "feet to metres": {
     "unitRegex" : [/-?feet/, /-?ft/, /-?foot/].regexJoin(),
     "shouldConvert" : (i) => {
-      if (isHyperboleOrZeroOrNegative(i)) {
+      if (isHyperbole(i) || i <= 0) {
         return false;
       }
       return true;
@@ -45,7 +45,6 @@ const unitsLookupMap = {
     "conversionFunction" : (i) => i * 0.3048,
     "inUnits" : (num) => num == 1 ? " foot" : " feet",
     "outUnits" : (num) => num == 1 ? " metre" : " metres",
-    "precisionThreshold" : 100,
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
         (
@@ -59,19 +58,20 @@ const unitsLookupMap = {
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
         return " " + rh.roundToDecimalPlaces(Number(feet) + Number(inches)/12, 2) + "ft";
       });
-    }
+    },
+    "precisionThreshold" : 100
   },
 
   "in to cm": {
     "unitRegex" : [/-in/, /-?inch/, /inches/].regexJoin(),
     "shouldConvert" : (i) => {
-      if (isHyperboleOrZeroOrNegative(i)) {
+      if (isHyperbole(i) || i <= 0 || i == 1) {
         return false;
       }
       return true;
     },
     "conversionFunction" : (i) => i * 2.54,
-    "inUnits": (num) => num == 1 ? " inch" : " inches",
+    "inUnits": " inches",
     "outUnits": " cm",
     "precisionThreshold" : 100
   },
@@ -79,13 +79,13 @@ const unitsLookupMap = {
   "miles to km": {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
     "shouldConvert" : (i) => {
-      if (isHyperboleOrZeroOrNegative(i)) {
+      if (isHyperbole(i) || i <= 0 || i == 1) {
         return false;
       } 
       return true;
     },
     "conversionFunction" : (i) => i * 1.609344,
-    "inUnits" : (num) => num == 1 ? " mile" : " miles",
+    "inUnits" : " miles",
     "outUnits" : " km",
     "precisionThreshold" : 10
   },

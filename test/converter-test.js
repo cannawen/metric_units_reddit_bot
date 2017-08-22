@@ -96,14 +96,14 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1-in",
+            "1.1-in",
             "2inch",
             "3 inch",
             "40-inch",
             "50 inches",
           ],
           {
-           "1 inch" : "2.5 cm",
+           "1.1 inches" : "2.8 cm",
            "2 inches" : "5.1 cm",
            "3 inches" : "7.6 cm",
            "40 inches" : "102 cm",
@@ -114,6 +114,10 @@ describe('Converter', () => {
 
       it('should not convert zero or negative values', () => {
         shouldNotConvert([0, -10], "inches");
+      });
+
+      it('should not convert 1 inch', () => {
+        shouldNotConvert([1], "inches");
       });
 
       it('should not convert when values are likely hyperbole', () => {
@@ -145,6 +149,10 @@ describe('Converter', () => {
         shouldNotConvert([0, -10], "miles");
       });
 
+      it('should not convert 1 mile', () => {
+        shouldNotConvert([1], "mile");
+      });
+
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "miles");
       });
@@ -170,6 +178,10 @@ describe('Converter', () => {
 
       it('should not convert zero or negative values', () => {
         shouldNotConvert([0, -10], "mph");
+      });
+
+      it('should not convert 1 mph', () => {
+        shouldNotConvert([1], "mph");
       });
 
       it('should not convert when values are likely hyperbole', () => {
