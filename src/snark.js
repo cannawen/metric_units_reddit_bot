@@ -31,7 +31,7 @@ const thanksReply = [
 ];
 
 const stupidReply = [
-  [3, "To be fair, I am still in beta ¯\\\_(ツ)\_/¯"],
+  [3, "To be fair, I am still in beta ¯&#92;&#95(ツ)&#95/¯"],
   [1, "Sorry, I was just trying to help (◕‸ ◕✿)"],
   [1, "Bots have feelings too, you know (ಥ﹏ಥ)"]
 ]
