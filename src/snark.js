@@ -10,6 +10,7 @@ const goodReply = [
 
 const badReply = [
   [1, "Bad carbon-based life form"],
+  [3, "To be fair, I am still in beta"],
   [2, "Bad human"],
   [8, "Sorry, I was just trying to help (◕‸ ◕✿)"],
   [6, "Bots have feelings too, you know (ಥ﹏ಥ)"]
