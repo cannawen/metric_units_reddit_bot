@@ -197,6 +197,10 @@ describe('Converter', () => {
         shouldNotConvert([0, -10], "mpg");
       });
 
+      it('should not convert less than 10 mpg, since it is likely a delta', () => {
+        shouldNotConvert([1, 5, 9.99], "mpg");
+      });
+
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "mph");
       });

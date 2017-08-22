@@ -9,7 +9,7 @@ const unitsLookupMap = {
   "miles per gallon to L/100km" : {
     "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
     "shouldConvert" : (i) => {
-      if (isHyperboleOrZeroOrNegative(i)) {
+      if (isHyperboleOrZeroOrNegative(i) || i < 10) {
         return false;
       }
       return true;
