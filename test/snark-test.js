@@ -37,6 +37,12 @@ describe('Snark', () => {
       });
     });
 
+    context('Stupid bot', () => {
+      it('should reply', () => {
+        snark.reply("such a stupid bot").should.equal("To be fair, I am still in beta ¯\\\_(ツ)\_/¯");
+      });
+    });
+
     context('What is love song easter egg', () => {
       it('should know the lyrics to the song', () => {
         snark.reply("What is love?").should.equal("Baby don't hurt me");

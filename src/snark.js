@@ -10,7 +10,6 @@ const goodReply = [
 
 const badReply = [
   [1, "Bad carbon-based life form"],
-  [3, "To be fair, I am still in beta ¯\\\_(ツ)\_/¯"],
   [1, "Bad human"],
   [1, "BAD HUMAN"],
   [8, "Sorry, I was just trying to help (◕‸ ◕✿)"],
@@ -30,6 +29,12 @@ const thanksReply = [
   "You're welcome ｡&#94;‿&#94;｡",
   "Any time, my dear redditor"
 ];
+
+const stupidReply = [
+  [3, "To be fair, I am still in beta ¯\\\_(ツ)\_/¯"],
+  [1, "Sorry, I was just trying to help (◕‸ ◕✿)"],
+  [1, "Bots have feelings too, you know (ಥ﹏ಥ)"]
+]
 
 function reply(message) {
   const goodMatch = message.match(/good bot/i);
@@ -51,6 +56,9 @@ function reply(message) {
   } else if (message.match(/i love you/i)) {
     return loveReply.randomElement();
 
+  } else if (message.match(/stupid bot/i)) {
+    return stupidReply.randomElement();
+
   } else if (message.match(/^what is love.?$/i)) {
     return "Baby don't hurt me";
 
@@ -62,6 +70,7 @@ function reply(message) {
   
   } else if (message.match(/^no more.?$/i)) {
     return "What is love?";
+
   }
 }
 
