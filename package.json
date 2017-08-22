@@ -12,8 +12,7 @@
     "js-yaml": "^3.9.1",
     "mocha": "^3.4.2",
     "proxyquire": "^1.8.0",
-    "request": "^2.81.0",
-    "universal-analytics": "^0.4.15"
+    "request": "^2.81.0"
   },
   "devDependencies": {},
   "scripts": {

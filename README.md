@@ -38,7 +38,6 @@ reddit-username: your-username-here
 reddit-password: your-password-here
 version: your-bot-version
 dev-mode: false #true will print POST requests to the console, instead of actually making the POST to the server
-#google-analytics-key: UA-XXXX-XX #optional, if you want to collect analytics
 ```
 run `./lib/deploy.sh` and you should have the bot up and running!
 

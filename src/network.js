@@ -134,8 +134,9 @@ function getRedditComments(subreddit) {
         'body': commentData['body'],
         'author': commentData['author'],
         'id': commentData['name'],
-        'link': commentData['link_permalink'] + "/" + commentData['id'],
-        'subreddit': commentData['subreddit']
+        'link': commentData['link_permalink'] + commentData['id'],
+        'subreddit': commentData['subreddit'],
+        'timestamp' : commentData['created_utc']
       });
     }
     return memo;
@@ -165,7 +166,8 @@ function filterCommentReplies(messages) {
         'body': data['body'],
         'id': data['name'],
         'submission': data['link_title'],
-        'link': 'https://www.reddit.com' + data['context']
+        'link': 'https://www.reddit.com' + data['context'],
+        'timestamp' : data['created_utc']
       }
     });
 }
@@ -178,7 +180,9 @@ function filterPrivateMessages(messages) {
       return {
         'body' : data['body'],
         'subject' : data['subject'],
-        'id' : data['name']
+        'id' : data['name'],
+        'username' : data['author'],
+        'timestamp' : data['created_utc']
       }
     });
 }

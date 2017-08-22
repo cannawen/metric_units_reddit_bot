@@ -1,31 +1,36 @@
-const ua = require('universal-analytics');
+const fs = require('fs');
 
 const helper = require('./helper');
 
 const environment = helper.environment();
-const analyticsKey = environment['google-analytics-key'];
 
-const ga = ua(analyticsKey, environment['version'], { https: true, strictCidFormat: false });
-
-function trackSnark(link, message, replied) {
-  track("snark", link, message + "\n" + replied.toString());
+function trackSnark(data) {
+  track("snark", data);
 }
 
-function trackConversion(link, message, conversions) {
-  track("conversion", link, message + "\n" + conversions.toString());
+function trackConversion(data) {
+  track("conversion", data);
 }
 
-function track(category, action, label) {
-  if (analyticsKey) {
-    if (environment['dev-mode']) {
-      helper.log(category, action, label);
-    } else {
-      ga.event(category, action, label);
-    }
+function trackUnsubscribe(data) {
+  track("unsubscribe", data);
+}
+
+function track(category, data) {
+  const dataString = data
+    .map(d => JSON.stringify(d))
+    .map(d =>  d.replace(/[,\n]/gi, ''))
+    .join(",") + "\n";
+
+  if (environment['dev-mode']) {
+    helper.log(dataString);
+  } else {
+    fs.appendFileSync("./private/analytics-" + category + ".csv", dataString, "utf8");
   }
 }
 
 module.exports = {
   "trackSnark" : trackSnark,
-  "trackConversion" : trackConversion
+  "trackConversion" : trackConversion,
+  "trackUnsubscribe" : trackUnsubscribe
 }
