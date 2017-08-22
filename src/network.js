@@ -148,10 +148,15 @@ function postComment(parentId, markdownBody) {
   post('/api/comment', { 'parent' : parentId, 'text' : markdownBody });
 }
 
-function getUnreadRepliesAndMarkAllAsRead() {
-  const messages = get("/message/unread");
-  post('/api/read_all_messages');
+function getUnreadMessages() {
+  return get("/message/unread");
+}
 
+function markAllMessagesAsRead() {
+  post('/api/read_all_messages');
+}
+
+function filterCommentReplies(messages) {
   return messages
     .filter(raw => raw['kind'] === 't1')
     .map(raw => raw['data'])
@@ -165,9 +170,25 @@ function getUnreadRepliesAndMarkAllAsRead() {
     });
 }
 
+function filterPrivateMessages(messages) {
+  return messages
+    .filter(raw => raw['kind'] === 't4')
+    .map(raw => raw['data'])
+    .map(data => {
+      return {
+        'body' : data['body'],
+        'subject' : data['subject'],
+        'id' : data['name']
+      }
+    });
+}
+
 module.exports = {
   "refreshToken" : refreshToken,
   "postComment" : postComment,
   "getRedditComments" : getRedditComments,
-  "getUnreadRepliesAndMarkAllAsRead" : getUnreadRepliesAndMarkAllAsRead 
+  "getUnreadMessages" : getUnreadMessages,
+  "markAllMessagesAsRead" : markAllMessagesAsRead,
+  "filterCommentReplies" : filterCommentReplies,
+  "filterPrivateMessages" : filterPrivateMessages
 }

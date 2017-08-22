@@ -45,9 +45,12 @@ setInterval(() => {
 
   network.refreshToken();
   cleanupOldSnarked();
+  
+  const messages = network.getUnreadMessages();
+  network.markAllMessagesAsRead();
 
   network
-    .getUnreadRepliesAndMarkAllAsRead()
+    .filterCommentReplies(messages)
     .filter(messageIsShort)
     .forEach(message => {
       const reply = snark.reply(message['body']);
@@ -70,6 +73,12 @@ setInterval(() => {
         analytics.trackSnark(message['link'], message['body'], shouldReply);
       }
     });
+
+
+  const stopMessage = "Please click 'block user' below and you will not see any more conversions from this bot. So long, and thanks for all the fish";
+  network.filterPrivateMessages(messages)
+    .filter(message => message['subject'] === "stop")
+    .forEach(message => network.postComment(message['id'], stopMessage));
 
 }, 60*1000)
 
