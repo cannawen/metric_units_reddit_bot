@@ -125,7 +125,7 @@ function get(url) {
 }
 
 function getRedditComments(subreddit) {
-  let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json");
+  let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100");
 
   const unprocessedComments = content.reduce((memo, yaml) => {
     const commentData = yaml['data'];
