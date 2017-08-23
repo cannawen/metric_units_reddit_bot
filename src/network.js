@@ -10,6 +10,72 @@ var oauthAccessToken = undefined;
 var oauthTokenValidUntil = undefined;
 var lastProcessedCommentTimestamp = 0;
 
+function get(url) {
+  let content;  
+
+  if (url.startsWith('http')) {
+    content = networkRequest({ url: url }, false);
+  } else {
+    content = networkRequest({ url: 'https://oauth.reddit.com' + url }, true)
+  }
+
+  return content['data']['children'];
+}
+
+function post(urlPath, form) {
+  if (environment['dev-mode']) {
+    helper.log(urlPath, form);
+    return;
+  }
+
+  return networkRequest({
+    url: 'https://oauth.reddit.com' + urlPath,
+    method: 'POST',
+    form: form
+  }, true);
+}
+
+function networkRequest(options, oauthRequest) {
+  function redditOauthHeader() {
+    const userAgent = 
+     "script:" + environment['reddit-username'] + ":" + environment['version']
+      + " (by: /u/" + environment['reddit-username'] + ")";
+
+    return {
+      headers: {
+        'User-Agent': userAgent
+      },
+      auth: {
+        'bearer': oauthAccessToken
+      },
+    }
+  }
+
+  var content = null;
+
+  if (oauthRequest) {
+    options = Object.assign(redditOauthHeader(), options);
+  }
+
+  request(options, function(err, res) {
+    if (err) {
+      console.error("network error:", err);
+      content = undefined;
+      return;
+    }
+    try {
+      content = JSON.parse(res.body);
+    } catch (e) {
+      content = undefined;
+    }
+  });
+
+  while (content === null) {
+    deasync.sleep(50);
+  }
+  return content;
+}
+
 function refreshToken() {
   if (helper.now() < oauthTokenValidUntil) {
     return;
@@ -30,10 +96,16 @@ function refreshToken() {
       'password': environment['reddit-password']
     }
   }, function(err, res) {
-    var json = JSON.parse(res.body);
-    oauthAccessToken = json.access_token;
-    oauthTokenValidUntil = helper.now() + 55*60*1000;
-    done = true;
+    try {
+      var json = JSON.parse(res.body);
+      oauthAccessToken = json.access_token;
+      oauthTokenValidUntil = helper.now() + 55*60*1000;
+      done = true;
+    } catch (e) {
+      console.error("oauth error:", e)
+      oauthTokenValidUntil = 0;
+      done = true;
+    }
   });
 
   while (!done) {
@@ -41,106 +113,23 @@ function refreshToken() {
   }
 }
 
-function userAgent() {
-  return "script:" + environment['reddit-username'] + ":" + environment['version']
-    + " (by: /u/" + environment['reddit-username'] + ")";
-}
-
-// Some duplication in post and get, story #150343477
-function post(urlPath, form) {
-  if (environment['dev-mode']) {
-    helper.log(urlPath, form);
-    return;
-  }
-
-  var content = null;
-
-  request({
-    url: 'https://oauth.reddit.com' + urlPath,
-    method: 'POST',
-    headers: {
-      'User-Agent': userAgent()
-    },
-    auth: {
-      'bearer': oauthAccessToken
-    },
-    form: form
-  }, function(err, res) {
-    if (err) {
-      console.error("post error: ", err);
-      content = undefined;
-      return;
-    }
-    try {
-      content = JSON.parse(res.body);
-    } catch (e) {
-      content= undefined;
-    }
-  });
-
-  while (content === null) {
-    deasync.sleep(50);
-  }
-  return content;
-}
-
-// Some duplication in post and get, story #150343477
-function get(url) {
-  let content = null;
-
-  let options;
-
-  if (url.startsWith('http')) {
-    options = { url: url };
-  } else {
-    options = {
-      url: 'https://oauth.reddit.com' + url,
-      headers: {
-        'User-Agent': userAgent()
-      },
-      auth: {
-        'bearer': oauthAccessToken
-      }
-    };
-  }
-
-  request(options, function(err, res) {
-    if (err) {
-      console.error("get error: ", err);
-      content = undefined;
-      return;
-    }
-    try {
-      content = JSON.parse(res.body);
-    } catch (e) {
-      content = undefined;
-    }
-  });
-
-  while (content === null) {
-    deasync.sleep(50);
-  }
-  return content['data']['children'];
-}
-
 function getRedditComments(subreddit) {
   let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100");
 
-  const unprocessedComments = content.reduce((memo, json) => {
-    const commentData = json['data'];
-    
-    if (commentData['created_utc'] > lastProcessedCommentTimestamp) {
-      memo.push({
-        'body': commentData['body'],
-        'author': commentData['author'],
-        'id': commentData['name'],
-        'link': commentData['link_permalink'] + commentData['id'],
-        'subreddit': commentData['subreddit'],
-        'timestamp' : commentData['created_utc']
-      });
-    }
-    return memo;
-  }, []);
+  const unprocessedComments = content
+    .map(comment => comment['data'])
+    .filter(data => data['created_utc'] > lastProcessedCommentTimestamp)
+    .map(data => {
+      return {
+          'body': data['body'],
+          'author': data['author'],
+          'id': data['name'],
+          'link': data['link_permalink'] + data['id'],
+          'subreddit': data['subreddit'],
+          'timestamp' : data['created_utc']
+        }
+    });
+
   lastProcessedCommentTimestamp = content[0]['data']['created_utc'];
   return unprocessedComments;
 }
@@ -189,8 +178,8 @@ function filterPrivateMessages(messages) {
 
 module.exports = {
   "refreshToken" : refreshToken,
-  "postComment" : postComment,
   "getRedditComments" : getRedditComments,
+  "postComment" : postComment,
   "getUnreadMessages" : getUnreadMessages,
   "markAllMessagesAsRead" : markAllMessagesAsRead,
   "filterCommentReplies" : filterCommentReplies,
