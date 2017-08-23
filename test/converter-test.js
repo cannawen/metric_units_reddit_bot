@@ -227,12 +227,14 @@ describe('Converter', () => {
       it('should convert when starting with special characters', () => {
         testConvert(
           [
+            "(-50°F)",
             "~-40°F",
             ">0°F",
             "<32°F",
             "\n40°F"
           ],
           {
+           "-50°F" : "-46°C",
            "-40°F" : "-40°C",
            "0°F" : "-18°C",
            "32°F" : "0°C",
@@ -399,11 +401,6 @@ describe('Converter', () => {
         testConvert("100-101 degrees F ", { "100 to 101°F" : "38°C" });
       });
 
-      // Story #150335050
-      it('should convert parenthesized measurements', () => {
-        testConvert("It's cold (-40°F) outside", { "-40°F" : "-40°C" });
-      });
-      
       // Story #150138193
       context('comment already contains conversion', () => {
         it('should not convert regardless of commas', () => {

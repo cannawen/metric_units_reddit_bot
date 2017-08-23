@@ -61,6 +61,7 @@ function conversions(input) {
     if (numberMatches) {
       numberMatches
         .map(match => {
+          match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
           input = input.replace((match + " ?" + map['unitRegex']).regex(), '');
           return match;
         })
