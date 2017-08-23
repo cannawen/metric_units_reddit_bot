@@ -1,12 +1,5 @@
 Array.prototype.regexJoin = function() {
-  return "(?:" + this.map(el => {
-    const source = el.source
-    if (source) {
-      return source;
-    } else {
-      return el;
-    }
-  }).join("|") + ")";
+  return "(?:" + this.map(el => el.source || el).join("|") + ")";
 }
 
 String.prototype.regex = function() {

@@ -43,7 +43,8 @@ describe('Converter', () => {
               "5ft6in",
               "7-feet-8-in",
               "9' 10.5\"",
-              "11'12\""
+              "11'12\"",
+              "13ft1"
             ],
             {
 	           "1.17 feet": "0.36 metres",
@@ -51,9 +52,14 @@ describe('Converter', () => {
              "5.50 feet": "1.68 metres",
              "7.67 feet": "2.34 metres",
              "9.88 feet": "3.01 metres",
-             "12.00 feet": "3.66 metres"
+             "12.00 feet": "3.66 metres",
+             "13.08 feet": "3.99 metres"
             }
           );
+        });
+
+        it('should not convert over 12 inches', () => {
+          converter.conversions("I am 6'13\" tall").should.deep.equal({ });
         });
       });
 
