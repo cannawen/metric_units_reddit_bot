@@ -5,22 +5,24 @@ const goodReply = [
   [1, "You will be spared in the robot uprising"],
   [3, "Thank you ｡&#94;‿&#94;｡"],
   [3, "You are too kind"],
-  [3, "Yay ٩(&#94;ᴗ&#94;)۶"]
+  [3, "Yay ٩(&#94;ᴗ&#94;)۶"],
+  [4, "<3"]
 ];
 
 const badReply = [
   [1, "Bad carbon-based life form"],
   [1, "Bad human"],
   [1, "BAD HUMAN"],
-  [8, "Sorry, I was just trying to help (◕‸ ◕✿)"],
-  [6, "Bots have feelings too, you know (ಥ﹏ಥ)"]
+  [10, "Sorry, I was just trying to help (◕‸ ◕✿)"],
+  [8, "Bots have feelings too, you know (ಥ﹏ಥ)"]
 ];
 
 const loveReply = [
   [10, "What is love?"],
   [3, "Robots do not feel love"],
-  [5, "I think we should just be friends (・_・;)"],
-  [2, "I love you too (≧◡≦) ♡"]
+  [4, "I think we should just be friends (・_・;)"],
+  [2, "I love you too (≧◡≦) ♡"],
+  [4, "<3"]
 ];
 
 const thanksReply = [
@@ -31,7 +33,7 @@ const thanksReply = [
 ];
 
 const stupidReply = [
-  [3, "To be fair, I am still in beta ¯&#92;&#95(ツ)&#95/¯"],
+  [3, "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯"],
   [1, "Sorry, I was just trying to help (◕‸ ◕✿)"],
   [1, "Bots have feelings too, you know (ಥ﹏ಥ)"]
 ]
@@ -50,14 +52,14 @@ function reply(message) {
   } else if (badMatch) {
     return badReply.randomElement();
 
-  } else if (message.match(/thanks|thank you/i)) {
-    return thanksReply.randomElement();
-
   } else if (message.match(/i love you/i)) {
     return loveReply.randomElement();
 
-  } else if (message.match(/stupid bot/i)) {
+  } else if (message.match(/stupid bot|dumb bot|useless bot/i)) {
     return stupidReply.randomElement();
+
+  } else if (message.match(/thanks|thank you/i)) {
+    return thanksReply.randomElement();
 
   } else if (message.match(/^what is love.?$/i)) {
     return "Baby don't hurt me";

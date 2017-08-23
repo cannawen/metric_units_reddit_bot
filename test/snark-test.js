@@ -13,6 +13,12 @@ describe('Snark', () => {
       snark = proxyquire('../src/snark', { './helper': helperStub });
     });
 
+    context('Good bot && Bad bot', () => {
+      it('should reply', () => {
+        snark.reply("bad bot good bot").should.equal("I think you might be a bit confused");
+      });
+    });
+
     context('Good bot', () => {
       it('should reply', () => {
         snark.reply("good bot").should.equal("Good human");
@@ -28,6 +34,7 @@ describe('Snark', () => {
     context('Thanks|Thank you', () => {
       it('should reply', () => {
         snark.reply("thank you, little bot!!!!").should.equal("Glad to be of service");
+        snark.reply("thanks, buddy").should.equal("Glad to be of service");
       });
     });
 
@@ -37,9 +44,11 @@ describe('Snark', () => {
       });
     });
 
-    context('Stupid bot', () => {
+    context('Stupid bot|Dumb bot|Useless bot', () => {
       it('should reply', () => {
-        snark.reply("such a stupid bot").should.equal("To be fair, I am still in beta ¯&#92;&#95(ツ)&#95/¯");
+        snark.reply("such a stupid bot").should.equal("To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
+        snark.reply("urg, dumb bot!").should.equal("To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
+        snark.reply("useless bot").should.equal("To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
       });
     });
 
