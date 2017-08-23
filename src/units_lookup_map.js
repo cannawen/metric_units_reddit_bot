@@ -1,7 +1,63 @@
 const rh = require('./regex_helper');
 
+function mpgToLper100km(i) {
+  return 235.215 / i;
+}
+
+function milesToKm(i) {
+  return i * 1.609344;
+}
+
+function feetToMetres(i) {
+  return i * 0.3048;
+}
+
+function inchesToCm(i) {
+  return i * 2.54;
+}
+
+function fahrenheitToCelsius(i) {
+  return (i - 32) * 5/9;
+}
+
+//-----------------------------------
+
 function isNotHyperbole(i) {
   return i.toString().match(/^100+(?:\.0+)?$/) === null;
+}
+
+function userFacingValue(input, conversionFunction, precision) {
+  const value = conversionFunction ? conversionFunction(input) : input;
+  // value.toString().replace(/[^\d.-]/,'');
+
+  let decimals;
+
+  if (input.indexOf('.') !== -1) {
+    decimals = input.split(".")[1].length;
+  } else if (precision && value < precision) {
+    decimals = 1;
+  } else {
+    decimals = 0;
+  }
+
+  return rh.roundToDecimalPlaces(value, decimals).addCommas();
+}
+
+function userFacingValueAndUnit(i, unit, conversionFunction, precision) {
+  return userFacingValue(i, conversionFunction, precision) + unit;
+}
+
+function userFacingValueAndUnitRange(i, j, unit, conversionFunction, precision) {
+  const iConverted = userFacingValue(i, conversionFunction, precision);
+  const jConverted = userFacingValue(j, conversionFunction, precision);
+  if (iConverted === jConverted) {
+    return iConverted + unit
+  } else {
+    return iConverted
+    + " to "
+    + jConverted
+    + unit;
+  }
 }
 
 const unitsLookupMap = {
@@ -9,27 +65,28 @@ const unitsLookupMap = {
   "miles per gallon to L/100km" : {
     "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10,
-    "conversionFunction": (i) => 235.215 / i,
-    "inUnits" : " mpg (US)",
-    "outUnits" : " L/100km",
-    "precisionThreshold" : 10
+    "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
+    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, 10),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(j, i, " L/100km", mpgToLper100km, 10)
   },
 
   "miles per hour to km/h": {
     "unitRegex" : [/mph/, /miles per hour/, /miles an hour/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
-    "conversionFunction" : (i) => i * 1.609344,
-    "inUnits" : " mph",
-    "outUnits" : " km/h",
-    "precisionThreshold" : 10
+    "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
+    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, 10),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km/h", milesToKm, 10)
   },
 
   "feet to metres": {
     "unitRegex" : [/-?feet/, /-?ft/, /-?foot/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
-    "conversionFunction" : (i) => i * 0.3048,
-    "inUnits" : (num) => num == 1 ? " foot" : " feet",
-    "outUnits" : (num) => num == 1 ? " metre" : " metres",
+    "inDisplay" : (i) => userFacingValueAndUnit(i, " ft"),
+    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " ft"),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " metres", feetToMetres, 100),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, 100),
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
         (
@@ -46,26 +103,25 @@ const unitsLookupMap = {
           return "  ";
         }
       });
-    },
-    "precisionThreshold" : 100
+    }
   },
 
   "in to cm": {
     "unitRegex" : [/-in/, /-?inch/, /inches/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
-    "conversionFunction" : (i) => i * 2.54,
-    "inUnits": " inches",
-    "outUnits": " cm",
-    "precisionThreshold" : 100
+    "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
+    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm, 100),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm, 100)
   },
 
   "miles to km": {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 8,
-    "conversionFunction" : (i) => i * 1.609344,
-    "inUnits" : " miles",
-    "outUnits" : " km",
-    "precisionThreshold" : 10
+    "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
+    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm, 10),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, 10)
   },
 
   "°F to °C" : {
@@ -75,9 +131,10 @@ const unitsLookupMap = {
                     /degrees? fahrenheit/,
                     /fahrenheit/
                   ].regexJoin(),
-    "conversionFunction" : (i) => (i - 32) * 5/9,
-    "inUnits" : "°F",
-    "outUnits" : "°C"
+    "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
+    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°C", fahrenheitToCelsius)
   }
 }
 

@@ -9,23 +9,6 @@ function conversions(input) {
   .reduce((memo, key) => {
     const map = unitsLookupMap[key];
 
-    function formattedConversion(input) {
-      const oneDecimalPointThreshold = map['precisionThreshold'];
-      const convertedValue = map['conversionFunction'](input);
-
-      let decimals;
-
-      if (input.indexOf('.') !== -1) {
-        decimals = input.split(".")[1].length;
-      } else if (oneDecimalPointThreshold && convertedValue < oneDecimalPointThreshold) {
-        decimals = 1;
-      } else {
-        decimals = 0;
-      }
-
-      return rh.roundToDecimalPlaces(convertedValue, decimals).addCommas();
-    }
-
     if (map['preprocess']) {
       input = map['preprocess'](input);
     }
@@ -45,21 +28,7 @@ function conversions(input) {
           const in1 = range.substring(0, toIndex);
           const in2 = range.substring(toIndex + 1);
 
-          const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](in2) : map['inUnits'];
-          
-          const out1 = formattedConversion(in1);
-          const out2 = formattedConversion(in2);
-
-          const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](out2) : map['outUnits'];
-
-          let outRange;
-          if (out1 == out2) {
-            outRange = out1 + outUnits;
-          } else {
-            outRange = out1 + " to " + out2 + outUnits;
-          }
-
-          memo[in1.addCommas() + " to " + in2.addCommas() + inUnits] = outRange;
+          memo[map['inDisplayRange'](in1, in2)] = map['outDisplayRange'](in1, in2);
         });
     }
 
@@ -74,27 +43,26 @@ function conversions(input) {
         })
         .map(match => match.replace(/[^\d.-]/g, ''))
         .forEach(number => {
-          const outNumber = formattedConversion(number);
+          const outValueAndUnit = map['outDisplay'](number);
+          const inValueAndUnit = map['inDisplay'](number);
 
           function shouldProcessNumber(number) {
+            const outNumber = outValueAndUnit.replace(/[^\d\.-]/g, '');
             const alreadyConvertedInComment = input.match(outNumber);
+
+            const alreadyConvertedInMap = Object.keys(memo).reduce((m,k) => {
+              return k.indexOf(" to " + inValueAndUnit) !== -1 || m;
+            }, false);
+
             let shouldConvert = true;
             if (map['shouldConvert']) {
               shouldConvert = map['shouldConvert'](number);
             }
-            return shouldConvert && !alreadyConvertedInComment;
+            return shouldConvert && !alreadyConvertedInComment && !alreadyConvertedInMap;
           }
 
           if (shouldProcessNumber(number)) {
-            const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](number) : map['inUnits'];
-            const alreadyConverted = Object.keys(memo).reduce((m, k) => {
-              return k.indexOf("to " + number.addCommas() + inUnits) != -1 || m;
-            }, false);
-            if (alreadyConverted) {
-              return;
-            }
-            const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outNumber) : map['outUnits'];
-            memo[number.addCommas() + inUnits] = outNumber + outUnits;
+            memo[inValueAndUnit] = outValueAndUnit;
           }
         });
     }
