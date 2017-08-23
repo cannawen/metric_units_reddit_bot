@@ -27,9 +27,9 @@ function isNotHyperbole(i) {
 }
 
 function userFacingValue(input, conversionFunction, precision) {
-  const value = conversionFunction ? conversionFunction(input) : input;
-  // value.toString().replace(/[^\d.-]/,'');
+  input = input.toString();
 
+  const value = conversionFunction ? conversionFunction(input) : input;
   let decimals;
 
   if (input.indexOf('.') !== -1) {
@@ -60,6 +60,10 @@ function userFacingValueAndUnitRange(i, j, unit, conversionFunction, precision) 
   }
 }
 
+function convertDecimalFeetToFeetAndInches(i) {
+  return Math.floor(i).toString() + "'" + rh.roundToDecimalPlaces(i%1 * 12, 0) + "\"";
+}
+
 const unitsLookupMap = {
   //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
   "miles per gallon to L/100km" : {
@@ -83,8 +87,20 @@ const unitsLookupMap = {
   "feet to metres": {
     "unitRegex" : [/-?feet/, /-?ft/, /-?foot/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
-    "inDisplay" : (i) => userFacingValueAndUnit(i, " ft"),
-    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " ft"),
+    "inDisplay" : (i) => {
+      if (i%1 == 0) {
+        return userFacingValueAndUnit(i.split('.')[0], " ft");
+      } else {
+        return convertDecimalFeetToFeetAndInches(i);
+      }
+    },
+    "inDisplayRange" : (i, j) => {
+      if (i%1 == 0 && j%1 == 0) {
+        return userFacingValueAndUnitRange(i.split('.')[0], j.split('.')[0], " ft");
+      } else {
+        return convertDecimalFeetToFeetAndInches(i) + " to " + convertDecimalFeetToFeetAndInches(j);
+      }
+    },
     "outDisplay" : (i) => userFacingValueAndUnit(i, " metres", feetToMetres, 100),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, 100),
     "preprocess" : (input) => {

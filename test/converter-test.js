@@ -16,7 +16,7 @@ function shouldNotConvert(numArr, units) {
 
 describe('Converter', () => {
   describe('#conversions()', () => {
-    context.skip('feet', () => {
+    context('feet', () => {
       it('should convert', () => {
         testConvert(
             [
@@ -27,11 +27,11 @@ describe('Converter', () => {
               "5.5-ft"
             ],
             {
-              "1 foot" : "0.3 metres",
-              "2 feet" : "0.6 metres",
-              "3 feet" : "0.9 metres",
-              "4 feet" : "1.2 metres",
-              "5'6\"" : "1.68 metres"
+              "1 ft" : "0.3 metres",
+              "2 ft" : "0.6 metres",
+              "3 ft" : "0.9 metres",
+              "4 ft" : "1.2 metres",
+              "5'6\"" : "1.7 metres"
             }
           );
       });
@@ -53,8 +53,8 @@ describe('Converter', () => {
 	           "3'4\"": "1.01 metres",
              "5'6\"": "1.68 metres",
              "7'8\"": "2.34 metres",
-             "9'10.5\"": "3.01 metres",
-             "12 feet": "3.66 metres",
+             "9'11\"": "3.01 metres",
+             "12 ft": "3.66 metres",
              "13'1\"": "3.99 metres"
             }
           );
@@ -409,6 +409,10 @@ describe('Converter', () => {
     });
 
     context.skip('Current failing tests - bugs and edge cases', () => {
+      //Story #150482058
+      it('should display partial inches', () => {
+        converter.conversions("9 feet 10.5").should.deep.equal({ "9'10.5\"": "3.01 metres" });
+      });
 
       // Story #150138193
       context('comment already contains conversion', () => {
