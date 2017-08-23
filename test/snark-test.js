@@ -39,7 +39,7 @@ describe('Snark', () => {
 
     context('Stupid bot', () => {
       it('should reply', () => {
-        snark.reply("such a stupid bot").should.equal("To be fair, I am still in beta ¯\\\_(ツ)\_/¯");
+        snark.reply("such a stupid bot").should.equal("To be fair, I am still in beta ¯&#92;&#95(ツ)&#95/¯");
       });
     });
 

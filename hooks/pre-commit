@@ -3,9 +3,9 @@ ORIGINAL_STASHED_COUNT=`git stash list | wc -l`
 git stash --keep-index
 NEW_STASHED_COUNT=`git stash list | wc -l`
 
-npm test
-
 returnvalue=0
+
+npm test
 
 if [[ $? -eq 1 ]]; then
   returnvalue=1
