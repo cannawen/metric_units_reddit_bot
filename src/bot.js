@@ -3,6 +3,7 @@ const fs = require('fs');
 const https = require('https');
 const path = require('path');
 const request = require('request');
+const yaml = require('js-yaml');
 
 const analytics = require('./analytics');
 const converter = require('./converter');
