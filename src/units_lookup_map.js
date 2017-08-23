@@ -61,7 +61,7 @@ const unitsLookupMap = {
 
   "miles to km": {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 8,
     "conversionFunction" : (i) => i * 1.609344,
     "inUnits" : " miles",
     "outUnits" : " km",

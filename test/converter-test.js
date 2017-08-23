@@ -129,8 +129,8 @@ describe('Converter', () => {
         shouldNotConvert([0, -10], "miles");
       });
 
-      it('should not convert 1 mile', () => {
-        shouldNotConvert([1], "mile");
+      it('should not convert 1 mile or 8 miles', () => {
+        shouldNotConvert([1, 8], "mile");
       });
 
       it('should not convert when values are likely hyperbole', () => {
