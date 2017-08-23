@@ -42,17 +42,24 @@ function conversions(input) {
         .forEach(range => {
           const toIndex = range.match(/\d-(?=-?\d)/).index + 1;
 
-          const fromNumber = range.substring(0, toIndex);
-          const toNumber = range.substring(toIndex + 1);
+          const in1 = range.substring(0, toIndex);
+          const in2 = range.substring(toIndex + 1);
 
-          const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](toNumber) : map['inUnits'];
+          const inUnits = (map['inUnits'] instanceof Function) ? map['inUnits'](in2) : map['inUnits'];
           
-          const outFromNumber = formattedConversion(fromNumber);
-          const outToNumber = formattedConversion(toNumber);
+          const out1 = formattedConversion(in1);
+          const out2 = formattedConversion(in2);
 
-          const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](outToNumber) : map['outUnits'];
+          const outUnits = (map['outUnits'] instanceof Function) ? map['outUnits'](out2) : map['outUnits'];
 
-          memo[fromNumber.addCommas() + " to " + toNumber.addCommas() + inUnits] = outFromNumber + " to " + outToNumber + outUnits;
+          let outRange;
+          if (out1 == out2) {
+            outRange = out1 + outUnits;
+          } else {
+            outRange = out1 + " to " + out2 + outUnits;
+          }
+
+          memo[in1.addCommas() + " to " + in2.addCommas() + inUnits] = outRange;
         });
     }
 

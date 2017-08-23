@@ -320,6 +320,10 @@ describe('Converter', () => {
           }
         );
       });
+
+      it('should collapse ranges if needed', () => {
+        testConvert("100-101 degrees F ", { "100 to 101°F" : "38°C" });
+      });
     });
 
     context('nothing to convert', () => {
@@ -401,11 +405,6 @@ describe('Converter', () => {
     });
 
     context.skip('Current failing tests - bugs and edge cases', () => {
-
-      // Story #150197623
-      it('should collapse ranges if needed', () => {
-        testConvert("100-101 degrees F ", { "100 to 101°F" : "38°C" });
-      });
 
       // Story #150138193
       context('comment already contains conversion', () => {
