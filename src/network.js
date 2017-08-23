@@ -2,7 +2,6 @@ const deasync = require('deasync');
 const fs = require('fs');
 const path = require('path');
 const request = require('request');
-const yaml = require('js-yaml');
 
 const helper = require('./helper');
 const environment = helper.environment();
@@ -127,8 +126,9 @@ function get(url) {
 function getRedditComments(subreddit) {
   let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100");
 
-  const unprocessedComments = content.reduce((memo, yaml) => {
-    const commentData = yaml['data'];
+  const unprocessedComments = content.reduce((memo, json) => {
+    const commentData = json['data'];
+    
     if (commentData['created_utc'] > lastProcessedCommentTimestamp) {
       memo.push({
         'body': commentData['body'],

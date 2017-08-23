@@ -7,15 +7,21 @@
   },
   "main": "compile-pages.js",
   "dependencies": {
-    "chai": "^4.1.0",
     "deasync": "^0.1.10",
     "js-yaml": "^3.9.1",
-    "mocha": "^3.4.2",
-    "proxyquire": "^1.8.0",
     "request": "^2.81.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "mocha": "^3.4.2",
+    "proxyquire": "^1.8.0"    
+  },
   "scripts": {
     "test": "mocha"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cannawen/metric_units_reddit_bot.git"
+  },
+  "license" : "GPL-3.0"
 }
