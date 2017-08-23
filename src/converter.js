@@ -51,7 +51,9 @@ function conversions(input) {
             const alreadyConvertedInComment = input.match(outNumber);
 
             const alreadyConvertedInMap = Object.keys(memo).reduce((m,k) => {
-              return k.indexOf(" to " + inValueAndUnit) !== -1 || m;
+              const value = inValueAndUnit.replace(/[^'"\d\.,-]/g,'');
+              const unit = inValueAndUnit.replace(value, '');
+              return k.match(("(^| )" + value + ".*" + unit).regex()) !== null || m;
             }, false);
 
             let shouldConvert = true;

@@ -20,20 +20,33 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
             [
-              "1-feet",
-              "2 feet",
+              "101-feet",
+              "20 feet",
               "3 foot",
-              "4 ft",
+              "400 ft",
               "5.5-ft"
             ],
             {
-              "1 ft" : "0.3 metres",
-              "2 ft" : "0.6 metres",
+              "101 ft" : "30.8 metres",
+              "20 ft" : "6.1 metres",
               "3 ft" : "0.9 metres",
-              "4 ft" : "1.2 metres",
+              "400 ft" : "122 metres",
               "5'6\"" : "1.7 metres"
             }
           );
+      });
+
+
+      it('should not convert zero or negative values', () => {
+        shouldNotConvert([0, -10], "feet");
+      });
+
+      it('should not convert common values', () => {
+        shouldNotConvert([1, 2, 4, 6], "feet");
+      });
+
+      it('should not convert when values are likely hyperbole', () => {
+        shouldNotConvert([100, 1000, 10000], "feet");
       });
 
       context('and inches', () => {
@@ -46,7 +59,8 @@ describe('Converter', () => {
               "7-feet-8-in",
               "9' 10.5\"",
               "11'12\"",
-              "13ft1"
+              "13ft1",
+              "400'0"
             ],
             {
 	           "1'2\"": "0.36 metres",
@@ -55,7 +69,8 @@ describe('Converter', () => {
              "7'8\"": "2.34 metres",
              "9'11\"": "3.01 metres",
              "12 ft": "3.66 metres",
-             "13'1\"": "3.99 metres"
+             "13'1\"": "3.99 metres",
+             "400 ft" : "121.92 metres"
             }
           );
         });
@@ -63,14 +78,6 @@ describe('Converter', () => {
         it('should not convert over 12 inches', () => {
           converter.conversions("I am 6'13\" tall").should.deep.equal({ });
         });
-      });
-
-      it('should not convert zero or negative values', () => {
-        shouldNotConvert([0, -10], "feet");
-      });
-
-      it('should not convert when values are likely hyperbole', () => {
-        shouldNotConvert([100, 1000, 10000], "feet");
       });
     });
 
@@ -111,14 +118,14 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "40miles",
+            "4miles",
             "50 miles",
             "60 mi",
             "70 mile",
             "80-mile"
           ],
           {
-           "40 miles" : "64 km",
+           "4 miles" : "6.4 km",
            "50 miles" : "80 km",
            "60 miles" : "97 km",
            "70 miles" : "113 km",
@@ -144,13 +151,13 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "40mph",
+            "4mph",
             "50 mph",
             "60 miles per hour",
             "70 miles an hour"
           ],
           {
-           "40 mph" : "64 km/h",
+           "4 mph" : "6.4 km/h",
            "50 mph" : "80 km/h",
            "60 mph" : "97 km/h",
            "70 mph" : "113 km/h"
@@ -316,7 +323,7 @@ describe('Converter', () => {
         testConvert(
           [
             "0 to -40°F",
-            "5000 - 9000 miles"
+            "5000-9000 miles"
           ],
           {
             "0 to -40°F": "-18 to -40°C",
@@ -326,7 +333,7 @@ describe('Converter', () => {
       });
 
       it('should collapse ranges if needed', () => {
-        testConvert("100-101 degrees F ", { "100 to 101°F" : "38°C" });
+        testConvert("100-101 degrees F", { "100 to 101°F" : "38°C" });
       });
     });
 
@@ -348,16 +355,15 @@ describe('Converter', () => {
       });
     });
 
-    context('interesting cases', () => {
-      it('converts ranges and singles of the same units, if it is the first one', () => {
+    context('should not convert if conversion is already calculated', () => {
+      it('should not convert a value that has been converted', () => {
         testConvert(
           [
             "101°F",
-            "101-200°F",
+            "101-200°F"
           ],
           {
-            "101 to 200°F" : "38 to 93°C", 
-            "101°F" : "38°C"
+            "101 to 200°F" : "38 to 93°C"
           }
         );
       });
@@ -366,7 +372,7 @@ describe('Converter', () => {
         testConvert(
           [
             "200°F",
-            "101-200°F",
+            "101-200°F"
           ],
           {
             "101 to 200°F" : "38 to 93°C"
@@ -378,7 +384,7 @@ describe('Converter', () => {
         testConvert(
           [
             "200 miles",
-            "101-200°F",
+            "101-200°F"
           ],
           {
             "101 to 200°F" : "38 to 93°C",
