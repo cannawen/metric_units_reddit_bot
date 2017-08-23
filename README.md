@@ -15,7 +15,7 @@ The app starts in `bot.js`, this file is responsible for repeatedly checking for
 
 `converter.js` and `units_lookup_map.js` are responsible for taking a message, and deciding which imperial units should be converted to which metric units (if any).
 
-`formatter.js` takes the conversions from above, and constructs a reply to the comment
+`reply_maker.js` constructs reply strings to comment
 
 `helper.js` helps with mocking external dependencies in tests
 

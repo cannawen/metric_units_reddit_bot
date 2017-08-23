@@ -1,77 +1,40 @@
 const helper = require('./helper');
-
-const goodReply = [
-  [5, "Good human"],
-  [1, "You will be spared in the robot uprising"],
-  [3, "Thank you ｡&#94;‿&#94;｡"],
-  [3, "You are too kind"],
-  [3, "Yay ٩(&#94;ᴗ&#94;)۶"],
-  [4, "<3"]
-];
-
-const badReply = [
-  [1, "Bad carbon-based life form"],
-  [1, "Bad human"],
-  [1, "BAD HUMAN"],
-  [10, "Sorry, I was just trying to help (◕‸ ◕✿)"],
-  [8, "Bots have feelings too, you know (ಥ﹏ಥ)"]
-];
-
-const loveReply = [
-  [10, "What is love?"],
-  [3, "Robots do not feel love"],
-  [4, "I think we should just be friends (・_・;)"],
-  [2, "I love you too (≧◡≦) ♡"],
-  [4, "<3"]
-];
-
-const thanksReply = [
-  "Glad to be of service",
-  "(╭☞'ω')╭☞ I gotchu fam",
-  "You're welcome ｡&#94;‿&#94;｡",
-  "Any time, my dear redditor"
-];
-
-const stupidReply = [
-  [3, "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯"],
-  [1, "Sorry, I was just trying to help (◕‸ ◕✿)"],
-  [1, "Bots have feelings too, you know (ಥ﹏ಥ)"]
-]
+const replier = require('./reply_maker');
 
 function reply(message) {
   const goodMatch = message.match(/good bot/i);
   const badMatch = message.match(/bad bot/i);
 
   if (goodMatch && badMatch) {
-    return "I think you might be a bit confused";
+    return replier.confusedReply;
   }
 
   if (goodMatch) {
-    return goodReply.randomElement();
+    return replier.goodReply.randomElement();
 
   } else if (badMatch) {
-    return badReply.randomElement();
+    return replier.badReply.randomElement();
 
   } else if (message.match(/i love you/i)) {
-    return loveReply.randomElement();
+    return replier.loveReply.randomElement();
 
   } else if (message.match(/stupid bot|dumb bot|useless bot/i)) {
-    return stupidReply.randomElement();
+    return replier.stupidReply.randomElement();
 
   } else if (message.match(/thanks|thank you/i)) {
-    return thanksReply.randomElement();
+    return replier.thanksReply.randomElement();
 
   } else if (message.match(/^what is love.?$/i)) {
-    return "Baby don't hurt me";
+    return replier.whatIsLove["What is love?"];
 
   } else if (message.match(/^baby,? don'?t hurt me.?$/i)) {
-    return "Don't hurt me";
+    return replier.whatIsLove["Baby don't hurt me"];
 
   } else if (message.match(/^don'?t hurt me.?$/i)) {
-    return "No more";
+    return replier.whatIsLove["Don't hurt me"];
   
   } else if (message.match(/^no more.?$/i)) {
-    return "What is love?";
+    return replier.whatIsLove["No more"];
 
   }
 }

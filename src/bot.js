@@ -7,9 +7,9 @@ const yaml = require('js-yaml');
 
 const analytics = require('./analytics');
 const converter = require('./converter');
-const formatter = require('./formatter');
 const helper = require('./helper');
 const network = require('./network');
+const replier = require('./reply_maker');
 const snark = require('./snark');
 
 const environment = helper.environment();
@@ -73,12 +73,10 @@ setInterval(() => {
       analytics.trackSnark([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
     });
 
-
-  const stopMessage = "Please click 'block user' below and you will not see any more conversions from this bot.\n\nSo long, and thanks for all the fish";
   network.filterPrivateMessages(messages)
     .filter(message => message['subject'] === "stop")
     .forEach(message => {
-      network.postComment(message['id'], stopMessage);
+      network.postComment(message['id'], replier.stopMessage);
       analytics.trackUnsubscribe([message['timestamp'], message['username']]);
     });
 
@@ -126,7 +124,7 @@ setInterval(() => {
       const comment = map['comment'];
       const conversions = map['conversions'];
 
-      const reply = formatter.formatReply(comment, conversions);
+      const reply = replier.formatReply(comment, conversions);
       network.postComment(comment['id'], reply);
 
       analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
