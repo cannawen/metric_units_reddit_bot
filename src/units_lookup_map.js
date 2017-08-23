@@ -85,7 +85,7 @@ const unitsLookupMap = {
   },
 
   "feet to metres": {
-    "unitRegex" : [/-?feet/, /-?ft/, /-?foot/].regexJoin(),
+    "unitRegex" : [/-?feet/, /-ft/, /-?foot/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 2 && i != 4 && i != 6,
     "inDisplay" : (i) => {
       if (i%1 == 0) {
@@ -105,16 +105,17 @@ const unitsLookupMap = {
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, 100),
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
-        (
-          rh.startRegex 
+        ( rh.startRegex 
           + rh.numberRegex
-          + [/['][ -]?/, "[ -]?" + unitsLookupMap['feet to metres']['unitRegex'] + "[ -]?"].regexJoin()
+          + "[ -]?"
+          + ["[\']", "ft", unitsLookupMap['feet to metres']['unitRegex']].regexJoin()
+          + "[ -]?"
           + rh.numberRegex
           + [rh.endRegex, /["]/, /-?in/, "-?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
         ).regex();
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
         if (inches <= 12) {
-          return " " + rh.roundToDecimalPlaces(Number(feet) + Number(inches)/12, 2) + "ft ";
+          return " " + rh.roundToDecimalPlaces(Number(feet) + Number(inches)/12, 2) + " feet ";
         } else {
           return "  ";
         }

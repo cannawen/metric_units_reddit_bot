@@ -23,7 +23,7 @@ describe('Converter', () => {
               "101-feet",
               "20 feet",
               "3 foot",
-              "400 ft",
+              "400 feet",
               "5.5-ft"
             ],
             {
@@ -47,6 +47,11 @@ describe('Converter', () => {
 
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "feet");
+      });
+
+      it('should not convert ft or \"', () => {
+        shouldNotConvert([3], " ft");
+        shouldNotConvert([3], "\"");
       });
 
       context('and inches', () => {
@@ -89,7 +94,7 @@ describe('Converter', () => {
             "2inch",
             "3 inch",
             "40-inch",
-            "50 inches",
+            "50 inches"
           ],
           {
            "1.1 inches" : "2.8 cm",
@@ -107,6 +112,11 @@ describe('Converter', () => {
 
       it('should not convert 1 inch', () => {
         shouldNotConvert([1], "inches");
+      });
+
+      it('should not convert in or \'', () => {
+        shouldNotConvert([3], " in");
+        shouldNotConvert([3], "\'");
       });
 
       it('should not convert when values are likely hyperbole', () => {
@@ -224,7 +234,7 @@ describe('Converter', () => {
             "70 degree fahrenheit",
             "80 degrees fahrenheit",
             "90 degree f",
-            "10000 degrees f",            
+            "10000 degrees f"
           ],
           {
            "-40°F" : "-40°C",
@@ -308,11 +318,11 @@ describe('Converter', () => {
         testConvert(
           [
             "999,123,456 miles",
-            "1000.4 miles",
+            "1000.4 miles"
           ],
           {
            "999,123,456 miles" : "1,607,933,339 km",
-           "1,000.4 miles" : "1,610.0 km",
+           "1,000.4 miles" : "1,610.0 km"
           }
         );
       });
