@@ -2,17 +2,25 @@ const assert = require('assert');
 const should = require('chai').should();
 const proxyquire =  require('proxyquire')
 
-var helperStub   =  { };
+var helperStub = {};
 var snark;
 
 describe('Snark', () => {
-  describe('#reply()', () => {
+  beforeEach(() => {
+    helperStub.random = function () { return 0 };
+    snark = proxyquire('../src/snark', { './helper': helperStub });
+  });
 
-    beforeEach(() => {
-      helperStub.random = function () { return 0 };
-      snark = proxyquire('../src/snark', { './helper': helperStub });
+  describe('#humanReply()', () => {
+    context('Good bot || Bad bot', () => {
+      it('should reply', () => {
+        snark.humanReply("good bot").should.equal("I AM HUMAN");
+        snark.humanReply("bad bot").should.equal("I AM HUMAN");
+      });
     });
+  });
 
+  describe('#reply()', () => {
     context('Good bot && Bad bot', () => {
       it('should reply', () => {
         snark.reply("bad bot good bot").should.equal("I think you might be a bit confused");

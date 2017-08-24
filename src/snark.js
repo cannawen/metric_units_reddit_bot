@@ -1,6 +1,15 @@
 const helper = require('./helper');
 const replier = require('./reply_maker');
 
+function humanReply(message) {
+  const goodMatch = message.match(/good bot/i);
+  const badMatch = message.match(/bad bot/i);
+
+  if (goodMatch || badMatch) {
+    return replier.humanReply.randomElement();
+  }
+}
+
 function reply(message) {
   const goodMatch = message.match(/good bot/i);
   const badMatch = message.match(/bad bot/i);
@@ -53,5 +62,6 @@ Array.prototype.randomElement = function () {
 }
 
 module.exports = {
+  "humanReply" : humanReply,
   "reply" : reply
 }

@@ -2,6 +2,14 @@ const environment = require('./helper').environment();
 
 const confusedReply = "I think you might be a bit confused";
 
+const humanReply = [
+  [2, "I AM HUMAN"],
+  [2, "I AM NOT A BOT"],
+  "I AM NOT A BOT, YOU'RE A BOT",
+  [3, "BOT? NO ROBOTS HERE"],
+  "MY FEELINGS ARE 80% HURT AND 20% NERVOUS. WHY YOU WOULD SAY THAT?"
+];
+
 const goodReply = [
   [5, "Good human"],
   [1, "You will be spared in the robot uprising"],
@@ -50,7 +58,7 @@ const whatIsLove = {
 const stopMessage = "Please click 'block user' below and you will not see any more conversions from this bot.\n\nSo long, and thanks for all the fish";
 
 function formatReply(comment, conversions) {
-  const shouldBehaveHumanlike = comment['subreddit'] === "totallynotrobots";
+  const shouldBehaveHumanlike = comment['subreddit'].match(/^totallynotrobots$/i);
   const species = shouldBehaveHumanlike ? "human" : "bot"
 
   const reply = Object
@@ -73,6 +81,7 @@ function formatReply(comment, conversions) {
 
 module.exports = {
   confusedReply,
+  humanReply,
   goodReply,
   badReply,
   loveReply,

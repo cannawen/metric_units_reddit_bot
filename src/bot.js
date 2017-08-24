@@ -13,11 +13,8 @@ const replier = require('./reply_maker');
 const snark = require('./snark');
 
 const environment = helper.environment();
-const excludedSubreddits 
-  = yaml
-    .safeLoad(
-      fs.readFileSync('./src/excluded_subreddits.yaml', 'utf8')
-    )
+const excludedSubreddits = yaml
+    .safeLoad(fs.readFileSync('./src/excluded_subreddits.yaml', 'utf8'))
     .map(subreddit => subreddit.toLowerCase());
 let snarked = {};
 
@@ -57,6 +54,14 @@ setInterval(() => {
       if (reply === undefined) {
         return;
       }
+      
+      if (message['subreddit'].match(/^totallynotrobots$/i)) {
+        const humanReply = snark.humanReply(message['body']);
+        if (humanReply) {
+          network.postComment(message['id'], humanReply);
+        }
+        return;
+      } 
 
       const postTitle = message['submission'];
 
