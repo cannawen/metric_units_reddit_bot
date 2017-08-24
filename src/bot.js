@@ -74,7 +74,7 @@ setInterval(() => {
     });
 
   network.filterPrivateMessages(messages)
-    .filter(message => message['subject'] === "stop")
+    .filter(message => message['subject'].match(/stop/i))
     .forEach(message => {
       network.postComment(message['id'], replier.stopMessage);
       analytics.trackUnsubscribe([message['timestamp'], message['username']]);
