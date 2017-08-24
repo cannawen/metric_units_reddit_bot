@@ -52,9 +52,9 @@ const stopMessage = "Please click 'block user' below and you will not see any mo
 function formatReply(comment, conversions) {
   return Object
     .keys(conversions)
-    .reduce((memo, nonSIvalue) => {
-      const SIvalue = conversions[nonSIvalue];
-      return memo + nonSIvalue + "|" + SIvalue + "\n";
+    .reduce((memo, nonMetricValue) => {
+      const metricValue = conversions[nonMetricValue];
+      return memo + nonMetricValue + "|" + metricValue + "\n";
     }, "Original measurement | Metric measurement\n---|---\n")
     + "\n\n&nbsp;"
     + "\n\n&nbsp;"
