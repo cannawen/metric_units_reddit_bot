@@ -72,7 +72,7 @@ const unitsLookupMap = {
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, 10),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(j, i, " L/100km", mpgToLper100km, 10)
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, 10)
   },
 
   "miles per hour to km/h": {

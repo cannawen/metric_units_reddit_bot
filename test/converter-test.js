@@ -215,10 +215,6 @@ describe('Converter', () => {
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "mph");
       });
-
-      it('should flip the range conversion', () => {
-        converter.conversions("30-40 mpg").should.deep.equal({ "30 to 40 mpg (US)": "5.9 to 7.8 L/100km"});
-      });
     });
 
     context('°F', () => {
@@ -334,12 +330,14 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "0 to -40°F",
-            "5000-9000 miles"
+            "0 - -40°F",
+            "5000-9000 miles",
+            "30 TO 40 mpg"
           ],
           {
             "0 to -40°F": "-18 to -40°C",
-            "5,000 to 9,000 miles" : "8,047 to 14,484 km"
+            "5,000 to 9,000 miles" : "8,047 to 14,484 km",
+            "30 to 40 mpg (US)": "7.8 to 5.9 L/100km"
           }
         );
       });
