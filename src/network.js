@@ -113,6 +113,26 @@ function refreshToken() {
   }
 }
 
+//Utility to generate excluded subreddits yaml
+function printBannedSubreddits() {
+  let messages = get("/message/inbox?limit=100")
+  while (messages.length > 0) {
+
+  const banned = messages
+    .filter(data => data['kind'] === 't4')
+    .map(data => data['data'])
+    .filter(m => m['subject'].match(/^You\'ve been banned from participating in r\/(.+)$/i))
+    
+    banned
+      .map (b => b['subject'].match(/^You\'ve been banned from participating in r\/(.+)$/i)[1])
+      .forEach(b => helper.log("- " + b))
+    
+    const id = messages[messages.length - 1]['data']['name'];
+
+    messages = get("/message/inbox?limit=100&after=" + id)
+  }
+}
+
 function getRedditComments(subreddit) {
   let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100");
 
