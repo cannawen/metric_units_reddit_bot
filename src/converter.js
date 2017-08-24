@@ -58,7 +58,7 @@ function conversions(input) {
 
             let shouldConvert = true;
             if (map['shouldConvert']) {
-              shouldConvert = map['shouldConvert'](number);
+              shouldConvert = map['shouldConvert'](Number(number));
             }
             return shouldConvert && !alreadyConvertedInComment && !alreadyConvertedInMap;
           }

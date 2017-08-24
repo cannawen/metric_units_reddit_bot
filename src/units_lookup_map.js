@@ -77,7 +77,7 @@ const unitsLookupMap = {
 
   "miles per hour to km/h": {
     "unitRegex" : [/mph/, /miles per hour/, /miles an hour/].regexJoin(),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 10,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, 10),
@@ -86,7 +86,7 @@ const unitsLookupMap = {
 
   "feet to metres": {
     "unitRegex" : [/-?feet/, /-ft/, /-?foot/].regexJoin(),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 2 && i != 4 && i != 6,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 2, 4, 6].indexOf(i) === -1,
     "inDisplay" : (i) => {
       if (i%1 == 0) {
         return userFacingValueAndUnit(i.split('.')[0], " ft");
@@ -134,7 +134,7 @@ const unitsLookupMap = {
 
   "miles to km": {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 8,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 8, 10].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm, 10),

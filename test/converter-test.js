@@ -148,8 +148,8 @@ describe('Converter', () => {
         shouldNotConvert([0, -10], "miles");
       });
 
-      it('should not convert 1 mile or 8 miles', () => {
-        shouldNotConvert([1, 8], "mile");
+      it('should not convert 1, 8, or 10 miles', () => {
+        shouldNotConvert([1, 8, 10], "mile");
       });
 
       it('should not convert when values are likely hyperbole', () => {
@@ -179,8 +179,8 @@ describe('Converter', () => {
         shouldNotConvert([0, -10], "mph");
       });
 
-      it('should not convert 1 mph', () => {
-        shouldNotConvert([1], "mph");
+      it('should not convert 1 or 10 mph', () => {
+        shouldNotConvert([1, 10], "mph");
       });
 
       it('should not convert when values are likely hyperbole', () => {
