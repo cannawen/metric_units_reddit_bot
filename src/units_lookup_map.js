@@ -107,14 +107,19 @@ const unitsLookupMap = {
       const feetAndInchesRegex = 
         ( rh.startRegex 
           + rh.numberRegex
-          + "[ -]?"
-          + ["[\']", "ft", unitsLookupMap['feet to metres']['unitRegex']].regexJoin()
-          + "[ -]?"
+          + ["[\']", " ?ft", " ?" + unitsLookupMap['feet to metres']['unitRegex']].regexJoin()
+          + "[- ]?"
           + rh.numberRegex
-          + [rh.endRegex, /["]/, /-?in/, "-?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
+          + [rh.endRegex, /["]/, / ?in/, " ?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
         ).regex();
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
-        if (inches <= 12) {
+        const inchesLessThan12 = inches <= 12;
+        const inchesLessThan3CharactersBeforeDecimal = inches
+            .toString()
+            .split('.')[0]
+            .replace(/[^\d\.]/,'')
+            .length <= 2
+        if (inchesLessThan12 && inchesLessThan3CharactersBeforeDecimal) {
           return " " + rh.roundToDecimalPlaces(Number(feet) + Number(inches)/12, 2) + " feet ";
         } else {
           return "  ";
