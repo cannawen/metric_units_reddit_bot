@@ -99,6 +99,10 @@ setInterval(() => {
     return comment['body'].length < 300;
   }
 
+  function isNotSarcastic(comment) {
+    return comment.match(/\b\/s\b/i) === null;
+  }
+
   function hasNumber(comment) {
     return comment['body'].match(/\d/) !== null;
   }
@@ -113,6 +117,7 @@ setInterval(() => {
     .filter(allowedToPostInSubreddit)
     .filter(postIsShort)
     .filter(hasNumber)
+    .filter(isNotSarcastic)
     .map(comment => {
       return {
         "comment" : comment,
