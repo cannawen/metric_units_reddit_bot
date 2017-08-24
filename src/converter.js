@@ -21,7 +21,7 @@ function conversions(input) {
           input = input.replace((range + " ?" + map['unitRegex']).regex(), '');
           return range;
         })
-        .map(range => range.replace(/to/g, "-").replace(/[^\d.-]/g, ''))
+        .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
         .forEach(range => {
           const toIndex = range.match(/\d-(?=-?\d)/).index + 1;
 
