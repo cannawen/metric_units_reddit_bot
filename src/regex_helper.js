@@ -21,7 +21,7 @@ const startRegex
   = /(?:^|[\s~><\b\(])/.source;
 
 const endRegex 
-  = /(?:$|[\s\.,;?!:\b\)])/.source;
+  = /(?:$|[\s\.,;?!:\b\)/])/.source;
 
 const numberRegex 
   = 
