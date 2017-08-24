@@ -23,19 +23,33 @@ describe('Converter', () => {
               "101-feet",
               "20 feet",
               "3 foot",
-              "400 feet",
+              "40feet",
               "5.5-ft"
             ],
             {
               "101 ft" : "30.8 metres",
               "20 ft" : "6.1 metres",
               "3 ft" : "0.9 metres",
-              "400 ft" : "122 metres",
+              "40 ft" : "12.2 metres",
               "5'6\"" : "1.7 metres"
             }
           );
       });
 
+      it('should switch precision appropriately', () => {
+        testConvert(
+          [
+            "327 feet",
+            "328 feet",
+            "329 feet"
+          ],
+          { 
+            "327 ft" : "99.7 metres",
+            "328 ft" : "100.0 metres",
+            "329 ft" : "100 metres",
+          }
+        );
+      });
 
       it('should not convert zero or negative values', () => {
         shouldNotConvert([0, -10], "feet");
@@ -106,6 +120,19 @@ describe('Converter', () => {
         );
       });
 
+      it('should switch precision appropriately', () => {
+        testConvert(
+          [
+            "39 inch",
+            "40 inch"
+          ],
+          { 
+            "39 inches" : "99.1 cm",
+            "40 inches" : "102 cm"
+          }
+        );
+      });
+
       it('should not convert zero or negative values', () => {
         shouldNotConvert([0, -10], "inches");
       });
@@ -128,18 +155,31 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "4miles",
+            "40miles",
             "50 miles",
             "60 mi",
             "70 mile",
             "80-mile"
           ],
           {
-           "4 miles" : "6.4 km",
+           "40 miles" : "64 km",
            "50 miles" : "80 km",
            "60 miles" : "97 km",
            "70 miles" : "113 km",
            "80 miles" : "129 km"
+          }
+        );
+      });
+
+      it('should switch precision appropriately', () => {
+        testConvert(
+          [
+            "6 miles",
+            "7 miles"
+          ],
+          { 
+            "6 miles" : "9.7 km",
+            "7 miles" : "11 km"
           }
         );
       });
@@ -161,16 +201,29 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "4mph",
+            "40mph",
             "50 mph",
             "60 miles per hour",
             "70 miles an hour"
           ],
           {
-           "4 mph" : "6.4 km/h",
+           "40 mph" : "64 km/h",
            "50 mph" : "80 km/h",
            "60 mph" : "97 km/h",
            "70 mph" : "113 km/h"
+          }
+        );
+      });
+
+      it('should switch precision appropriately', () => {
+        testConvert(
+          [
+            "6 mph",
+            "7 mph"
+          ],
+          { 
+            "6 mph" : "9.7 km/h",
+            "7 mph" : "11 km/h"
           }
         );
       });
@@ -192,14 +245,27 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "20 mpg",
+            "25 mpg",
             "30mpg",
             "50 miles per gallon"
           ],
           {
-           "20 mpg (US)" : "12 L/100km",
+           "25 mpg (US)" : "9.4 L/100km",
            "30 mpg (US)" : "7.8 L/100km",
            "50 mpg (US)" : "4.7 L/100km"
+          }
+        );
+      });
+
+      it('should switch precision appropriately', () => {
+        testConvert(
+          [
+            "23 mpg",
+            "24 mpg"
+          ],
+          { 
+            "23 mpg (US)" : "10 L/100km",
+            "24 mpg (US)" : "9.8 L/100km"
           }
         );
       });
