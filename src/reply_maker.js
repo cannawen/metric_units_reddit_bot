@@ -54,10 +54,9 @@ function formatReply(comment, conversions) {
     .keys(conversions)
     .reduce((memo, nonMetricValue) => {
       const metricValue = conversions[nonMetricValue];
-      return memo + nonMetricValue + "|" + metricValue + "\n";
-    }, "Original measurement | Metric measurement\n---|---\n")
-    + "\n\n&nbsp;"
-    + "\n\n&nbsp;"
+      return memo + nonMetricValue + " | " + metricValue + "\n";
+    }, "")
+    + "\n"
     + "^metric ^units ^bot" 
     + " ^|"
     + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is...%20%5BPlease%20include%20a%20link%20if%20you%20are%20reporting%20a%20bug%20about%20a%20specific%20comment!%5D)"
