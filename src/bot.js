@@ -100,7 +100,7 @@ setInterval(() => {
   }
 
   function isNotSarcastic(comment) {
-    return comment.match(/\b\/s\b/i) === null;
+    return comment['body'].match(/\b\/s\b/i) === null;
   }
 
   function hasNumber(comment) {
