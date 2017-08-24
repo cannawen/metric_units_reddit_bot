@@ -54,7 +54,7 @@ function formatReply(comment, conversions) {
     .keys(conversions)
     .reduce((memo, nonMetricValue) => {
       const metricValue = conversions[nonMetricValue];
-      return memo + nonMetricValue + " | " + metricValue + "\n";
+      return memo + nonMetricValue + " | " + metricValue + "  \n";
     }, "")
     + "\n"
     + "^metric ^units ^bot" 
