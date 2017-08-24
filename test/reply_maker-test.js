@@ -8,7 +8,7 @@ describe('reply_maker', () => {
     it('should create a tabular response for 1 conversion', () => {
       replier.formatReply("Test foo", {"foo" : "bar"})
         .should
-        .include("foo | bar  \n");
+        .include("foo | bar ");
     });
 
     it('should create tabular response for 2 conversions', () => {
@@ -16,7 +16,7 @@ describe('reply_maker', () => {
         .should
         .include("foo | bar  \n")
         .and
-        .include("hi | hey  \n");
+        .include("hi | hey ");
     });
 
     it('should create tabular response of supersets of text', () => {
@@ -26,7 +26,7 @@ describe('reply_maker', () => {
         .and
         .include("foobar | hey  \n")
         .and
-        .include("cat | dog  \n");
+        .include("cat | dog ");
     });
   });
 });
