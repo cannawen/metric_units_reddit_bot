@@ -33,6 +33,14 @@ describe('Snark', () => {
         snark.reply("bad bot good bot").should.equal("I think you might be a bit confused");
       });
     });
+    
+    context('Whos a {x} bot', () => {
+      it('should reply', () => {
+        snark.reply("who's a potato bot?").should.equal("ME! Is it me? Am I a potato bot?");
+        snark.reply("who is an elephant bot?").should.equal("ME! Is it me? Am I an elephant bot?");
+        snark.reply("whos a good bot?").should.equal("ME! Is it me? Am I a good bot?");
+      });
+    });
 
     context('Good bot', () => {
       it('should reply', () => {

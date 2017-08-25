@@ -19,7 +19,8 @@ const confusedReply = [
 ];
 
 const whosAReply = [
-  "ME! Is it me? Am I a {{x}} bot?"
+  "ME! Is it me? Am I a{{x}} bot?",
+  "I'M A{{X}} BOT!!!"
 ];
 
 const goodReply = [

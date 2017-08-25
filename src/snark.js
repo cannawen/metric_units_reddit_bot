@@ -21,39 +21,46 @@ function reply(message) {
     return replier.confusedReply.randomElement();
   }
 
+  const whosA = message.match(/(?:whos|who's|who is) a(n? \w+) bot/i);
+  if (whosA) {
+    const r = replier.whosAReply.randomElement();
+
+    if (r.match("{{x}}")) {
+      return r.replace("{{x}}", whosA[1]);
+
+    } else if (r.match("{{X}}")) {
+      return r.replace("{{X}}", whosA[1].toUpperCase());
+
+    } else {
+      return r;
+    }
+  }
+
   if (goodMatch) {
     return replier.goodReply.randomElement();
-  } 
 
-  if (badMatch) {
+  } else if (badMatch) {
     return replier.badReply.randomElement();
-  } 
 
-  if (message.match(/i love you/i)) {
+  } else if (message.match(/i love you/i)) {
     return replier.loveReply.randomElement();
-  } 
 
-  if (message.match(/stupid bot|dumb bot|useless bot/i)) {
+  } else if (message.match(/stupid bot|dumb bot|useless bot/i)) {
     return replier.stupidReply.randomElement();
-  } 
 
-  if (message.match(/thanks|thank you/i)) {
+  } else if (message.match(/thanks|thank you/i)) {
     return replier.thanksReply.randomElement();
-  } 
 
-  if (message.match(/^what is love.?$/i)) {
+  } else if (message.match(/^what is love.?$/i)) {
     return replier.whatIsLove["What is love?"];
-  } 
 
-  if (message.match(/^baby,? don'?t hurt me.?$/i)) {
+  } else if (message.match(/^baby,? don'?t hurt me.?$/i)) {
     return replier.whatIsLove["Baby don't hurt me"];
-  } 
 
-  if (message.match(/^don'?t hurt me.?$/i)) {
+  } else if (message.match(/^don'?t hurt me.?$/i)) {
     return replier.whatIsLove["Don't hurt me"];
-  } 
 
-  if (message.match(/^no more.?$/i)) {
+  } else if (message.match(/^no more.?$/i)) {
     return replier.whatIsLove["No more"];
   }
 }
