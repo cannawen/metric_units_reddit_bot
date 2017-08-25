@@ -68,7 +68,7 @@ const unitsLookupMap = {
   //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
   "miles per gallon to L/100km" : {
     "unitRegex" : [/mpg/, /miles per gallon/].regexJoin(),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10 && i < 235,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, 10),

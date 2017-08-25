@@ -286,6 +286,10 @@ describe('Converter', () => {
         shouldNotConvert([1, 5, 9.99], "mpg");
       });
 
+      it('should not convert over 235 mpg, because thats ridiculous', () => {
+        shouldNotConvert([235], "mpg");
+      });
+
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "mph");
       });
