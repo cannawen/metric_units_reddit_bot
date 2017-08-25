@@ -133,7 +133,7 @@ setInterval(() => {
     .map(comment => {
       return {
         "comment" : comment,
-        "conversions" : converter.conversions(comment['body'])
+        "conversions" : converter.conversions(comment['body'], comment['subreddit'])
       }
     })
     .filter(hasConversions)

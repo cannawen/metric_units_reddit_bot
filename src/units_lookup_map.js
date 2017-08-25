@@ -72,7 +72,8 @@ const unitsLookupMap = {
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, 10),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, 10)
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, 10),
+    "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo"]
   },
 
   "miles per hour to km/h": {
@@ -134,7 +135,11 @@ const unitsLookupMap = {
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm, 100),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm, 100)
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm, 100),
+    "ignoredKeywords" : ["dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
+                        "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
+                        "sex", "glory hole",
+                        "monitor", "screen", "tv", "ipad", "iphone", "android", "macbook", "windows", "apple"]
   },
 
   "miles to km": {

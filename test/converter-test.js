@@ -6,7 +6,7 @@ function testConvert(input, expectedMap) {
   if (Array.isArray(input)) {
     input = " " + input.join("  ") + " ";
   }
-  converter.conversions(input).should.deep.equal(expectedMap);
+  converter.conversions(input, "foobar").should.deep.equal(expectedMap);
 }
 
 function shouldNotConvert(numArr, units) {
@@ -95,7 +95,7 @@ describe('Converter', () => {
         });
 
         it('should not convert over 12 inches', () => {
-          converter.conversions("I am 6'13\" tall").should.deep.equal({ });
+          testConvert("I am 6'13\" tall", { });
         });
       });
     });
@@ -148,6 +148,14 @@ describe('Converter', () => {
 
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "inches");
+      });
+
+      it('should not convert penis measurements in comments', () => {
+        testConvert("I have a 10-inch DONG", {});
+      });
+
+      it('should not convert screen sizes in comments', () => {
+        testConvert("My 32 inch ultra widescreen monitor", {});
       });
     });
 
@@ -280,6 +288,10 @@ describe('Converter', () => {
 
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "mph");
+      });
+
+      it('should not convert in sports subs', () => {
+        converter.conversions("He played 30mpg", "basketball4lyfe").should.deep.equal({});
       });
     });
 
@@ -477,7 +489,7 @@ describe('Converter', () => {
           "22F"
         ].join("  ");
 
-        converter.conversions(inputString).should.deep.equal({ });
+        testConvert(inputString, { });
       });
     });
 
@@ -534,34 +546,34 @@ describe('Converter', () => {
 
     context('comment already contains conversion', () => {
       it('should not convert if the value is present', () => {
-        converter.conversions("About 200 miles (322 km) away").should.deep.equal({});
-        converter.conversions("About 200 miles or 322 kilometers away").should.deep.equal({});
-        converter.conversions("About 200 miles or 322 away").should.deep.equal({});
+        testConvert("About 200 miles (322 km) away", {});
+        testConvert("About 200 miles or 322 kilometers away", {});
+        testConvert("About 200 miles or 322 away", {});
       });
     });
 
     context.skip('Current failing tests - bugs and edge cases', () => {
       //Story #150482058
       it('should display partial inches', () => {
-        converter.conversions("9 feet 10.5").should.deep.equal({ "9'10.5\"": "3.01 metres" });
+        testConvert("9 feet 10.5", { "9'10.5\"": "3.01 metres" });
       });
 
       // Story #150138193
       context('comment already contains conversion', () => {
         it('should not convert regardless of commas', () => {
-          converter.conversions("About 2000 miles or 3219 kilometers away").should.deep.equal({});
+          testConvert("About 2000 miles or 3219 kilometers away", {});
         });
 
         it('should be smart enough to handle rounding', () => {
-          converter.conversions("About 2000 miles or 3,220 kilometers away").should.deep.equal({});
+          testConvert("About 2000 miles or 3,220 kilometers away", {});
         });
 
         it('should convert if the units do not match', () => {
-          converter.conversions("About 200 miles and 322 degrees C away").should.deep.equal({"200 miles" : "322 km"});
+          testConvert("About 200 miles and 322 degrees C away", {"200 miles" : "322 km"});
         });
 
         it('should convert if the value does not exactly match', () => {
-          converter.conversions("About 200 miles and 32222 km  away").should.deep.equal({"200 miles" : "322 km"});
+          testConvert("About 200 miles and 32222 km  away", {"200 miles" : "322 km"});
         });
       });
 
