@@ -159,7 +159,7 @@ function postComment(parentId, markdownBody) {
 }
 
 function getUnreadMessages() {
-  return get("/message/unread");
+  return get("/message/unread?limit=100");
 }
 
 function markAllMessagesAsRead() {
