@@ -27,29 +27,19 @@ process.on('uncaughtException', function (err) {
 network.refreshToken();
 
 setInterval(() => {
-  function messageIsShort(message) {
-    return message['body'].length < 25;
-  }
-  
-  function cleanupOldSnarked() {
-    snarked = 
-      Object
-      .keys(snarked)
-      .reduce((memo, key) => {
-        const lessThan24hAgo = snarked[key] > now - 24*60*60*1000;
-        if (lessThan24hAgo) {
-          memo[key] = snarked[key];
-        }
-        return memo;
-      }, {});
-  };
-
   const now = helper.now();
 
   network.refreshToken();
-  cleanupOldSnarked();
   
   const messages = network.getUnreadMessages();
+  if (!messages) {
+    return;
+  }
+
+  function messageIsShort(message) {
+    return message['body'].length < 25;
+  }
+
   network.markAllMessagesAsRead();
 
   network
@@ -92,10 +82,25 @@ setInterval(() => {
       network.blockAuthorOfMessageWithId(message['id']);
     });
 
+  //cleanup old snarked
+  snarked = Object
+    .keys(snarked)
+    .reduce((memo, key) => {
+      const lessThan24hAgo = snarked[key] > now - 24*60*60*1000;
+      if (lessThan24hAgo) {
+        memo[key] = snarked[key];
+      }
+      return memo;
+    }, {});
+    
 }, 60*1000)
 
 setInterval(() => {
-
+  const comments = network.getRedditComments("all");
+  if (!comments) {
+    return;
+  }
+  
   function allowedToPostInSubreddit(comment) {
       return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
   }
@@ -123,8 +128,7 @@ setInterval(() => {
     return Object.keys(map['conversions']).length > 0;
   }
 
-  network
-    .getRedditComments("all")
+  comments
     .filter(commentIsntFromABot)
     .filter(allowedToPostInSubreddit)
     .filter(postIsShort)

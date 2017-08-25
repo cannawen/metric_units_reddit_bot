@@ -19,7 +19,11 @@ function get(url) {
     content = networkRequest({ url: 'https://oauth.reddit.com' + url }, true)
   }
 
-  return content['data']['children'];
+  try {
+    return content['data']['children'];
+  } else {
+    return content;
+  }
 }
 
 function post(urlPath, form) {
@@ -135,6 +139,9 @@ function printBannedSubreddits() {
 
 function getRedditComments(subreddit) {
   let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100");
+  if (!content) {
+    return;
+  }
 
   const unprocessedComments = content
     .map(comment => comment['data'])
