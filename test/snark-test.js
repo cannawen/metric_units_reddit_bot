@@ -17,10 +17,11 @@ describe('Snark', () => {
   });
 
   describe('#humanReply()', () => {
-    context('Good bot || Bad bot', () => {
+    context('Good bot || Bad bot || Best bot', () => {
       it('should reply', () => {
         check(snark.humanReply, "good bot", "I AM HUMAN");
         check(snark.humanReply, "bad bot", "I AM HUMAN");
+        check(snark.humanReply, "best bot", "I AM HUMAN");
       });
     });
 

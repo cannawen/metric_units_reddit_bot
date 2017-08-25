@@ -4,7 +4,7 @@ const replier = require('./reply_maker');
 function humanReply(message) {
   const body = message['body'];
 
-  if (body.match(/good bot|bad bot/i)) {
+  if (body.match(/good bot|bad bot|best bot/i)) {
     return replier.humanReply.randomElement();
   }
 
