@@ -1,6 +1,7 @@
 const deasync = require('deasync');
 const fs = require('fs');
 const https = require('https');
+const mkdirp = require('mkdirp');
 const path = require('path');
 const request = require('request');
 const yaml = require('js-yaml');
@@ -17,6 +18,11 @@ const excludedSubreddits = yaml
     .safeLoad(fs.readFileSync('./src/excluded_subreddits.yaml', 'utf8'))
     .map(subreddit => subreddit.toLowerCase());
 let snarked = {};
+
+process.on('uncaughtException', function (err) {
+  mkdirp("./private/errors");
+  fs.writeFileSync("./private/errors/" + helper.now() + ".txt", err.stack, "utf8");
+});
 
 network.refreshToken();
 
