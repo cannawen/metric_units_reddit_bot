@@ -1,8 +1,11 @@
 const fs = require('fs');
+const mkdirp = require('mkdirp');
 
 const helper = require('./helper');
 
 const environment = helper.environment();
+const folder = "./private/analytics/" + environment['version'] + "/";
+mkdirp(folder);
 
 function trackSnark(data) {
   track("snark", data);
@@ -25,7 +28,7 @@ function track(category, data) {
   if (environment['dev-mode']) {
     helper.log(dataString);
   } else {
-    fs.appendFileSync("./private/analytics-" + category + ".csv", dataString, "utf8");
+    fs.appendFileSync(folder + category + ".csv", dataString, "utf8");
   }
 }
 
