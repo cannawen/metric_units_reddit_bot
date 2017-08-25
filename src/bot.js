@@ -64,6 +64,7 @@ setInterval(() => {
       if (message['subreddit'].match(/^totallynotrobots$/i)) {
         const humanReply = snark.humanReply(message);
         if (humanReply) {
+          analytics.trackSnark([message['timestamp'], message['link'], message['body'], reply, true]);
           network.postComment(message['id'], humanReply);
         }
         return;
@@ -75,20 +76,19 @@ setInterval(() => {
       // Replies 40% of the time otherwise
       // Possible refactor candidate, story #150342011
       const shouldReply = snarked[postTitle] === undefined || helper.random() > 0.6;
+      analytics.trackSnark([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
       
       if (shouldReply) {
         snarked[postTitle] = now;
         network.postComment(message['id'], reply);
       }
-
-      analytics.trackSnark([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
     });
 
   network.filterPrivateMessages(messages)
     .filter(message => message['subject'].match(/stop/i))
     .forEach(message => {
-      network.postComment(message['id'], replier.stopMessage);
       analytics.trackUnsubscribe([message['timestamp'], message['username']]);
+      network.postComment(message['id'], replier.stopMessage);
       network.blockAuthorOfMessageWithId(message['id']);
     });
 
@@ -142,8 +142,8 @@ setInterval(() => {
       const conversions = map['conversions'];
 
       const reply = replier.formatReply(comment, conversions);
-      network.postComment(comment['id'], reply);
 
       analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
+      network.postComment(comment['id'], reply);
     })
 }, 2*1000);  
