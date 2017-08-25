@@ -21,7 +21,7 @@ function get(url) {
 
   try {
     return content['data']['children'];
-  } else {
+  } catch (e) {
     return content;
   }
 }
