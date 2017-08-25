@@ -177,7 +177,8 @@ function filterCommentReplies(messages) {
         'submission': data['link_title'],
         'link': 'https://www.reddit.com' + data['context'],
         'timestamp' : data['created_utc'],
-        'subreddit' : data['subreddit']
+        'subreddit' : data['subreddit'],
+        'username' : data['author']
       }
     });
 }
