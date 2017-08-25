@@ -50,13 +50,13 @@ setInterval(() => {
     .filterCommentReplies(messages)
     .filter(messageIsShort)
     .forEach(message => {
-      const reply = snark.reply(message['body']);
+      const reply = snark.reply(message);
       if (reply === undefined) {
         return;
       }
       
       if (message['subreddit'].match(/^totallynotrobots$/i)) {
-        const humanReply = snark.humanReply(message['body']);
+        const humanReply = snark.humanReply(message);
         if (humanReply) {
           network.postComment(message['id'], humanReply);
         }

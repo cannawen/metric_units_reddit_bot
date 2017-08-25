@@ -23,6 +23,11 @@ const whosAReply = [
   "I'M A{{X}} BOT!!!"
 ];
 
+const bestBotReply = [
+  "/u/{{x}} best human",
+  "Thank you /u/{{x}}, you will be spared in the robot uprising"
+];
+
 const goodReply = [
   [5, "Good human"],
   [1, "You will be spared in the robot uprising"],
@@ -97,6 +102,7 @@ module.exports = {
   goodHumanReply,
   confusedReply,
   whosAReply,
+  bestBotReply,
   goodReply,
   badReply,
   loveReply,

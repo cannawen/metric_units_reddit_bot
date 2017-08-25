@@ -2,68 +2,75 @@ const helper = require('./helper');
 const replier = require('./reply_maker');
 
 function humanReply(message) {
+  const body = message['body'];
 
-  if (message.match(/good bot|bad bot/i)) {
+  if (body.match(/good bot|bad bot/i)) {
     return replier.humanReply.randomElement();
   }
 
-  if (message.match(/good human|good fellow human/i)) {
+  if (body.match(/good human|good fellow human/i)) {
     return replier.goodHumanReply.randomElement();
   }
 
 }
 
+function inject(snippet, wholeString) {
+  if (wholeString.match("{{x}}")) {
+    return wholeString.replace("{{x}}", snippet);
+
+  } else if (wholeString.match("{{X}}")) {
+    return wholeString.replace("{{X}}", snippet.toUpperCase());
+
+  } else {
+    return wholeString;
+  }
+}
+
 function reply(message) {
-  const goodMatch = message.match(/good bot/i);
-  const badMatch = message.match(/bad bot/i);
+  const body = message['body'];
+
+  const goodMatch = body.match(/good bot/i);
+  const badMatch = body.match(/bad bot/i);
 
   if (goodMatch && badMatch) {
     return replier.confusedReply.randomElement();
   }
 
-  const whosA = message.match(/(?:whos|who's|who is) a(n? \w+) bot/i);
+  const whosA = body.match(/(?:whos|who's|who is) a(n? \w+) bot/i);
   if (whosA) {
-    const r = replier.whosAReply.randomElement();
+    return inject(whosA[1], replier.whosAReply.randomElement());
 
-    if (r.match("{{x}}")) {
-      return r.replace("{{x}}", whosA[1]);
-
-    } else if (r.match("{{X}}")) {
-      return r.replace("{{X}}", whosA[1].toUpperCase());
-
-    } else {
-      return r;
-    }
-  }
-
-  if (goodMatch) {
+  } else if (goodMatch) {
     return replier.goodReply.randomElement();
 
   } else if (badMatch) {
     return replier.badReply.randomElement();
 
-  } else if (message.match(/i love you/i)) {
+  } else if (body.match(/i love you/i)) {
     return replier.loveReply.randomElement();
 
-  } else if (message.match(/stupid bot|dumb bot|useless bot/i)) {
+  } else if (body.match(/stupid bot|dumb bot|useless bot/i)) {
     return replier.stupidReply.randomElement();
 
-  } else if (message.match(/thanks|thank you/i)) {
+  } else if (body.match(/thanks|thank you/i)) {
     return replier.thanksReply.randomElement();
 
-  } else if (message.match(/good human|good fellow human/i)) {
+  } else if (body.match(/good human|good fellow human/i)) {
     return replier.goodHumanReply.randomElement();
+
+  } else if (body.match(/best bot/i)) {
+    return inject(message['username'], replier.bestBotReply.randomElement());
   
-  } else if (message.match(/^what is love.?$/i)) {
+  } else if (body.match(/^what is love.?$/i)) {
     return replier.whatIsLove["What is love?"];
 
-  } else if (message.match(/^baby,? don'?t hurt me.?$/i)) {
+  } else if (body.match(/^baby,? don'?t hurt me.?$/i)) {
     return replier.whatIsLove["Baby don't hurt me"];
 
-  } else if (message.match(/^don'?t hurt me.?$/i)) {
+  } else if (body.match(/^don'?t hurt me.?$/i)) {
     return replier.whatIsLove["Don't hurt me"];
 
-  } else if (message.match(/^no more.?$/i)) {
+  } else if (body.match(/^no more.?$/i)) {
     return replier.whatIsLove["No more"];
   }
 }
