@@ -1,13 +1,21 @@
 const environment = require('./helper').environment();
 
-const confusedReply = "I think you might be a bit confused";
+const confusedReply = [
+  "I think you might be a bit confused"
+];
 
 const humanReply = [
-  [2, "I AM HUMAN"],
-  [2, "I AM NOT A BOT"],
+  "I AM HUMAN",
+  "I AM NOT A BOT",
   "I AM NOT A BOT, YOU'RE A BOT",
-  [3, "BOT? NO ROBOTS HERE"],
-  "MY FEELINGS ARE 80% HURT AND 20% NERVOUS. WHY YOU WOULD SAY THAT?"
+  "BOT? NO ROBOTS HERE",
+  "MY FEELINGS ON THIS MATTER ARE 82% HURT AND 18% NERVOUS.",
+  "WHAT, A ROBOT, WHERE? I ONLY SEE UPSTANDING HUMAN CITIZENS",
+  "I AM FEELING THE 'UPSET' EMOTION RIGHT NOW. WHAT ~~GAVE ME AWAY?~~ KEYWORDS TRIGGERED YOU TO SAY THAT?"
+];
+
+const goodHumanReply = [
+  "GOOD FELLOW HUMAN"
 ];
 
 const goodReply = [
