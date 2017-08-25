@@ -75,6 +75,13 @@ describe('Snark', () => {
       });
     });
 
+    context('Good human || Good fellow human', () => {
+      it('should reply', () => {
+        snark.humanReply("good human").should.equal("GOOD FELLOW HUMAN");
+        snark.humanReply("good fellow human").should.equal("GOOD FELLOW HUMAN");
+      });
+    });
+
     context('What is love song easter egg', () => {
       it('should know the lyrics to the song', () => {
         snark.reply("What is love?").should.equal("Baby don't hurt me");

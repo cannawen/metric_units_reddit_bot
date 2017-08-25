@@ -51,6 +51,9 @@ function reply(message) {
   } else if (message.match(/thanks|thank you/i)) {
     return replier.thanksReply.randomElement();
 
+  } else if (message.match(/good human|good fellow human/i)) {
+    return replier.goodHumanReply.randomElement();
+  
   } else if (message.match(/^what is love.?$/i)) {
     return replier.whatIsLove["What is love?"];
 
