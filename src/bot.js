@@ -83,6 +83,7 @@ setInterval(() => {
     .forEach(message => {
       network.postComment(message['id'], replier.stopMessage);
       analytics.trackUnsubscribe([message['timestamp'], message['username']]);
+      network.blockAuthorOfMessageWithId(message['id']);
     });
 
 }, 60*1000)

@@ -197,6 +197,10 @@ function filterPrivateMessages(messages) {
     });
 }
 
+function blockAuthorOfMessageWithId(id) {
+  post("/api/block", { 'id' : id });
+}
+
 module.exports = {
   "refreshToken" : refreshToken,
   "getRedditComments" : getRedditComments,
@@ -204,5 +208,6 @@ module.exports = {
   "getUnreadMessages" : getUnreadMessages,
   "markAllMessagesAsRead" : markAllMessagesAsRead,
   "filterCommentReplies" : filterCommentReplies,
-  "filterPrivateMessages" : filterPrivateMessages
+  "filterPrivateMessages" : filterPrivateMessages,
+  "blockAuthorOfMessageWithId" : blockAuthorOfMessageWithId
 }
