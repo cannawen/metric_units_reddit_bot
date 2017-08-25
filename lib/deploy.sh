@@ -1,4 +1,4 @@
 #!/bin/bash
 npm install
-node ./src/bot.js > ./private/logs.txt &
+node ./src/bot.js &
 # `ps aux | grep node` to find the process to kill
