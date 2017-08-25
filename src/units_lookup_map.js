@@ -73,7 +73,8 @@ const unitsLookupMap = {
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, 10),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, 10),
-    "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo"]
+    "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
+                         "nba", "nhl", "nfl", "sport"]
   },
 
   "miles per hour to km/h": {
@@ -139,7 +140,10 @@ const unitsLookupMap = {
     "ignoredKeywords" : ["dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
                         "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                         "sex", "glory hole",
-                        "monitor", "screen", "tv", "ipad", "iphone", "android", "macbook", "windows", "apple"]
+                        "monitor", "screen", 
+                        "tv", 
+                        "ipad", "iphone", "android", "phone", "tablet", "apple",
+                        "macbook", "windows"]
   },
 
   "miles to km": {
@@ -148,7 +152,9 @@ const unitsLookupMap = {
     "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm, 10),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, 10)
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, 10),
+    "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
+                         "air miles", "aeroplan", "points"]
   },
 
   "°F to °C" : {

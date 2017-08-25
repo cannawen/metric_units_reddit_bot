@@ -149,14 +149,6 @@ describe('Converter', () => {
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "inches");
       });
-
-      it('should not convert penis measurements in comments', () => {
-        testConvert("I have a 10-inch DONG", {});
-      });
-
-      it('should not convert screen sizes in comments', () => {
-        testConvert("My 32 inch ultra widescreen monitor", {});
-      });
     });
 
     context('miles', () => {
@@ -292,10 +284,6 @@ describe('Converter', () => {
 
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "mph");
-      });
-
-      it('should not convert in sports subs', () => {
-        converter.conversions("He played 30mpg", "basketball4lyfe").should.deep.equal({});
       });
     });
 
@@ -555,6 +543,16 @@ describe('Converter', () => {
         testConvert("About 200 miles or 322 away", {});
       });
     });
+
+    context('ignored keywords', () => {
+      it('should not convert if the sub name matches exclusion', () => {
+        converter.conversions("He played 30mpg", "basketball4lyfe").should.deep.equal({});
+      });
+      
+      it('should not convert if the body matches, case-insensitive', () => {
+        testConvert("My 32 inch ultra widescreen MONITOR", {});
+      });
+    })
 
     context.skip('Current failing tests - bugs and edge cases', () => {
       //Story #150482058
