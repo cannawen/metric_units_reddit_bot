@@ -2,11 +2,13 @@ const helper = require('./helper');
 const replier = require('./reply_maker');
 
 function humanReply(message) {
+
   if (message.match(/good bot|bad bot/i)) {
     return replier.humanReply.randomElement();
   }
-  if (message.match(/good human/i)) {
-    return replier.humanReply.randomElement();
+
+  if (message.match(/good human|good fellow human/i)) {
+    return replier.goodHumanReply.randomElement();
   }
 
 }

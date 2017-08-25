@@ -18,6 +18,13 @@ describe('Snark', () => {
         snark.humanReply("bad bot").should.equal("I AM HUMAN");
       });
     });
+
+    context('Good human || Good fellow human', () => {
+      it('should reply', () => {
+        snark.humanReply("good human").should.equal("GOOD FELLOW HUMAN");
+        snark.humanReply("good fellow human").should.equal("GOOD FELLOW HUMAN");
+      });
+    });
   });
 
   describe('#reply()', () => {

@@ -1,9 +1,5 @@
 const environment = require('./helper').environment();
 
-const confusedReply = [
-  "I think you might be a bit confused"
-];
-
 const humanReply = [
   "I AM HUMAN",
   "I AM NOT A BOT",
@@ -16,6 +12,14 @@ const humanReply = [
 
 const goodHumanReply = [
   "GOOD FELLOW HUMAN"
+];
+
+const confusedReply = [
+  "I think you might be a bit confused"
+];
+
+const whosAReply = [
+  "ME! Is it me? Am I a {{x}} bot?"
 ];
 
 const goodReply = [
@@ -88,8 +92,10 @@ function formatReply(comment, conversions) {
 }
 
 module.exports = {
-  confusedReply,
   humanReply,
+  goodHumanReply,
+  confusedReply,
+  whosAReply,
   goodReply,
   badReply,
   loveReply,
