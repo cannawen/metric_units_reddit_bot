@@ -18,6 +18,7 @@ function conversions(input) {
     if (rangeMatches) {
       rangeMatches
         .map(range => {
+          range = range.replace(/\(/, "\\(").replace(/\)/, "\\)");
           input = input.replace((range + " ?" + map['unitRegex']).regex(), '');
           return range;
         })

@@ -318,7 +318,7 @@ describe('Converter', () => {
       it('should convert when starting with special characters', () => {
         testConvert(
           [
-            "(-50°F)",
+            "(-50°F",
             "~-40°F",
             ">0°F",
             "<32°F",
@@ -337,6 +337,7 @@ describe('Converter', () => {
       it('should convert when ending with special characters', () => {
         testConvert(
           [
+            "-50°F)",
             "-40°F.",
             "0°F,",
             "32°F;",
@@ -347,6 +348,7 @@ describe('Converter', () => {
             "80°F/"
           ],
           {
+           "-50°F" : "-46°C",
            "-40°F" : "-40°C",
            "0°F" : "-18°C",
            "32°F" : "0°C",
@@ -357,6 +359,54 @@ describe('Converter', () => {
            "80°F" : "27°C"
          }
         );
+      });
+
+      context('should convert ranges', () => {
+        it('starting with special characters', () => {
+          testConvert(
+            [
+              "(-50 to 32°F",
+              "~-40 to 32°F",
+              ">0 to 32°F",
+              "<32 to 0°F",
+              "\n40 to 32°F"
+            ],
+            {
+             "-50 to 32°F" : "-46 to 0°C",
+             "-40 to 32°F" : "-40 to 0°C",
+             "0 to 32°F" : "-18 to 0°C",
+             "32 to 0°F" : "0 to -18°C",
+             "40 to 32°F" : "4 to 0°C"
+           }
+          );
+        });
+
+        it('ending with special characters', () => {
+          testConvert(
+            [
+              "32 to -50°F)",
+              "32 to -40°F.",
+              "32 to 0°F,",
+              "0 to 32°F;",
+              "32 to 40°F?",
+              "32 to 50°F!",
+              "32 to 60°F:",
+              "32 to 70°F\n",
+              "32 to 80°F/"
+            ],
+            {
+             "32 to -50°F" : "0 to -46°C",
+             "32 to -40°F" : "0 to -40°C",
+             "32 to 0°F" : "0 to -18°C",
+             "0 to 32°F" : "-18 to 0°C",
+             "32 to 40°F" : "0 to 4°C",
+             "32 to 50°F" : "0 to 10°C",
+             "32 to 60°F" : "0 to 16°C",
+             "32 to 70°F" : "0 to 21°C",
+             "32 to 80°F" : "0 to 27°C"
+           }
+          );
+        });
       });
     });
 
