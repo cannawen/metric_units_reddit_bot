@@ -34,22 +34,23 @@ function reply(message) {
   }
 
   const whosA = body.match(/(?:whos|who's|who is) a(n? \w+) bot/i);
+
   if (whosA) {
     return inject(whosA[1], replier.whosAReply.randomElement());
 
-  } else if (body.match(/good bot/i)) {
+  } else if (body.match(/not/i) === null && body.match(/good bot/i)) {
     return replier.goodReply.randomElement();
 
-  } else if (body.match(/bad bot/i)) {
+  } else if (body.match(/not/i) === null && body.match(/bad bot/i)) {
     return replier.badReply.randomElement();
 
   } else if (body.match(/i love you/i)) {
     return replier.loveReply.randomElement();
 
-  } else if (body.match(/stupid bot|dumb bot|useless bot/i)) {
+  } else if (body.match(/not/i) === null && body.match(/stupid bot|dumb bot|useless bot/i)) {
     return replier.stupidReply.randomElement();
 
-  } else if (body.match(/thanks|thank you/i)) {
+  } else if (body.match(/no/i) === null && body.match(/thanks|thank you/i)) {
     return replier.thanksReply.randomElement();
 
   } else if (body.match(/good human|good fellow human/i)) {

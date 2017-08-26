@@ -54,11 +54,19 @@ describe('Snark', () => {
       it('should reply', () => {
         check(snark.reply, "good bot", "Good human");
       });
+      
+      it('should handle negations', () => {
+        check(snark.reply, "not a good bot", undefined);
+      });
     });
 
     context('Bad bot', () => {
       it('should reply', () => {
         check(snark.reply, "Bad bot!", "Bad carbon-based life form");
+      });
+
+      it('should handle negations', () => {
+        check(snark.reply, "not a bag bot", undefined);
       });
     });
 
@@ -66,6 +74,9 @@ describe('Snark', () => {
       it('should reply', () => {
         check(snark.reply, "thank you, little bot!!!!", "Glad to be of service");
         check(snark.reply, "thanks, buddy", "Glad to be of service");
+      });
+      it('should handle negations', () => {
+        check(snark.reply, "no thanks", undefined);
       });
     });
 
@@ -86,6 +97,10 @@ describe('Snark', () => {
         check(snark.reply, "such a stupid bot", "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
         check(snark.reply, "urg, dumb bot!", "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
         check(snark.reply, "useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
+      });
+
+      it('should handle negations', () => {
+        check(snark.reply, "you're not a stupid bot", undefined);
       });
     });
 
