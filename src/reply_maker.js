@@ -26,8 +26,9 @@ const whosAReply = [
 ];
 
 const genderReply = [
-  "Actually, I prefer the female gender pronoun. Thanks.",
-  "Actually, my gender identity is non-binary. Thanks."
+  [3, "Actually, I prefer the female gender pronoun. Thanks."],
+  "Actually, my gender identity is non-binary. Thanks.",
+  "Wow, did you just assume my gender? I happen to identify as female, thank you."
 ];
 
 const bestBotReply = [
