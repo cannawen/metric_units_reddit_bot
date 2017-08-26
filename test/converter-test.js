@@ -583,7 +583,7 @@ describe('Converter', () => {
     context('comment contains quote', () => {
       it('should not convert if the value is present', () => {
         testConvert("> About 201 miles away", {});
-        testConvert("\n> About 202 miles away", {});
+        testConvert("\n&gt; About 202 miles away", {});
       });
     });
 

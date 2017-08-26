@@ -192,7 +192,7 @@ const unitsLookupMap = {
   }
 };
 
-const globalIgnore = [/\n> /, /^> /,
+const globalIgnore = [/(?:\n|^)(?:>|&gt;) /,
                       "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
                       "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                       "ass", "anus", "anal", "butt", 

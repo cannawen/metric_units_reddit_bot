@@ -138,7 +138,7 @@ function printBannedSubreddits() {
 }
 
 function getRedditComments(subreddit) {
-  let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100");
+  let content = get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100&raw_json=1");
   if (!content) {
     return;
   }
