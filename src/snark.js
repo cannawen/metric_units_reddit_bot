@@ -16,7 +16,7 @@ function humanReply(message) {
 
 function inject(snippet, wholeString) {
   if (wholeString.match("{{x}}")) {
-    return wholeString.replace("{{x}}", snippet);
+    return wholeString.replace("{{x}}", snippet.toLowerCase());
 
   } else if (wholeString.match("{{X}}")) {
     return wholeString.replace("{{X}}", snippet.toUpperCase());

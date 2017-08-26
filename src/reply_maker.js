@@ -43,7 +43,8 @@ const badReply = [
   [1, "BAD HUMAN"],
   [10, "Sorry, I was just trying to help (◕‸ ◕✿)"],
   [8, "Bots have feelings too, you know (ಥ﹏ಥ)"],
-  "(ง •̀_•́)ง"
+  "(ง •̀_•́)ง FITE ME",
+  [5, "^I'm ^sorry, ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_"]
 ];
 
 const loveReply = [
