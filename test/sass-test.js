@@ -53,10 +53,12 @@ describe('Sass', () => {
       });
     });
 
-    context('Mr. bot|Mister bot', () => {
+    context('Mr. bot|Mister bot|good boy|bad boy', () => {
       it('should reply', () => {
         check(sass.reply, "Thanks, mister bot", "Actually, I prefer the female gender pronoun. Thanks.");
         check(sass.reply, "mr bot, you are funny", "Actually, I prefer the female gender pronoun. Thanks.");
+        check(sass.reply, "good boy!", "Actually, I prefer the female gender pronoun. Thanks.");
+        check(sass.reply, "bad boy.", "Actually, I prefer the female gender pronoun. Thanks.");
       });
 
       it('should reply not reply when user already answered', () => {
