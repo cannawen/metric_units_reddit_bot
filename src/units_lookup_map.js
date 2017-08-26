@@ -192,18 +192,19 @@ const unitsLookupMap = {
   }
 };
 
-const nsfwArray = ["dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
-                   "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
-                   "ass", "anus", "anal", "butt", 
-                   "nsfw", "gonewild", "sex", "glory hole"]
+const globalIgnore = [/\n> /, /^> /,
+                      "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
+                      "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
+                      "ass", "anus", "anal", "butt", 
+                      "nsfw", "gonewild", "sex", "glory hole"]
 module.exports = {
   "unitsLookupMap" : Object.keys(unitsLookupMap)
                            .reduce((memo, key) => {
                               const map = unitsLookupMap[key];
                               if (map['ignoredKeywords']) {
-                                map['ignoredKeywords'] = map['ignoredKeywords'].concat(nsfwArray);
+                                map['ignoredKeywords'] = map['ignoredKeywords'].concat(globalIgnore);
                               } else {
-                                map['ignoredKeywords'] = nsfwArray;
+                                map['ignoredKeywords'] = globalIgnore;
                               }
                               memo[key] = map;
                               return memo;

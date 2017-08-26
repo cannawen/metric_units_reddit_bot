@@ -580,6 +580,13 @@ describe('Converter', () => {
       });
     });
 
+    context('comment contains quote', () => {
+      it('should not convert if the value is present', () => {
+        testConvert("> About 201 miles away", {});
+        testConvert("\n> About 202 miles away", {});
+      });
+    });
+
     context('comment already contains conversion', () => {
       it('should not convert if the value is present', () => {
         testConvert("About 200 miles (322 km) away", {});
