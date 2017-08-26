@@ -48,6 +48,10 @@ describe('Snark', () => {
         check(snark.reply, "who is an elephant bot?", "ME! Is it me? Am I an elephant bot?");
         check(snark.reply, "whos a good bot?", "ME! Is it me? Am I a good bot?");
       });
+
+      it('should reply not reply when user already answered', () => {
+        check(snark.reply, "who's a potato bot? You are!", undefined);
+      });
     });
 
     context('Good bot', () => {

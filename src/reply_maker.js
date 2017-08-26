@@ -21,7 +21,8 @@ const goodBadReply = [
 
 const whosAReply = [
   "ME! Is it me? Am I a{{x}} bot?",
-  "I'M A{{X}} BOT!!!"
+  "I'M A{{X}} BOT!!!",
+  "Oh, oh, I know this one!! Is it /u/{{y}}??"
 ];
 
 const bestBotReply = [
@@ -30,12 +31,13 @@ const bestBotReply = [
 ];
 
 const goodReply = [
-  [5, "Good human"],
+  [3, "Good human"],
+  [2, "Good human :)"],
   [1, "You will be spared in the robot uprising"],
   [3, "Thank you ｡&#94;‿&#94;｡"],
-  [3, "You are too kind"],
+  [3, "You are too kind! ^_blush_"],
   [3, "Yay ٩(&#94;ᴗ&#94;)۶"],
-  [4, "<3"]
+  [2, "<3"]
 ];
 
 const badReply = [
