@@ -29,21 +29,18 @@ function inject(snippet, wholeString) {
 function reply(message) {
   const body = message['body'];
 
-  const goodMatch = body.match(/good bot/i);
-  const badMatch = body.match(/bad bot/i);
-
-  if (goodMatch && badMatch) {
-    return replier.confusedReply.randomElement();
+  if (body.match(/good/i) && body.match(/bad/i) && body.match(/bot/i)) {
+    return replier.goodBadReply.randomElement();
   }
 
   const whosA = body.match(/(?:whos|who's|who is) a(n? \w+) bot/i);
   if (whosA) {
     return inject(whosA[1], replier.whosAReply.randomElement());
 
-  } else if (goodMatch) {
+  } else if (body.match(/good bot/i)) {
     return replier.goodReply.randomElement();
 
-  } else if (badMatch) {
+  } else if (body.match(/bad bot/i)) {
     return replier.badReply.randomElement();
 
   } else if (body.match(/i love you/i)) {

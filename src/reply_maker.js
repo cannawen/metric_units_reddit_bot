@@ -14,8 +14,9 @@ const goodHumanReply = [
   "GOOD FELLOW HUMAN"
 ];
 
-const confusedReply = [
-  "I think you might be a bit confused"
+const goodBadReply = [
+  "I have unit tests for this edge case",
+  "Yes, this scenario is handled gracefully."
 ];
 
 const whosAReply = [
@@ -100,7 +101,7 @@ function formatReply(comment, conversions) {
 module.exports = {
   humanReply,
   goodHumanReply,
-  confusedReply,
+  goodBadReply,
   whosAReply,
   bestBotReply,
   goodReply,

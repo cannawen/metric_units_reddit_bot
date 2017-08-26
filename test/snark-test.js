@@ -36,7 +36,9 @@ describe('Snark', () => {
   describe('#reply()', () => {
     context('Good bot && Bad bot', () => {
       it('should reply', () => {
-        check(snark.reply, "bad bot good bot", "I think you might be a bit confused");
+        check(snark.reply, "bad bot good bot", "I have unit tests for this edge case");
+        check(snark.reply, "bad good bot", "I have unit tests for this edge case");
+        check(snark.reply, "good bad bot", "I have unit tests for this edge case");
       });
     });
     
