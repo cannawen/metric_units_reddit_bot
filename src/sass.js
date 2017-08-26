@@ -14,19 +14,11 @@ function humanReply(message) {
 
 }
 
-function inject(snippet, wholeString, match) {
-  if (match) {
-    return wholeString.replace(match, snippet);
-  }
-  if (wholeString.match("{{x}}")) {
-    return wholeString.replace("{{x}}", snippet.toLowerCase());
-
-  } else if (wholeString.match("{{X}}")) {
-    return wholeString.replace("{{X}}", snippet.toUpperCase());
-
-  } else {
-    return wholeString;
-  }
+function substitute(wholeString, map) {
+  return Object.keys(map)
+    .reduce((memo, key) => {
+      return memo.replace("{{" + key + "}}", map[key]);
+    }, wholeString);
 }
 
 function reply(message) {
@@ -40,8 +32,11 @@ function reply(message) {
   const whosA = body.match(/(?:whos|who's|who is) a(n? \w+) bot/i);
 
   if (whosA && body.match(/you/i) === null) {
-    const reply = inject(whosA[1], replier.whosAReply.randomElement());
-    return inject(username, reply, "{{y}}");
+    return substitute(replier.whosAReply.randomElement(), {
+      'adjective' : whosA[1],
+      'ADJECTIVE' : whosA[1].toUpperCase(),
+      'username' : username
+    });
     
   } else if (body.match(/mr.? bot|mister bot|good boy|bad boy/i)) {
     return replier.genderReply.randomElement();
@@ -65,7 +60,7 @@ function reply(message) {
     return replier.goodHumanReply.randomElement();
 
   } else if (body.match(/best bot|great bot/i) && body.match(/not/i) === null) {
-    return inject(username, replier.bestBotReply.randomElement());
+    return substitute(replier.bestBotReply.randomElement(), { 'username' : username });
   
   } else if (body.match(/^what is love.?$/i)) {
     return replier.whatIsLove["What is love?"];

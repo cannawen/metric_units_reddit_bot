@@ -20,9 +20,9 @@ const goodBadReply = [
 ];
 
 const whosAReply = [
-  "ME! Is it me? Am I a{{x}} bot?",
-  "I'M A{{X}} BOT!!!",
-  "Oh, oh, I know this one!! Is it /u/{{y}}??"
+  "ME! Is it me? Am I a{{adjective}} bot?",
+  "I'M A{{ADJECTIVE}} BOT!!!",
+  "Oh, oh, I know this one!! Is it /u/{{username}}??"
 ];
 
 const genderReply = [
@@ -32,8 +32,8 @@ const genderReply = [
 ];
 
 const bestBotReply = [
-  "/u/{{x}} best human",
-  "Thank you /u/{{x}}, you will be spared in the robot uprising"
+  "/u/{{username}} best human",
+  "Thank you /u/{{username}}, you will be spared in the robot uprising"
 ];
 
 const goodReply = [
