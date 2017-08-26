@@ -86,7 +86,8 @@ const unitsLookupMap = {
     "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, 10),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, 10),
     "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
-                         "nba", "nhl", "nfl", "sport"]
+                         "nba", "nhl", "nfl", "sport",
+                         "play", "game"]
   },
 
   "miles per hour to km/h": {
@@ -163,7 +164,10 @@ const unitsLookupMap = {
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " kg", lbToKg, [50, 10]),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " kg", lbToKg, [50, 10]),
-    "ignoredKeywords" : ["uk", "britain", "british", "england", "£", "united kingdom"]
+    "ignoredKeywords" : ["uk", "britain", "british", "england", "united kingdom", "europe", 
+                         "£", "pence", "sterling",
+                         "money", "costs", "expensive", "cheap", 
+                         "store", "amazon"]
   },
 
   "miles to km" : {
@@ -196,7 +200,7 @@ const globalIgnore = [/(?:\n|^)(?:>|&gt;) /,
                       "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
                       "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                       "ass", "anus", "anal", "butt", 
-                      "nsfw", "gonewild", "sex", "glory hole"]
+                      "nsfw", "gonewild", "sex", "glory hole", "cuck"]
 module.exports = {
   "unitsLookupMap" : Object.keys(unitsLookupMap)
                            .reduce((memo, key) => {
