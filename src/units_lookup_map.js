@@ -137,13 +137,11 @@ const unitsLookupMap = {
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm, 100),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm, 100),
-    "ignoredKeywords" : ["dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
-                        "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
-                        "sex", "glory hole",
-                        "monitor", "screen", 
-                        "tv", 
-                        "ipad", "iphone", "android", "phone", "tablet", "apple",
-                        "macbook", "windows"]
+    "ignoredKeywords" : ["monitor", "screen", "tv", 
+                        "ipad", "iphone", "phone", "tablet", 
+                        "apple", "windows", "linux", "android", "ios",
+                        "macbook", "laptop", "computer", "notebook", "imac", "pc", "dell",
+                        "rgb", "hz",]
   },
 
   "miles to km": {
@@ -154,7 +152,8 @@ const unitsLookupMap = {
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm, 10),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, 10),
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
-                         "air miles", "aeroplan", "points"]
+                         "air miles", "aeroplan", "points",
+                         "america", "usa", "uk", "italy", "croatia"]
   },
 
   "°F to °C" : {
@@ -169,8 +168,22 @@ const unitsLookupMap = {
     "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°C", fahrenheitToCelsius)
   }
-}
+};
 
+const nsfwArray = ["dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
+                   "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
+                   "ass", "anus", "anal", "butt", 
+                   "nsfw", "gonewild", "sex", "glory hole"]
 module.exports = {
-  "unitsLookupMap" : unitsLookupMap
+  "unitsLookupMap" : Object.keys(unitsLookupMap)
+                           .reduce((memo, key) => {
+                              const map = unitsLookupMap[key];
+                              if (map['ignoredKeywords']) {
+                                map['ignoredKeywords'] = map['ignoredKeywords'].concat(nsfwArray);
+                              } else {
+                                map['ignoredKeywords'] = nsfwArray;
+                              }
+                              memo[key] = map;
+                              return memo;
+                           }, {})
 }
