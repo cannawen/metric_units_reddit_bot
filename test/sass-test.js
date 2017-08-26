@@ -73,10 +73,11 @@ describe('Sass', () => {
       });
     });
 
-    context('Thanks|Thank you', () => {
+    context('Thanks|Thank you|thx', () => {
       it('should reply', () => {
         check(sass.reply, "thank you, little bot!!!!", "Glad to be of service");
         check(sass.reply, "thanks, buddy", "Glad to be of service");
+        check(sass.reply, "thx fam", "Glad to be of service");
       });
 
       it('should handle negations', () => {
@@ -90,9 +91,14 @@ describe('Sass', () => {
       });
     });
 
-    context('Best bot', () => {
+    context('Best bot|Great bot', () => {
       it('should reply', () => {
         check(sass.reply, "best bot", "/u/foobar best human");
+        check(sass.reply, "great bot", "/u/foobar best human");
+      });
+
+      it('should handle negations', () => {
+        check(sass.reply, "not a great bot", undefined);
       });
     });
 
