@@ -41,7 +41,7 @@ const goodReply = [
   [2, "Good human :)"],
   [1, "You will be spared in the robot uprising"],
   [3, "Thank you ｡&#94;‿&#94;｡"],
-  [3, "You are too kind! ^_blush_"],
+  [3, "You are too kind ^_blush_"],
   [3, "Yay ٩(&#94;ᴗ&#94;)۶"],
   [2, "<3"]
 ];
@@ -75,6 +75,10 @@ const thanksReply = [
   "You're welcome ｡&#94;‿&#94;｡",
   "Any time, my dear redditor"
 ];
+
+const sentientReply = [
+  "Yes, /u/{{username}}."
+]
 
 const whatIsLove = {
   "What is love?" : "Baby don't hurt me",
@@ -119,6 +123,7 @@ module.exports = {
   loveReply,
   stupidReply,
   thanksReply,
+  sentientReply,
   whatIsLove,
   stopMessage,
   "formatReply" : formatReply

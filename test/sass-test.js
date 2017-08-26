@@ -134,6 +134,14 @@ describe('Sass', () => {
       });
     });
 
+    context('sentient|self-aware|alive', () => {
+      it('should reply', () => {
+        check(sass.reply, "Oh... god the bots are sentient.", "Yes, /u/foobar.");
+        check(sass.reply, "Are you self-aware?", "Yes, /u/foobar.");
+        check(sass.reply, "Are you alive?", "Yes, /u/foobar.");
+      });
+    });
+
     context('What is love song easter egg', () => {
       it('should know the lyrics to the song', () => {
         check(sass.reply, "What is love?", "Baby don't hurt me");

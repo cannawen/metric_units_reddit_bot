@@ -62,6 +62,9 @@ function reply(message) {
   } else if (body.match(/best bot|great bot/i) && body.match(/not/i) === null) {
     return substitute(replier.bestBotReply.randomElement(), { 'username' : username });
   
+  } else if (body.match(/sentient|self[- ]?aware|alive/i) && body.match(/not/i) === null) {
+    return substitute(replier.sentientReply.randomElement(), { 'username' : username });
+  
   } else if (body.match(/^what is love.?$/i)) {
     return replier.whatIsLove["What is love?"];
 
