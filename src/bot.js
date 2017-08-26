@@ -11,13 +11,13 @@ const converter = require('./converter');
 const helper = require('./helper');
 const network = require('./network');
 const replier = require('./reply_maker');
-const snark = require('./snark');
+const sass = require('./sass');
 
 const environment = helper.environment();
 const excludedSubreddits = yaml
     .safeLoad(fs.readFileSync('./src/excluded_subreddits.yaml', 'utf8'))
     .map(subreddit => subreddit.toLowerCase());
-let snarked = {};
+let sassed = {};
 
 process.on('uncaughtException', function (err) {
   mkdirp("./private/errors");
@@ -46,15 +46,15 @@ setInterval(() => {
     .filterCommentReplies(messages)
     .filter(messageIsShort)
     .forEach(message => {
-      const reply = snark.reply(message);
+      const reply = sass.reply(message);
       if (reply === undefined) {
         return;
       }
       
       if (message['subreddit'].match(/^totallynotrobots$/i)) {
-        const humanReply = snark.humanReply(message);
+        const humanReply = sass.humanReply(message);
         if (humanReply) {
-          analytics.trackSnark([message['timestamp'], message['link'], message['body'], reply, true]);
+          analytics.tracksass([message['timestamp'], message['link'], message['body'], reply, true]);
           network.postComment(message['id'], humanReply);
         }
         return;
@@ -62,14 +62,14 @@ setInterval(() => {
 
       const postTitle = message['submission'];
 
-      // Always replies if no snark in post within the last 24h
+      // Always replies if no sass in post within the last 24h
       // Replies 40% of the time otherwise
       // Possible refactor candidate, story #150342011
-      const shouldReply = snarked[postTitle] === undefined || helper.random() > 0.6;
-      analytics.trackSnark([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
+      const shouldReply = sassed[postTitle] === undefined || helper.random() > 0.6;
+      analytics.trackSass([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
       
       if (shouldReply) {
-        snarked[postTitle] = now;
+        sassed[postTitle] = now;
         network.postComment(message['id'], reply);
       }
     });
@@ -82,13 +82,13 @@ setInterval(() => {
       network.blockAuthorOfMessageWithId(message['id']);
     });
 
-  //cleanup old snarked
-  snarked = Object
-    .keys(snarked)
+  //cleanup old sassed
+  sassed = Object
+    .keys(sassed)
     .reduce((memo, key) => {
-      const lessThan24hAgo = snarked[key] > now - 24*60*60*1000;
+      const lessThan24hAgo = sassed[key] > now - 24*60*60*1000;
       if (lessThan24hAgo) {
-        memo[key] = snarked[key];
+        memo[key] = sassed[key];
       }
       return memo;
     }, {});

@@ -2,7 +2,7 @@ What does the bot do?
 ---
 The bot finds comments with imperial units, and replies with metric units.
 
-There is a chance it will reply to certain triggers like "good bot" ([see here for what the triggers are](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/snark-test.js)).
+There is a chance it will reply to certain triggers like "good bot". ([See here for what the triggers are](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/sass-test.js)).
 
 See [./test/converter-test.js](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/converter-test.js) for what conversions are currently supported, and [see Pivotal Tracker for what's coming up next](https://www.pivotaltracker.com/n/projects/2091572)
 
@@ -21,7 +21,7 @@ The app starts in `bot.js`, this file is responsible for repeatedly checking for
 
 `network.js` handles get, post, and OAuth network requests and parses the responses for easier consumption
 
-`snark.js` creates snarky responses to certain trigger words
+`sass.js` creates sassy responses to certain trigger words
 
 `analytics.js` will save events in the `./private` directory
 
