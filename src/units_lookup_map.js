@@ -16,6 +16,10 @@ function inchesToCm(i) {
   return i * 2.54;
 }
 
+function lbToKg(i) {
+  return i * 0.453592;
+}
+
 function fahrenheitToCelsius(i) {
   return (i - 32) * 5/9;
 }
@@ -26,18 +30,26 @@ function isNotHyperbole(i) {
   return i.toString().match(/^100+(?:\.0+)?$/) === null;
 }
 
-function userFacingValue(input, conversionFunction, precision) {
+function userFacingValue(input, conversionFunction, precisionThreshold) {
   input = input.toString();
 
   const value = conversionFunction ? conversionFunction(input) : input;
-  let decimals;
+  let decimals = 0;
 
   if (input.indexOf('.') !== -1) {
     decimals = input.split(".")[1].length;
-  } else if (precision && value < precision) {
-    decimals = 1;
   } else {
-    decimals = 0;
+    if (Array.isArray(precisionThreshold)) {
+      for (let i = 0; i < precisionThreshold.length; i++) {
+        if (value < precisionThreshold[i]) {
+          decimals = i + 1;
+        } else {
+          break;
+        }
+      }
+    } else if (precisionThreshold !== undefined && value < precisionThreshold) {
+      decimals = 1;
+    }
   }
 
   return rh.roundToDecimalPlaces(value, decimals).addCommas();
@@ -130,7 +142,7 @@ const unitsLookupMap = {
     }
   },
 
-  "in to cm": {
+  "in to cm" : {
     "unitRegex" : [/-in/, /-?inch/, /inches/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
@@ -144,7 +156,17 @@ const unitsLookupMap = {
                         "rgb", "hz",]
   },
 
-  "miles to km": {
+  "lb to kg" : {
+    "unitRegex" : [/-?lb/, /-?pound/, /pounds/].regexJoin(),
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
+    "inDisplay" : (i) => userFacingValueAndUnit(i, " lb"),
+    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " kg", lbToKg, [50, 10]),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " kg", lbToKg, [50, 10]),
+    "ignoredKeywords" : ["uk", "britain", "british", "england", "£", "united kingdom"]
+  },
+
+  "miles to km" : {
     "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 8, 10].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),

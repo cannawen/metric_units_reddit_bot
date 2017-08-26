@@ -16,6 +16,50 @@ function shouldNotConvert(numArr, units) {
 
 describe('Converter', () => {
   describe('#conversions()', () => {
+    context('lbs', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "1lb",
+            "2 lb",
+            "3 pounds",
+            "4-pound"
+          ],
+          {
+            "1 lb" : "0.45 kg",
+            "2 lb" : "0.91 kg",
+            "3 lb" : "1.36 kg",
+            "4 lb" : "1.81 kg"
+          }
+        );
+      });
+
+      it('should switch precision appropriately', () => {
+        testConvert(
+          [
+            "22 lb",
+            "23 lb",
+            "110 lb",
+            "111 lb"
+          ],
+          { 
+            "22 lb" : "9.98 kg",
+            "23 lb" : "10.4 kg",
+            "110 lb" : "49.9 kg",
+            "111 lb" : "50 kg"
+          }
+        );
+      });
+
+      it('should not convert zero or negative values', () => {
+        shouldNotConvert([0, -10], "lb");
+      });
+
+      it('should not convert when values are likely hyperbole', () => {
+        shouldNotConvert([100, 1000, 10000], "lb");
+      });
+    });
+
     context('feet', () => {
       it('should convert', () => {
         testConvert(

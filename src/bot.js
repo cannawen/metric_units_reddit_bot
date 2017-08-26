@@ -24,6 +24,8 @@ process.on('uncaughtException', function (err) {
   fs.writeFileSync("./private/errors/" + helper.now() + ".txt", err.stack, "utf8");
 });
 
+throw new Error();
+
 network.refreshToken();
 
 setInterval(() => {
