@@ -42,6 +42,9 @@ function reply(message) {
   if (whosA && body.match(/you/i) === null) {
     const reply = inject(whosA[1], replier.whosAReply.randomElement());
     return inject(username, reply, "{{y}}");
+    
+  } else if (body.match(/mr.? bot|mister bot/)) {
+    return replier.genderReply.randomElement();
 
   } else if (body.match(/good bot/i) && body.match(/not/i) === null) {
     return replier.goodReply.randomElement();

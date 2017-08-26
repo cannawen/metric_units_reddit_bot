@@ -25,6 +25,11 @@ const whosAReply = [
   "Oh, oh, I know this one!! Is it /u/{{y}}??"
 ];
 
+const genderReply = [
+  "Actually, I prefer the female gender pronoun. Thanks.",
+  "Actually, my gender identity is non-binary. Thanks."
+];
+
 const bestBotReply = [
   "/u/{{x}} best human",
   "Thank you /u/{{x}}, you will be spared in the robot uprising"
@@ -106,6 +111,7 @@ module.exports = {
   goodHumanReply,
   goodBadReply,
   whosAReply,
+  genderReply,
   bestBotReply,
   goodReply,
   badReply,
