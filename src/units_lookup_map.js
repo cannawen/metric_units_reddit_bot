@@ -175,7 +175,7 @@ const unitsLookupMap = {
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, 10),
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
-                         "america", "usa", "uk", "italy", "croatia"]
+                         "america", "usa", "uk", "italy", "italian", "croatia"]
   },
 
   "°F to °C" : {
