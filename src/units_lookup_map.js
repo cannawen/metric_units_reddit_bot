@@ -97,7 +97,7 @@ const unitsLookupMap = {
 
   "miles per hour to km/h": {
     "unitRegex" : rh.regexJoinToString([/mph/, /miles (?:an|per) hour/]),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 10,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 10, 60].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, 10),

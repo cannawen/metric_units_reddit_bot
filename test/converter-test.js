@@ -302,13 +302,13 @@ describe('Converter', () => {
           [
             "40mph",
             "50 mph",
-            "60 miles per hour",
+            "65 miles per hour",
             "70 miles an hour"
           ],
           {
            "40 mph" : "64 km/h",
            "50 mph" : "80 km/h",
-           "60 mph" : "97 km/h",
+           "65 mph" : "105 km/h",
            "70 mph" : "113 km/h"
           }
         );
@@ -331,8 +331,8 @@ describe('Converter', () => {
         shouldNotConvert([0, -10], "mph");
       });
 
-      it('should not convert 1 or 10 mph', () => {
-        shouldNotConvert([1, 10], "mph");
+      it('should not convert 1, 10, or 60 mph', () => {
+        shouldNotConvert([1, 10, 60], "mph");
       });
 
       it('should not convert when values are likely hyperbole', () => {
