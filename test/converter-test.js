@@ -344,7 +344,7 @@ describe('Converter', () => {
             "70 degree fahrenheit",
             "80 degrees fahrenheit",
             "90 degree f",
-            "10000 degrees f"
+            "10000° FAHRENHEIT"
           ],
           {
            "-40°F" : "-40°C",

@@ -184,9 +184,7 @@ const unitsLookupMap = {
 
   "°F to °C" : {
     "unitRegex" : [
-                    /° ?f/, 
-                    /degrees? f/,
-                    /degrees? fahrenheit/,
+                    /(?:°|degrees?) ?(?:f|fahrenheit)/,
                     /fahrenheit/
                   ].regexJoin(),
     "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
