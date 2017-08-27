@@ -98,7 +98,7 @@ function formatReply(comment, conversions) {
   let uppercase = false;
 
   if (comment['subreddit'].match(/^totallynotrobots$/i)) {
-    species = "~~bot~~ ^human";
+    species = "human";
     source =  "~~source~~";
     version = "~~" + environment['version'] + "~~";
     subreddit = "I_AM_HUMAN_DO_NOT_BAN"

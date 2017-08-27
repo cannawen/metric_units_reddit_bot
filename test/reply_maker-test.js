@@ -38,7 +38,7 @@ describe('reply_maker', () => {
     it('should say metric units human on totallynotrobots', () => {
       replier.formatReply({ 'subreddit': 'totallynotrobots' }, {})
         .should
-        .include("^METRIC ^UNITS ^~~BOT~~ ^HUMAN")
+        .include("^METRIC ^UNITS ^HUMAN")
     });
   });
 });

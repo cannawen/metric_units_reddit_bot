@@ -203,7 +203,7 @@ const globalIgnore = [/(?:\n|^)(?:>|&gt;) /,
                       "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
                       "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                       "ass", "anus", "anal", "butt", 
-                      "nsfw", "gonewild", "sex", "glory hole", "cuck"]
+                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest"]
 module.exports = {
   "unitsLookupMap" : Object.keys(unitsLookupMap)
                            .reduce((memo, key) => {
