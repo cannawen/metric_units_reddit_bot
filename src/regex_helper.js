@@ -1,13 +1,9 @@
-Array.prototype.regexJoin = function() {
-  return "(?:" + this.map(el => el.source || el).join("|") + ")";
+function regexJoinToString(arr) {
+  return "(?:" + arr.map(el => el.source || el).join("|") + ")";
 }
 
-String.prototype.regex = function() {
-  return new RegExp(this, "gi");
-}
-
-String.prototype.addCommas = function() {
-    var parts = this.toString().split(".");
+function addCommas(number) {
+    var parts = number.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
 }
@@ -28,10 +24,10 @@ const numberRegex
   "("
     + "(?:"
       + /-?/.source
-      + [
+      + regexJoinToString([
           /\d+/,
           /\d{1,3}(?:,\d{3})+/
-        ].regexJoin() 
+        ]) 
       + /(?:\.\d+)?/.source
     + ")"
     + "|"
@@ -46,6 +42,8 @@ const rangeRegex
   + numberRegex;
 
 module.exports = {
+  "regexJoinToString" : regexJoinToString,
+  "addCommas" : addCommas,
   "roundToDecimalPlaces" : roundToDecimalPlaces,
   startRegex,
   endRegex,

@@ -23,13 +23,13 @@ function lowConfidenceMatches(input) {
         input = map['preprocess'](input);
       }
 
-      const completeRangeRegex = (rh.startRegex + rh.rangeRegex + "(?= ?" + map['weakUnitsRegex'] + rh.endRegex + ")").regex();
+      const completeRangeRegex = new RegExp(rh.startRegex + rh.rangeRegex + "(?= ?" + map['weakUnitsRegex'] + rh.endRegex + ")", 'gi');
       const rangeMatches = input.match(completeRangeRegex);
       if (rangeMatches) {
         rangeMatches
           .map(range => {
             range = range.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace((range + " ?" + map['weakUnitsRegex']).regex(), '');
+            input = input.replace(new RegExp(range + " ?" + map['weakUnitsRegex'], 'gi'), '');
             return range;
           })
           .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
@@ -43,13 +43,13 @@ function lowConfidenceMatches(input) {
           });
       }
 
-      const completeNumberRegex = (rh.startRegex + rh.numberRegex + "(?= ?" + map['weakUnitsRegex'] + rh.endRegex + ")").regex();
+      const completeNumberRegex = new RegExp(rh.startRegex + rh.numberRegex + "(?= ?" + map['weakUnitsRegex'] + rh.endRegex + ")", 'gi');
       const numberMatches = input.match(completeNumberRegex);
       if (numberMatches) {
         numberMatches
           .map(match => {
             match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace((match + " ?" + map['weakUnitsRegex']).regex(), '');
+            input = input.replace(new RegExp(match + " ?" + map['weakUnitsRegex'], 'gi'), '');
             return match;
           })
           .map(match => match.replace(/[^\d.-]/g, ''))
@@ -75,13 +75,13 @@ function highConfidenceMatches(input, subreddit) {
         input = map['preprocess'](input);
       }
 
-      const completeRangeRegex = (rh.startRegex + rh.rangeRegex + "(?= ?" + map['unitRegex'] + rh.endRegex + ")").regex();
+      const completeRangeRegex = new RegExp(rh.startRegex + rh.rangeRegex + "(?= ?" + map['unitRegex'] + rh.endRegex + ")", 'gi');
       const rangeMatches = input.match(completeRangeRegex);
       if (rangeMatches) {
         rangeMatches
           .map(range => {
             range = range.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace((range + " ?" + map['unitRegex']).regex(), '');
+            input = input.replace(new RegExp(range + " ?" + map['unitRegex'], 'gi'), '');
             return range;
           })
           .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
@@ -95,13 +95,13 @@ function highConfidenceMatches(input, subreddit) {
           });
       }
 
-      const completeNumberRegex = (rh.startRegex + rh.numberRegex + "(?= ?" + map['unitRegex'] + rh.endRegex + ")").regex();
+      const completeNumberRegex = new RegExp(rh.startRegex + rh.numberRegex + "(?= ?" + map['unitRegex'] + rh.endRegex + ")", 'gi');
       const numberMatches = input.match(completeNumberRegex);
       if (numberMatches) {
         numberMatches
           .map(match => {
             match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace((match + " ?" + map['unitRegex']).regex(), '');
+            input = input.replace(new RegExp((match + " ?" + map['unitRegex']), 'gi'), '');
             return match;
           })
           .map(match => match.replace(/[^\d.-]/g, ''))
@@ -115,7 +115,7 @@ function highConfidenceMatches(input, subreddit) {
               let containsIgnoredKeywork = false;
 
               if (map['ignoredKeywords']) {
-                const ignoredRegex = new RegExp(map['ignoredKeywords'].regexJoin(), 'i');
+                const ignoredRegex = new RegExp(rh.regexJoinToString(map['ignoredKeywords']), 'i');
                 containsIgnoredKeywork = input.match(ignoredRegex)
                 containsIgnoredKeywork = subreddit.match(ignoredRegex) || containsIgnoredKeywork
               }
@@ -123,7 +123,7 @@ function highConfidenceMatches(input, subreddit) {
               const alreadyConvertedInMap = Object.keys(memo).reduce((m,k) => {
                 const value = inValueAndUnit.replace(/[^'"\d\.,-]/g,'');
                 const unit = inValueAndUnit.replace(value, '');
-                return k.match(("(^| )" + value + ".*" + unit).regex()) !== null || m;
+                return k.match(new RegExp("(^| )" + value + ".*" + unit), 'gi') !== null || m;
               }, false);
 
               let isValidConversionNumber = true;

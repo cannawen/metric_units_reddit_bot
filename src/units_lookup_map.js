@@ -52,7 +52,7 @@ function userFacingValue(input, conversionFunction, precisionThreshold) {
     }
   }
 
-  return rh.roundToDecimalPlaces(value, decimals).addCommas();
+  return rh.addCommas(rh.roundToDecimalPlaces(value, decimals));
 }
 
 function userFacingValueAndUnit(i, unit, conversionFunction, precision) {
@@ -79,7 +79,7 @@ function convertDecimalFeetToFeetAndInches(i) {
 const unitsLookupMap = {
   //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
   "miles per gallon to L/100km" : {
-    "unitRegex" : [/mpg/, /miles per gal(?:lon)?/].regexJoin(),
+    "unitRegex" : rh.regexJoinToString([/mpg/, /miles per gal(?:lon)?/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10 && i < 235,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
@@ -91,7 +91,7 @@ const unitsLookupMap = {
   },
 
   "miles per hour to km/h": {
-    "unitRegex" : [/mph/, /miles (?:an|per) hour/].regexJoin(),
+    "unitRegex" : rh.regexJoinToString([/mph/, /miles (?:an|per) hour/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1 && i != 10,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
@@ -100,8 +100,8 @@ const unitsLookupMap = {
   },
 
   "feet to metres": {
-    "unitRegex" : [/-?feet/, /-ft/, /-?foot/].regexJoin(),
-    "weakUnitsRegex" : [/[']/, /ft/].regexJoin(),
+    "unitRegex" : rh.regexJoinToString([/-?feet/, /-ft/, /-?foot/]),
+    "weakUnitsRegex" : rh.regexJoinToString([/[']/, /ft/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 2, 4, 6].indexOf(i) === -1,
     "inDisplay" : (i) => {
       if (i%1 == 0) {
@@ -121,13 +121,13 @@ const unitsLookupMap = {
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, 100),
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
-        ( rh.startRegex 
+        new RegExp(( rh.startRegex 
           + rh.numberRegex
-          + ["[\']", " ?ft", " ?" + unitsLookupMap['feet to metres']['unitRegex']].regexJoin()
+          + rh.regexJoinToString(["[\']", " ?ft", " ?" + unitsLookupMap['feet to metres']['unitRegex']])
           + "[- ]?"
           + rh.numberRegex
-          + [rh.endRegex, /["]/, / ?in/, " ?" + unitsLookupMap['in to cm']['unitRegex']].regexJoin()
-        ).regex();
+          + rh.regexJoinToString([rh.endRegex, /["]/, / ?in/, " ?" + unitsLookupMap['in to cm']['unitRegex']])
+        ),'gi');
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
         const inchesLessThan12 = inches <= 12;
         const inchesLessThan3CharactersBeforeDecimal = inches
@@ -145,8 +145,8 @@ const unitsLookupMap = {
   },
 
   "in to cm" : {
-    "unitRegex" : [/-in/, /-?inch/, /inches/].regexJoin(),
-    "weakUnitsRegex" : [/["]/, /in/].regexJoin(),
+    "unitRegex" : rh.regexJoinToString([/-in/, /-?inch/, /inches/]),
+    "weakUnitsRegex" : rh.regexJoinToString([/["]/, /in/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
@@ -160,8 +160,8 @@ const unitsLookupMap = {
   },
 
   "lb to kg" : {
-    "unitRegex" : [/-?lbs?/].regexJoin(),
-    "weakUnitsRegex" : [/-?pound/, /pounds/].regexJoin(),
+    "unitRegex" : "-?lbs?",
+    "weakUnitsRegex" : rh.regexJoinToString([/-?pound/, /pounds/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " lb"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
@@ -170,7 +170,7 @@ const unitsLookupMap = {
   },
 
   "miles to km" : {
-    "unitRegex" : [/mi/, /-?miles?/].regexJoin(),
+    "unitRegex" : rh.regexJoinToString([/mi/, /-?miles?/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 8, 10].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
@@ -182,11 +182,11 @@ const unitsLookupMap = {
   },
 
   "°F to °C" : {
-    "unitRegex" : [
+    "unitRegex" : rh.regexJoinToString([
                     /(?:°|degrees?) ?(?:f|fahrenheit)/,
                     /fahrenheit/
-                  ].regexJoin(),
-    "weakUnitsRegex" : ["f"].regexJoin(),
+                  ]),
+    "weakUnitsRegex" : "f",
     "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius),
