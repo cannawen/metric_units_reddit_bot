@@ -30,6 +30,11 @@ function isNotHyperbole(i) {
   return i.toString().match(/^100+(?:\.0+)?$/) === null;
 }
 
+function roundToDecimalPlaces(number, places) {
+  const multiplier = Math.pow(10, places);
+  return (Math.round(number * multiplier)/multiplier).toFixed(places);
+}
+
 function userFacingValue(input, conversionFunction, precisionThreshold) {
   input = input.toString();
 
@@ -52,7 +57,7 @@ function userFacingValue(input, conversionFunction, precisionThreshold) {
     }
   }
 
-  return rh.addCommas(rh.roundToDecimalPlaces(value, decimals));
+  return rh.addCommas(roundToDecimalPlaces(value, decimals));
 }
 
 function userFacingValueAndUnit(i, unit, conversionFunction, precision) {
@@ -73,7 +78,7 @@ function userFacingValueAndUnitRange(i, j, unit, conversionFunction, precision) 
 }
 
 function convertDecimalFeetToFeetAndInches(i) {
-  return Math.floor(i).toString() + "'" + rh.roundToDecimalPlaces(i%1 * 12, 0) + "\"";
+  return Math.floor(i).toString() + "'" + roundToDecimalPlaces(i%1 * 12, 0) + "\"";
 }
 
 const unitsLookupMap = {
@@ -136,7 +141,7 @@ const unitsLookupMap = {
             .replace(/[^\d\.]/,'')
             .length <= 2
         if (inchesLessThan12 && inchesLessThan3CharactersBeforeDecimal) {
-          return " " + rh.roundToDecimalPlaces(Number(feet) + Number(inches)/12, 2) + " feet ";
+          return " " + roundToDecimalPlaces(Number(feet) + Number(inches)/12, 2) + " feet ";
         } else {
           return "  ";
         }
