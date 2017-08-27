@@ -6,7 +6,12 @@ function testConvert(input, expectedMap) {
   if (Array.isArray(input)) {
     input = " " + input.join("  ") + " ";
   }
-  converter.conversions(input, "foobar").should.deep.equal(expectedMap);
+  comment = {
+    'body' : input,
+    'subreddit' : 'foo',
+    'postTitle' : 'bar'
+  }
+  converter.conversions(comment).should.deep.equal(expectedMap);
 }
 
 function shouldNotConvert(numArr, units) {
@@ -670,7 +675,21 @@ describe('Converter', () => {
 
     context('ignored keywords', () => {
       it('should not convert if the sub name matches exclusion', () => {
-        converter.conversions("He played 30mpg", "basketball4lyfe").should.deep.equal({});
+        const comment = {
+          'body' : 'He played 30mpg',
+          'subreddit' : 'basketball4lyfe',
+          'postTitle' : 'bar'
+        }
+        converter.conversions(comment).should.deep.equal({});
+      });
+      
+      it('should not convert if the post title matches exclusion', () => {
+        const comment = {
+          'body' : 'He played 30mpg',
+          'subreddit' : 'foo',
+          'postTitle' : 'this is basketball talk'
+        }
+        converter.conversions(comment).should.deep.equal({});
       });
       
       it('should not convert if the body matches, case-insensitive', () => {

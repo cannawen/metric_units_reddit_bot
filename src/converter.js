@@ -2,8 +2,12 @@ const rh = require('./regex_helper');
 
 const unitsLookupMap = require('./units_lookup_map').unitsLookupMap;
 
-function conversions(input, subreddit) {
-  let matches = highConfidenceMatches(input, subreddit);
+function conversions(comment) {
+  const input = comment['body'];
+  const subreddit = comment['subreddit'];
+  const postTitle = comment['postTitle'];
+
+  let matches = highConfidenceMatches(input, subreddit, postTitle);
 
   if (Object.keys(matches).length > 0) {
     matches = Object.assign(matches, lowConfidenceMatches(input));
@@ -64,7 +68,7 @@ function lowConfidenceMatches(input) {
     }, {});
 }
 
-function highConfidenceMatches(input, subreddit) {
+function highConfidenceMatches(input, subreddit, postTitle) {
   return Object.keys(unitsLookupMap)
     //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
     .sort((a, b) => b.length - a.length)
@@ -118,6 +122,7 @@ function highConfidenceMatches(input, subreddit) {
                 const ignoredRegex = new RegExp(rh.regexJoinToString(map['ignoredKeywords']), 'i');
                 containsIgnoredKeywork = input.match(ignoredRegex)
                 containsIgnoredKeywork = subreddit.match(ignoredRegex) || containsIgnoredKeywork
+                containsIgnoredKeywork = postTitle.match(ignoredRegex) || containsIgnoredKeywork
               }
 
               const alreadyConvertedInMap = Object.keys(memo).reduce((m,k) => {

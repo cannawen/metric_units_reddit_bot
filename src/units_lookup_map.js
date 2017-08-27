@@ -160,7 +160,7 @@ const unitsLookupMap = {
     "ignoredKeywords" : ["monitor", "screen", "tv", 
                         "ipad", "iphone", "phone", "tablet", 
                         "apple", "windows", "linux", "android", "ios",
-                        "macbook", "laptop", "computer", "notebook", "imac", "pc", "dell",
+                        "macbook", "laptop", "computer", "notebook", "imac", "pc", "dell", "thinkpad",
                         "rgb", "hz",]
   },
 

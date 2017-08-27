@@ -151,6 +151,7 @@ function getRedditComments(subreddit) {
           'body': data['body'],
           'author': data['author'],
           'id': data['name'],
+          'postTitle': data['link_title'],
           'link': data['link_permalink'] + data['id'],
           'subreddit': data['subreddit'],
           'timestamp' : data['created_utc']
@@ -181,7 +182,7 @@ function filterCommentReplies(messages) {
       return {
         'body': data['body'],
         'id': data['name'],
-        'submission': data['link_title'],
+        'postTitle': data['link_title'],
         'link': 'https://www.reddit.com' + data['context'],
         'timestamp' : data['created_utc'],
         'subreddit' : data['subreddit'],

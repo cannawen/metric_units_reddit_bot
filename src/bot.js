@@ -60,7 +60,7 @@ setInterval(() => {
         return;
       } 
 
-      const postTitle = message['submission'];
+      const postTitle = message['postTitle'];
 
       // Always replies if no sass in post within the last 24h
       // Replies 40% of the time otherwise
@@ -137,7 +137,7 @@ setInterval(() => {
     .map(comment => {
       return {
         "comment" : comment,
-        "conversions" : converter.conversions(comment['body'], comment['subreddit'])
+        "conversions" : converter.conversions(comment)
       }
     })
     .filter(hasConversions)
