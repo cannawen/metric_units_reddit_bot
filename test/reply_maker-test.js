@@ -8,7 +8,7 @@ describe('reply_maker', () => {
     it('should create a tabular response for 1 conversion', () => {
       replier.formatReply({ 'subreddit': 'all' }, {"foo" : "bar"})
         .should
-        .include("foo | bar ");
+        .include("foo | bar\n\n");
     });
 
     it('should create tabular response for 2 conversions', () => {
@@ -16,7 +16,7 @@ describe('reply_maker', () => {
         .should
         .include("foo | bar  \n")
         .and
-        .include("hi | hey ");
+        .include("hi | hey\n\n");
     });
 
     it('should create tabular response of supersets of text', () => {
@@ -26,7 +26,7 @@ describe('reply_maker', () => {
         .and
         .include("foobar | hey  \n")
         .and
-        .include("cat | dog ");
+        .include("cat | dog\n\n");
     });
 
     it('should say metric units bot on normal subreddits', () => {

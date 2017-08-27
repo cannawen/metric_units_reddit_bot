@@ -108,7 +108,7 @@ function formatReply(comment, conversions) {
     .keys(conversions)
     .map(nonMetricValue => nonMetricValue + " | " + conversions[nonMetricValue])
     .join("  \n")
-    + " "
+    + "\n\n"
     + "^metric ^units ^" + species 
     + " ^|"
     + " ^[feedback](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20" + species + "&message=I%20think%20your%20" + species + "%20is...%20%5BPlease%20include%20a%20link%20if%20you%20are%20reporting%20a%20bug%20about%20a%20specific%20comment!%5D)"
