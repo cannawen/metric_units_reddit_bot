@@ -200,6 +200,7 @@ const unitsLookupMap = {
 };
 
 const globalIgnore = [/(?:\n|^)(?:>|&gt;) /,
+                      "kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal",
                       "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
                       "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                       "ass", "anus", "anal", "butt", 
