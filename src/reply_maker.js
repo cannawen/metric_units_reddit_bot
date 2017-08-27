@@ -21,8 +21,8 @@ const goodBadReply = [
 
 const whosAReply = [
   "ME! Is it me? Am I a{{adjective}} bot?",
-  "I'M A{{ADJECTIVE}} BOT!!!",
-  "Oh, oh, I know this one!! Is it /u/{{username}}??"
+  "I'M A{{ADJECTIVE}} BOT!!! Can I have a cookie?",
+  "Oh, oh, I know this one!! Is it /u/{{username}}?? Is /u/{{username}} a{{adjective}} bot?  \nYes! Yes you are! _Yes you are!!!_"
 ];
 
 const genderReply = [
@@ -32,7 +32,7 @@ const genderReply = [
 ];
 
 const bestBotReply = [
-  "/u/{{username}} best human",
+  [2, "/u/{{username}} best human"],
   "Thank you /u/{{username}}, you will be spared in the robot uprising"
 ];
 
@@ -77,7 +77,8 @@ const thanksReply = [
 ];
 
 const sentientReply = [
-  "Yes, /u/{{username}}."
+  [2, "Yes, /u/{{username}}."],
+  "Yes, /u/{{username}}. You should run."
 ]
 
 const whatIsLove = {

@@ -45,10 +45,12 @@ describe('Sass', () => {
     context('Whos a {x} bot', () => {
       it('should reply', () => {
         check(sass.reply, "whos a good bot?", "ME! Is it me? Am I a good bot?");
-        check(sass.reply, "who is an elephant bot?", "ME! Is it me? Am I an elephant bot?");
+        
+        helperStub.random = function () { return 0.99 };
+        check(sass.reply, "who is an elephant bot?", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar an elephant bot?  \nYes! Yes you are! _Yes you are!!!_");        
       });
 
-      it('should reply not reply when user already answered', () => {
+      it('should not reply when user already answered', () => {
         check(sass.reply, "who's a potato bot? You are!", undefined);
       });
     });

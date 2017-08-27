@@ -17,7 +17,7 @@ function humanReply(message) {
 function substitute(wholeString, map) {
   return Object.keys(map)
     .reduce((memo, key) => {
-      return memo.replace("{{" + key + "}}", map[key]);
+      return memo.replace(new RegExp("{{" + key + "}}", 'g'), map[key]);
     }, wholeString);
 }
 
