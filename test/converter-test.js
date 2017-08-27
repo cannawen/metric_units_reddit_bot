@@ -22,8 +22,8 @@ describe('Converter', () => {
           [
             "1lb",
             "2 lb",
-            "3 pounds",
-            "4-pound"
+            "3 lbs",
+            "4-lbs"
           ],
           {
             "1 lb" : "0.45 kg",
@@ -57,6 +57,27 @@ describe('Converter', () => {
 
       it('should not convert when values are likely hyperbole', () => {
         shouldNotConvert([100, 1000, 10000], "lb");
+      });
+
+      it('should not convert units with low confidence', () => {
+        shouldNotConvert([22], "pounds")
+      });
+
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          testConvert(
+            [
+              "1 lb",
+              "2 pounds",
+              "3 pound"
+            ],
+            {
+              "1 lb" : "0.45 kg",
+              "2 lb" : "0.91 kg",
+              "3 lb" : "1.36 kg"
+            }
+          );
+        }); 
       });
     });
 
@@ -107,9 +128,26 @@ describe('Converter', () => {
         shouldNotConvert([100, 1000, 10000], "feet");
       });
 
-      it('should not convert ft or \"', () => {
+      it('should not convert units with low confidence', () => {
         shouldNotConvert([3], " ft");
-        shouldNotConvert([3], "\"");
+        shouldNotConvert([3], "\'");
+      });
+
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          testConvert(
+            [
+              "101-feet",
+              "20'",
+              "3 ft"
+            ],
+            {
+              "101 ft" : "30.8 metres",
+              "20 ft" : "6.1 metres",
+              "3 ft" : "0.9 metres"
+            }
+          );
+        }); 
       });
 
       context('and inches', () => {
@@ -185,13 +223,30 @@ describe('Converter', () => {
         shouldNotConvert([1], "inches");
       });
 
-      it('should not convert in or \'', () => {
+      it('should not convert when values are likely hyperbole', () => {
+        shouldNotConvert([100, 1000, 10000], "inches");
+      });
+
+      it('should not convert units with low confidence', () => {
         shouldNotConvert([3], " in");
         shouldNotConvert([3], "\'");
       });
 
-      it('should not convert when values are likely hyperbole', () => {
-        shouldNotConvert([100, 1000, 10000], "inches");
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          testConvert(
+            [
+              "1.1-in",
+              "2 in",
+              "3\""
+            ],
+            {
+             "1.1 inches" : "2.8 cm",
+             "2 inches" : "5.1 cm",
+             "3 inches" : "7.6 cm",
+            }
+          );
+        }); 
       });
     });
 
@@ -289,8 +344,8 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "25 mpg",
-            "30mpg",
+            "25mpg",
+            "30miles per gal",
             "50 miles per gallon"
           ],
           {
@@ -359,6 +414,24 @@ describe('Converter', () => {
            "10,000°F" : "5,538°C"
          }
         );
+      });
+      it('should not convert units with low confidence', () => {
+        shouldNotConvert([32], "F");
+      });
+
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          testConvert(
+            [
+              "-40°f",
+              "0F"
+            ],
+            {
+             "-40°F" : "-40°C",
+             "0°F" : "-18°C"
+            }
+          );
+        }); 
       });
     });
 
@@ -605,7 +678,48 @@ describe('Converter', () => {
       });
     })
 
+    context('high confidence conversion with low confidence conversion', () => {
+      it('should trigger regardless of hyperbole', () => {
+        testConvert("1000' wide and 2000 feet across", {
+          "1,000 ft" : "305 metres",
+          "2,000 ft" : "610 metres"
+        });
+      });
+      
+      it('should trigger regardless even if it is a different unit', () => {
+        testConvert("1000' wide and 2000 miles across", {
+          "1,000 ft" : "305 metres",
+          "2,000 miles" : "3,219 km"
+        });
+      });
+    });
+
     context.skip('Current failing tests - bugs and edge cases', () => {
+      
+      //Story #150577140
+      context('high confidence conversion with low confidence conversion', () => {
+        it.skip('should not convert negatives', () => {
+          testConvert("-1000' wide and 2000 feet across", {
+            "1,000 ft" : "305 metres",
+            "2,000 ft" : "610 metres"
+          });
+        });
+
+        it.skip('should trigger regardless of keywords', () => {
+          testConvert("1000 mi wide and 2000 miles across italy", {
+            "1,000 miles" : "1,609 km",
+            "2,000 miles" : "3,219 km"
+          });
+        });
+
+        it.skip('should trigger regardless of keywords', () => {
+          testConvert("1000 mi wide and 2000 foot across italy", {
+            "1,000 miles" : "1,609 km",
+            "2,000 ft" : "610 metres"
+          });
+        });
+      });
+
       //Story #150482058
       it('should display partial inches', () => {
         testConvert("9 feet 10.5", { "9'10.5\"": "3.01 metres" });
