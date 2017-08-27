@@ -62,10 +62,6 @@ describe('Sass', () => {
         check(sass.reply, "good boy!", "Actually, I prefer the female gender pronoun. Thanks.");
         check(sass.reply, "bad boy.", "Actually, I prefer the female gender pronoun. Thanks.");
       });
-
-      it('should reply not reply when user already answered', () => {
-        check(sass.reply, "who's a potato bot? You are!", undefined);
-      });
     });
 
     context('Good bot', () => {
@@ -144,7 +140,7 @@ describe('Sass', () => {
       });
     });
 
-    context('What is love song easter egg', () => {
+    context('What is love song', () => {
       it('should know the lyrics to the song', () => {
         check(sass.reply, "What is love?", "Baby don't hurt me");
         check(sass.reply, "Baby don't hurt me", "Don't hurt me");
