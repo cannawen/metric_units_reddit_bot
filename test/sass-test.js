@@ -115,9 +115,9 @@ describe('Sass', () => {
 
     context('Stupid bot|Dumb bot|Useless bot', () => {
       it('should reply', () => {
-        check(sass.reply, "such a stupid bot", "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
-        check(sass.reply, "urg, dumb bot!", "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
-        check(sass.reply, "useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95(ツ)&#95/¯");
+        check(sass.reply, "such a stupid bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
+        check(sass.reply, "urg, dumb bot!", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
+        check(sass.reply, "useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
       });
 
       it('should handle negations', () => {
