@@ -58,8 +58,8 @@ describe('Sass', () => {
 
     context('{{x}} bot', () => {
       it('should reply', () => {
-        verify(sass.reply, "BEST BOT!", "/u/foobar best human");
-        verify(sass.reply, "idiot bot", "/u/foobar idiot human");
+        verify(sass.reply, "BEST BOT!", "/u/foobar is best human");
+        verify(sass.reply, "idiot bot", "/u/foobar is idiot human");
       });
     });
 

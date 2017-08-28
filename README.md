@@ -32,7 +32,7 @@ Create your bot's reddit account.
 
 Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.) From there, you should be able to get your OAuth username and secret
 
-Git clone the code, and create a file `./private/environment.yaml` that looks like:
+Download the code, and create a file `./private/environment.yaml` that looks like:
 ```
 oauth-username: your-oauth-username
 oauth-secret: your-oauth-secret

@@ -32,7 +32,7 @@ const genderReply = [
 ];
 
 const xBotReply = [
-  "/u/{{username}} {{adjective}} human"
+  "/u/{{username}} is {{adjective}} human"
 ];
 
 const goodReply = [
