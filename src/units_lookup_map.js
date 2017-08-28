@@ -92,7 +92,8 @@ const unitsLookupMap = {
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, 10),
     "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
                          "nba", "nhl", "nfl", "sport",
-                         "play", "game"]
+                         "play", "game",
+                         "britain", "british", "england", "scotland", "wales", "uk"]
   },
 
   "miles per hour to km/h": {
@@ -101,7 +102,8 @@ const unitsLookupMap = {
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, 10),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km/h", milesToKm, 10)
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km/h", milesToKm, 10),
+    "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
 
   "feet to metres": {
@@ -183,7 +185,8 @@ const unitsLookupMap = {
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, 10),
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
-                         "america", "usa", "uk", "italy", "italian", "croatia"]
+                         "britain", "british", "england", "scotland", "wales", "uk",
+                         "italy", "italian", "croatia"]
   },
 
   "°F to °C" : {
@@ -204,7 +207,8 @@ const globalIgnore = [/(?:\n|^)(?:>|&gt;) /,
                       "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft",
                       "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                       "ass", "anus", "anal", "butt", 
-                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest"]
+                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest",
+                      "america", "usa"]
 module.exports = {
   "unitsLookupMap" : Object.keys(unitsLookupMap)
                            .reduce((memo, key) => {
