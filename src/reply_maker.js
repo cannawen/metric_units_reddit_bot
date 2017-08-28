@@ -22,7 +22,7 @@ const goodBadReply = [
 const whosAReply = [
   "ME! Is it me? Am I a{{adjective}} bot?",
   "I'M A{{ADJECTIVE}} BOT!!! Can I have a cookie?",
-  "Oh, oh, I know this one!! Is it /u/{{username}}?? Is /u/{{username}} a{{adjective}} bot?  \nYes! Yes you are! _Yes you are!!!_"
+  "Oh, oh, I know this one!! Is it /u/{{username}}?? Is /u/{{username}} a{{adjective}} bot?"
 ];
 
 const genderReply = [

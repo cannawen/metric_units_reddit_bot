@@ -47,7 +47,7 @@ describe('Sass', () => {
         check(sass.reply, "whos a good bot?", "ME! Is it me? Am I a good bot?");
         
         helperStub.random = function () { return 0.99 };
-        check(sass.reply, "who is an elephant bot?", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar an elephant bot?  \nYes! Yes you are! _Yes you are!!!_");        
+        check(sass.reply, "who is an elephant bot?", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar an elephant bot?");        
       });
 
       it('should not reply when user already answered', () => {
