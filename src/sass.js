@@ -33,7 +33,7 @@ function reply(message) {
 
   if (whosA && body.match(/you/i) === null) {
     return substitute(replier.whosAReply.randomElement(), {
-      'adjective' : whosA[1],
+      'adjective' : whosA[1].toLowerCase(),
       'ADJECTIVE' : whosA[1].toUpperCase(),
       'username' : username
     });

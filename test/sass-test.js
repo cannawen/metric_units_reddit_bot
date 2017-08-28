@@ -56,7 +56,7 @@ describe('Sass', () => {
       });
     });
 
-    context('{{something}} bot', () => {
+    context('{{x}} bot', () => {
       it('should reply', () => {
         verify(sass.reply, "BEST BOT!", "/u/foobar best human");
         verify(sass.reply, "idiot bot", "/u/foobar idiot human");
@@ -90,16 +90,26 @@ describe('Sass', () => {
       });
     });
 
-    context('Whos a {x} bot', () => {
-      it('should reply', () => {
+    context('Whos a {{x}} bot', () => {
+      it('should superceeding other triggers', () => {
         verify(sass.reply, "whos a good bot?", "ME! Is it me? Am I a good bot?");
-        
+      });
+      
+      it('should lowercase the adjective', () => {
+        verify(sass.reply, "WHO'S A NAUGHTY BOT", "ME! Is it me? Am I a naughty bot?");
+      });
+
+      it('should appropriately conjugate the a to an', () => {        
+        verify(sass.reply, "Well, who's an elephant bot?", "ME! Is it me? Am I an elephant bot?");        
+      });
+
+      it('should substitute username if needed', () => {        
         helperStub.random = function () { return 0.99 };
-        verify(sass.reply, "who is an elephant bot?", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar an elephant bot?");        
+        verify(sass.reply, "who is a potato bot? Hmm?", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?");        
       });
 
       it('should not reply when user already answered', () => {
-        verify(sass.reply, "who's a potato bot? You are!", undefined);
+        verify(sass.reply, "who's a tasty bot? You are!", undefined);
       });
     });
 

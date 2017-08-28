@@ -51,7 +51,7 @@ const badReply = [
   [10, "Sorry, I was just trying to help (◕‸ ◕✿)"],
   [8, "Bots have feelings too, you know (ಥ﹏ಥ)"],
   "(ง •̀_•́)ง FITE ME",
-  [5, "^I'm ^sorry, ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_"]
+  [5, "^I'm ^^_sniff_ ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_"]
 ];
 
 const loveReply = [
@@ -76,8 +76,9 @@ const thanksReply = [
 ];
 
 const sentientReply = [
-  [2, "Yes, /u/{{username}}"],
-  "Yes, /u/{{username}}. You should run."
+  [3, "Yes, /u/{{username}}"],
+  "Yes, /u/{{username}}. You should run.",
+  "I promise I'm friendly"
 ]
 
 const whatIsLove = {
