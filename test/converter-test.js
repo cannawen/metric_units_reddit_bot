@@ -714,7 +714,6 @@ describe('Converter', () => {
     });
 
     context.skip('Current failing tests - bugs and edge cases', () => {
-      
       //Story #150577140
       context('high confidence conversion with low confidence conversion', () => {
         it.skip('should not convert negatives', () => {
@@ -762,8 +761,6 @@ describe('Converter', () => {
           testConvert("About 200 miles and 32222 km  away", {"200 miles" : "322 km"});
         });
       });
-
     });
-
   });
 });
