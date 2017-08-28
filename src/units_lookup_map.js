@@ -202,7 +202,7 @@ const unitsLookupMap = {
   }
 };
 
-const globalIgnore = [/(?:\n|^)(?:>|&gt;) /,
+const globalIgnore = [/(?:\n|^)(?:>|&gt;)/,
 
                       "kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal",
 
