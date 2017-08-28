@@ -96,20 +96,22 @@ describe('Sass', () => {
       });
     });
 
-    context('I love you', () => {
+    context('love you|love ya|love u', () => {
       it('should reply', () => {
         check(sass.reply, "i love you, bot", "What is love?");
+        check(sass.reply, "love ya, buddy", "What is love?");
+        check(sass.reply, "love u", "What is love?");
+      });      
+
+      it('should handle negations', () => {
+        check(sass.reply, "no one loves you", undefined);
       });
     });
 
-    context('Best bot|Great bot', () => {
+    context('{{something}} bot', () => {
       it('should reply', () => {
-        check(sass.reply, "best bot", "/u/foobar best human");
-        check(sass.reply, "great bot", "/u/foobar best human");
-      });
-
-      it('should handle negations', () => {
-        check(sass.reply, "not a great bot", undefined);
+        check(sass.reply, "best bot!", "/u/foobar best human");
+        check(sass.reply, "idiot bot", "/u/foobar idiot human");
       });
     });
 
@@ -117,7 +119,7 @@ describe('Sass', () => {
       it('should reply', () => {
         check(sass.reply, "such a stupid bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
         check(sass.reply, "urg, dumb bot!", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
-        check(sass.reply, "useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
+        check(sass.reply, "so useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
       });
 
       it('should handle negations', () => {
@@ -134,9 +136,9 @@ describe('Sass', () => {
 
     context('sentient|self-aware|alive', () => {
       it('should reply', () => {
-        check(sass.reply, "Oh... god the bots are sentient.", "Yes, /u/foobar.");
-        check(sass.reply, "Are you self-aware?", "Yes, /u/foobar.");
-        check(sass.reply, "Are you alive?", "Yes, /u/foobar.");
+        check(sass.reply, "Oh... god the bots are sentient.", "Yes, /u/foobar");
+        check(sass.reply, "Are you self-aware?", "Yes, /u/foobar");
+        check(sass.reply, "Are you alive?", "Yes, /u/foobar");
       });
     });
 

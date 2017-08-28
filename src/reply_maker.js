@@ -31,9 +31,8 @@ const genderReply = [
   "Wow, did you just assume my gender? I happen to identify as female, thank you."
 ];
 
-const bestBotReply = [
-  [2, "/u/{{username}} best human"],
-  "Thank you /u/{{username}}, you will be spared in the robot uprising"
+const xBotReply = [
+  "/u/{{username}} {{adjective}} human"
 ];
 
 const goodReply = [
@@ -77,7 +76,7 @@ const thanksReply = [
 ];
 
 const sentientReply = [
-  [2, "Yes, /u/{{username}}."],
+  [2, "Yes, /u/{{username}}"],
   "Yes, /u/{{username}}. You should run."
 ]
 
@@ -127,7 +126,7 @@ module.exports = {
   goodBadReply,
   whosAReply,
   genderReply,
-  bestBotReply,
+  xBotReply,
   goodReply,
   badReply,
   loveReply,

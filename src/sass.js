@@ -47,11 +47,8 @@ function reply(message) {
   } else if (body.match(/bad bot/i) && body.match(/not/i) === null) {
     return replier.badReply.randomElement();
 
-  } else if (body.match(/i love you/i)) {
+  } else if (body.match(/love (you|ya|u)/i) && body.match(/no/i) === null) {
     return replier.loveReply.randomElement();
-
-  } else if (body.match(/stupid bot|dumb bot|useless bot/i) && body.match(/not/i) === null) {
-    return replier.stupidReply.randomElement();
 
   } else if (body.match(/thanks|thank you|thx/i) && body.match(/no/i) === null) {
     return replier.thanksReply.randomElement();
@@ -59,8 +56,14 @@ function reply(message) {
   } else if (body.match(/good human|good fellow human/i)) {
     return replier.goodHumanReply.randomElement();
 
-  } else if (body.match(/best bot|great bot/i) && body.match(/not/i) === null) {
-    return substitute(replier.bestBotReply.randomElement(), { 'username' : username });
+  } else if (body.match(/^(\w+) bot.?$/i)) {
+    return substitute(replier.xBotReply.randomElement(), { 
+      'username' : username,
+      'adjective' : body.match(/^(\w+) bot.?$/i)[1]
+    });
+
+  } else if (body.match(/stupid bot|dumb bot|useless bot/i) && body.match(/not/i) === null) {
+    return replier.stupidReply.randomElement();
   
   } else if (body.match(/sentient|self[- ]?aware|alive/i) && body.match(/not/i) === null) {
     return substitute(replier.sentientReply.randomElement(), { 'username' : username });
