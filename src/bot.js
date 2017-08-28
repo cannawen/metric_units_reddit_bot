@@ -37,7 +37,7 @@ setInterval(() => {
   }
 
   function messageIsShort(message) {
-    return message['body'].length < 25;
+    return message['body'].length < 30;
   }
 
   network.markAllMessagesAsRead();
