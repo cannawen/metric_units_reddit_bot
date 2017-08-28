@@ -59,7 +59,7 @@ function reply(message) {
   } else if (body.match(/^(\w+) bot.?$/i)) {
     return substitute(replier.xBotReply.randomElement(), { 
       'username' : username,
-      'adjective' : body.match(/^(\w+) bot.?$/i)[1]
+      'adjective' : body.match(/^(\w+) bot.?$/i)[1].toLowerCase()
     });
 
   } else if (body.match(/stupid bot|dumb bot|useless bot/i) && body.match(/not/i) === null) {

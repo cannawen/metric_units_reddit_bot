@@ -110,7 +110,7 @@ describe('Sass', () => {
 
     context('{{something}} bot', () => {
       it('should reply', () => {
-        check(sass.reply, "best bot!", "/u/foobar best human");
+        check(sass.reply, "BEST BOT!", "/u/foobar best human");
         check(sass.reply, "idiot bot", "/u/foobar idiot human");
       });
     });
