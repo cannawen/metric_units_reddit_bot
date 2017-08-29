@@ -50,7 +50,7 @@ function reply(message) {
   } else if (body.match(/love (you|ya|u)/i) && body.match(/no/i) === null) {
     return replier.loveReply.randomElement();
 
-  } else if (body.match(/thanks|thank you|thx/i) && body.match(/no/i) === null) {
+  } else if (body.match(/thanks|thank you|^(?:thx|ty) bot/i) && body.match(/no/i) === null) {
     return replier.thanksReply.randomElement();
 
   } else if (body.match(/good human|good fellow human/i)) {

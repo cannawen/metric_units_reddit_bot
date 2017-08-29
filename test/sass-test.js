@@ -32,11 +32,12 @@ describe('Sass', () => {
       });
     });
 
-    context('Thanks|Thank you|thx', () => {
+    context('Thanks|Thank you|thx|ty', () => {
       it('should reply', () => {
         verify(sass.reply, "thank you, little bot!!!!", "Glad to be of service");
         verify(sass.reply, "thanks, buddy", "Glad to be of service");
-        verify(sass.reply, "thx fam", "Glad to be of service");
+        verify(sass.reply, "thx bot", "Glad to be of service");
+        verify(sass.reply, "ty bot", "Glad to be of service");
       });
 
       it('should handle negations', () => {
