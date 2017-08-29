@@ -99,7 +99,7 @@ describe('Converter', () => {
             {
               "101 ft" : "30.8 metres",
               "20 ft" : "6.1 metres",
-              "3 ft" : "0.9 metres",
+              "3 ft" : "0.91 metres",
               "40 ft" : "12.2 metres",
               "5'6\"" : "1.7 metres"
             }
@@ -149,7 +149,7 @@ describe('Converter', () => {
             {
               "101 ft" : "30.8 metres",
               "20 ft" : "6.1 metres",
-              "3 ft" : "0.9 metres"
+              "3 ft" : "0.91 metres"
             }
           );
         }); 

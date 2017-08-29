@@ -124,8 +124,8 @@ const unitsLookupMap = {
         return convertDecimalFeetToFeetAndInches(i) + " to " + convertDecimalFeetToFeetAndInches(j);
       }
     },
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " metres", feetToMetres, 100),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, 100),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " metres", feetToMetres, [100, 5]),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, [100, 5]),
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
         new RegExp(( rh.startRegex 
