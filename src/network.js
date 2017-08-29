@@ -65,6 +65,7 @@ function networkRequest(options, oauthRequest) {
     if (err) {
       console.error("network error:", err);
       content = undefined;
+      oauthTokenValidUntil = 0;
       return;
     }
     try {

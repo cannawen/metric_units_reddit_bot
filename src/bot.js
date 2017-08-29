@@ -20,13 +20,29 @@ const excludedSubreddits = yaml
 let sassed = {};
 
 process.on('uncaughtException', function (err) {
-  mkdirp("./private/errors");
-  fs.writeFileSync("./private/errors/" + helper.now() + ".txt", err.stack, "utf8");
+  logError(err);
 });
 
 network.refreshToken();
+setIntervalSafely(replyToMessages, 60);
+setIntervalSafely(postConversions, 2);
 
-setInterval(() => {
+function logError(error) {
+  mkdirp("./private/errors/" + environment['version']);
+  fs.writeFileSync("./private/errors/" + helper.now() + ".txt", error.stack, "utf8");
+}
+
+function setIntervalSafely(f, seconds) {
+  setInterval(() => {
+    try {
+      f()
+    } catch(e) {
+      logError(e)
+    }
+  }, seconds * 1000);
+}
+
+function replyToMessages() {
   const now = helper.now();
 
   network.refreshToken();
@@ -93,9 +109,9 @@ setInterval(() => {
       return memo;
     }, {});
     
-}, 60*1000)
+};
 
-setInterval(() => {
+function postConversions() {
   const comments = network.getRedditComments("all");
   if (!comments) {
     return;
@@ -150,4 +166,4 @@ setInterval(() => {
       analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
       network.postComment(comment['id'], reply);
     })
-}, 2*1000);  
+};  

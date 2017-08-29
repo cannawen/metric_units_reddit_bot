@@ -6,7 +6,7 @@ function conversions(comment) {
   const input = comment['body'];
   const subreddit = comment['subreddit'];
   const postTitle = comment['postTitle'];
-
+  
   let matches = highConfidenceMatches(input, subreddit, postTitle);
 
   if (Object.keys(matches).length > 0) {
