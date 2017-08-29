@@ -81,7 +81,7 @@ function replyToMessages() {
       // Always replies if no sass in post within the last 24h
       // Replies are 50% less likely for each reply within 24 hours
       // Possible refactor candidate, story #150342011
-      const shouldReply = false;
+      let shouldReply = false;
 
       if (sassed[postTitle] === undefined) {
         shouldReply = true;
