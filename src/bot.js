@@ -79,13 +79,24 @@ function replyToMessages() {
       const postTitle = message['postTitle'];
 
       // Always replies if no sass in post within the last 24h
-      // Replies 40% of the time otherwise
+      // Replies are 50% less likely for each reply within 24 hours
       // Possible refactor candidate, story #150342011
-      const shouldReply = sassed[postTitle] === undefined || helper.random() > 0.6;
+      const shouldReply = false;
+
+      if (sassed[postTitle] === undefined) {
+        shouldReply = true;
+        sassed[postTitle] = { 'timestamp' : now, 
+                              'replyChance' : 0.5 };
+      } else if (helper.random() < sassed[postTitle]['replyChance']) {
+        shouldReply = true;
+        sassed[postTitle]= { 'timestamp' : now, 
+                             'replyChance': sassed[postTitle]['replyChance'] / 2};
+      }
+
+
       analytics.trackSass([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
       
       if (shouldReply) {
-        sassed[postTitle] = now;
         network.postComment(message['id'], reply);
       }
     });
@@ -102,7 +113,7 @@ function replyToMessages() {
   sassed = Object
     .keys(sassed)
     .reduce((memo, key) => {
-      const lessThan24hAgo = sassed[key] > now - 24*60*60*1000;
+      const lessThan24hAgo = sassed[key]['timestamp'] > now - 24*60*60*1000;
       if (lessThan24hAgo) {
         memo[key] = sassed[key];
       }
