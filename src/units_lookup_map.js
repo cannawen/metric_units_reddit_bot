@@ -148,7 +148,8 @@ const unitsLookupMap = {
           return "  ";
         }
       });
-    }
+    },
+    "ignoredKeywords" : ["size"]
   },
 
   "in to cm" : {
@@ -191,10 +192,10 @@ const unitsLookupMap = {
 
   "°F to °C" : {
     "unitRegex" : rh.regexJoinToString([
-                    /(?:°|degrees?) ?(?:f|fahrenheit)/,
+                    /(?:°|-?degrees?) ?(?:f|fahrenheit)/,
                     /fahrenheit/
                   ]),
-    "weakUnitsRegex" : "f",
+    "weakUnitsRegex" : rh.regexJoinToString([/f/, /-?degrees?/]),
     "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius),
@@ -213,7 +214,7 @@ const globalIgnore = [/(?:\n|^)(?:>|&gt;)/,
                       "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft", "dildo",
                       "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                       "ass", "anus", "anal", "butt", 'tit', 'kink', 'bdsm', "blow job",
-                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest"]
+                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest", "piv"]
 module.exports = {
   "unitsLookupMap" : Object.keys(unitsLookupMap)
                            .reduce((memo, key) => {
