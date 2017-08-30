@@ -28,8 +28,9 @@ setIntervalSafely(replyToMessages, 60);
 setIntervalSafely(postConversions, 2);
 
 function logError(error) {
-  mkdirp("./private/errors/" + environment['version']);
-  fs.writeFileSync("./private/errors/" + helper.now() + ".txt", error.stack, "utf8");
+  const dir = "./private/errors/" + environment['version'] + "/";
+  mkdirp(dir);
+  fs.writeFileSync(dir + helper.now() + ".txt", error.stack, "utf8");
 }
 
 function setIntervalSafely(f, seconds) {
