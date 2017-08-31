@@ -163,7 +163,7 @@ const unitsLookupMap = {
     "ignoredKeywords" : ["monitor", "screen", "tv", 
                         "ipad", "iphone", "phone", "tablet", 
                         "apple", "windows", "linux", "android", "ios",
-                        "macbook", "laptop", "computer", "notebook", "imac", "pc", "dell", "thinkpad",
+                        "macbook", "laptop", "computer", "notebook", "imac", "pc", "dell", "thinkpad", "lenovo",
                         "rgb", "hz",]
   },
 
@@ -214,7 +214,7 @@ const globalIgnore = [/(?:\n|^)(?:>|&gt;)/,
                       "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft", "dildo",
                       "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
                       "ass", "anus", "anal", "butt", 'tit', 'kink', 'bdsm', "blow job",
-                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest", "piv"]
+                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest", "piv", "milf"]
 module.exports = {
   "unitsLookupMap" : Object.keys(unitsLookupMap)
                            .reduce((memo, key) => {
