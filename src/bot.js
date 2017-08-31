@@ -24,23 +24,13 @@ process.on('uncaughtException', function (err) {
 });
 
 network.refreshToken();
-setIntervalSafely(replyToMessages, 60);
-setIntervalSafely(postConversions, 2);
+helper.setIntervalSafely(postConversions, 2);
+helper.setIntervalSafely(replyToMessages, 60);
 
 function logError(error) {
   const dir = "./private/errors/" + environment['version'] + "/";
   mkdirp(dir);
   fs.writeFileSync(dir + helper.now() + ".txt", error.stack, "utf8");
-}
-
-function setIntervalSafely(f, seconds) {
-  setInterval(() => {
-    try {
-      f()
-    } catch(e) {
-      logError(e)
-    }
-  }, seconds * 1000);
 }
 
 function replyToMessages() {
