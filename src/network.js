@@ -175,38 +175,6 @@ function markAllMessagesAsRead() {
   post('/api/read_all_messages');
 }
 
-function filterCommentReplies(messages) {
-  return messages
-    .filter(raw => raw['kind'] === 't1')
-    .map(raw => raw['data'])
-    .map(data => {
-      return {
-        'body': data['body'],
-        'id': data['name'],
-        'postTitle': data['link_title'],
-        'link': 'https://www.reddit.com' + data['context'],
-        'timestamp' : data['created_utc'],
-        'subreddit' : data['subreddit'],
-        'username' : data['author']
-      }
-    });
-}
-
-function filterPrivateMessages(messages) {
-  return messages
-    .filter(raw => raw['kind'] === 't4')
-    .map(raw => raw['data'])
-    .map(data => {
-      return {
-        'body' : data['body'],
-        'subject' : data['subject'],
-        'id' : data['name'],
-        'username' : data['author'],
-        'timestamp' : data['created_utc']
-      }
-    });
-}
-
 function blockAuthorOfMessageWithId(id) {
   post("/api/block", { 'id' : id });
 }
@@ -217,7 +185,5 @@ module.exports = {
   "postComment" : postComment,
   "getUnreadMessages" : getUnreadMessages,
   "markAllMessagesAsRead" : markAllMessagesAsRead,
-  "filterCommentReplies" : filterCommentReplies,
-  "filterPrivateMessages" : filterPrivateMessages,
   "blockAuthorOfMessageWithId" : blockAuthorOfMessageWithId
 }

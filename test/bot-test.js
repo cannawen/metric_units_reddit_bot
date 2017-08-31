@@ -6,11 +6,14 @@ describe('Bot', () => {
   let bot;
 
   //Network
-  let refreshTokenCalled;
+  let refreshTokenCount;
   let getRedditCommentsParam;
   let getRedditCommentsReturnValue;
   let postCommentId;
   let postCommentBody;
+  let getUnreadMessagesReturnValue;
+  let getUnreadMessagesCalled;
+  let markAllMessagesAsReadCalled;
 
   //Helper
   let commentFunction;
@@ -27,16 +30,21 @@ describe('Bot', () => {
   let replyConversionParam;
   let replyReturnValue;
 
+  //Sass
+  let sassMessageParam;
+  let sassRetunValue;
+
   beforeEach(() => {
     let helperStub = {};
     let networkStub = {};
     let converterStub = {};
     let replyStub = {};
+    let sassStub = {};
 
     //Network
-    refreshTokenCalled = false;
+    refreshTokenCount = 0;
     networkStub.refreshToken = () => { 
-      refreshTokenCalled = true;
+      refreshTokenCount = refreshTokenCount + 1;
     };
     getRedditCommentsParam = undefined;
     networkStub.getRedditComments = (param) => { 
@@ -48,7 +56,17 @@ describe('Bot', () => {
     networkStub.postComment = (id, body) => {
       postCommentId = id;
       postCommentBody = body;
-    }
+    };
+    getUnreadMessagesCalled = false;
+    getUnreadMessagesReturnValue = undefined;
+    networkStub.getUnreadMessages = () => {
+      getUnreadMessagesCalled = true;
+      return getUnreadMessagesReturnValue
+    };
+    markAllMessagesAsReadCalled = false;
+    networkStub.markAllMessagesAsRead = () => {
+      markAllMessagesAsReadCalled = true;
+    };
 
     //Helper
     commentFunction = undefined;
@@ -83,23 +101,34 @@ describe('Bot', () => {
       return replyReturnValue;
     }
 
+    //Sass
+    sassMessageParam = undefined;
+    sassRetunValue = undefined;
+    sassStub.reply = (message) => {
+      sassMessageParam = message;
+      return sassRetunValue;
+    }
+
     bot = proxyquire('../src/bot', { 
       './helper': helperStub,
       './network' : networkStub,
       './converter' : converterStub,
       './reply_maker' : replyStub,
-      './analytics' : { trackConversion: (x) => x }
+      './analytics' : { trackConversion: (x) => x,
+                        trackSass: (x) => x,
+                        trackUnsubscribe: (x) => x },
+      './sass' : sassStub
     });
   });
 
   describe('on load', () => {
     it('should refresh network token', () => {
-      refreshTokenCalled.should.equal(true);
+      refreshTokenCount.should.equal(1);
     });
   });
 
-  describe('reply to comment', () => {
-    it('should happen every 2 seconds', () => {
+  describe('conversions', () => {
+    it('should trigger every 2 seconds', () => {
       commentSeconds.should.equal(2);
     });
 
@@ -147,6 +176,54 @@ describe('Bot', () => {
             postCommentId.should.equal('123');
             postCommentBody.should.equal(replyReturnValue);
           });
+        });
+      });
+    });
+  });
+
+  describe('personality', () => {
+    it('should trigger every 60 seconds', () => {
+      directMessageSeconds.should.equal(60);
+    });
+
+    context('on trigger', () => {
+      it('should refresh network token', () => {
+        directMessageFunction();
+        refreshTokenCount.should.equal(2);
+      });
+
+      it('should get all unread messages', () => {
+        directMessageFunction();
+        getUnreadMessagesCalled.should.equal(true);
+      });
+
+      context('valid message', () => {
+        let message;
+
+        beforeEach(() => {
+          message = {
+            'kind' : 't1',
+            'data' : {
+              'body' : 'good bot',
+              'name' : '456',
+              'subreddit' : '',
+              'subject' : ''
+            }
+          };
+          getUnreadMessagesReturnValue = [message];
+        });
+
+        it('should mark all messages as read', () => {
+          directMessageFunction();
+          markAllMessagesAsReadCalled.should.equal(true);
+        });
+
+        it('should make sassy response', () => {
+          sassRetunValue = 'sassy response';
+          directMessageFunction();
+          sassMessageParam['body'].should.equal('good bot');
+          postCommentId.should.equal('456');
+          postCommentBody.should.equal(sassRetunValue);
         });
       });
     });

@@ -34,6 +34,38 @@ function logError(error) {
 }
 
 function replyToMessages() {
+  function filterCommentReplies(messages) {
+    return messages
+      .filter(raw => raw['kind'] === 't1')
+      .map(raw => raw['data'])
+      .map(data => {
+        return {
+          'body': data['body'],
+          'id': data['name'],
+          'postTitle': data['link_title'],
+          'link': 'https://www.reddit.com' + data['context'],
+          'timestamp' : data['created_utc'],
+          'subreddit' : data['subreddit'],
+          'username' : data['author']
+        }
+      });
+  }
+
+  function filterPrivateMessages(messages) {
+    return messages
+      .filter(raw => raw['kind'] === 't4')
+      .map(raw => raw['data'])
+      .map(data => {
+        return {
+          'body' : data['body'],
+          'subject' : data['subject'],
+          'id' : data['name'],
+          'username' : data['author'],
+          'timestamp' : data['created_utc']
+        }
+      });
+  }
+
   const now = helper.now();
 
   network.refreshToken();
@@ -49,8 +81,7 @@ function replyToMessages() {
 
   network.markAllMessagesAsRead();
 
-  network
-    .filterCommentReplies(messages)
+  filterCommentReplies(messages)
     .filter(messageIsShort)
     .forEach(message => {
       const reply = sass.reply(message);
@@ -92,7 +123,7 @@ function replyToMessages() {
       }
     });
 
-  network.filterPrivateMessages(messages)
+  filterPrivateMessages(messages)
     .filter(message => message['subject'].match(/stop/i))
     .forEach(message => {
       analytics.trackUnsubscribe([message['timestamp'], message['username']]);
