@@ -20,6 +20,7 @@ describe('Bot', () => {
   let commentSeconds;
   let privateMessageFunction;
   let privateMessageSeconds;
+  let randomNumber;
 
   //Converter
   let conversionCommentParam;
@@ -29,7 +30,7 @@ describe('Bot', () => {
   let replyCommentParam;
   let replyConversionParam;
   let replyReturnValue;
-  let replyStopMessage = "please block me";
+  let replyStopMessage = 'please block me';
 
   //Personality
   let personalityMessageParam;
@@ -83,6 +84,7 @@ describe('Bot', () => {
         privateMessageSeconds = seconds;
       }
     };
+    helperStub.random = () => randomNumber;
 
     //Converter
     conversionCommentParam = undefined;
@@ -165,13 +167,13 @@ describe('Bot', () => {
           it('should create reply', () => {
             commentFunction();
             replyCommentParam.should.equal(comment);
-            replyConversionParam.should.equal(conversionReturnValue);
+            replyConversionParam.should.deep.equal({"1" : "2"});
           });
 
           it('should post reply', () => {
             commentFunction();
             postCommentId.should.equal('123');
-            postCommentBody.should.equal(replyReturnValue);
+            postCommentBody.should.equal('comment 1 converts to comment 2');
           });
         });
       });
@@ -232,14 +234,38 @@ describe('Bot', () => {
               { 'body' : 'good bot', 'name' : '456'}
             );
             getUnreadMessagesReturnValue = [commentReply];
+            personalityRetunValue = 'sassy response';
           });
 
           it('should make sassy response', () => {
-            personalityRetunValue = 'sassy response';
             privateMessageFunction();
             personalityMessageParam['body'].should.equal('good bot');
             postCommentId.should.equal('456');
-            postCommentBody.should.equal(personalityRetunValue);
+            postCommentBody.should.equal('sassy response');
+          });
+
+          context('second comment reply with the same title', () => {
+            it('should reply 50% of the time', () => {
+              privateMessageFunction();
+              randomNumber = 0.49;
+              postCommentId = undefined;
+              postCommentBody = undefined;
+              privateMessageFunction();
+
+              postCommentId.should.equal('456');
+              postCommentBody.should.equal('sassy response');
+            });
+
+            it('should not reply 50% of the time', () => {
+              privateMessageFunction();
+              randomNumber = 0.51;
+              postCommentId = undefined;
+              postCommentBody = undefined;
+              privateMessageFunction();
+              
+              should.equal(postCommentId, undefined);
+              should.equal(postCommentBody, undefined);
+            });
           });
         });
 
@@ -255,8 +281,25 @@ describe('Bot', () => {
           it('should ask the user to block the bot', () => {
             privateMessageFunction();
             postCommentId.should.equal('789');
-            postCommentBody.should.equal(replyStopMessage);
+            postCommentBody.should.equal('please block me');
           });
+        });
+      });
+
+      context('invalid reply', () => {
+        beforeEach(() => {
+          let longCommentReply = createNetworkComment(
+            't1',
+            { 'body' : 'you are a good bot arent you??' }
+          );
+          getUnreadMessagesReturnValue = [longCommentReply];
+          personalityRetunValue = 'sassy response';
+        });
+
+        it('should not reply', () => {
+          privateMessageFunction();
+          should.equal(postCommentId, undefined);
+          should.equal(postCommentBody, undefined);
         });
       });
     });
