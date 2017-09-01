@@ -18,8 +18,8 @@ describe('Bot', () => {
   //Helper
   let commentFunction;
   let commentSeconds;
-  let directMessageFunction;
-  let directMessageSeconds;
+  let privateMessageFunction;
+  let privateMessageSeconds;
 
   //Converter
   let conversionCommentParam;
@@ -29,6 +29,7 @@ describe('Bot', () => {
   let replyCommentParam;
   let replyConversionParam;
   let replyReturnValue;
+  let replyStopMessage = "please block me";
 
   //Sass
   let sassMessageParam;
@@ -71,15 +72,15 @@ describe('Bot', () => {
     //Helper
     commentFunction = undefined;
     commentSeconds = undefined;
-    directMessageFunction = undefined;
-    directMessageSeconds = undefined;
+    privateMessageFunction = undefined;
+    privateMessageSeconds = undefined;
     helperStub.setIntervalSafely = (f, seconds) => { 
       if (commentFunction === undefined) {
         commentFunction = f;
         commentSeconds = seconds;
       } else {
-        directMessageFunction = f;
-        directMessageSeconds = seconds;
+        privateMessageFunction = f;
+        privateMessageSeconds = seconds;
       }
     };
 
@@ -99,7 +100,8 @@ describe('Bot', () => {
       replyCommentParam = comment;
       replyConversionParam = conversions;
       return replyReturnValue;
-    }
+    };
+    replyStub.stopMessage = replyStopMessage;
 
     //Sass
     sassMessageParam = undefined;
@@ -107,7 +109,7 @@ describe('Bot', () => {
     sassStub.reply = (message) => {
       sassMessageParam = message;
       return sassRetunValue;
-    }
+    };
 
     bot = proxyquire('../src/bot', { 
       './helper': helperStub,
@@ -181,27 +183,25 @@ describe('Bot', () => {
     });
   });
 
-  describe('personality', () => {
+  describe('private messages', () => {
     it('should trigger every 60 seconds', () => {
-      directMessageSeconds.should.equal(60);
+      privateMessageSeconds.should.equal(60);
     });
 
     context('on trigger', () => {
       it('should refresh network token', () => {
-        directMessageFunction();
+        privateMessageFunction();
         refreshTokenCount.should.equal(2);
       });
 
       it('should get all unread messages', () => {
-        directMessageFunction();
+        privateMessageFunction();
         getUnreadMessagesCalled.should.equal(true);
       });
 
-      context('valid message', () => {
-        let message;
-
+      context('valid comment reply', () => {
         beforeEach(() => {
-          message = {
+          let commentReply = {
             'kind' : 't1',
             'data' : {
               'body' : 'good bot',
@@ -210,20 +210,45 @@ describe('Bot', () => {
               'subject' : ''
             }
           };
-          getUnreadMessagesReturnValue = [message];
+          getUnreadMessagesReturnValue = [commentReply];
         });
 
         it('should mark all messages as read', () => {
-          directMessageFunction();
+          privateMessageFunction();
           markAllMessagesAsReadCalled.should.equal(true);
         });
 
-        it('should make sassy response', () => {
-          sassRetunValue = 'sassy response';
-          directMessageFunction();
-          sassMessageParam['body'].should.equal('good bot');
-          postCommentId.should.equal('456');
-          postCommentBody.should.equal(sassRetunValue);
+        context('comment reply', () => {
+          it('should make sassy response', () => {
+            sassRetunValue = 'sassy response';
+            privateMessageFunction();
+            sassMessageParam['body'].should.equal('good bot');
+            postCommentId.should.equal('456');
+            postCommentBody.should.equal(sassRetunValue);
+          });
+        });
+      });
+
+      context('valid comment reply', () => {
+        beforeEach(() => {
+          let directMessage = {
+            'kind' : 't4',
+            'data' : {
+              'body' : '',
+              'name' : '789',
+              'subreddit' : '',
+              'subject' : 'stop'
+            }
+          };
+          getUnreadMessagesReturnValue = [directMessage];
+        });
+
+        context('direct message with subject stop', () => {
+          it('should ask the user to block the bot', () => {
+            privateMessageFunction();
+            postCommentId.should.equal('789');
+            postCommentBody.should.equal(replyStopMessage);
+          });
         });
       });
     });
