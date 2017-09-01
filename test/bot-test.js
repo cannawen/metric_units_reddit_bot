@@ -144,15 +144,10 @@ describe('Bot', () => {
         let comment;
 
         beforeEach(() => {
-          comment = {
+          comment = createComment({
             'body': 'comment 1',
-            'author': '',
             'id': '123',
-            'postTitle': '',
-            'link': '',
-            'subreddit': '',
-            'timestamp' : ''
-          }
+          });
           getRedditCommentsReturnValue = [comment];
           conversionReturnValue = {"1" : "2"};
         });
@@ -178,6 +173,27 @@ describe('Bot', () => {
             postCommentId.should.equal('123');
             postCommentBody.should.equal(replyReturnValue);
           });
+        });
+      });
+
+      context('given invalid comment', () => {
+        beforeEach(() => {
+          let noNumberComment = createComment({'body': 'comment'});
+          let botComment = createComment({'body': '79 miles I am a bot.'});
+          let longComment = createComment({'body': '79 miles careful: the variable settings will be modified, though. jQuery doesnt return a new instance. The reason for this (and for the naming) is that .extend() was developed to extend object  doesnt return a new instance. The reason for this (and for the naming) is that .extend() was developed too'})
+          let sarcasticComment = createComment({'body': '79 miles /s'});
+          
+          getRedditCommentsReturnValue = [
+            noNumberComment,
+            botComment,
+            longComment,
+            sarcasticComment
+          ];
+        });
+
+        it('should not attempt to create conversion', () => {
+          commentFunction();
+          should.equal(conversionCommentParam, undefined);
         });
       });
     });
@@ -254,3 +270,15 @@ describe('Bot', () => {
     });
   });
 });
+
+function createComment(map) {
+  return Object.assign({
+    'body': '',
+    'author': '',
+    'id': '',
+    'postTitle': '',
+    'link': '',
+    'subreddit': '',
+    'timestamp' : ''}
+  , map);
+}

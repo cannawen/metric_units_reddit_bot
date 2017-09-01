@@ -166,7 +166,7 @@ function postConversions() {
   }
 
   function isNotSarcastic(comment) {
-    return comment['body'].match(/\b\/s\b/i) === null;
+    return comment['body'].match(new RegExp("(^|[ \\n])/s($|[ \\n])", 'i')) === null;
   }
 
   function hasNumber(comment) {
