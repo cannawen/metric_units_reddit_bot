@@ -336,8 +336,8 @@ describe('Converter', () => {
         shouldNotConvert([0, -10], "mph");
       });
 
-      it('should not convert 1, 10, or 60 mph', () => {
-        shouldNotConvert([1, 10, 60], "mph");
+      it('should not convert common mph', () => {
+        shouldNotConvert([1, 10, 60, 88], "mph");
       });
 
       it('should not convert when values are likely hyperbole', () => {
@@ -694,6 +694,10 @@ describe('Converter', () => {
       
       it('should not convert if the body matches, case-insensitive', () => {
         testConvert("My 32 inch ultra widescreen MONITOR", {});
+      });
+
+      it('should not convert if keyword is not found', () => {
+        testConvert("10 inches of grassy hills", {"10 inches" : "25.4 cm"})
       });
     })
 

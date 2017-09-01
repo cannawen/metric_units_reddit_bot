@@ -119,10 +119,14 @@ function highConfidenceMatches(input, subreddit, postTitle) {
               let containsIgnoredKeywork = false;
 
               if (map['ignoredKeywords']) {
-                const ignoredRegex = new RegExp(rh.regexJoinToString(map['ignoredKeywords']), 'i');
-                containsIgnoredKeywork = input.match(ignoredRegex)
-                containsIgnoredKeywork = subreddit.match(ignoredRegex) || containsIgnoredKeywork
-                containsIgnoredKeywork = postTitle.match(ignoredRegex) || containsIgnoredKeywork
+                const ignoredWordRegex = new RegExp(rh.startRegex
+                  + rh.regexJoinToString(map['ignoredKeywords'])
+                  + rh.endRegex
+                , 'i');
+
+                containsIgnoredKeywork = input.match(ignoredWordRegex)
+                containsIgnoredKeywork = postTitle.match(ignoredWordRegex) || containsIgnoredKeywork
+                containsIgnoredKeywork = subreddit.match(new RegExp(rh.regexJoinToString(map['ignoredKeywords']), 'i')) || containsIgnoredKeywork
               }
 
               const alreadyConvertedInMap = Object.keys(memo).reduce((m,k) => {

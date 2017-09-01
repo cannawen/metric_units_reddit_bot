@@ -98,7 +98,7 @@ const unitsLookupMap = {
 
   "miles per hour to km/h": {
     "unitRegex" : rh.regexJoinToString([/mph/, /miles (?:an|per) hour/]),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 10, 60].indexOf(i) === -1,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 10, 60, 88].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, 10),
@@ -154,7 +154,7 @@ const unitsLookupMap = {
 
   "in to cm" : {
     "unitRegex" : rh.regexJoinToString([/-in/, /-?inch/, /inches/]),
-    "weakUnitsRegex" : rh.regexJoinToString([/["]/, /in/]),
+    "weakUnitsRegex" : rh.regexJoinToString([/["]/, /in/, /''/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
