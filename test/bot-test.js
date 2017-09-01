@@ -217,15 +217,10 @@ describe('Bot', () => {
 
       context('valid comment reply', () => {
         beforeEach(() => {
-          let commentReply = {
-            'kind' : 't1',
-            'data' : {
-              'body' : 'good bot',
-              'name' : '456',
-              'subreddit' : '',
-              'subject' : ''
-            }
-          };
+          let commentReply = createNetworkComment(
+            't1',
+            { 'body' : 'good bot', 'name' : '456'}
+          );
           getUnreadMessagesReturnValue = [commentReply];
         });
 
@@ -247,15 +242,10 @@ describe('Bot', () => {
 
       context('valid comment reply', () => {
         beforeEach(() => {
-          let directMessage = {
-            'kind' : 't4',
-            'data' : {
-              'body' : '',
-              'name' : '789',
-              'subreddit' : '',
-              'subject' : 'stop'
-            }
-          };
+          let directMessage = createNetworkComment(
+            't4',
+            { 'name' : '789', 'subject' : 'stop' }
+          );
           getUnreadMessagesReturnValue = [directMessage];
         });
 
@@ -282,3 +272,16 @@ function createComment(map) {
     'timestamp' : ''}
   , map);
 }
+
+function createNetworkComment(kind, map) {
+  return {
+    'kind' : kind,
+    'data' : Object.assign({
+              'body' : '',
+              'name' : '',
+              'subreddit' : '',
+              'subject' : ''
+            }, map)
+  }
+}
+
