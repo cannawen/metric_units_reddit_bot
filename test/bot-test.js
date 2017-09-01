@@ -31,16 +31,16 @@ describe('Bot', () => {
   let replyReturnValue;
   let replyStopMessage = "please block me";
 
-  //Sass
-  let sassMessageParam;
-  let sassRetunValue;
+  //Personality
+  let personalityMessageParam;
+  let personalityRetunValue;
 
   beforeEach(() => {
     let helperStub = {};
     let networkStub = {};
     let converterStub = {};
     let replyStub = {};
-    let sassStub = {};
+    let personalityStub = {};
 
     //Network
     refreshTokenCount = 0;
@@ -103,12 +103,12 @@ describe('Bot', () => {
     };
     replyStub.stopMessage = replyStopMessage;
 
-    //Sass
-    sassMessageParam = undefined;
-    sassRetunValue = undefined;
-    sassStub.reply = (message) => {
-      sassMessageParam = message;
-      return sassRetunValue;
+    //Personality
+    personalityMessageParam = undefined;
+    personalityRetunValue = undefined;
+    personalityStub.reply = (message) => {
+      personalityMessageParam = message;
+      return personalityRetunValue;
     };
 
     bot = proxyquire('../src/bot', { 
@@ -117,9 +117,9 @@ describe('Bot', () => {
       './converter' : converterStub,
       './reply_maker' : replyStub,
       './analytics' : { trackConversion: (x) => x,
-                        trackSass: (x) => x,
+                        trackPersonality: (x) => x,
                         trackUnsubscribe: (x) => x },
-      './sass' : sassStub
+      './personality' : personalityStub
     });
   });
 
@@ -220,11 +220,11 @@ describe('Bot', () => {
 
         context('comment reply', () => {
           it('should make sassy response', () => {
-            sassRetunValue = 'sassy response';
+            personalityRetunValue = 'sassy response';
             privateMessageFunction();
-            sassMessageParam['body'].should.equal('good bot');
+            personalityMessageParam['body'].should.equal('good bot');
             postCommentId.should.equal('456');
-            postCommentBody.should.equal(sassRetunValue);
+            postCommentBody.should.equal(personalityRetunValue);
           });
         });
       });

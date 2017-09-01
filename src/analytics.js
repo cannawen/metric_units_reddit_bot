@@ -7,8 +7,8 @@ const environment = helper.environment();
 const folder = "./private/analytics/" + environment['version'] + "/";
 mkdirp(folder);
 
-function trackSass(data) {
-  track("sass", data);
+function trackPersonality(data) {
+  track("personality", data);
 }
 
 function trackConversion(data) {
@@ -33,7 +33,7 @@ function track(category, data) {
 }
 
 module.exports = {
-  "trackSass" : trackSass,
+  "trackPersonality" : trackPersonality,
   "trackConversion" : trackConversion,
   "trackUnsubscribe" : trackUnsubscribe
 }

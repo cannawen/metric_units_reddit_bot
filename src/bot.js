@@ -11,13 +11,13 @@ const converter = require('./converter');
 const helper = require('./helper');
 const network = require('./network');
 const replier = require('./reply_maker');
-const sass = require('./sass');
+const personality = require('./personality');
 
 const environment = helper.environment();
 const excludedSubreddits = yaml
     .safeLoad(fs.readFileSync('./src/excluded_subreddits.yaml', 'utf8'))
     .map(subreddit => subreddit.toLowerCase());
-let sassed = {};
+let personalityMetadata = {};
 
 process.on('uncaughtException', function (err) {
   logError(err);
@@ -84,15 +84,15 @@ function replyToMessages() {
   filterCommentReplies(messages)
     .filter(messageIsShort)
     .forEach(message => {
-      const reply = sass.reply(message);
+      const reply = personality.reply(message);
       if (reply === undefined) {
         return;
       }
       
       if (message['subreddit'].match(/^totallynotrobots$/i)) {
-        const humanReply = sass.humanReply(message);
+        const humanReply = personality.humanReply(message);
         if (humanReply) {
-          analytics.tracksass([message['timestamp'], message['link'], message['body'], reply, true]);
+          analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, true]);
           network.postComment(message['id'], humanReply);
         }
         return;
@@ -100,23 +100,23 @@ function replyToMessages() {
 
       const postTitle = message['postTitle'];
 
-      // Always replies if no sass in post within the last 24h
+      // Always replies if no personality in post within the last 24h
       // Replies are 50% less likely for each reply within 24 hours
       // Possible refactor candidate, story #150342011
       let shouldReply = false;
 
-      if (sassed[postTitle] === undefined) {
+      if (personalityMetadata[postTitle] === undefined) {
         shouldReply = true;
-        sassed[postTitle] = { 'timestamp' : now, 
+        personalityMetadata[postTitle] = { 'timestamp' : now, 
                               'replyChance' : 0.5 };
-      } else if (helper.random() < sassed[postTitle]['replyChance']) {
+      } else if (helper.random() < personalityMetadata[postTitle]['replyChance']) {
         shouldReply = true;
-        sassed[postTitle]= { 'timestamp' : now, 
-                             'replyChance': sassed[postTitle]['replyChance'] / 2};
+        personalityMetadata[postTitle]= { 'timestamp' : now, 
+                             'replyChance': personalityMetadata[postTitle]['replyChance'] / 2};
       }
 
 
-      analytics.trackSass([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
+      analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
       
       if (shouldReply) {
         network.postComment(message['id'], reply);
@@ -131,13 +131,13 @@ function replyToMessages() {
       network.blockAuthorOfMessageWithId(message['id']);
     });
 
-  //cleanup old sassed
-  sassed = Object
-    .keys(sassed)
+  //cleanup old personalityMetadata
+  personalityMetadata = Object
+    .keys(personalityMetadata)
     .reduce((memo, key) => {
-      const lessThan24hAgo = sassed[key]['timestamp'] > now - 24*60*60*1000;
+      const lessThan24hAgo = personalityMetadata[key]['timestamp'] > now - 24*60*60*1000;
       if (lessThan24hAgo) {
-        memo[key] = sassed[key];
+        memo[key] = personalityMetadata[key];
       }
       return memo;
     }, {});
