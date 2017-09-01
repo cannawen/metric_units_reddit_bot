@@ -215,13 +215,9 @@ describe('Bot', () => {
         getUnreadMessagesCalled.should.equal(true);
       });
 
-      context('valid comment reply', () => {
+      context('valid private reply', () => {
         beforeEach(() => {
-          let commentReply = createNetworkComment(
-            't1',
-            { 'body' : 'good bot', 'name' : '456'}
-          );
-          getUnreadMessagesReturnValue = [commentReply];
+          getUnreadMessagesReturnValue = [];
         });
 
         it('should mark all messages as read', () => {
@@ -230,6 +226,14 @@ describe('Bot', () => {
         });
 
         context('comment reply', () => {
+          beforeEach(() => {
+            let commentReply = createNetworkComment(
+              't1',
+              { 'body' : 'good bot', 'name' : '456'}
+            );
+            getUnreadMessagesReturnValue = [commentReply];
+          });
+
           it('should make sassy response', () => {
             personalityRetunValue = 'sassy response';
             privateMessageFunction();
@@ -238,18 +242,16 @@ describe('Bot', () => {
             postCommentBody.should.equal(personalityRetunValue);
           });
         });
-      });
-
-      context('valid comment reply', () => {
-        beforeEach(() => {
-          let directMessage = createNetworkComment(
-            't4',
-            { 'name' : '789', 'subject' : 'stop' }
-          );
-          getUnreadMessagesReturnValue = [directMessage];
-        });
 
         context('direct message with subject stop', () => {
+          beforeEach(() => {
+            let directMessage = createNetworkComment(
+              't4',
+              { 'name' : '789', 'subject' : 'stop' }
+            );
+            getUnreadMessagesReturnValue = [directMessage];
+          });
+
           it('should ask the user to block the bot', () => {
             privateMessageFunction();
             postCommentId.should.equal('789');
