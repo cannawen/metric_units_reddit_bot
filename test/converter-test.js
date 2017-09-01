@@ -716,21 +716,21 @@ describe('Converter', () => {
     context.skip('Current failing tests - bugs and edge cases', () => {
       //Story #150577140
       context('high confidence conversion with low confidence conversion', () => {
-        it.skip('should not convert negatives', () => {
+        it('should not convert negatives', () => {
           testConvert("-1000' wide and 2000 feet across", {
             "1,000 ft" : "305 metres",
             "2,000 ft" : "610 metres"
           });
         });
 
-        it.skip('should trigger regardless of keywords', () => {
+        it('should trigger regardless of keywords', () => {
           testConvert("1000 mi wide and 2000 miles across italy", {
             "1,000 miles" : "1,609 km",
             "2,000 miles" : "3,219 km"
           });
         });
 
-        it.skip('should trigger regardless of keywords', () => {
+        it('should trigger regardless of keywords', () => {
           testConvert("1000 mi wide and 2000 foot across italy", {
             "1,000 miles" : "1,609 km",
             "2,000 ft" : "610 metres"

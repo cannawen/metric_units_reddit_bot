@@ -91,8 +91,8 @@ describe('Sass', () => {
       });
     });
 
-    context('Whos a {{x}} bot', () => {
-      it('should superceeding other triggers', () => {
+    context('Who\'s a {{x}} bot', () => {
+      it('should take precedence other triggers', () => {
         verify(sass.reply, "whos a good bot?", "ME! Is it me? Am I a good bot?");
       });
       
@@ -100,7 +100,7 @@ describe('Sass', () => {
         verify(sass.reply, "WHO'S A NAUGHTY BOT", "ME! Is it me? Am I a naughty bot?");
       });
 
-      it('should appropriately conjugate the a to an', () => {        
+      it('should appropriately conjugate a to an', () => {        
         verify(sass.reply, "Well, who's an elephant bot?", "ME! Is it me? Am I an elephant bot?");        
       });
 
