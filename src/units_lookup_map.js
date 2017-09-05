@@ -35,38 +35,66 @@ function roundToDecimalPlaces(number, places) {
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
 }
 
-function userFacingValue(input, conversionFunction, precisionThreshold) {
-  input = input.toString();
+function fillZeros(length) {
+  let out = '';
+  for (let i = 0; i < length; i++) {
+    out += '0';
+  }
+  return out;
+}
 
-  const value = conversionFunction ? conversionFunction(input) : input;
-  let decimals = 0;
+function round(input, allowableErrorPercent) {
+  const inputString = input.toString();
+  
+  const decimalLength = inputString.split('.')[1].length;
 
-  if (input.indexOf('.') !== -1) {
-    decimals = input.split(".")[1].length;
-  } else {
-    if (Array.isArray(precisionThreshold)) {
-      for (let i = 0; i < precisionThreshold.length; i++) {
-        if (value < precisionThreshold[i]) {
-          decimals = i + 1;
-        } else {
-          break;
+  const nonDecimalInput = (input * Math.pow(10, decimalLength)).toString();
+  const stringLength = nonDecimalInput.length;
+
+  const output = nonDecimalInput
+    .split('')
+    .map((char, index) => {
+      const multiplier = Math.pow(10, stringLength - index);
+      const sigDig = roundToDecimalPlaces(nonDecimalInput/multiplier, 0);
+      return sigDig * multiplier;
+    })
+    .concat(nonDecimalInput)
+    .reduce((memo, potentialResult) => {
+      const errorPercent = Math.abs(nonDecimalInput - potentialResult)/nonDecimalInput * 100;
+      if (errorPercent < allowableErrorPercent) {
+        if (memo['error'] === undefined || memo['error'] < errorPercent) {
+          return {
+            'error' : errorPercent,
+            'result' : potentialResult
+          }
         }
       }
-    } else if (precisionThreshold !== undefined && value < precisionThreshold) {
-      decimals = 1;
-    }
+      return memo;
+    }, { 'error' : undefined, 'result' : undefined})['result'];
+  return output/Math.pow(10, decimalLength);
+}
+
+function userFacingValue(input, conversionFunction) {
+  input = input.toString();
+
+  let value;
+
+  if (conversionFunction) {
+    value = round(conversionFunction(input), 5);
+  } else {
+    value = input;
   }
 
-  return rh.addCommas(roundToDecimalPlaces(value, decimals));
+  return rh.addCommas(value);
 }
 
-function userFacingValueAndUnit(i, unit, conversionFunction, precision) {
-  return userFacingValue(i, conversionFunction, precision) + unit;
+function userFacingValueAndUnit(i, unit, conversionFunction) {
+  return userFacingValue(i, conversionFunction) + unit;
 }
 
-function userFacingValueAndUnitRange(i, j, unit, conversionFunction, precision) {
-  const iConverted = userFacingValue(i, conversionFunction, precision);
-  const jConverted = userFacingValue(j, conversionFunction, precision);
+function userFacingValueAndUnitRange(i, j, unit, conversionFunction) {
+  const iConverted = userFacingValue(i, conversionFunction);
+  const jConverted = userFacingValue(j, conversionFunction);
   if (iConverted === jConverted) {
     return iConverted + unit
   } else {
@@ -88,8 +116,8 @@ const unitsLookupMap = {
     "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10 && i < 235,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, 10),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, 10),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km),
     "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
                          "nba", "nhl", "nfl", "sport",
                          "play", "game",
@@ -101,8 +129,8 @@ const unitsLookupMap = {
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 10, 60, 88].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, 10),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km/h", milesToKm, 10),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km/h", milesToKm),
     "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
 
@@ -124,8 +152,8 @@ const unitsLookupMap = {
         return convertDecimalFeetToFeetAndInches(i) + " to " + convertDecimalFeetToFeetAndInches(j);
       }
     },
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " metres", feetToMetres, [100, 5]),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, [100, 5]),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " metres", feetToMetres),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres),
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
         new RegExp(( rh.startRegex 
@@ -158,8 +186,8 @@ const unitsLookupMap = {
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm, 100),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm, 100),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm),
     "ignoredKeywords" : ["monitor", "screen", "tv", 
                         "ipad", "iphone", "phone", "tablet", 
                         "apple", "windows", "linux", "android", "ios",
@@ -173,8 +201,8 @@ const unitsLookupMap = {
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " lb"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " kg", lbToKg, [50, 10]),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " kg", lbToKg, [50, 10]),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " kg", lbToKg),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " kg", lbToKg),
   },
 
   "miles to km" : {
@@ -182,8 +210,8 @@ const unitsLookupMap = {
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 8, 10].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm, 10),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, 10),
+    "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm),
+    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm),
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",

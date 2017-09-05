@@ -106,7 +106,7 @@ function formatReply(comment, conversions) {
   }
 
   return Object.keys(conversions)
-    .map(nonMetricValue => nonMetricValue + " | " + conversions[nonMetricValue])
+    .map(nonMetricValue => nonMetricValue + " ≈ " + conversions[nonMetricValue])
     .map(transform)
     .join("  \n")
     + "\n\n"
