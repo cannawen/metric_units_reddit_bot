@@ -8,25 +8,25 @@ describe('reply_maker', () => {
     it('should create a tabular response for 1 conversion', () => {
       replier.formatReply({ 'subreddit': 'all' }, {"foo" : "bar"})
         .should
-        .include("foo | bar\n\n");
+        .include("foo ≈ bar\n\n");
     });
 
     it('should create tabular response for 2 conversions', () => {
       replier.formatReply({ 'subreddit': 'all' }, {"foo" : "bar", "hi" : "hey"})
         .should
-        .include("foo | bar  \n")
+        .include("foo ≈ bar  \n")
         .and
-        .include("hi | hey\n\n");
+        .include("hi ≈ hey\n\n");
     });
 
     it('should create tabular response of supersets of text', () => {
       replier.formatReply({ 'subreddit': 'all' }, {"foo" : "bar", "foobar" : "hey", "cat":"dog"})
         .should
-        .include("foo | bar  \n")
+        .include("foo ≈ bar  \n")
         .and
-        .include("foobar | hey  \n")
+        .include("foobar ≈ hey  \n")
         .and
-        .include("cat | dog\n\n");
+        .include("cat ≈ dog\n\n");
     });
 
     it('should say metric units bot on normal subreddits', () => {
