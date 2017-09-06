@@ -13,10 +13,15 @@ const replier = require('./reply_maker');
 const personality = require('./personality');
 
 const environment = helper.environment();
-const excludedSubreddits = yaml
-    .safeLoad(fs.readFileSync('./src/excluded_subreddits.yaml', 'utf8'))
-    .map(subreddit => subreddit.toLowerCase());
 let personalityMetadata = {};
+let excludedSubreddits = [];
+try { 
+  excludedSubreddits = yaml
+    .safeLoad(fs.readFileSync('./private/excluded_subreddits.yaml', 'utf8'))
+    .map(subreddit => subreddit.toLowerCase());
+} catch (e) {
+  helper.logError(e);
+}
 
 process.on('uncaughtException', function (err) {
   helper.logError(err);
