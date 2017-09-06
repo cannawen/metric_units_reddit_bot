@@ -135,7 +135,7 @@ const unitsLookupMap = {
   "feet to metres": {
     "unitRegex" : rh.regexJoinToString([/-?feet/, /-ft/, /-?foot/]),
     "weakUnitsRegex" : rh.regexJoinToString([/[']/, /ft/]),
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 2, 4, 6].indexOf(i) === -1,
+    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 2, 4, 6].indexOf(i) === -1 && !(i > 4 && i < 8),
     "inDisplay" : (i) => {
       if (i%1 == 0) {
         return userFacingValueAndUnit(i.split('.')[0], " ft");

@@ -32,26 +32,9 @@ describe('Converter', () => {
           ],
           {
             "1 lb" : "0.45 kg",
-            "2 lb" : "0.91 kg",
-            "3 lb" : "1.36 kg",
-            "4 lb" : "1.81 kg"
-          }
-        );
-      });
-
-      it('should switch precision appropriately', () => {
-        testConvert(
-          [
-            "22 lb",
-            "23 lb",
-            "110 lb",
-            "111 lb"
-          ],
-          { 
-            "22 lb" : "9.98 kg",
-            "23 lb" : "10.4 kg",
-            "110 lb" : "49.9 kg",
-            "111 lb" : "50 kg"
+            "2 lb" : "0.9 kg",
+            "3 lb" : "1.4 kg",
+            "4 lb" : "1.8 kg"
           }
         );
       });
@@ -78,8 +61,8 @@ describe('Converter', () => {
             ],
             {
               "1 lb" : "0.45 kg",
-              "2 lb" : "0.91 kg",
-              "3 lb" : "1.36 kg"
+              "2 lb" : "0.9 kg",
+              "3 lb" : "1.4 kg"
             }
           );
         }); 
@@ -94,31 +77,16 @@ describe('Converter', () => {
               "20 feet",
               "3 foot",
               "40feet",
-              "5.5-ft"
+              "15.5-ft"
             ],
             {
-              "101 ft" : "30.8 metres",
-              "20 ft" : "6.1 metres",
-              "3 ft" : "0.91 metres",
-              "40 ft" : "12.2 metres",
-              "5'6\"" : "1.7 metres"
+              "101 ft" : "30 metres",
+              "20 ft" : "6 metres",
+              "3 ft" : "0.9 metres",
+              "40 ft" : "12 metres",
+              "15'6\"" : "4.7 metres"
             }
           );
-      });
-
-      it('should switch precision appropriately', () => {
-        testConvert(
-          [
-            "327 feet",
-            "328 feet",
-            "329 feet"
-          ],
-          { 
-            "327 ft" : "99.7 metres",
-            "328 ft" : "100.0 metres",
-            "329 ft" : "100 metres",
-          }
-        );
       });
 
       it('should not convert zero or negative values', () => {
@@ -127,6 +95,10 @@ describe('Converter', () => {
 
       it('should not convert common values', () => {
         shouldNotConvert([1, 2, 4, 6], "feet");
+      });
+
+      it('should not convert heights between 4-8ft', () => {
+        shouldNotConvert([4.5, 5.7, 6.222, 7.42], "feet");
       });
 
       it('should not convert when values are likely hyperbole', () => {
@@ -147,9 +119,9 @@ describe('Converter', () => {
               "3 ft"
             ],
             {
-              "101 ft" : "30.8 metres",
-              "20 ft" : "6.1 metres",
-              "3 ft" : "0.91 metres"
+              "101 ft" : "30 metres",
+              "20 ft" : "6 metres",
+              "3 ft" : "0.9 metres"
             }
           );
         }); 
@@ -160,9 +132,9 @@ describe('Converter', () => {
           testConvert(
             [
               "1'2\"",
-              "3 foot 4 inches",
-              "5ft6in",
-              "7-feet-8-in",
+              "13 foot 4 inches",
+              "15ft6in",
+              "17-feet-8-in",
               "9' 10.5\"",
               "11'12\"",
               "13ft1",
@@ -170,13 +142,13 @@ describe('Converter', () => {
             ],
             {
              "1'2\"": "0.36 metres",
-             "3'4\"": "1.01 metres",
-             "5'6\"": "1.68 metres",
-             "7'8\"": "2.34 metres",
-             "9'11\"": "3.01 metres",
-             "12 ft": "3.66 metres",
-             "13'1\"": "3.99 metres",
-             "400 ft" : "121.92 metres"
+             "13'4\"": "4 metres",
+             "15'6\"": "4.7 metres",
+             "17'8\"": "5.4 metres",
+             "9'11\"": "3 metres",
+             "12 ft": "3.7 metres",
+             "13'1\"": "4 metres",
+             "400 ft" : "120 metres"
             }
           );
         });
@@ -199,23 +171,10 @@ describe('Converter', () => {
           ],
           {
            "1.1 inches" : "2.8 cm",
-           "2 inches" : "5.1 cm",
-           "3 inches" : "7.6 cm",
-           "40 inches" : "102 cm",
-           "50 inches" : "127 cm"
-          }
-        );
-      });
-
-      it('should switch precision appropriately', () => {
-        testConvert(
-          [
-            "39 inch",
-            "40 inch"
-          ],
-          { 
-            "39 inches" : "99.1 cm",
-            "40 inches" : "102 cm"
+           "2 inches" : "5 cm",
+           "3 inches" : "8 cm",
+           "40 inches" : "100 cm",
+           "50 inches" : "130 cm"
           }
         );
       });
@@ -247,8 +206,8 @@ describe('Converter', () => {
             ],
             {
              "1.1 inches" : "2.8 cm",
-             "2 inches" : "5.1 cm",
-             "3 inches" : "7.6 cm",
+             "2 inches" : "5 cm",
+             "3 inches" : "8 cm",
             }
           );
         }); 
@@ -268,22 +227,9 @@ describe('Converter', () => {
           {
            "40 miles" : "64 km",
            "50 miles" : "80 km",
-           "60 miles" : "97 km",
-           "70 miles" : "113 km",
-           "80 miles" : "129 km"
-          }
-        );
-      });
-
-      it('should switch precision appropriately', () => {
-        testConvert(
-          [
-            "6 miles",
-            "7 miles"
-          ],
-          { 
-            "6 miles" : "9.7 km",
-            "7 miles" : "11 km"
+           "60 miles" : "100 km",
+           "70 miles" : "110 km",
+           "80 miles" : "130 km"
           }
         );
       });
@@ -313,21 +259,8 @@ describe('Converter', () => {
           {
            "40 mph" : "64 km/h",
            "50 mph" : "80 km/h",
-           "65 mph" : "105 km/h",
-           "70 mph" : "113 km/h"
-          }
-        );
-      });
-
-      it('should switch precision appropriately', () => {
-        testConvert(
-          [
-            "6 mph",
-            "7 mph"
-          ],
-          { 
-            "6 mph" : "9.7 km/h",
-            "7 mph" : "11 km/h"
+           "65 mph" : "100 km/h",
+           "70 mph" : "110 km/h"
           }
         );
       });
@@ -354,22 +287,9 @@ describe('Converter', () => {
             "50 miles per gallon"
           ],
           {
-           "25 mpg (US)" : "9.4 L/100km",
-           "30 mpg (US)" : "7.8 L/100km",
+           "25 mpg (US)" : "9 L/100km",
+           "30 mpg (US)" : "8 L/100km",
            "50 mpg (US)" : "4.7 L/100km"
-          }
-        );
-      });
-
-      it('should switch precision appropriately', () => {
-        testConvert(
-          [
-            "23 mpg",
-            "24 mpg"
-          ],
-          { 
-            "23 mpg (US)" : "10 L/100km",
-            "24 mpg (US)" : "9.8 L/100km"
           }
         );
       });
@@ -420,6 +340,7 @@ describe('Converter', () => {
          }
         );
       });
+
       it('should not convert units with low confidence', () => {
         shouldNotConvert([32], "F");
       });
@@ -536,23 +457,6 @@ describe('Converter', () => {
       });
     });
 
-    context('decimal numbers', () => {
-      it('should convert with the same precision', () => {
-        testConvert(
-          [
-            "0.2 miles",
-            ".45 miles",
-            "6.789 miles"
-          ],
-          {
-           "0.2 miles" : "0.3 km",
-           "0.45 miles" : "0.72 km",
-           "6.789 miles" : "10.926 km"
-          }
-        );
-      });
-    });
-
     context('large numbers', () => {
       it('should convert with commas', () => {
         testConvert(
@@ -561,8 +465,8 @@ describe('Converter', () => {
             "1000.4 miles"
           ],
           {
-           "999,123,456 miles" : "1,607,933,339 km",
-           "1,000.4 miles" : "1,610.0 km"
+           "999,123,456 miles" : "1,600,000,000 km",
+           "1,000.4 miles" : "1,600 km"
           }
         );
       });
@@ -578,8 +482,8 @@ describe('Converter', () => {
           ],
           {
             "0 to -40°F": "-18 to -40°C",
-            "5,000 to 9,000 miles" : "8,047 to 14,484 km",
-            "30 to 40 mpg (US)": "7.8 to 5.9 L/100km"
+            "5,000 to 9,000 miles" : "8,000 to 14,000 km",
+            "30 to 40 mpg (US)": "8 to 6 L/100km"
           }
         );
       });
@@ -640,7 +544,7 @@ describe('Converter', () => {
           ],
           {
             "101 to 200°F" : "38 to 93°C",
-            "200 miles" : "322 km"
+            "200 miles" : "320 km"
           }
         );
       });
@@ -652,24 +556,28 @@ describe('Converter', () => {
             "200mi",
           ],
           {
-            "200 miles" : "322 km"
+            "200 miles" : "320 km"
           }
         );
       });
     });
 
     context('comment contains quote', () => {
-      it('should not convert if the value is present', () => {
+      it('should not convert', () => {
         testConvert("> About 201 miles away", {});
         testConvert("\n&gt; About 202 miles away", {});
       });
     });
 
     context('comment already contains conversion', () => {
-      it('should not convert if the value is present', () => {
-        testConvert("About 200 miles (322 km) away", {});
-        testConvert("About 200 miles or 322 kilometers away", {});
-        testConvert("About 200 miles or 322 away", {});
+      it('should not convert', () => {
+        testConvert("About 200 miles (320 km) away", {});
+        //Story #150138193
+        // testConvert("About 200 miles or 300 kilometers away", {});
+        // testConvert("About 200 miles or 322 away", {});
+        // testConvert("About 200 miles or 321.9 away", {});
+        // testConvert("About 200 miles or 321.87 away", {});
+        // testConvert("About 200 miles or 321.879 away", {});
       });
     });
 
@@ -697,22 +605,22 @@ describe('Converter', () => {
       });
 
       it('should not convert if keyword is not found', () => {
-        testConvert("10 inches of grassy hills", {"10 inches" : "25.4 cm"})
+        testConvert("10 inches of grassy hills", {"10 inches" : "25 cm"})
       });
     })
 
     context('high confidence conversion with low confidence conversion', () => {
       it('should trigger regardless of hyperbole', () => {
         testConvert("1000' wide and 2000 feet across", {
-          "1,000 ft" : "305 metres",
-          "2,000 ft" : "610 metres"
+          "1,000 ft" : "300 metres",
+          "2,000 ft" : "600 metres"
         });
       });
       
       it('should trigger regardless even if it is a different unit', () => {
         testConvert("1000' wide and 2000 miles across", {
-          "1,000 ft" : "305 metres",
-          "2,000 miles" : "3,219 km"
+          "1,000 ft" : "300 metres",
+          "2,000 miles" : "3,200 km"
         });
       });
     });
