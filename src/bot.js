@@ -1,7 +1,6 @@
 const deasync = require('deasync');
 const fs = require('fs');
 const https = require('https');
-const mkdirp = require('mkdirp');
 const path = require('path');
 const request = require('request');
 const yaml = require('js-yaml');

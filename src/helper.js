@@ -1,5 +1,6 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
+const mkdirp = require('mkdirp');
 
 function random() {
   return Math.random();
@@ -17,7 +18,7 @@ function environment() {
 function logError(error) {
   const dir = "./private/errors/" + environment['version'] + "/";
   mkdirp(dir);
-  fs.writeFileSync(dir + helper.now() + ".txt", error.stack, "utf8");
+  fs.writeFileSync(dir + now() + ".txt", error.stack, "utf8");
 }
 
 function setIntervalSafely(f, seconds) {

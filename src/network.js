@@ -122,19 +122,17 @@ function refreshToken() {
 function printBannedSubreddits() {
   let messages = get("/message/inbox?limit=100")
   while (messages.length > 0) {
-
-  const banned = messages
-    .filter(data => data['kind'] === 't4')
-    .map(data => data['data'])
-    .filter(m => m['subject'].match(/^You\'ve been banned from participating in r\/(.+)$/i))
+    messages
+      .filter(data => data['kind'] === 't4')
+      .map(data => data['data'])
+      .map (message => message['subject'].match(/^You\'ve been banned from participating in r\/(.+)$/i))
+      .filter(match => match !== null)
+      .map(match => match[1])
+      .forEach(subreddit => helper.log("- " + subreddit));
     
-    banned
-      .map (b => b['subject'].match(/^You\'ve been banned from participating in r\/(.+)$/i)[1])
-      .forEach(b => helper.log("- " + b))
-    
-    const id = messages[messages.length - 1]['data']['name'];
+    const lastMessageId = messages[messages.length - 1]['data']['name'];
 
-    messages = get("/message/inbox?limit=100&after=" + id)
+    messages = get("/message/inbox?limit=100&after=" + lastMessageId)
   }
 }
 
