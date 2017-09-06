@@ -20,18 +20,12 @@ const excludedSubreddits = yaml
 let personalityMetadata = {};
 
 process.on('uncaughtException', function (err) {
-  logError(err);
+  helper.logError(err);
 });
 
 network.refreshToken();
 helper.setIntervalSafely(postConversions, 2);
 helper.setIntervalSafely(replyToMessages, 60);
-
-function logError(error) {
-  const dir = "./private/errors/" + environment['version'] + "/";
-  mkdirp(dir);
-  fs.writeFileSync(dir + helper.now() + ".txt", error.stack, "utf8");
-}
 
 function replyToMessages() {
   function filterCommentReplies(messages) {

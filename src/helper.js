@@ -14,6 +14,12 @@ function environment() {
   return yaml.safeLoad(environmentString);
 }
 
+function logError(error) {
+  const dir = "./private/errors/" + environment['version'] + "/";
+  mkdirp(dir);
+  fs.writeFileSync(dir + helper.now() + ".txt", error.stack, "utf8");
+}
+
 function setIntervalSafely(f, seconds) {
   setInterval(() => {
     try {
@@ -29,5 +35,6 @@ module.exports = {
   "now" : now,
   "environment" : environment,
   "log" : console.log,
+  "logError":logError,
   "setIntervalSafely" : setIntervalSafely
 }
