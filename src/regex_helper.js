@@ -9,7 +9,7 @@ function addCommas(number) {
 }
 
 const startRegex 
-  = /(?:^|[\s~><\b\(])/.source;
+  = /(?:^|[\s~><\b\(/])/.source;
 
 const endRegex 
   = /(?:$|[\s\.,;?!:\b\)/])/.source;
