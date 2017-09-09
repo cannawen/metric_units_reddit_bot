@@ -55,7 +55,7 @@ run `./lib/watch.sh` (uses [fswatch](https://github.com/emcrisostomo/fswatch))
 
 Git hooks
 ---
-The pre-commit hook will run tests before each commit. It will only allow code to be committed if all tests are passing successfully and there are no unnecessary console.log statements
+The pre-commit hook will run tests before each commit. It will only allow code to be committed if all tests are passing successfully and there are no unnecessary console.log statements.
 
 To enable git hooks, copy the file from the `./hooks` directory into the `./.git/hooks` directory
 
