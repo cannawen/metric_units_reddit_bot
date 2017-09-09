@@ -159,7 +159,7 @@ const unitsLookupMap = {
           + rh.regexJoinToString(["[\']", " ?ft", " ?" + unitsLookupMap['feet to metres']['unitRegex']])
           + "[- ]?"
           + rh.numberRegex
-          + rh.regexJoinToString([rh.endRegex, /["]/, / ?in/, " ?" + unitsLookupMap['in to cm']['unitRegex']])
+          + rh.regexJoinToString([/["]/, / ?in/, " ?" + unitsLookupMap['in to cm']['unitRegex']])
         ),'gi');
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
         const inchesLessThan12 = inches <= 12;

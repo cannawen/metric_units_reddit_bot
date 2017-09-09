@@ -8,7 +8,7 @@ describe('Units lookup map', () => {
       const preprocess = map.unitsLookupMap['feet to metres']['preprocess'];
 
       it('should turn feet and inches into feet', () => {
-        const input = " 1'2\"  3 foot 4 inches  5ft6in  7-feet-8-in  9' 10.5\"  11'12\"  13ft1  400'0"
+        const input = " 1'2\"  3 foot 4 inches  5ft6in  7-feet-8-in  9' 10.5\"  11'12\"  400'0\""
         preprocess(input).should
           .include("1.17 feet")
           .and.include("3.33 feet")
@@ -16,7 +16,6 @@ describe('Units lookup map', () => {
           .and.include("7.67 feet")
           .and.include("9.88 feet")
           .and.include("12.00 feet")
-          .and.include("13.08 feet")
           .and.include("400.00 feet");
       });
 

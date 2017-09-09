@@ -137,8 +137,7 @@ describe('Converter', () => {
               "17-feet-8-in",
               "9' 10.5\"",
               "11'12\"",
-              "13ft1",
-              "400'0"
+              "400'0\""
             ],
             {
              "1'2\"": "0.36 metres",
@@ -147,7 +146,6 @@ describe('Converter', () => {
              "17'8\"": "5.4 metres",
              "9'11\"": "3 metres",
              "12 ft": "3.7 metres",
-             "13'1\"": "4 metres",
              "400 ft" : "120 metres"
             }
           );
