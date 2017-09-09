@@ -338,25 +338,6 @@ describe('Converter', () => {
          }
         );
       });
-
-      it('should not convert units with low confidence', () => {
-        shouldNotConvert([32], "F");
-      });
-
-      context('when confident about one conversion', () => {
-        it('should convert those with less confidence', () => {
-          testConvert(
-            [
-              "-40°f",
-              "0F"
-            ],
-            {
-             "-40°F" : "-40°C",
-             "0°F" : "-18°C"
-            }
-          );
-        }); 
-      });
     });
 
     context('supported special characters', () => {

@@ -221,13 +221,10 @@ const unitsLookupMap = {
                     /(?:°|-?degrees?) ?(?:f|fahrenheit)/,
                     /fahrenheit/
                   ]),
-    "weakUnitsRegex" : rh.regexJoinToString([/f/, /-?degrees?/]),
     "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius, Math.round),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°C", fahrenheitToCelsius, Math.round)
-    // "ignoredKeywords" : ["i am", /i'?m/,
-    //                      "bodybuilding", "relationships", "nanny"]
   }
 };
 
