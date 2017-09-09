@@ -180,7 +180,7 @@ const unitsLookupMap = {
 
   "in to cm" : {
     "unitRegex" : rh.regexJoinToString([/-in/, /-?inch/, /inches/]),
-    "weakUnitsRegex" : rh.regexJoinToString([/["]/, /in/, /''/]),
+    "weakUnitsRegex" : rh.regexJoinToString([/["]/, /''/]),
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),

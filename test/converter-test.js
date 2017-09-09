@@ -199,12 +199,10 @@ describe('Converter', () => {
           testConvert(
             [
               "1.1-in",
-              "2 in",
               "3\""
             ],
             {
              "1.1 inches" : "2.8 cm",
-             "2 inches" : "5 cm",
              "3 inches" : "8 cm",
             }
           );
