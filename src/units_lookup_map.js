@@ -213,7 +213,7 @@ const unitsLookupMap = {
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
-                         "italy", "italian", "croatia"]
+                         "italy", "italian", "croatia", "brasil", "brazil"]
   },
 
   "°F to °C" : {
