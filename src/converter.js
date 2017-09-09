@@ -1,3 +1,4 @@
+const analytics = require('./analytics');
 const rh = require('./regex_helper');
 
 const unitsLookupMap = require('./units_lookup_map').unitsLookupMap;
@@ -98,6 +99,8 @@ function highConfidenceMatches(input, subreddit, postTitle) {
               const in2 = range.substring(toIndex + 1);
 
               memo[map['inDisplayRange'](in1, in2)] = map['outDisplayRange'](in1, in2);
+            } else {
+              analytics.trackError([range, input, subreddit, postTitle])
             }
           });
       }

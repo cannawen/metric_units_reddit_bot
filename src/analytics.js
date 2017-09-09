@@ -19,6 +19,10 @@ function trackUnsubscribe(data) {
   track("unsubscribe", data);
 }
 
+function trackError(data) {
+  track("error", data);
+}
+
 function track(category, data) {
   const dataString = data
     .map(d => JSON.stringify(d))
@@ -35,5 +39,6 @@ function track(category, data) {
 module.exports = {
   "trackPersonality" : trackPersonality,
   "trackConversion" : trackConversion,
-  "trackUnsubscribe" : trackUnsubscribe
+  "trackUnsubscribe" : trackUnsubscribe,
+  "trackError" : trackError
 }
