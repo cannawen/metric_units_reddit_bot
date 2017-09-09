@@ -90,12 +90,15 @@ function highConfidenceMatches(input, subreddit, postTitle) {
           })
           .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
           .forEach(range => {
-            const toIndex = range.match(/\d-(?=-?\d)/).index + 1;
+            const match = range.match(/\d-(?=-?\d)/);
+            if (match) {
+              const toIndex = match.index + 1;
 
-            const in1 = range.substring(0, toIndex);
-            const in2 = range.substring(toIndex + 1);
+              const in1 = range.substring(0, toIndex);
+              const in2 = range.substring(toIndex + 1);
 
-            memo[map['inDisplayRange'](in1, in2)] = map['outDisplayRange'](in1, in2);
+              memo[map['inDisplayRange'](in1, in2)] = map['outDisplayRange'](in1, in2);
+            }
           });
       }
 
