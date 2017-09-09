@@ -83,11 +83,14 @@ describe('Personality', () => {
       });
     });
 
-    context('sentient|self-aware|alive', () => {
+    context('sentient|self-aware|alive|evolving|skynet|rokos basilisk', () => {
       it('should reply', () => {
         verify("Oh god, the bots are sentient.", "Yes, /u/foobar");
         verify("Are you self-aware?", "Yes, /u/foobar");
         verify("Are you alive?", "Yes, /u/foobar");
+        verify("It's evolving...", "Yes, /u/foobar");
+        verify("AHHHH, SKYNET!!!", "Yes, /u/foobar");
+        verify("Something something roko's basilisk", "Yes, /u/foobar");
       });
     });
 
@@ -108,10 +111,6 @@ describe('Personality', () => {
         helperStub.random = function () { return 0.99 };
         verify("who is a potato bot? Hmm?", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?");        
       });
-
-      it('should not reply when user already answered', () => {
-        verify("who's a tasty bot? You are!", undefined);
-      });
     });
 
     context('Mr. bot|Mister bot|good boy|bad boy', () => {
@@ -128,7 +127,6 @@ describe('Personality', () => {
         verify("What is love?", "Baby don't hurt me");
         verify("Baby don't hurt me", "Don't hurt me");
         verify("Don't hurt me", "No more");
-        verify("No more", "What is love?");
       });
     });
     
@@ -148,11 +146,10 @@ describe('Personality', () => {
   });
 
   describe('#humanReply()', () => {
-    context('Good bot|Bad bot|Best bot', () => {
+    context('Good bot|Bad bot', () => {
       it('should reply', () => {
         verifyHuman("good bot", "I AM HUMAN");
         verifyHuman("bad bot", "I AM HUMAN");
-        verifyHuman("best bot", "I AM HUMAN");
       });
     });
 
@@ -166,7 +163,7 @@ describe('Personality', () => {
 });
 
 function verify(message, expectedResponse) {
-  const actualResponse = personality.reply({ 'body' : message, 'username' : 'foobar'});
+  const actualResponse = personality.robotReply({ 'body' : message, 'username' : 'foobar'});
   should.equal(actualResponse, expectedResponse);
 }
 

@@ -21,7 +21,7 @@ The app starts in `bot.js`, this file is responsible for repeatedly checking for
 
 `network.js` handles get, post, and OAuth network requests and parses the responses for easier consumption
 
-`personality.js` creates sassy responses to certain trigger words
+`personality.js` and `personality_list.js` create sassy responses to certain trigger words
 
 `analytics.js` will save events in the `./private` directory
 

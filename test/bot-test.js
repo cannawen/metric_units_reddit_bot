@@ -108,7 +108,7 @@ describe('Bot', () => {
     //Personality
     personalityMessageParam = undefined;
     personalityRetunValue = undefined;
-    personalityStub.reply = (message) => {
+    personalityStub.robotReply = (message) => {
       personalityMessageParam = message;
       return personalityRetunValue;
     };

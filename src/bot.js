@@ -82,7 +82,7 @@ function replyToMessages() {
   filterCommentReplies(messages)
     .filter(messageIsShort)
     .forEach(message => {
-      const reply = personality.reply(message);
+      const reply = personality.robotReply(message);
       if (reply === undefined) {
         return;
       }
