@@ -186,11 +186,11 @@ const unitsLookupMap = {
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm, currRound(5)),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm, currRound(5)),
-    "ignoredKeywords" : ["monitor", "screen", "tv", 
-                        "ipad", "iphone", "phone", "tablet", 
+    "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
+                        "ipad", "iphone", "phone", "tablet", "tablets",
                         "apple", "windows", "linux", "android", "ios",
-                        "macbook", "laptop", "computer", "notebook", "imac", "pc", "dell", "thinkpad", "lenovo",
-                        "rgb", "hz",]
+                        "macbook", "laptop", "laptops", "computer", "computers", "notebook", "imac", "pc", "dell", "thinkpad", "lenovo",
+                        "rgb", "hz"]
   },
 
   "lb to kg" : {
