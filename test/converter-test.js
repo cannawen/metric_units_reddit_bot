@@ -542,7 +542,8 @@ describe('Converter', () => {
     context('comment contains quote', () => {
       it('should not convert', () => {
         testConvert("> About 201 miles away", {});
-        testConvert("\n&gt;About 202 miles away", {});
+        testConvert(">1.5lbs", {});
+        testConvert("\n&gt; About 202 miles away", {});
       });
     });
 

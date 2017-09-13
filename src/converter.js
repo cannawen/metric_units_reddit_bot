@@ -69,7 +69,8 @@ function lowConfidenceMatches(input) {
     }, {});
 }
 
-function highConfidenceMatches(input, subreddit, postTitle) {
+function highConfidenceMatches(originalInput, subreddit, postTitle) {
+  let input = originalInput;
   return Object.keys(unitsLookupMap)
     //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
     .sort((a, b) => b.length - a.length)
@@ -145,7 +146,14 @@ function highConfidenceMatches(input, subreddit, postTitle) {
               if (map['shouldConvert']) {
                 isValidConversionNumber = map['shouldConvert'](Number(number));
               }
-              return isValidConversionNumber && !alreadyConvertedInComment && !alreadyConvertedInMap && !containsIgnoredKeywork;
+
+              const startsWithQuote = originalInput.match(/(?:^|\n)(?:>|&gt;)/);
+
+              return isValidConversionNumber 
+                && !alreadyConvertedInComment 
+                && !alreadyConvertedInMap 
+                && !containsIgnoredKeywork 
+                && !startsWithQuote;
             }
 
             if (shouldProcessNumber(number)) {
