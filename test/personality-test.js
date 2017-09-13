@@ -138,6 +138,13 @@ describe('Personality', () => {
       });
     });
 
+    context('☞ | ☜', () => {
+      it('should reply', () => {
+        verify("☞", "☜(ﾟヮﾟ☜)");
+        verify("☜", "(☞ﾟヮﾟ)☞");
+      });
+    });
+
     context('Random message', () => {
       it('should not reply', () => {
         verify("Hello test", undefined);

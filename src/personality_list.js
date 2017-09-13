@@ -143,6 +143,16 @@ const robotPersonality = [
     }
   },
   {
+    "description" : "☞",
+    "response": "☜(ﾟヮﾟ☜)",
+    "regex" : /☞/i
+  },
+  {
+    "description" : "☜",
+    "response": "(☞ﾟヮﾟ)☞",
+    "regex" : /☜/i
+  },
+  {
     "description" : "What is love?",
     "response": "Baby don't hurt me",
     "regex" : /^what is love.?$/i
