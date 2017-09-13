@@ -11,24 +11,16 @@ describe('Personality', () => {
     personality = proxyquire('../src/personality', { './helper': helperStub });
   });
 
-  describe('#reply()', () => {    
+  describe('#reply()', () => {  
     context('Good bot', () => {
       it('should reply', () => {
         verify("good bot", "Good human");
-      });
-      
-      it('should handle negations', () => {
-        verify("not a good bot", undefined);
       });
     });
 
     context('Bad bot', () => {
       it('should reply', () => {
         verify("Bad bot!", "Bad carbon-based life form");
-      });
-
-      it('should handle negations', () => {
-        verify("not a bad bot", undefined);
       });
     });
 
@@ -39,10 +31,6 @@ describe('Personality', () => {
         verify("thx bot", "Glad to be of service");
         verify("ty bot", "Glad to be of service");
       });
-
-      it('should handle negations', () => {
-        verify("no thanks", undefined);
-      });
     });
 
     context('love you|love ya|love u', () => {
@@ -51,10 +39,6 @@ describe('Personality', () => {
         verify("love ya, buddy", "What is love?");
         verify("love u", "What is love?");
       });      
-
-      it('should handle negations', () => {
-        verify("no one love you", undefined);
-      });
     });
 
     context('{{x}} bot', () => {
@@ -69,10 +53,6 @@ describe('Personality', () => {
         verify("such a stupid bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
         verify("urg, dumb bot!", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
         verify("so useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
-      });
-
-      it('should handle negations', () => {
-        verify("you're not a stupid bot", undefined);
       });
     });
 
@@ -142,6 +122,14 @@ describe('Personality', () => {
       it('should reply', () => {
         verify("☞", "☜(ﾟヮﾟ☜)");
         verify("☜", "(☞ﾟヮﾟ)☞");
+      });
+    });
+    
+    context('Negations', () => {
+      it('should not reply', () => {
+        verify("not a good bot", undefined);
+        verify("no thanks", undefined);
+        verify("you're not a stupid bot", undefined);
       });
     });
 
