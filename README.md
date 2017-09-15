@@ -41,23 +41,19 @@ reddit-password: your-password-here
 version: your-bot-version
 dev-mode: false #true will print POST requests to the console, instead of actually making the POST to the server
 ```
-run `./lib/deploy.sh` and you should have the bot up and running!
+run `npm install` then `node ./src/bot.js` and you should have the bot up and running!
 
 
 Running the tests
 ---
 run `npm test`
 
-Or, if you want the tests to automatically re-run when you save
-
-run `./lib/watch.sh` (uses [fswatch](https://github.com/emcrisostomo/fswatch))
-
 
 Git hooks
 ---
 The pre-commit hook will run tests before each commit. It will only allow code to be committed if all tests are passing successfully and there are no unnecessary console.log statements.
 
-To enable git hooks, copy the file from the `./hooks` directory into the `./.git/hooks` directory
+To enable git hooks, copy the file `pre-commit` into the `./.git/hooks/` directory
 
 
 Questions or Comments?
