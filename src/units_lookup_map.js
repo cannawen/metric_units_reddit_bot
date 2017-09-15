@@ -35,14 +35,6 @@ function roundToDecimalPlaces(number, places) {
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
 }
 
-function fillZeros(length) {
-  let out = '';
-  for (let i = 0; i < length; i++) {
-    out += '0';
-  }
-  return out;
-}
-
 //Problems rounding negative numbers
 function round(input, allowableErrorPercent) {
   let multiplier;
