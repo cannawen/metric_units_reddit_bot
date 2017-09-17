@@ -63,21 +63,21 @@ function replyToMessages() {
         }
       });
   }
+  
+  function messageIsShort(message) {
+    return message['body'].length < 30;
+  }
 
   const now = helper.now();
 
   network.refreshToken();
   
   const messages = network.getUnreadMessages();
+  network.markAllMessagesAsRead();
   if (!messages) {
     return;
   }
 
-  function messageIsShort(message) {
-    return message['body'].length < 30;
-  }
-
-  network.markAllMessagesAsRead();
 
   filterCommentReplies(messages)
     .filter(messageIsShort)
