@@ -10,7 +10,7 @@ function isHyperbole(i) {
 
 const unitLookupList = [
   {
-    "inputUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
+    "imperialUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
     "standardInputUnit" : " mpg (US)",
     "isInvalidInput": isZeroOrNegative,
     "isWeaklyValidInput": isHyperbole,
@@ -25,7 +25,7 @@ const unitLookupList = [
                          "britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
-    "inputUnits" : [/-?mph/, /miles (?:an|per) hour/],
+    "imperialUnits" : [/-?mph/, /miles (?:an|per) hour/],
     "standardInputUnit" : " mph",
     "isInvalidInput": isZeroOrNegative,
     "isWeaklyValidInput": (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
@@ -37,8 +37,8 @@ const unitLookupList = [
     "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
-    "inputUnits" : [/-?feet/, /-ft/, /-?foot/],
-    "weakInputUnits" : [/[']/, /ft/],
+    "imperialUnits" : [/-?feet/, /-ft/, /-?foot/],
+    "weakImperialUnits" : [/[']/, /ft/],
     "standardInputUnit" : " feet",
     "isInvalidInput": isZeroOrNegative,
     "isWeaklyValidInput": (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
@@ -86,8 +86,8 @@ const unitLookupList = [
     "ignoredKeywords" : ["size"]
   },
   {
-    "inputUnits" : [/-in/, /-?inch/, /inches/],
-    "weakInputUnits" : [/["]/, /''/],
+    "imperialUnits" : [/-in/, /-?inch/, /inches/],
+    "weakImperialUnits" : [/["]/, /''/],
     "standardInputUnit" : " inches",
     "isInvalidInput": isZeroOrNegative,
     "isWeaklyValidInput": isHyperbole,
@@ -103,8 +103,8 @@ const unitLookupList = [
                         "rgb", "hz"]
   },
   {
-    "inputUnits" : "-?lbs?",
-    "weakInputUnits" : [/-?pound/, /-?pounds/],
+    "imperialUnits" : "-?lbs?",
+    "weakImperialUnits" : [/-?pound/, /-?pounds/],
     "standardInputUnit" : " lb",
     "isInvalidInput": isZeroOrNegative,
     "isWeaklyValidInput": isHyperbole,
@@ -115,7 +115,7 @@ const unitLookupList = [
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " kg", lbToKg, currRound(5)),
   },
   {
-    "inputUnits" : [/-?mi/, /-?miles?/],
+    "imperialUnits" : [/-?mi/, /-?miles?/],
     "standardInputUnit" : " miles",
     "isInvalidInput": isZeroOrNegative,
     "isWeaklyValidInput": (i) => isHyperbole(i) || i === 8,
@@ -130,8 +130,8 @@ const unitLookupList = [
                          "italy", "italian", "croatia", "brasil", "brazil"]
   },
   {
-    "inputUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
-    "weakInputUnits" : ["f", "-?degrees?"],
+    "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
+    "weakImperialUnits" : ["f", "-?degrees?"],
     "standardInputUnit" : "°F",
     "isInvalidInput": (i) => false,
     "isWeaklyValidInput": (i) => i > 1000,
@@ -158,9 +158,9 @@ function roundToDecimalPlaces(number, places) {
     "1-2 mi away at 3 miles an hour"
   Output: Array of input numbers and standardized units
     [
-      { "inputNumber" : 1, "inputUnit" : " miles" },
-      { "inputNumber" : 2, "inputUnit" : " miles" },
-      { "inputNumber" : 3, "inputUnit" : " mph" }
+      { "imperial": { "number" : 1, "unit" : " miles" } },
+      { "imperial": { "number" : 2, "unit" : " miles" } },
+      { "imperial": { "number" : 3, "unit" : " mph" } }
     ]
 */
 function findPotentialConversions(input) {
@@ -193,13 +193,17 @@ function findPotentialConversions(input) {
               const in2 = range.substring(toIndex + 1).replace(/[^\d-\.]/g, '');
 
               potentialConversions.push({
-                "inputNumber" : in1, 
-                "inputUnit" : standardUnit
-              })
+                "imperial": {
+                  "number" : in1, 
+                  "unit" : standardUnit
+                }
+              });
               potentialConversions.push({
-                "inputNumber" : in2, 
-                "inputUnit" : standardUnit
-              })
+                "imperial": {
+                  "number" : in2, 
+                  "unit" : standardUnit
+                }
+              });
             } else {
               analytics.trackError([range, input, subreddit, postTitle])
             }
@@ -225,8 +229,10 @@ function findPotentialConversions(input) {
         .map(match => match.replace(/[^\d-\.]/g, ''))
         .forEach(match => {
           potentialConversions.push({
-            "inputNumber" : match, 
-            "inputUnit" : standardUnit
+            "imperial" : {
+              "number" : match, 
+              "unit" : standardUnit
+            }
           })
         });
     }
@@ -249,7 +255,7 @@ function findPotentialConversions(input) {
 
   return unitLookupList.reduce((memo, map) => {
     const conversions = findMatchForUnitsAndRemoveFromString(
-                          map['inputUnits'],
+                          map['imperialUnits'],
                           map['standardInputUnit'], 
                           processedInput);
     processedInput = conversions['string'];
@@ -257,7 +263,7 @@ function findPotentialConversions(input) {
 
     if (conversions['potentialConversions'].length > 0) {
       const weakConversions = findMatchForUnitsAndRemoveFromString(
-                                map['weakInputUnits'],
+                                map['weakImperialUnits'],
                                 map['standardInputUnit'], 
                                 processedInput);
 
@@ -267,27 +273,28 @@ function findPotentialConversions(input) {
     return memo;
   }, []);
 }
+
 /*
   Input: Array of input numbers and standardized units
     [
-      { "inputNumber" : 10000, "inputUnit" : " miles" },
-      { "inputNumber" : -2, "inputUnit" : " miles" },
-      { "inputNumber" : 3, "inputUnit" : " mph" }
+      { "imperial": { "number" : 10000, "unit" : " miles" } },
+      { "imperial": { "number" : -2, "unit" : " miles" } },
+      { "imperial": { "number" : 3, "unit" : " mph" } }
     ]
   Output: Valid conversions
     [
-      { "inputNumber" : 10000, "inputUnit" : " miles" },
-      { "inputNumber" : 3, "inputUnit" : " mph" }
+      { "imperial": { "number" : 10000, "unit" : " miles" } },
+      { "imperial": { "number" : 3, "unit" : " mph" } }
     ]
 */
 function filterConversions(potentialConversions) {
   const possiblyValidConversions = potentialConversions.filter(input => {
-    const inputUnit = input['inputUnit'];
-    const inputNumber = Number(input['inputNumber']);
+    const imperialUnit = input['imperial']['unit'];
+    const imperialNumber = Number(input['imperial']['number']);
 
-    const map = unitLookupMap[inputUnit];
+    const map = unitLookupMap[imperialUnit];
     if (map['isInvalidInput']) {
-      return map['isInvalidInput'](inputNumber) == false;
+      return map['isInvalidInput'](imperialNumber) == false;
 
     } else {
       return true;
@@ -295,12 +302,12 @@ function filterConversions(potentialConversions) {
   });
 
   const stronglyValidInput = possiblyValidConversions.filter(input => {
-    const inputUnit = input['inputUnit'];
-    const inputNumber = Number(input['inputNumber']);
+    const imperialUnit = input['imperial']['unit'];
+    const imperialNumber = Number(input['imperial']['number']);
 
-    const map = unitLookupMap[inputUnit];
+    const map = unitLookupMap[imperialUnit];
     if (map['isWeaklyValidInput']) {
-      return map['isWeaklyValidInput'](inputNumber) == false;
+      return map['isWeaklyValidInput'](imperialNumber) == false;
 
     } else {
       return true;

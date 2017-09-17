@@ -313,7 +313,7 @@ describe('conversion_helper', () => {
             inputUnit = unit;
           }
 
-          memo.push(createInputMap(inputNumber, inputUnit));
+          memo.push(createImperialMap(inputNumber, inputUnit));
 
           return memo;
         }, expectedOutput);
@@ -433,9 +433,9 @@ describe('conversion_helper', () => {
     context('Mix of invalid and weak conversions', () => {
       it('should not convert', () => {
         const potentialConversions = [
-          createInputMap(-10, " lb"),
-          createInputMap(10000, " lb"),
-          createInputMap(2, " feet"),
+          createImperialMap(-10, " lb"),
+          createImperialMap(10000, " lb"),
+          createImperialMap(2, " feet"),
         ];
 
         ch.filterConversions(potentialConversions).should.deep.equal([]);
@@ -446,16 +446,16 @@ describe('conversion_helper', () => {
     context('Mix of invalid, weak, and strong conversions', () => {
       it('should allow weak and strong conversions', () => {        
         const potentialConversions = [
-          createInputMap(3, " lb"),
-          createInputMap(-10, " lb"),
-          createInputMap(10000, " lb"),
-          createInputMap(2, " feet"),
+          createImperialMap(3, " lb"),
+          createImperialMap(-10, " lb"),
+          createImperialMap(10000, " lb"),
+          createImperialMap(2, " feet"),
         ];
         
         const expectedConversions = [
-          createInputMap(3, " lb"),
-          createInputMap(10000, " lb"),
-          createInputMap(2, " feet"),
+          createImperialMap(3, " lb"),
+          createImperialMap(10000, " lb"),
+          createImperialMap(2, " feet"),
         ];
 
         ch.filterConversions(potentialConversions).should.deep.equal(expectedConversions);
@@ -464,12 +464,12 @@ describe('conversion_helper', () => {
 
     function verifyFilterConversions(values, unit, expectedValues = []) {
       const potentialConversions = values.reduce((memo, value) => {
-        memo.push(createInputMap(value, unit));
+        memo.push(createImperialMap(value, unit));
         return memo;
       }, []);
       
       const expectedConversions = expectedValues.reduce((memo, value) => {
-        memo.push(createInputMap(value, unit));
+        memo.push(createImperialMap(value, unit));
         return memo;
       }, []);
 
@@ -478,10 +478,14 @@ describe('conversion_helper', () => {
   });
 });
 
-function createInputMap(value, unit) {
+function createImperialMap(value, unit) {
+  return { "imperial" : createMap(value, unit) };
+}
+
+function createMap(value, unit) {
   return {
-    "inputNumber" : value.toString(),
-    "inputUnit" : unit
+    "number" : value.toString(),
+    "unit" : unit
   };
 }
 
