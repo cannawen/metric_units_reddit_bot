@@ -27,14 +27,6 @@ describe('conversion_helper', () => {
       const comment = createComment("hello", "hello", "foo");
       ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
     });
-
-    function createComment(subreddit, title, text) {
-      return {
-        "subreddit" : subreddit,
-        "postTitle" : title,
-        "body" : text
-      }
-    }
   });
 
   describe('#findPotentialConversions()', () => {
@@ -329,6 +321,24 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('contains ignored keywords', () => {
+      it('should not convert', () => {
+        verifyPotentialConversions(
+          [
+            "size 11 feet",
+            "he plays basketball 32 mpg every day"
+          ],
+          undefined
+        );
+      });
+
+      context('contains non-ignored conversion', () => {
+        it('should convert non-ignored conversion', () => {
+          verifyPotentialConversions(["size 5 lbs and 11 feet"], [5], " lb");
+        });
+      });
+    });
+
     function verifyPotentialConversions(input, numbers, unit) {
       if (Array.isArray(input)) {
         input = " " + input.join("  ") + " ";
@@ -353,7 +363,8 @@ describe('conversion_helper', () => {
         }, expectedOutput);
       }
 
-      ch.findPotentialConversions(input).should.deep.equal(expectedOutput);
+      const comment = createComment("foobar", "foobar", input);
+      ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
     }
   });
 
@@ -576,3 +587,10 @@ function createMap(value, unit) {
   };
 }
 
+function createComment(subreddit, title, text) {
+  return {
+    "subreddit" : subreddit,
+    "postTitle" : title,
+    "body" : text
+  }
+}

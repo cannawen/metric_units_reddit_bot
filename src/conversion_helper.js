@@ -156,7 +156,7 @@ function shouldConvertComment(comment, regexArray) {
       { "imperial": { "number" : 3, "unit" : " mph" } }
     ]
 */
-function findPotentialConversions(input) {
+function findPotentialConversions(comment) {
   function findMatchForUnitsAndRemoveFromString(unitArray, standardUnit, string) {
     let potentialConversions = [];
     const unitRegex = rh.regexJoinToString(unitArray);
@@ -238,6 +238,8 @@ function findPotentialConversions(input) {
 
   //---------------------------------------------------------
 
+  let input = comment['body'];
+
   let processedInput = unitLookupList.reduce((memo, map) => {
     if (map["preprocess"]) {
       return map["preprocess"](input);
@@ -247,6 +249,10 @@ function findPotentialConversions(input) {
   }, input)
 
   return unitLookupList.reduce((memo, map) => {
+    if (!shouldConvertComment(comment, map['ignoredKeywords'])) {
+      return memo;
+    }
+
     const conversions = findMatchForUnitsAndRemoveFromString(
                           map['imperialUnits'],
                           map['standardInputUnit'], 
