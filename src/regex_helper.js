@@ -1,5 +1,9 @@
-function regexJoinToString(arr) {
-  return "(?:" + arr.map(el => el.source || el).join("|") + ")";
+function regexJoinToString(input) {
+  if (Array.isArray(input)) {
+    return "(?:" + input.map(el => el.source || el).join("|") + ")";
+  } else {
+    return "(?:" + input + ")";
+  }
 }
 
 function addCommas(number) {
