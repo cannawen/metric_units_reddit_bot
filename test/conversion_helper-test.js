@@ -283,6 +283,19 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('ranges', () => {
+      it('should find conversions', () => {
+        verifyPotentialConversions(
+          [
+            "1-2°f",
+            "-3 to -4°f"
+          ],
+          [1, 2, -3, -4],
+          "°F"
+        );
+      });
+    });
+
   });
 });
 

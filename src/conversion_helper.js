@@ -4,6 +4,7 @@ const unitLookupList = [
   {
     "inputUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
     "standardInputUnit" : " mpg (US)",
+    
     "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10 && i < 235,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
@@ -17,6 +18,7 @@ const unitLookupList = [
   {
     "inputUnits" : [/-?mph/, /miles (?:an|per) hour/],
     "standardInputUnit" : " mph",
+
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 10, 60, 88].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
@@ -26,8 +28,9 @@ const unitLookupList = [
   },
   {
     "inputUnits" : [/-?feet/, /-ft/, /-?foot/],
-    "standardInputUnit" : " feet",
     "weakInputUnits" : [/[']/, /ft/],
+    "standardInputUnit" : " feet",
+
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 2, 4, 6].indexOf(i) === -1 && !(i > 4 && i < 8),
     "inDisplay" : (i) => {
       if (i%1 == 0) {
@@ -73,8 +76,9 @@ const unitLookupList = [
   },
   {
     "inputUnits" : [/-in/, /-?inch/, /inches/],
-    "standardInputUnit" : " inches",
     "weakInputUnits" : [/["]/, /''/],
+    "standardInputUnit" : " inches",
+
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
@@ -88,8 +92,9 @@ const unitLookupList = [
   },
   {
     "inputUnits" : "-?lbs?",
-    "standardInputUnit" : " lb",
     "weakInputUnits" : [/-?pound/, /-?pounds/],
+    "standardInputUnit" : " lb",
+
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " lb"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
@@ -99,6 +104,7 @@ const unitLookupList = [
   {
     "inputUnits" : [/-?mi/, /-?miles?/],
     "standardInputUnit" : " miles",
+
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 8, 10].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
@@ -113,6 +119,7 @@ const unitLookupList = [
     "inputUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
     "weakInputUnits" : ["f", "-?degrees?"],
     "standardInputUnit" : "°F",
+
     "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius, Math.round),
@@ -125,23 +132,73 @@ function roundToDecimalPlaces(number, places) {
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
 }
 
+/*
+  Input: String
+    "1-2 mi away at 3 miles an hour"
+  Output: Array of input numbers and standardized units
+    [
+      { "inputNumber" : 1, "inputUnit" : " miles" },
+      { "inputNumber" : 2, "inputUnit" : " miles" },
+      { "inputNumber" : 3, "inputUnit" : " mph" }
+    ]
+*/
 function findPotentialConversions(input) {
-  function findMatchForUnitsAndRemoveFromString(matchUnit, standardUnit, string) {
+  function findMatchForUnitsAndRemoveFromString(unitArray, standardUnit, string) {
     let potentialConversions = [];
+    const unitRegex = rh.regexJoinToString(unitArray);
+
+    const rangeRegex = new RegExp(rh.startRegex 
+                         + rh.rangeRegex 
+                         + "(?= ?" 
+                           + unitRegex 
+                           + rh.endRegex 
+                         + ")",
+                       'gi');
+    const rangeMatches = string.match(rangeRegex);
+    if (rangeMatches) {
+      rangeMatches
+          .map(range => {
+            range = range.replace(/\(/, "\\(").replace(/\)/, "\\)");
+            string = string.replace(new RegExp(range + " ?" + unitRegex, 'gi'), '');
+            return range;
+          })
+          .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
+          .forEach(range => {
+            const match = range.match(/\d-(?=-?\d)/);
+            if (match) {
+              const toIndex = match.index + 1;
+
+              const in1 = range.substring(0, toIndex).replace(/[^\d-\.]/g, '');
+              const in2 = range.substring(toIndex + 1).replace(/[^\d-\.]/g, '');
+
+              potentialConversions.push({
+                "inputNumber" : in1, 
+                "inputUnit" : standardUnit
+              })
+              potentialConversions.push({
+                "inputNumber" : in2, 
+                "inputUnit" : standardUnit
+              })
+            } else {
+              analytics.trackError([range, input, subreddit, postTitle])
+            }
+          });
+    }
+
     const regex = new RegExp(rh.startRegex
                     + rh.numberRegex 
                     + "(?= ?" 
-                      + rh.regexJoinToString(matchUnit)
+                      + unitRegex
                       + rh.endRegex
-                    + ")"
-                  , 'gi');
-    const weakMatches = string.match(regex);
+                    + ")",
+                  'gi');
+    const matches = string.match(regex);
 
-    if (weakMatches) {
-      weakMatches
+    if (matches) {
+      matches
         .map(match => {
           match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
-          string = string.replace(new RegExp(match + " ?" + rh.regexJoinToString(matchUnit), 'gi'), '');
+          string = string.replace(new RegExp(match + " ?" + unitRegex, 'gi'), '');
           return match;
         })
         .map(match => match.replace(/[^\d-\.]/g, ''))
@@ -158,6 +215,8 @@ function findPotentialConversions(input) {
       'string' : string
     };
   }
+
+  //---------------------------------------------------------
 
   let processedInput = unitLookupList.reduce((memo, map) => {
     if (map["preprocess"]) {
