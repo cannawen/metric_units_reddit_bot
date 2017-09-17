@@ -3,8 +3,7 @@ const should = require('chai').should();
 const ch = require('../src/conversion_helper');
 
 describe('conversion_helper', () => {
-  describe('findPotentialConversions', () => {
-
+  describe('#findPotentialConversions()', () => {
     context('lbs', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
@@ -248,7 +247,7 @@ describe('conversion_helper', () => {
     context('negative numbers should be found', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
-          "-1°f",
+          "-1°F",
           [-1],
           "°F"
         );
@@ -259,8 +258,8 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1,000°f",
-            "1,000,000°f"
+            "1,000°F",
+            "1,000,000°F"
           ],
           [1000, 1000000],
           "°F"
@@ -272,10 +271,10 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1.1°f",
-            "-2.22°f",
-            "3,333.333°f",
-            "-44,444.4444°f"
+            "1.1°F",
+            "-2.22°F",
+            "3,333.333°F",
+            "-44,444.4444°F"
           ],
           [1.1, -2.22, 3333.333, -44444.4444],
           "°F"
@@ -287,8 +286,8 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1-2°f",
-            "-3 to -4°f"
+            "1-2°F",
+            "-3 to -4°F"
           ],
           [1, 2, -3, -4],
           "°F"
@@ -296,35 +295,193 @@ describe('conversion_helper', () => {
       });
     });
 
+    function verifyPotentialConversions(input, numbers, unit) {
+      if (Array.isArray(input)) {
+        input = " " + input.join("  ") + " ";
+      }
+      let expectedOutput = [];
+      if (Array.isArray(numbers)) {
+        expectedOutput = numbers.reduce((memo, el) => {
+          let inputNumber;
+          let inputUnit;
+
+          if (Array.isArray(el)) {
+            inputNumber = el[0];
+            inputUnit = el[1];
+          } else {
+            inputNumber = el.toString();
+            inputUnit = unit;
+          }
+
+          memo.push(createInputMap(inputNumber, inputUnit));
+
+          return memo;
+        }, expectedOutput);
+      }
+
+      ch.findPotentialConversions(input).should.deep.equal(expectedOutput);
+    }
+  });
+
+  describe('#filterConversions()', () => {
+    context('lbs', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([1, 2, 3], " lb", [1, 2, 3]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([0, -10], " lb", undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([100, 1000, 10000], " lb", undefined);
+      });
+    });
+
+    context('feet', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([3, 5, 7], " feet", [3, 5, 7]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([0, -10], " feet", undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([100, 1000, 10000], " feet", undefined);
+      });
+
+      it('should not allow common values', () => {
+        verifyFilterConversions([1, 2, 4, 6], " feet", undefined);
+      });
+    });
+
+    context('inches', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([1, 2, 3], " inches", [1, 2, 3]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([0, -10], " inches", undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([100, 1000, 10000], " inches", undefined);
+      });
+    });
+
+    context('miles', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([1, 2, 3], " miles", [1, 2, 3]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([0, -10], " miles", undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([100, 1000, 10000], " miles", undefined);
+      });
+
+      it('should not allow common values', () => {
+        verifyFilterConversions([8], " miles", undefined);
+      });
+    });
+
+    context('mph', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([1, 2, 3], " mph", [1, 2, 3]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([0, -10], " mph", undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([100, 1000, 10000], " mph", undefined);
+      });
+
+      it('should not allow common values', () => {
+        verifyFilterConversions([60, 88], " mph", undefined);
+      });
+    });
+
+    context('mpg', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([1, 2, 3], " mpg (US)", [1, 2, 3]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([0, -10], " mpg (US)", undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([100, 1000, 10000], " mpg (US)", undefined);
+      });
+    });
+
+    context('°F', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([1, 2, 3], "°F", [1, 2, 3]);
+      });
+
+      it('should not allow when values are too big', () => {
+        verifyFilterConversions([1001, 78639], "°F", undefined);
+      });
+    });
+
+    context('Mix of invalid and weak conversions', () => {
+      it('should not convert', () => {
+        const potentialConversions = [
+          createInputMap(-10, " lb"),
+          createInputMap(10000, " lb"),
+          createInputMap(2, " feet"),
+        ];
+
+        ch.filterConversions(potentialConversions).should.deep.equal([]);
+
+      });
+    });
+
+    context('Mix of invalid, weak, and strong conversions', () => {
+      it('should allow weak and strong conversions', () => {        
+        const potentialConversions = [
+          createInputMap(3, " lb"),
+          createInputMap(-10, " lb"),
+          createInputMap(10000, " lb"),
+          createInputMap(2, " feet"),
+        ];
+        
+        const expectedConversions = [
+          createInputMap(3, " lb"),
+          createInputMap(10000, " lb"),
+          createInputMap(2, " feet"),
+        ];
+
+        ch.filterConversions(potentialConversions).should.deep.equal(expectedConversions);
+      });
+    });
+
+    function verifyFilterConversions(values, unit, expectedValues = []) {
+      const potentialConversions = values.reduce((memo, value) => {
+        memo.push(createInputMap(value, unit));
+        return memo;
+      }, []);
+      
+      const expectedConversions = expectedValues.reduce((memo, value) => {
+        memo.push(createInputMap(value, unit));
+        return memo;
+      }, []);
+
+      ch.filterConversions(potentialConversions).should.deep.equal(expectedConversions);
+    }
   });
 });
 
-function verifyPotentialConversions(input, numbers, unit) {
-  if (Array.isArray(input)) {
-    input = " " + input.join("  ") + " ";
-  }
-  let expectedOutput = [];
-  if (Array.isArray(numbers)) {
-    expectedOutput = numbers.reduce((memo, el) => {
-      let inputNumber;
-      let inputUnit;
-
-      if (Array.isArray(el)) {
-        inputNumber = el[0];
-        inputUnit = el[1];
-      } else {
-        inputNumber = el.toString();
-        inputUnit = unit;
-      }
-
-      memo.push({
-        "inputNumber" : inputNumber,
-        "inputUnit" : inputUnit
-      });
-
-      return memo;
-    }, expectedOutput);
-  }
-
-  ch.findPotentialConversions(input).should.deep.equal(expectedOutput);
+function createInputMap(value, unit) {
+  return {
+    "inputNumber" : value.toString(),
+    "inputUnit" : unit
+  };
 }
+

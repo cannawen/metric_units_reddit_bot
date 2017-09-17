@@ -1,11 +1,20 @@
 const rh = require('./regex_helper');
 
+function isZeroOrNegative(i) {
+  return i <= 0;
+}
+
+function isHyperbole(i) {
+  return i.toString().match(/^100+(?:\.0+)?$/) !== null;
+}
+
 const unitLookupList = [
   {
     "inputUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
     "standardInputUnit" : " mpg (US)",
-    
-    "shouldConvert" : (i) => isNotHyperbole(i) && i >= 10 && i < 235,
+    "isInvalidInput": isZeroOrNegative,
+    "isWeaklyValidInput": isHyperbole,
+
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, currRound(5)),
@@ -18,8 +27,9 @@ const unitLookupList = [
   {
     "inputUnits" : [/-?mph/, /miles (?:an|per) hour/],
     "standardInputUnit" : " mph",
+    "isInvalidInput": isZeroOrNegative,
+    "isWeaklyValidInput": (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
 
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 10, 60, 88].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, currRound(5)),
@@ -30,8 +40,9 @@ const unitLookupList = [
     "inputUnits" : [/-?feet/, /-ft/, /-?foot/],
     "weakInputUnits" : [/[']/, /ft/],
     "standardInputUnit" : " feet",
+    "isInvalidInput": isZeroOrNegative,
+    "isWeaklyValidInput": (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
 
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 2, 4, 6].indexOf(i) === -1 && !(i > 4 && i < 8),
     "inDisplay" : (i) => {
       if (i%1 == 0) {
         return userFacingValueAndUnit(i.split('.')[0], " ft");
@@ -78,8 +89,9 @@ const unitLookupList = [
     "inputUnits" : [/-in/, /-?inch/, /inches/],
     "weakInputUnits" : [/["]/, /''/],
     "standardInputUnit" : " inches",
+    "isInvalidInput": isZeroOrNegative,
+    "isWeaklyValidInput": isHyperbole,
 
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm, currRound(5)),
@@ -94,8 +106,9 @@ const unitLookupList = [
     "inputUnits" : "-?lbs?",
     "weakInputUnits" : [/-?pound/, /-?pounds/],
     "standardInputUnit" : " lb",
+    "isInvalidInput": isZeroOrNegative,
+    "isWeaklyValidInput": isHyperbole,
 
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " lb"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " kg", lbToKg, currRound(5)),
@@ -104,8 +117,9 @@ const unitLookupList = [
   {
     "inputUnits" : [/-?mi/, /-?miles?/],
     "standardInputUnit" : " miles",
+    "isInvalidInput": isZeroOrNegative,
+    "isWeaklyValidInput": (i) => isHyperbole(i) || i === 8,
 
-    "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 8, 10].indexOf(i) === -1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm, currRound(5)),
@@ -119,13 +133,20 @@ const unitLookupList = [
     "inputUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
     "weakInputUnits" : ["f", "-?degrees?"],
     "standardInputUnit" : "°F",
+    "isInvalidInput": (i) => false,
+    "isWeaklyValidInput": (i) => i > 1000,
 
     "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
     "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius, Math.round),
     "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°C", fahrenheitToCelsius, Math.round)
   }
-]
+];
+
+const unitLookupMap = unitLookupList.reduce((memo, map) => {
+  memo[map['standardInputUnit']] = map;
+  return memo;
+}, {});
 
 function roundToDecimalPlaces(number, places) {
   const multiplier = Math.pow(10, places);
@@ -246,7 +267,54 @@ function findPotentialConversions(input) {
     return memo;
   }, []);
 }
+/*
+  Input: Array of input numbers and standardized units
+    [
+      { "inputNumber" : 10000, "inputUnit" : " miles" },
+      { "inputNumber" : -2, "inputUnit" : " miles" },
+      { "inputNumber" : 3, "inputUnit" : " mph" }
+    ]
+  Output: Valid conversions
+    [
+      { "inputNumber" : 10000, "inputUnit" : " miles" },
+      { "inputNumber" : 3, "inputUnit" : " mph" }
+    ]
+*/
+function filterConversions(potentialConversions) {
+  const possiblyValidConversions = potentialConversions.filter(input => {
+    const inputUnit = input['inputUnit'];
+    const inputNumber = Number(input['inputNumber']);
+
+    const map = unitLookupMap[inputUnit];
+    if (map['isInvalidInput']) {
+      return map['isInvalidInput'](inputNumber) == false;
+
+    } else {
+      return true;
+    }
+  });
+
+  const stronglyValidInput = possiblyValidConversions.filter(input => {
+    const inputUnit = input['inputUnit'];
+    const inputNumber = Number(input['inputNumber']);
+
+    const map = unitLookupMap[inputUnit];
+    if (map['isWeaklyValidInput']) {
+      return map['isWeaklyValidInput'](inputNumber) == false;
+
+    } else {
+      return true;
+    }
+  })
+
+  if (stronglyValidInput.length == 0) {
+    return [];
+  } else {
+    return possiblyValidConversions;
+  }
+}
 
 module.exports = {
-  "findPotentialConversions" : findPotentialConversions
+  "findPotentialConversions" : findPotentialConversions,
+  "filterConversions" : filterConversions
 }
