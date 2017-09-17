@@ -1,5 +1,12 @@
 const rh = require('./regex_helper');
 
+function createMap(value, unit) {
+  return {
+    "number" : value.toString(),
+    "unit" : unit
+  };
+}
+
 function isZeroOrNegative(i) {
   return i <= 0;
 }
@@ -12,13 +19,9 @@ const unitLookupList = [
   {
     "imperialUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
     "standardInputUnit" : " mpg (US)",
-    "isInvalidInput": isZeroOrNegative,
-    "isWeaklyValidInput": isHyperbole,
-
-    "inDisplay" : (i) => userFacingValueAndUnit(i, " mpg (US)"),
-    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mpg (US)"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " L/100km", mpgToLper100km, currRound(5)),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " L/100km", mpgToLper100km, currRound(5)),
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : isHyperbole,
+    "conversionFunction" : (i) => createMap(235.215 / i, " L/100km"),
     "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
                          "nba", "nhl", "nfl", "sport",
                          "play", "game",
@@ -27,38 +30,18 @@ const unitLookupList = [
   {
     "imperialUnits" : [/-?mph/, /miles (?:an|per) hour/],
     "standardInputUnit" : " mph",
-    "isInvalidInput": isZeroOrNegative,
-    "isWeaklyValidInput": (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
-
-    "inDisplay" : (i) => userFacingValueAndUnit(i, " mph"),
-    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " mph"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " km/h", milesToKm, currRound(5)),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km/h", milesToKm, currRound(5)),
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
+    "conversionFunction" : (i) => createMap(i * 1.609344, " km/h"),
     "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
     "imperialUnits" : [/-?feet/, /-ft/, /-?foot/],
     "weakImperialUnits" : [/[']/, /ft/],
     "standardInputUnit" : " feet",
-    "isInvalidInput": isZeroOrNegative,
-    "isWeaklyValidInput": (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
-
-    "inDisplay" : (i) => {
-      if (i%1 == 0) {
-        return userFacingValueAndUnit(i.split('.')[0], " ft");
-      } else {
-        return convertDecimalFeetToFeetAndInches(i);
-      }
-    },
-    "inDisplayRange" : (i, j) => {
-      if (i%1 == 0 && j%1 == 0) {
-        return userFacingValueAndUnitRange(i.split('.')[0], j.split('.')[0], " ft");
-      } else {
-        return convertDecimalFeetToFeetAndInches(i) + " to " + convertDecimalFeetToFeetAndInches(j);
-      }
-    },
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " metres", feetToMetres, currRound(5)),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " metres", feetToMetres, currRound(5)),
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
+    "conversionFunction" : (i) => createMap(i * 0.3048, " metres"),
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
         new RegExp(( rh.startRegex 
@@ -89,13 +72,9 @@ const unitLookupList = [
     "imperialUnits" : [/-in/, /-?inch/, /inches/],
     "weakImperialUnits" : [/["]/, /''/],
     "standardInputUnit" : " inches",
-    "isInvalidInput": isZeroOrNegative,
-    "isWeaklyValidInput": isHyperbole,
-
-    "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
-    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " cm", inchesToCm, currRound(5)),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " cm", inchesToCm, currRound(5)),
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : isHyperbole,
+    "conversionFunction" : (i) => createMap(i * 2.54, " cm"),
     "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
                         "ipad", "iphone", "phone", "tablet", "tablets",
                         "apple", "windows", "linux", "android", "ios",
@@ -106,24 +85,17 @@ const unitLookupList = [
     "imperialUnits" : "-?lbs?",
     "weakImperialUnits" : [/-?pound/, /-?pounds/],
     "standardInputUnit" : " lb",
-    "isInvalidInput": isZeroOrNegative,
-    "isWeaklyValidInput": isHyperbole,
-
-    "inDisplay" : (i) => userFacingValueAndUnit(i, " lb"),
-    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " kg", lbToKg, currRound(5)),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " kg", lbToKg, currRound(5)),
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : isHyperbole,
+    "conversionFunction" : (i) => createMap(i * 0.453592, " kg"),
+    "ignoredKeywords" : ["football", "soccer", "fifa"]
   },
   {
     "imperialUnits" : [/-?mi/, /-?miles?/],
     "standardInputUnit" : " miles",
-    "isInvalidInput": isZeroOrNegative,
-    "isWeaklyValidInput": (i) => isHyperbole(i) || i === 8,
-
-    "inDisplay" : (i) => userFacingValueAndUnit(i, " miles"),
-    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " miles"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, " km", milesToKm, currRound(5)),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " km", milesToKm, currRound(5)),
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
+    "conversionFunction" : (i) => createMap(i * 1.609344, " km"),
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
@@ -133,13 +105,9 @@ const unitLookupList = [
     "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
     "weakImperialUnits" : ["f", "-?degrees?"],
     "standardInputUnit" : "°F",
-    "isInvalidInput": (i) => false,
-    "isWeaklyValidInput": (i) => i > 1000,
-
-    "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
-    "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
-    "outDisplay" : (i) => userFacingValueAndUnit(i, "°C", fahrenheitToCelsius, Math.round),
-    "outDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°C", fahrenheitToCelsius, Math.round)
+    "isInvalidInput" : (i) => false,
+    "isWeaklyValidInput" : (i) => i > 1000,
+    "conversionFunction" : (i) => createMap((i - 32) * 5/9, "°C")
   }
 ];
 
@@ -151,6 +119,31 @@ const unitLookupMap = unitLookupList.reduce((memo, map) => {
 function roundToDecimalPlaces(number, places) {
   const multiplier = Math.pow(10, places);
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
+}
+
+const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal",
+
+                      "america", "usa", "united states",
+
+                      "dick", "penis", "dong", "cock", "member", "phallus", "wood", "willy", "pecker", "manhood", "boner", "junk", "wiener", "shaft", "dildo",
+                      "genitalia", "clit", "labia", "pussy", "vagina", "snatch",
+                      "ass", "anus", "anal", "butt", "tit", "kink", "bdsm", "blow job", "jizz", "cum",
+                      "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest", "piv", "milf"]
+
+function shouldConvertComment(comment, regexArray) {
+  const input = comment['body'];
+  const postTitle = comment['postTitle'];
+  const subreddit = comment['subreddit'];
+
+ const ignoredWordRegex = new RegExp(rh.startRegex
+    + rh.regexJoinToString(regexArray)
+    + rh.endRegex
+  , 'i');
+
+  const hasIgnoredKeyword = input.match(ignoredWordRegex) 
+    || postTitle.match(ignoredWordRegex) 
+    || subreddit.match(new RegExp(rh.regexJoinToString(regexArray), 'i'));
+  return hasIgnoredKeyword === null;
 }
 
 /*
@@ -321,7 +314,45 @@ function filterConversions(potentialConversions) {
   }
 }
 
+/*
+  Input: imperial conversions
+    [
+      { "imperial" : { "number" : 10000, "unit" : " miles" } },
+      { "imperial" : { "number" : 30, "unit" : " mpg" } }
+    ]
+  Output: metric and imperial conversions
+    [
+      { 
+        "imperial" : 
+          { "number" : 10000, "unit" : " miles" }, 
+        "metric": 
+          { "number" : 16093.44, "unit" : " km" } 
+      },
+      { 
+        "imperial" : 
+          { "number" : 30, "unit" : " mpg" }, 
+        "metric" : [
+          { "number" : 12.7543, "unit" : " L/km" },
+          { "number" : 7.84049, "unit" : "L/100km" } 
+        ]
+      }
+    ]
+*/
+function calculateMetric(imperialInputs) {
+  return imperialInputs.map(input => {
+    const imperialUnit = input['imperial']['unit'];
+    const imperialNumber = Number(input['imperial']['number']);
+
+    const map = unitLookupMap[imperialUnit];
+    input['metric'] =  map['conversionFunction'](imperialNumber)
+    return input;
+  });
+}
+
 module.exports = {
+  globalIgnore,
+  "shouldConvertComment" : shouldConvertComment,
   "findPotentialConversions" : findPotentialConversions,
-  "filterConversions" : filterConversions
+  "filterConversions" : filterConversions,
+  "calculateMetric" : calculateMetric
 }

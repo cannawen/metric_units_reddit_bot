@@ -3,6 +3,40 @@ const should = require('chai').should();
 const ch = require('../src/conversion_helper');
 
 describe('conversion_helper', () => {
+  describe('#shouldConvertComment()', () => {
+    it('should convert if keywords do not match', () => {
+      const ignoredKeywords = ["foo", "bar"];
+      const comment = createComment("hello", "foobar", "foobar");
+      ch.shouldConvertComment(comment, ignoredKeywords).should.be.true;
+    });
+
+    it('should not convert if subreddit matches', () => {
+      const ignoredKeywords = ["foo", "bar"];
+      const comment = createComment("foobar", "hello", "hello");
+      ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
+    });
+
+    it('should not convert if post title matches', () => {
+      const ignoredKeywords = ["foo", "bar"];
+      const comment = createComment("hello", "This the bar stuff", "hello");
+      ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
+    });
+
+    it('should not convert if body matches', () => {
+      const ignoredKeywords = ["foo", "bar"];
+      const comment = createComment("hello", "hello", "foo");
+      ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
+    });
+
+    function createComment(subreddit, title, text) {
+      return {
+        "subreddit" : subreddit,
+        "postTitle" : title,
+        "body" : text
+      }
+    }
+  });
+
   describe('#findPotentialConversions()', () => {
     context('lbs', () => {
       it('should find conversions', () => {
@@ -474,6 +508,59 @@ describe('conversion_helper', () => {
       }, []);
 
       ch.filterConversions(potentialConversions).should.deep.equal(expectedConversions);
+    }
+  });
+
+  describe('#calculateMetric()', () => {
+    context('lbs', () => {
+      it('should convert', () => {
+        verifyConversion(1, " lb", 0.453592, " kg");
+      });
+    });
+
+    context('feet', () => {
+      it('should convert', () => {
+        verifyConversion(1, " feet", 0.3048, " metres");
+      });
+    });
+
+    context('inches', () => {
+      it('should convert', () => {
+        verifyConversion(1, " inches", 2.54, " cm");
+      });
+    });
+
+    context('miles', () => {
+      it('should convert', () => {
+        verifyConversion(1, " miles", 1.609344, " km");
+      });
+    });
+
+    context('mph', () => {
+      it('should convert', () => {
+        verifyConversion(1, " mph", 1.609344, " km/h");
+      });
+    });
+
+    context('mpg', () => {
+      it('should convert', () => {
+        verifyConversion(1, " mpg (US)", 235.215, " L/100km");
+      });
+    });
+
+    context('°F', () => {
+      it('should convert', () => {
+        verifyConversion(32, "°F", 0, "°C");
+      });
+    });
+
+    function verifyConversion(imperialNumber, imperialUnit, metricNumber, metricUnit) {
+      const imperialMap = createImperialMap(imperialNumber, imperialUnit);
+
+      const expectedOutput = Object.assign({}, imperialMap);
+      expectedOutput['metric'] = { "number" : metricNumber.toString(), "unit" : metricUnit };
+
+      ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput])
     }
   });
 });
