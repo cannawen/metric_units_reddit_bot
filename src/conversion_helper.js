@@ -27,7 +27,7 @@ const unitLookupList = [
   {
     "inputUnits" : [/-?feet/, /-ft/, /-?foot/],
     "standardInputUnit" : " feet",
-    "weakUnitsRegex" : rh.regexJoinToString([/[']/, /ft/]),
+    "weakInputUnits" : [/[']/, /ft/],
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && [1, 2, 4, 6].indexOf(i) === -1 && !(i > 4 && i < 8),
     "inDisplay" : (i) => {
       if (i%1 == 0) {
@@ -74,7 +74,7 @@ const unitLookupList = [
   {
     "inputUnits" : [/-in/, /-?inch/, /inches/],
     "standardInputUnit" : " inches",
-    "weakUnitsRegex" : rh.regexJoinToString([/["]/, /''/]),
+    "weakInputUnits" : [/["]/, /''/],
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0 && i != 1,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " inches"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " inches"),
@@ -89,7 +89,7 @@ const unitLookupList = [
   {
     "inputUnits" : "-?lbs?",
     "standardInputUnit" : " lb",
-    "weakUnitsRegex" : rh.regexJoinToString([/-?pound/, /pounds/]),
+    "weakInputUnits" : [/-?pound/, /-?pounds/],
     "shouldConvert" : (i) => isNotHyperbole(i) && i > 0,
     "inDisplay" : (i) => userFacingValueAndUnit(i, " lb"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, " lb"),
@@ -111,6 +111,7 @@ const unitLookupList = [
   },
   {
     "inputUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
+    "weakInputUnits" : ["f", "-?degrees?"],
     "standardInputUnit" : "°F",
     "inDisplay" : (i) => userFacingValueAndUnit(i, "°F"),
     "inDisplayRange" : (i, j) => userFacingValueAndUnitRange(i, j, "°F"),
@@ -125,6 +126,39 @@ function roundToDecimalPlaces(number, places) {
 }
 
 function findPotentialConversions(input) {
+  function findMatchForUnitsAndRemoveFromString(matchUnit, standardUnit, string) {
+    let potentialConversions = [];
+    const regex = new RegExp(rh.startRegex
+                    + rh.numberRegex 
+                    + "(?= ?" 
+                      + rh.regexJoinToString(matchUnit)
+                      + rh.endRegex
+                    + ")"
+                  , 'gi');
+    const weakMatches = string.match(regex);
+
+    if (weakMatches) {
+      weakMatches
+        .map(match => {
+          match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
+          string = string.replace(new RegExp(match + " ?" + rh.regexJoinToString(matchUnit), 'gi'), '');
+          return match;
+        })
+        .map(match => match.replace(/[^\d-\.]/g, ''))
+        .forEach(match => {
+          potentialConversions.push({
+            "inputNumber" : match, 
+            "inputUnit" : standardUnit
+          })
+        });
+    }
+
+    return {
+      'potentialConversions' : potentialConversions,
+      'string' : string
+    };
+  }
+
   let processedInput = unitLookupList.reduce((memo, map) => {
     if (map["preprocess"]) {
       return map["preprocess"](input);
@@ -132,30 +166,23 @@ function findPotentialConversions(input) {
       return memo;
     }
   }, input)
-  
+
   return unitLookupList.reduce((memo, map) => {
-    const numberAndUnitRegex = new RegExp(rh.startRegex
-                  + rh.numberRegex 
-                  + "(?= ?" 
-                    + rh.regexJoinToString(map['inputUnits'])
-                    + rh.endRegex
-                  + ")"
-                , 'gi');
-    const matches = processedInput.match(numberAndUnitRegex);
-    if (matches) {
-      matches
-        .map(match => {
-          match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
-          processedInput = processedInput.replace(new RegExp(match + " ?" + rh.regexJoinToString(map['inputUnits']), 'gi'), '');
-          return match;
-        })
-        .map(match => match.replace(/[^\d-\.]/g, ''))
-        .forEach(match => {
-          memo.push({
-            "inputNumber" : match, 
-            "inputUnit" : map["standardInputUnit"]
-          })
-        });
+    const conversions = findMatchForUnitsAndRemoveFromString(
+                          map['inputUnits'],
+                          map['standardInputUnit'], 
+                          processedInput);
+    processedInput = conversions['string'];
+    memo = memo.concat(conversions['potentialConversions']);
+
+    if (conversions['potentialConversions'].length > 0) {
+      const weakConversions = findMatchForUnitsAndRemoveFromString(
+                                map['weakInputUnits'],
+                                map['standardInputUnit'], 
+                                processedInput);
+
+      processedInput = weakConversions['string'];
+      memo = memo.concat(weakConversions['potentialConversions']);
     }
     return memo;
   }, []);

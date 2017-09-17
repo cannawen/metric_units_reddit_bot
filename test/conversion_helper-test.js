@@ -20,6 +20,25 @@ describe('conversion_helper', () => {
           " lb"
         );
       });
+
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          verifyPotentialConversions(
+            [
+              "1lb",
+              // Less confident:
+              "2pound",
+              "3pounds",
+              "4 pound",
+              "5 pounds",
+              "6-pound",
+              "7-pounds"
+            ],
+            [1, 2, 3, 4, 5, 6, 7],
+            " lb"
+          );
+        }); 
+      });
     });
 
     context('feet', () => {
@@ -37,6 +56,20 @@ describe('conversion_helper', () => {
           [1, 2, 3, 4, 5, 6, 7],
           " feet"
         );
+      });
+
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          verifyPotentialConversions(
+            [
+              "1feet",
+              "2'",
+              "3ft"
+            ],
+            [1, 2, 3],
+            " feet"
+          );
+        }); 
       });
 
       context('and inches', () => {
@@ -76,6 +109,19 @@ describe('conversion_helper', () => {
           [1, 2, 3, 4, 5, 6],
           " inches"
         );
+      });
+
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          verifyPotentialConversions(
+            [
+              "1inch",
+              "2\""
+            ],
+            [1, 2],
+            " inches"
+          );
+        }); 
       });
     });
 
@@ -162,6 +208,27 @@ describe('conversion_helper', () => {
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
           "°F"
         );
+      });
+
+
+      context('when confident about one conversion', () => {
+        it('should convert those with less confidence', () => {
+          verifyPotentialConversions(
+            [
+              "1°f",
+              "2F",
+              "3degree",
+              "4degrees",
+              "5 F",
+              "6 degree",
+              "7 degrees",
+              "8-degree",
+              "9-degrees"
+            ],
+            [1, 2, 3, 4, 5, 6, 7, 8, 9],
+            "°F"
+          );
+        }); 
       });
     });
 
