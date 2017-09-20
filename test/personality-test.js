@@ -99,6 +99,7 @@ describe('Personality', () => {
         verify("mr bot, you are funny", "Actually, I prefer the female gender pronoun. Thanks.");
         verify("good boy!", "Actually, I prefer the female gender pronoun. Thanks.");
         verify("bad boy.", "Actually, I prefer the female gender pronoun. Thanks.");
+        verify("Yes mrs bot", undefined);
       });
     });
 

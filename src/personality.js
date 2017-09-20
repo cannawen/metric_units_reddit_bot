@@ -62,7 +62,7 @@ function robotReply(message) {
         [3, "Actually, I prefer the female gender pronoun. Thanks."],
         "Actually, my gender identity is non-binary. Thanks."
       ],
-      "regex" : /mr.? bot|mister bot|good boy|bad boy/i
+      "regex" : /mr\.? bot|mister bot|good boy|bad boy/i
     },
     {
       "description" : "good human",
