@@ -113,7 +113,7 @@ const unitLookupList = [
     "isInvalidInput" : (i) => false,
     "isWeaklyValidInput" : (i) => i > 1000,
     "conversionFunction" : (i) => createMap((i - 32) * 5/9, "°C"),
-    "ignoredKeywords" : ["°C", "degrees? c(?:elsius)?", "kelvin"]
+    "ignoredKeywords" : [/\d*°C/, "degrees? c(?:elsius)?", "kelvin"]
   }
 ];
 
@@ -156,7 +156,7 @@ function shouldConvertComment(comment, regexArray = globalIgnore) {
   const postTitle = comment['postTitle'];
   const subreddit = comment['subreddit'];
 
- const ignoredWordRegex = new RegExp(rh.startRegex
+  const ignoredWordRegex = new RegExp(rh.startRegex
     + rh.regexJoinToString(regexArray)
     + rh.endRegex
   , 'i');

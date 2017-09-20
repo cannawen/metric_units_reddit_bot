@@ -202,8 +202,8 @@ describe('Converter', () => {
     context('comment already contains conversion', () => {
       it('should not convert', () => {
         testConvert("About 200 miles (320 km) away", {});
-        testConvert("About 200 miles or 300 kilometers away", {});
-        testConvert("About 200 miles or some km away", {});
+        testConvert("About 200 miles or some kilometers away", {});
+        testConvert("About 200 degrees F or 100°C", {});
       });
     });
 
