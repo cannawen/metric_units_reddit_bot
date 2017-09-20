@@ -13,7 +13,7 @@ This is a javascript app built with [Node.js](https://nodejs.org/en/), and all o
 
 The app starts in `bot.js`, this file is responsible for repeatedly checking for new comments and replying to messages in an infinite loop. It uses the following modules:
 
-`converter.js` and `units_lookup_map.js` are responsible for taking a message, and deciding which imperial units should be converted to which metric units (if any).
+`converter.js` and `conversion_helper.js` are responsible for taking a message, and deciding which imperial units should be converted to which metric units (if any).
 
 `reply_maker.js` constructs reply strings to comment
 

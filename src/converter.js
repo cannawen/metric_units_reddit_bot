@@ -1,168 +1,26 @@
 const analytics = require('./analytics');
 const rh = require('./regex_helper');
-
-const unitsLookupMap = require('./units_lookup_map').unitsLookupMap;
+const ch = require('./conversion_helper');
 
 function conversions(comment) {
-  const input = comment['body'];
-  const subreddit = comment['subreddit'];
-  const postTitle = comment['postTitle'];
-  
-  let matches = highConfidenceMatches(input, subreddit, postTitle);
-
-  if (Object.keys(matches).length > 0) {
-    matches = Object.assign(matches, lowConfidenceMatches(input));
+  if (!ch.shouldConvertComment(comment)) {
+    return {};
   }
 
-  return matches;
-}
-
-function lowConfidenceMatches(input) {
-  return Object.keys(unitsLookupMap)
-    //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
-    .sort((a, b) => b.length - a.length)
-    .reduce((memo, key) => {
-      const map = unitsLookupMap[key];
-
-      if (map['preprocess']) {
-        input = map['preprocess'](input);
-      }
-
-      const completeRangeRegex = new RegExp(rh.startRegex + rh.rangeRegex + "(?= ?" + map['weakUnitsRegex'] + rh.endRegex + ")", 'gi');
-      const rangeMatches = input.match(completeRangeRegex);
-      if (rangeMatches) {
-        rangeMatches
-          .map(range => {
-            range = range.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace(new RegExp(range + " ?" + map['weakUnitsRegex'], 'gi'), '');
-            return range;
-          })
-          .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
-          .forEach(range => {
-            const toIndex = range.match(/\d-(?=-?\d)/).index + 1;
-
-            const in1 = range.substring(0, toIndex);
-            const in2 = range.substring(toIndex + 1);
-
-            memo[map['inDisplayRange'](in1, in2)] = map['outDisplayRange'](in1, in2);
-          });
-      }
-
-      const completeNumberRegex = new RegExp(rh.startRegex + rh.numberRegex + "(?= ?" + map['weakUnitsRegex'] + rh.endRegex + ")", 'gi');
-      const numberMatches = input.match(completeNumberRegex);
-      if (numberMatches) {
-        numberMatches
-          .map(match => {
-            match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace(new RegExp(match + " ?" + map['weakUnitsRegex'], 'gi'), '');
-            return match;
-          })
-          .map(match => match.replace(/[^\d.-]/g, ''))
-          .forEach(number => {
-            const outValueAndUnit = map['outDisplay'](number);
-            const inValueAndUnit = map['inDisplay'](number);
-            
-            memo[inValueAndUnit] = outValueAndUnit;
-          });
-      }
-      return memo;
-    }, {});
-}
-
-function highConfidenceMatches(originalInput, subreddit, postTitle) {
-  let input = originalInput;
-  return Object.keys(unitsLookupMap)
-    //Workaround: longest key is processed first so "miles per hour" will not be read as "miles"
-    .sort((a, b) => b.length - a.length)
-    .reduce((memo, key) => {
-      const map = unitsLookupMap[key];
-
-      if (map['preprocess']) {
-        input = map['preprocess'](input);
-      }
-
-      const completeRangeRegex = new RegExp(rh.startRegex + rh.rangeRegex + "(?= ?" + map['unitRegex'] + rh.endRegex + ")", 'gi');
-      const rangeMatches = input.match(completeRangeRegex);
-      if (rangeMatches) {
-        rangeMatches
-          .map(range => {
-            range = range.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace(new RegExp(range + " ?" + map['unitRegex'], 'gi'), '');
-            return range;
-          })
-          .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
-          .forEach(range => {
-            const match = range.match(/\d-(?=-?\d)/);
-            if (match) {
-              const toIndex = match.index + 1;
-
-              const in1 = range.substring(0, toIndex);
-              const in2 = range.substring(toIndex + 1);
-
-              memo[map['inDisplayRange'](in1, in2)] = map['outDisplayRange'](in1, in2);
-            } else {
-              analytics.trackError([range, input, subreddit, postTitle])
-            }
-          });
-      }
-
-      const completeNumberRegex = new RegExp(rh.startRegex + rh.numberRegex + "(?= ?" + map['unitRegex'] + rh.endRegex + ")", 'gi');
-      const numberMatches = input.match(completeNumberRegex);
-      if (numberMatches) {
-        numberMatches
-          .map(match => {
-            match = match.replace(/\(/, "\\(").replace(/\)/, "\\)");
-            input = input.replace(new RegExp((match + " ?" + map['unitRegex']), 'gi'), '');
-            return match;
-          })
-          .map(match => match.replace(/[^\d.-]/g, ''))
-          .forEach(number => {
-            const outValueAndUnit = map['outDisplay'](number);
-            const inValueAndUnit = map['inDisplay'](number);
-
-            function shouldProcessNumber(number) {
-              const outNumber = outValueAndUnit.replace(/[^\d\.-]/g, '');
-              const alreadyConvertedInComment = input.match(outNumber);
-              let containsIgnoredKeywork = false;
-
-              if (map['ignoredKeywords']) {
-                const ignoredWordRegex = new RegExp(rh.startRegex
-                  + rh.regexJoinToString(map['ignoredKeywords'])
-                  + rh.endRegex
-                , 'i');
-
-                containsIgnoredKeywork = input.match(ignoredWordRegex)
-                containsIgnoredKeywork = postTitle.match(ignoredWordRegex) || containsIgnoredKeywork
-                containsIgnoredKeywork = subreddit.match(new RegExp(rh.regexJoinToString(map['ignoredKeywords']), 'i')) || containsIgnoredKeywork
-              }
-
-              const alreadyConvertedInMap = Object.keys(memo).reduce((m,k) => {
-                const value = inValueAndUnit.replace(/[^'"\d\.,-]/g,'');
-                const unit = inValueAndUnit.replace(value, '');
-                return k.match(new RegExp("(^| )" + value + ".*" + unit), 'gi') !== null || m;
-              }, false);
-
-              let isValidConversionNumber = true;
-              if (map['shouldConvert']) {
-                isValidConversionNumber = map['shouldConvert'](Number(number));
-              }
-
-              const startsWithQuote = originalInput.match(/(?:^|\n)(?:>|&gt;)/);
-
-              return isValidConversionNumber 
-                && !alreadyConvertedInComment 
-                && !alreadyConvertedInMap 
-                && !containsIgnoredKeywork 
-                && !startsWithQuote;
-            }
-
-            if (shouldProcessNumber(number)) {
-              memo[inValueAndUnit] = outValueAndUnit;
-            }
-          });
-      }
-      return memo;
-    }, {});
+  //TODO refactor to be more functional
+  const potentialConversions = ch.findPotentialConversions(comment);
+  const filteredConversions = ch.filterConversions(potentialConversions);
+  const metricConversions = ch.calculateMetric(filteredConversions);
+  const roundedConversions = ch.roundConversions(metricConversions);
+  const formattedConversions = ch.formatConversion(roundedConversions);
+  
+  return formattedConversions.reduce((memo, conversion) => {
+    const key = conversion['imperial']['number'] + conversion['imperial']['unit'];
+    const value = conversion['rounded']['number'] + conversion['rounded']['unit'];
+    
+    memo[key] = value ;
+    return memo;
+  }, {});
 }
 
 module.exports = {
