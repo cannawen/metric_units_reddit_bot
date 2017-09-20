@@ -1,29 +1,19 @@
 What does the bot do?
 ---
-The bot finds comments with imperial units, and replies with metric units.
+The bot finds comments with imperial units, and replies with metric units. See [./test/converter-test.js](test/converter-test.js) for what conversions are currently supported, and see [Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2091572) for what's coming up next.
 
-There is a chance it will reply to certain triggers like "good bot". ([See here for what the triggers are](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/personality-test.js)).
-
-See [./test/converter-test.js](https://github.com/cannawen/metric_units_reddit_bot/blob/master/test/converter-test.js) for what conversions are currently supported, and [see Pivotal Tracker for what's coming up next](https://www.pivotaltracker.com/n/projects/2091572)
+There is a chance it will reply to certain triggers like "good bot". See [personality-test.js](test/personality-test.js) for what the triggers are.
 
 
 How does the code work?
 ---
 This is a javascript app built with [Node.js](https://nodejs.org/en/), and all of the app code is in the [src](https://github.com/cannawen/metric_units_reddit_bot/tree/master/src) directory.
 
-The app starts in `bot.js`, this file is responsible for repeatedly checking for new comments and replying to messages in an infinite loop. It uses the following modules:
+The app starts in [bot.js](src/bot.js), and it polls the Reddit servers in an infinite loop. The app has two major components:
 
-`converter.js` and `conversion_helper.js` are responsible for taking a message, and deciding which imperial units should be converted to which metric units (if any).
+[converter.js](src/converter.js) and [conversion_helper.js](src/conversion_helper.js) are responsible for converting imperial units to metric units.
 
-`reply_maker.js` constructs reply strings to comment
-
-`helper.js` helps with mocking external dependencies in tests
-
-`network.js` handles get, post, and OAuth network requests and parses the responses for easier consumption
-
-`personality.js` create sassy responses to certain trigger words
-
-`analytics.js` will save events in the `./private` directory
+[personality.js](src/personality.js) create sassy responses to certain trigger words
 
 
 Running the code
@@ -51,9 +41,12 @@ run `npm test`
 
 Git hooks
 ---
-The pre-commit hook will run tests before each commit. It will only allow code to be committed if all tests are passing successfully and there are no unnecessary console.log statements.
+The pre-commit hook will run before each commit. It will only allow code to be committed if the following preconditions are met:
+- There are no failing tests
+- All tests are run (no `.only()` statements isolating tests)
+- There are no unnecessary console.log statements
 
-To enable git hooks, copy the file `pre-commit` into the `./.git/hooks/` directory
+To enable git hooks, copy the file [pre-commit](pre-commit) into your `./.git/hooks/` directory
 
 
 Questions or Comments?
