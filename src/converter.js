@@ -7,18 +7,19 @@ function conversions(comment) {
     return {};
   }
 
+  //TODO refactor to be more functional
   const potentialConversions = ch.findPotentialConversions(comment);
   const filteredConversions = ch.filterConversions(potentialConversions);
   const metricConversions = ch.calculateMetric(filteredConversions);
   const roundedConversions = ch.roundConversions(metricConversions);
   const formattedConversions = ch.formatConversion(roundedConversions);
   
-  return formattedConversions.reduce((m, c) => {
-    const key = c['imperial']['number'] + c['imperial']['unit'];
-    const value = c['rounded']['number'] + c['rounded']['unit'];
+  return formattedConversions.reduce((memo, conversion) => {
+    const key = conversion['imperial']['number'] + conversion['imperial']['unit'];
+    const value = conversion['rounded']['number'] + conversion['rounded']['unit'];
     
-    m[key] = value ;
-    return m;
+    memo[key] = value ;
+    return memo;
   }, {});
 }
 
