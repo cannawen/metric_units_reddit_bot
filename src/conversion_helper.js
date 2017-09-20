@@ -151,7 +151,7 @@ const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis",
                       "ass", "anus", "anal", "butt", "tit", "kink", "bdsm", "blow job", "jizz", "cum",
                       "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest", "piv", "milf"]
 
-function shouldConvertComment(comment, regexArray) {
+function shouldConvertComment(comment, regexArray = globalIgnore) {
   const input = comment['body'];
   const postTitle = comment['postTitle'];
   const subreddit = comment['subreddit'];
