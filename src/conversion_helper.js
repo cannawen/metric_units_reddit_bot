@@ -63,7 +63,7 @@ const unitLookupList = [
                + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
       }
     },
-    "ignoredKeywords" : ["m", "meters?", "metres?", "cm", 
+    "ignoredKeywords" : ["meters?", "cms?", "centimeters?",
 
                          "size"]
   },
@@ -74,7 +74,7 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => createMap(i * 2.54, " cm"),
-    "ignoredKeywords" : ["cm", "mm",
+    "ignoredKeywords" : ["cms?", "mms?", "millimeters?", "centimeters?",
 
                         "monitor", "monitors", "screen", "tv", "tvs",
                         "ipad", "iphone", "phone", "tablet", "tablets",
@@ -89,7 +89,7 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => createMap(i * 0.453592, " kg"),
-    "ignoredKeywords" : ["kg", "g",
+    "ignoredKeywords" : ["kgs?", "grams?", "kilograms?",
 
                          "football", "soccer", "fifa"]
   },
@@ -99,7 +99,7 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
     "conversionFunction" : (i) => createMap(i * 1.609344, " km"),
-    "ignoredKeywords" : ["km", "m", "kilometers?",
+    "ignoredKeywords" : ["kms?", "kilometers?",
 
                          "churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
