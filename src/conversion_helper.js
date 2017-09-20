@@ -1,20 +1,5 @@
 const rh = require('./regex_helper');
 
-function createMap(value, unit) {
-  return {
-    "number" : value.toString(),
-    "unit" : unit
-  };
-}
-
-function isZeroOrNegative(i) {
-  return i <= 0;
-}
-
-function isHyperbole(i) {
-  return i.toString().match(/^100+(?:\.0+)?$/) !== null;
-}
-
 const unitLookupList = [
   {
     "imperialUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
@@ -22,7 +7,9 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => createMap(235.215 / i, " L/100km"),
-    "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
+    "ignoredKeywords" : ["L/100km", "km/L",
+
+                         "basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
                          "nba", "nhl", "nfl", "sport",
                          "play", "game",
                          "britain", "british", "england", "scotland", "wales", "uk"]
@@ -33,7 +20,9 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
     "conversionFunction" : (i) => createMap(i * 1.609344, " km/h"),
-    "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
+    "ignoredKeywords" : ["km/h", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s",
+
+                         "britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
     "imperialUnits" : [/-?feet/, /-ft/, /-?foot/],
@@ -66,7 +55,17 @@ const unitLookupList = [
         }
       });
     },
-    "ignoredKeywords" : ["size"]
+    "postprocessInput" : (input) => {
+      if (input.toString().indexOf('.') == -1) {
+        return input + " feet";
+      } else {
+        return rh.addCommas(Math.floor(input).toString()) + "'" 
+               + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
+      }
+    },
+    "ignoredKeywords" : ["m", "meters?", "metres?", "cm", 
+
+                         "size"]
   },
   {
     "imperialUnits" : [/-in/, /-?inch/, /inches/],
@@ -75,7 +74,9 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => createMap(i * 2.54, " cm"),
-    "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
+    "ignoredKeywords" : ["cm", "mm",
+
+                        "monitor", "monitors", "screen", "tv", "tvs",
                         "ipad", "iphone", "phone", "tablet", "tablets",
                         "apple", "windows", "linux", "android", "ios",
                         "macbook", "laptop", "laptops", "computer", "computers", "notebook", "imac", "pc", "dell", "thinkpad", "lenovo",
@@ -88,7 +89,9 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => createMap(i * 0.453592, " kg"),
-    "ignoredKeywords" : ["football", "soccer", "fifa"]
+    "ignoredKeywords" : ["kg", "g",
+
+                         "football", "soccer", "fifa"]
   },
   {
     "imperialUnits" : [/-?mi/, /-?miles?/],
@@ -96,7 +99,9 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
     "conversionFunction" : (i) => createMap(i * 1.609344, " km"),
-    "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
+    "ignoredKeywords" : ["km", "m", "kilometers?",
+
+                         "churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
                          "italy", "italian", "croatia", "brasil", "brazil"]
@@ -107,7 +112,8 @@ const unitLookupList = [
     "standardInputUnit" : "°F",
     "isInvalidInput" : (i) => false,
     "isWeaklyValidInput" : (i) => i > 1000,
-    "conversionFunction" : (i) => createMap((i - 32) * 5/9, "°C")
+    "conversionFunction" : (i) => createMap((i - 32) * 5/9, "°C"),
+    "ignoredKeywords" : ["°C", "degrees? c(?:elsius)?", "kelvin"]
   }
 ];
 
@@ -115,6 +121,21 @@ const unitLookupMap = unitLookupList.reduce((memo, map) => {
   memo[map['standardInputUnit']] = map;
   return memo;
 }, {});
+
+function createMap(value, unit) {
+  return {
+    "number" : value.toString(),
+    "unit" : unit
+  };
+}
+
+function isZeroOrNegative(i) {
+  return i <= 0;
+}
+
+function isHyperbole(i) {
+  return i.toString().match(/^100+(?:\.0+)?$/) !== null;
+}
 
 function roundToDecimalPlaces(number, places) {
   const multiplier = Math.pow(10, places);
@@ -338,8 +359,8 @@ function filterConversions(potentialConversions) {
         "imperial" : 
           { "number" : 30, "unit" : " mpg" }, 
         "metric" : [
-          { "number" : 12.7543, "unit" : " L/km" },
-          { "number" : 7.84049, "unit" : "L/100km" } 
+          { "number" : 12.7543, "unit" : " km/L" },
+          { "number" : 7.84049, "unit" : " L/100km" } 
         ]
       }
     ]
@@ -355,10 +376,125 @@ function calculateMetric(imperialInputs) {
   });
 }
 
+/*
+  Input: metric and imperial conversions
+    [
+      { 
+        "imperial" : 
+          { "number" : 10000, "unit" : " miles" }, 
+        "metric": 
+          { "number" : 16093.44, "unit" : " km" } 
+      },
+      { 
+        "imperial" : 
+          { "number" : 30, "unit" : " mpg" }, 
+        "metric" : [
+          { "number" : 12.7543, "unit" : " km/L" },
+          { "number" : 7.84049, "unit" : " L/100km" } 
+        ]
+      }
+    ]
+  Output: rounded metric and imperial conversions
+    [
+      { 
+        "imperial" : 
+          { "number" : 10000, "unit" : " miles" }, 
+        "metric": 
+          { "number" : 16093.44, "unit" : " km" },
+        "rounded" :
+          { "number" : 16000.44, "unit" : " km" }
+      },
+      { 
+        "imperial" : 
+          { "number" : 30, "unit" : " mpg" }, 
+        "metric" : [
+          { "number" : 12.7543, "unit" : " km/L" },
+          { "number" : 7.84049, "unit" : " L/100km" } 
+        ]
+      }
+    ]
+*/
+function roundConversions(conversions) {
+  function round(input, allowableErrorPercent) {
+    let multiplier;
+
+    if (input.toString().split('.').length > 1) {
+      multiplier = Math.pow(10, input.toString().split('.')[1].length)
+    } else {
+      multiplier = 1;
+    }
+
+    if (input < 0) {
+      multiplier = multiplier * -1;
+    }
+
+    const nonDecimalInput = input * multiplier;
+
+    const digits = nonDecimalInput.toString().length;
+
+    let output;
+    let unroundedDigits = 1;
+    do {
+      const roundingMultipler = Math.pow(10, digits-unroundedDigits)
+      output = Math.round(nonDecimalInput/roundingMultipler) * roundingMultipler;
+      unroundedDigits++;
+    } while(Math.abs(output - nonDecimalInput)/nonDecimalInput * 100 > allowableErrorPercent);
+
+    return output/multiplier;
+  }
+
+  function roundToDecimalPlaces(input, decimals) {
+      const roundingMultipler = Math.pow(10, decimals)
+      const number = Math.round(input * roundingMultipler)/roundingMultipler;
+      return number.toFixed(decimals);
+  }
+
+  return conversions.map(conversion => {
+    let rounded;
+
+    const imperial = conversion['imperial']['number'];
+    const metric = conversion['metric']['number'];
+
+    if (imperial.toString().indexOf('.') !== -1) {
+      const decimals = imperial.split('.')[1].length;
+      rounded = roundToDecimalPlaces(metric, decimals);
+
+    } else if ((imperial > 100 || metric > 100) && imperial.toString()[imperial.length - 1] == '0') {
+      rounded = round(metric, 5);
+    } else {
+      rounded = round(metric, 3);
+    }
+
+
+    conversion['rounded'] = createMap(rounded, conversion['metric']['unit']);
+    return conversion;
+  })
+}
+
+function formatConversion(conversions) {
+  return conversions.map(conversion => {
+    const metric = conversion['rounded']['number'];
+    conversion['formatted'] = createMap(rh.addCommas(metric), conversion['rounded']['unit'])
+
+    const imperialUnit = conversion['imperial']['unit'];
+    const imperialNumber = conversion['imperial']['number'];
+
+    const postprocessInput = unitLookupMap[imperialUnit]['postprocessInput'];
+    if (postprocessInput) {
+      conversion['imperial']['number'] = postprocessInput(imperialNumber);
+      conversion['imperial']['unit'] = "";
+    }
+
+    return conversion;
+  });
+}
+
 module.exports = {
   globalIgnore,
   "shouldConvertComment" : shouldConvertComment,
   "findPotentialConversions" : findPotentialConversions,
   "filterConversions" : filterConversions,
-  "calculateMetric" : calculateMetric
+  "calculateMetric" : calculateMetric,
+  "roundConversions" : roundConversions,
+  "formatConversion" : formatConversion
 }

@@ -4,7 +4,7 @@ const ch = require('../src/conversion_helper');
 
 describe('conversion_helper', () => {
   describe('#shouldConvertComment()', () => {
-    it('should convert if keywords do not match', () => {
+    it('should convert if ignored keywords do not match', () => {
       const ignoredKeywords = ["foo", "bar"];
       const comment = createComment("hello", "foobar", "foobar");
       ch.shouldConvertComment(comment, ignoredKeywords).should.be.true;
@@ -573,6 +573,124 @@ describe('conversion_helper', () => {
 
       ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput])
     }
+  });
+
+  describe('#roundConversions()', () => {
+    context('has decimal places', () => {
+      it('should convert with output decimal places', () => {
+        verifyRounding(6.66, 1.2345678, 1.23);
+        verifyRounding(6.6, -1.99872, "-2.0");
+      });
+    });
+
+    context('whole input', () => {
+      context('input not ending in 0', () => {
+        it('should round to 3%', () => {
+          verifyRounding(3, 96.888, 97);
+          verifyRounding(3, -98.88, -100);
+        });
+      });
+
+      context('input ending in 0', () => {
+        context('smaller than 100', () => {
+          it('should round to 3%', () => {
+            verifyRounding(20, 96.888, 97);
+            verifyRounding(20, -98.88, -100);
+          });        
+        });
+
+        context('greater than 100', () => {
+          it('should round to 5%', () => {
+            verifyRounding(200, 96.888, 100);
+            verifyRounding(200, -94.88, -95);
+          });        
+        });
+      });
+    });
+
+    function verifyRounding(imperial, metric, expected) {
+      const input = {
+        'imperial' : createMap(imperial, 'foo'),
+        'metric' : createMap(metric, 'bar')
+      }
+      const expectedOut = Object.assign({}, input, {'rounded' : createMap(expected, 'bar')});
+
+      ch.roundConversions([input])[0]
+        .should
+        .deep
+        .equal(expectedOut);
+    }
+  });
+
+  describe('#formatConversion()', () => {
+    context('number under 1,000', () => {
+      it('should not change', () => {
+        verifyUserFacing("999", "999");
+      });
+    });
+
+    context('number over 1,000', () => {
+      it('should add commas', () => {
+        verifyUserFacing("1000", "1,000");
+        verifyUserFacing("1000.00", "1,000.00");
+        verifyUserFacing("1000000", "1,000,000");
+      });
+    });
+
+    function verifyUserFacing(rounded, expected) {
+      const input = {
+        'imperial' : createMap(1, ' miles'),
+        'metric' : createMap(1, 'bar'),
+        'rounded' : createMap(rounded, 'bar')
+      }
+      const expectedOut = Object.assign({}, input, {'formatted' : createMap(expected, 'bar')});
+
+      ch.formatConversion([input])[0]
+        .should
+        .deep
+        .equal(expectedOut);
+    }
+
+    context('feet', () => {
+      context('decimal', () => {
+        it('should convert', () => {
+          const actual = ch.formatConversion([{
+            'imperial' : createMap(1000.25, " feet"),
+            'metric' : createMap(2, " metres"),
+            'rounded' : createMap(2, " metres")
+          }])[0];
+
+          const expected = {
+            'imperial' : createMap("1,000'3\"", ""),
+            'metric' : createMap(2, " metres"),
+            'rounded' : createMap(2, " metres"),
+            'formatted' : createMap(2, " metres")
+          }
+
+
+          actual.should.deep.equal(expected);
+        });
+      });
+
+      context('whole', () => {
+        it('should convert', () => {
+          const actual = ch.formatConversion([{
+            'imperial' : createMap(5, " feet"),
+            'metric' : createMap(2, " metres"),
+            'rounded' : createMap(2, " metres")
+          }])[0];
+
+          const expected = {
+            'imperial' : createMap("5 feet", ""),
+            'metric' : createMap(2, " metres"),
+            'rounded' : createMap(2, " metres"),
+            'formatted' : createMap(2, " metres")
+          }
+
+          actual.should.deep.equal(expected);
+        });
+      });
+    });
   });
 });
 
