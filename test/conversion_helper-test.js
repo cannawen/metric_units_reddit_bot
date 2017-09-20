@@ -4,28 +4,40 @@ const ch = require('../src/conversion_helper');
 
 describe('conversion_helper', () => {
   describe('#shouldConvertComment()', () => {
+    context('comment contains quote', () => {
+      it('should not convert', () => {
+        const comment = createComment("foo", "bar", "\n&gt; About 202 miles away");
+        ch.shouldConvertComment(comment, []).should.be.false;
+
+        const comment2 = createComment("foo", "bar", ">1.5lbs");
+        ch.shouldConvertComment(comment2, []).should.be.false;
+      });
+    });
+
     it('should convert if ignored keywords do not match', () => {
       const ignoredKeywords = ["foo", "bar"];
       const comment = createComment("hello", "foobar", "foobar");
       ch.shouldConvertComment(comment, ignoredKeywords).should.be.true;
     });
 
-    it('should not convert if subreddit matches', () => {
-      const ignoredKeywords = ["foo", "bar"];
-      const comment = createComment("foobar", "hello", "hello");
-      ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
-    });
+    context('comment contains ignored keyword', () => {
+      it('should not convert if subreddit matches', () => {
+        const ignoredKeywords = ["foo", "bar"];
+        const comment = createComment("foobar", "hello", "hello");
+        ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
+      });
 
-    it('should not convert if post title matches', () => {
-      const ignoredKeywords = ["foo", "bar"];
-      const comment = createComment("hello", "This the bar stuff", "hello");
-      ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
-    });
+      it('should not convert if post title matches', () => {
+        const ignoredKeywords = ["foo", "bar"];
+        const comment = createComment("hello", "This the bar stuff", "hello");
+        ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
+      });
 
-    it('should not convert if body matches', () => {
-      const ignoredKeywords = ["foo", "bar"];
-      const comment = createComment("hello", "hello", "foo");
-      ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
+      it('should not convert if body matches', () => {
+        const ignoredKeywords = ["foo", "bar"];
+        const comment = createComment("hello", "hello", "foo");
+        ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
+      });
     });
   });
 

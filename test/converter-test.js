@@ -199,49 +199,13 @@ describe('Converter', () => {
       });
     });
 
-    context('comment contains quote', () => {
-      it('should not convert', () => {
-        testConvert("> About 201 miles away", {});
-        testConvert(">1.5lbs", {});
-        testConvert("\n&gt; About 202 miles away", {});
-      });
-    });
-
     context('comment already contains conversion', () => {
       it('should not convert', () => {
         testConvert("About 200 miles (320 km) away", {});
         testConvert("About 200 miles or 300 kilometers away", {});
-        testConvert("About 200 miles or 322 km away", {});
+        testConvert("About 200 miles or some km away", {});
       });
     });
-
-    context('ignored keywords', () => {
-      it('should not convert if the sub name matches exclusion', () => {
-        const comment = {
-          'body' : 'He played 30mpg',
-          'subreddit' : 'basketball4lyfe',
-          'postTitle' : 'bar'
-        }
-        converter.conversions(comment).should.deep.equal({});
-      });
-      
-      it('should not convert if the post title matches exclusion', () => {
-        const comment = {
-          'body' : 'He played 30mpg',
-          'subreddit' : 'foo',
-          'postTitle' : 'this is basketball talk'
-        }
-        converter.conversions(comment).should.deep.equal({});
-      });
-      
-      it('should not convert if the body matches, case-insensitive', () => {
-        testConvert("My 32 inch ultra widescreen MONITOR", {});
-      });
-
-      it('should not convert if keyword is not found', () => {
-        testConvert("10 inches of grassy hills", {"10 inches" : "25 cm"})
-      });
-    })
 
     context.skip('Current failing tests - bugs and edge cases', () => {
       //Story #150482058

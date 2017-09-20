@@ -164,7 +164,9 @@ function shouldConvertComment(comment, regexArray) {
   const hasIgnoredKeyword = input.match(ignoredWordRegex) 
     || postTitle.match(ignoredWordRegex) 
     || subreddit.match(new RegExp(rh.regexJoinToString(regexArray), 'i'));
-  return hasIgnoredKeyword === null;
+
+  const hasQuotedText = input.match(/(^|\n)(>|&gt;)/);
+  return hasIgnoredKeyword === null && hasQuotedText === null;
 }
 
 /*
