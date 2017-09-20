@@ -16,7 +16,7 @@ function conversions(comment) {
   
   return formattedConversions.reduce((memo, conversion) => {
     const key = conversion['imperial']['number'] + conversion['imperial']['unit'];
-    const value = conversion['rounded']['number'] + conversion['rounded']['unit'];
+    const value = conversion['formatted']['number'] + conversion['formatted']['unit'];
     
     memo[key] = value ;
     return memo;

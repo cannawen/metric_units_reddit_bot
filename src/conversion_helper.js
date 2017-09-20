@@ -485,6 +485,8 @@ function formatConversion(conversions) {
     if (postprocessInput) {
       conversion['imperial']['number'] = postprocessInput(imperialNumber);
       conversion['imperial']['unit'] = "";
+    } else {
+      conversion['imperial']['number'] = rh.addCommas(imperialNumber);
     }
 
     return conversion;

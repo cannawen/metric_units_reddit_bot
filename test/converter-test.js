@@ -25,10 +25,10 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1 lb"
+            "1001 lb"
           ],
           {
-            "1 lb" : "0.45 kg"
+            "1,001 lb" : "450 kg"
           }
         );
       });
