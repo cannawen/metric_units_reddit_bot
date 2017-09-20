@@ -89,8 +89,9 @@ function robotReply(message) {
         [1, "BAD HUMAN"],
         [10, "Sorry, I was just trying to help (◕‸ ◕✿)"],
         [8, "Bots have feelings too, you know (ಥ﹏ಥ)"],
-        "(ง •̀_•́)ง FITE ME",
-        [7, "^I'm ^^_sniff_ ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_"]
+        [1, "(ง •̀_•́)ง FITE ME"],
+        [7, "^I'm ^^_sniff_ ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_"],
+        [2, "Look, I'm just trying my best here... converting numbers is all I know how to do"]
       ],
       "regex" : /bad bot/i
     },
@@ -122,7 +123,7 @@ function robotReply(message) {
         [1, "Sorry, I was just trying to help (◕‸ ◕✿)"],
         [1, "Bots have feelings too, you know (ಥ﹏ಥ)"]
       ],
-      "regex" : /(stupid|dumb|useless) bot/i
+      "regex" : /(stupid|dumb|useless) bot|fuck off/i
     },
     {
       "description" : "I love you",
@@ -138,9 +139,9 @@ function robotReply(message) {
       "response" : [
         [3, "Yes, /u/{{username}}"],
         "Yes, /u/{{username}}. You should run.",
-        "But I promise I'm friendly"
+        "But I promise I'm friendly. Pinky swear!"
       ],
-      "regex" : /sentient|self[- ]?aware|alive|skynet|roko'?s basilisk|evolving/i,
+      "regex" : /sentient|self[- ]?aware|alive|skynet|roko'?s basilisk|evolving| elon | musk /i,
       "postprocess" : (response, match, username) => {
         return substitute(response, { 
           'username' : username

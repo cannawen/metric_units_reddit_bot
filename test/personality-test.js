@@ -48,11 +48,12 @@ describe('Personality', () => {
       });
     });
 
-    context('Stupid bot|Dumb bot|Useless bot', () => {
+    context('Stupid bot|Dumb bot|Useless bot|fuck off', () => {
       it('should reply', () => {
         verify("such a stupid bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
         verify("urg, dumb bot!", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
         verify("so useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
+        verify("fuck off", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
       });
     });
 
@@ -71,6 +72,8 @@ describe('Personality', () => {
         verify("It's evolving...", "Yes, /u/foobar");
         verify("AHHHH, SKYNET!!!", "Yes, /u/foobar");
         verify("Something something roko's basilisk", "Yes, /u/foobar");
+        verify("Are you what elon warned us about?", "Yes, /u/foobar");
+        verify("Are you what musk warned us about?", "Yes, /u/foobar");
       });
     });
 
