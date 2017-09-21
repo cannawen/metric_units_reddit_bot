@@ -550,8 +550,16 @@ describe('conversion_helper', () => {
     });
 
     context('inches', () => {
-      it('should convert', () => {
-        verifyConversion(1, " inches", 2.54, " cm");
+      context('greater than 1 cm', () => {
+        it('should convert in cm', () => {
+          verifyConversion(1, " inches", 2.54, " cm");
+        });
+      });
+
+      context('less than 1 cm', () => {
+        it('should convert in mm', () => {
+          verifyConversion(0.38, " inches", 9.652000000000001, " mm");
+        });
       });
     });
 

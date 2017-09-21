@@ -83,7 +83,14 @@ const unitLookupList = [
     "standardInputUnit" : " inches",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 2.54, " cm"),
+    "conversionFunction" : (i) => {
+      const cm = i * 2.54;
+      if (cm < 1) {
+        return createMap(cm * 10, " mm");
+      } else {
+        return createMap(cm, " cm");
+      }
+    },
     "ignoredKeywords" : ["cms?", "mms?", "millimeters?", "centimeters?",
 
                         "monitor", "monitors", "screen", "tv", "tvs",
