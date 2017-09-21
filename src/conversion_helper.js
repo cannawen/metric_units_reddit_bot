@@ -18,6 +18,9 @@ function distanceMap(m) {
   }
 }
 
+const metricDistances = ["mm", "cm", "km", "light-?years?",
+                         /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
+
 const unitLookupList = [
   {
     "imperialUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
@@ -62,7 +65,7 @@ const unitLookupList = [
         return [createMap(km, " km/h"), perSMap];
       }
     },
-    "ignoredKeywords" : ["km/h", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s",
+    "ignoredKeywords" : ["km/hr?", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s",
 
                          "britain", "british", "england", "scotland", "wales", "uk"]
   },
@@ -105,9 +108,7 @@ const unitLookupList = [
                + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
       }
     },
-    "ignoredKeywords" : ["meters?", "cms?", "centimeters?",
-
-                         "size"]
+    "ignoredKeywords" : ["size"].concat(metricDistances)
   },
   {
     "imperialUnits" : [/-in/, /-?inch/, /inches/],
@@ -116,13 +117,11 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 2.54 / 100),
-    "ignoredKeywords" : ["cms?", "mms?", "millimeters?", "centimeters?",
-
-                        "monitor", "monitors", "screen", "tv", "tvs",
+    "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
                         "ipad", "iphone", "phone", "tablet", "tablets",
                         "apple", "windows", "linux", "android", "ios",
                         "macbook", "laptop", "laptops", "computer", "computers", "notebook", "imac", "pc", "dell", "thinkpad", "lenovo",
-                        "rgb", "hz"]
+                        "rgb", "hz"].concat(metricDistances)
   },
   {
     "imperialUnits" : "-?lbs?",
@@ -141,12 +140,11 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
     "conversionFunction" : (i) => distanceMap(i * 1.609344 * 1000),
-    "ignoredKeywords" : ["kms?", "kilometers?",
-
-                         "churn", "credit card", "visa", "mastercard", "awardtravel",
+    "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
                          "italy", "italian", "croatia", "brasil", "brazil"]
+                         .concat(metricDistances)
   },
   {
     "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
