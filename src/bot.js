@@ -13,7 +13,7 @@ const replier = require('./reply_maker');
 const personality = require('./personality');
 
 const environment = helper.environment();
-let personalityMetadata = {};
+let replyMetadata = {};
 let excludedSubreddits = [];
 try { 
   excludedSubreddits = yaml
@@ -103,16 +103,20 @@ function replyToMessages() {
       // Possible refactor candidate, story #150342011
       let shouldReply = false;
 
-      if (personalityMetadata[postTitle] === undefined) {
+      if (replyMetadata[postTitle] === undefined) {
         shouldReply = true;
-        personalityMetadata[postTitle] = { 'timestamp' : now, 
-                              'replyChance' : 0.5 };
-      } else if (helper.random() < personalityMetadata[postTitle]['replyChance']) {
-        shouldReply = true;
-        personalityMetadata[postTitle]= { 'timestamp' : now, 
-                             'replyChance': personalityMetadata[postTitle]['replyChance'] / 2};
-      }
+        replyMetadata[postTitle] = { 
+          'timestamp' : now, 
+          'personalityReplyChance' : 0.5
+        };
 
+      } else if (helper.random() < replyMetadata[postTitle]['personalityReplyChance']) {
+        shouldReply = true;
+        Object.assign(replyMetadata[postTitle], { 
+          'timestamp' : now, 
+          'personalityReplyChance': replyMetadata[postTitle]['personalityReplyChance'] / 2
+        });
+      }
 
       analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
       
@@ -129,25 +133,19 @@ function replyToMessages() {
       network.blockAuthorOfMessageWithId(message['id']);
     });
 
-  //cleanup old personalityMetadata
-  personalityMetadata = Object
-    .keys(personalityMetadata)
+  //cleanup old replyMetadata
+  replyMetadata = Object
+    .keys(replyMetadata)
     .reduce((memo, key) => {
-      const lessThan24hAgo = personalityMetadata[key]['timestamp'] > now - 24*60*60*1000;
+      const lessThan24hAgo = replyMetadata[key]['timestamp'] > now - 24*60*60*1000;
       if (lessThan24hAgo) {
-        memo[key] = personalityMetadata[key];
+        memo[key] = replyMetadata[key];
       }
       return memo;
     }, {});
-    
 };
 
 function postConversions() {
-  const comments = network.getRedditComments("all");
-  if (!comments) {
-    return;
-  }
-  
   function allowedToPostInSubreddit(comment) {
       return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
   }
@@ -171,10 +169,63 @@ function postConversions() {
     return comment['body'].match(/\d/) !== null;
   }
 
+  function filterIfAlreadyReplied(map) {
+    const postTitle = map['comment']['postTitle'];
+    const conversions = map['conversions'];
+
+    const newConversions = new Set(Object.keys(conversions));
+
+    //If we have not seen this post within 24 hours
+    if (replyMetadata[postTitle] === undefined) {
+      replyMetadata[postTitle] = {
+          'timestamp' : helper.now(), 
+          'personalityReplyChance' : 1,
+          'conversions' : newConversions
+      }
+      //We should perform conversions
+      return map;
+
+    //If we have seen this post within 24 hours
+    } else {
+      const alreadyConverted = replyMetadata[postTitle]['conversions'];
+
+      //If we have done personality but not converted
+      if (alreadyConverted === undefined) {
+        replyMetadata[postTitle] = Object.assign(replyMetadata[postTitle], {
+          'conversions' : newConversions
+        });
+        //We should perform the conversion
+        return map;
+
+      //If we have converted something
+      } else {
+        const unconverted = [...newConversions].filter(x => !alreadyConverted.has(x));
+        //If all conversions in the current comment have already been converted
+        if (unconverted.length === 0) {
+          //Do not convert anything for this comment
+          return Object.assign(map, {'conversions' : {}});
+
+        //If one or more of the conversions in this comment have not been converted
+        } else {
+          replyMetadata[postTitle] = Object.assign(replyMetadata[postTitle], {
+            'conversions' : new Set([...alreadyConverted, ...newConversions])
+          });
+          //Convert all conversions in this comment
+          return map;
+        }
+      }
+    }
+  }
+
   function hasConversions(map) {
     return Object.keys(map['conversions']).length > 0;
   }
-
+  
+  const comments = network.getRedditComments("all");
+  if (!comments) {
+    return;
+  }
+  
   comments
     .filter(commentIsntFromABot)
     .filter(allowedToPostInSubreddit)
@@ -187,6 +238,7 @@ function postConversions() {
         "conversions" : converter.conversions(comment)
       }
     })
+    .map(filterIfAlreadyReplied)
     .filter(hasConversions)
     .forEach(map => {
       const comment = map['comment'];

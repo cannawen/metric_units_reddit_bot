@@ -14,8 +14,9 @@ fi
 # Don't allow console.log() statements to be committed.
 
 count=`grep -iR --include \*.js 'console\.log' ./src ./test | wc -l | awk '{print $1}'`
-if [[ "$count" -ne 1 ]]; then 
-  echo "Remove $count console.log() statements"
+if [[ "$count" -ne 2 ]]; then 
+  remove=$count - 2
+  echo "Remove $remove console.log() statements"
   returnvalue=1
 fi
 

@@ -16,6 +16,7 @@ function environment() {
 }
 
 function logError(error) {
+  console.log(error.stack);
   const dir = "./private/errors/" + environment['version'] + "/";
   mkdirp(dir);
   fs.writeFileSync(dir + now() + ".txt", error.stack, "utf8");
