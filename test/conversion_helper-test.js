@@ -569,7 +569,15 @@ describe('conversion_helper', () => {
 
     context('mpg', () => {
       it('should convert', () => {
-        verifyConversion(1, " mpg (US)", 235.215, " L/100km");
+        const imperialMap = createImperialMap(1, " mpg (US)");
+        const expectedOutput = Object.assign({}, imperialMap);
+
+        expectedOutput['metric'] = [
+          { "number" : "0.425144", "unit" : " km/L"},
+          { "number" : "235.215", "unit" : " L/100km" }
+        ];
+
+        ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
       });
     });
 

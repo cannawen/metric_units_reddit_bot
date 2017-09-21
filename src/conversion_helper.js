@@ -6,7 +6,12 @@ const unitLookupList = [
     "standardInputUnit" : " mpg (US)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(235.215 / i, " L/100km"),
+    "conversionFunction" : (i) => {
+      return [
+        createMap(i * 0.425144, " km/L"),
+        createMap(235.215 / i, " L/100km")
+      ]
+    },
     "ignoredKeywords" : ["L/100km", "km/L",
 
                          "basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
@@ -452,31 +457,47 @@ function roundConversions(conversions) {
   }
 
   return conversions.map(conversion => {
-    let rounded;
+    function createMetricMap(imperial, metric, unit) {
+      let rounded;
+      if (imperial.toString().indexOf('.') !== -1) {
+        const decimals = imperial.split('.')[1].length;
+        rounded = roundToDecimalPlaces(metric, decimals);
 
-    const imperial = conversion['imperial']['number'];
-    const metric = conversion['metric']['number'];
-
-    if (imperial.toString().indexOf('.') !== -1) {
-      const decimals = imperial.split('.')[1].length;
-      rounded = roundToDecimalPlaces(metric, decimals);
-
-    } else if ((imperial > 100 || metric > 100) && imperial.toString()[imperial.length - 1] == '0') {
-      rounded = round(metric, 5);
-    } else {
-      rounded = round(metric, 3);
+      } else if ((imperial > 100 || metric > 100) && imperial.toString()[imperial.length - 1] == '0') {
+        rounded = round(metric, 5);
+      } else {
+        rounded = round(metric, 3);
+      }
+      return createMap(rounded, unit);
     }
 
+    const metricConversions = conversion['metric'];
+    const imperial = conversion['imperial']['number'];
+    let map;
+    if (Array.isArray(metricConversions)) {
+      map = metricConversions.map(mc => {
+        return createMetricMap(imperial, mc['number'], mc['unit'])
+      });
+    } else {
+      map = createMetricMap(imperial, conversion['metric']['number'], conversion['metric']['unit'])
+    }
 
-    conversion['rounded'] = createMap(rounded, conversion['metric']['unit']);
+    conversion['rounded'] = map;
     return conversion;
   })
 }
 
 function formatConversion(conversions) {
   return conversions.map(conversion => {
-    const metric = conversion['rounded']['number'];
-    conversion['formatted'] = createMap(rh.addCommas(metric), conversion['rounded']['unit'])
+    const roundedConversions = conversion['rounded'];
+    if (Array.isArray(roundedConversions)) {
+      conversion['formatted'] = roundedConversions.map(rc => {
+        return createMap(rh.addCommas(rc['number']), rc['unit']);
+      });
+    } else {
+      const metric = conversion['rounded']['number'];
+      conversion['formatted'] = createMap(rh.addCommas(metric), conversion['rounded']['unit'])
+    }
 
     const imperialUnit = conversion['imperial']['unit'];
     const imperialNumber = conversion['imperial']['number'];

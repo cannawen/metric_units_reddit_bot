@@ -114,7 +114,7 @@ describe('Converter', () => {
             "25mpg"
           ],
           {
-           "25 mpg (US)" : "9.4 L/100km"
+           "25 mpg (US)" : "10.6 km/L or 9.4 L/100km"
           }
         );
       });

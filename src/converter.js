@@ -7,7 +7,6 @@ function conversions(comment) {
     return {};
   }
 
-  //TODO refactor to be more functional
   const potentialConversions = ch.findPotentialConversions(comment);
   const filteredConversions = ch.filterConversions(potentialConversions);
   const metricConversions = ch.calculateMetric(filteredConversions);
@@ -16,7 +15,14 @@ function conversions(comment) {
   
   return formattedConversions.reduce((memo, conversion) => {
     const key = conversion['imperial']['number'] + conversion['imperial']['unit'];
-    const value = conversion['formatted']['number'] + conversion['formatted']['unit'];
+    const formatted = conversion['formatted'];
+
+    let value;
+    if (Array.isArray(formatted)) {
+      value = formatted.map(el => el['number'] + el['unit']).join(' or ');
+    } else {
+      value = formatted['number'] + formatted['unit'];
+    }
     
     memo[key] = value ;
     return memo;
