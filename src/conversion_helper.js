@@ -57,7 +57,7 @@ const unitLookupList = [
     },
     "postprocessInput" : (input) => {
       if (input.toString().indexOf('.') == -1) {
-        return input + " feet";
+        return rh.addCommas(input) + " feet";
       } else {
         return rh.addCommas(Math.floor(input).toString()) + "'" 
                + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
@@ -113,7 +113,7 @@ const unitLookupList = [
     "isInvalidInput" : (i) => false,
     "isWeaklyValidInput" : (i) => i > 1000,
     "conversionFunction" : (i) => createMap((i - 32) * 5/9, "°C"),
-    "ignoredKeywords" : [/\d*°C/, "degrees? c(?:elsius)?", "kelvin"]
+    "ignoredKeywords" : [/\d*°C/, "degrees? c", "celsius", "kelvin"]
   }
 ];
 
