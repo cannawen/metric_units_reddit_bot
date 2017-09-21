@@ -7,10 +7,15 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => {
-      return [
-        createMap(i * 0.425144, " km/L"),
-        createMap(235.215 / i, " L/100km")
-      ]
+      const kmPerL = createMap(i * 0.425144, " km/L");
+      if (i < 15) {
+        return kmPerL;
+      } else {
+        return [
+          kmPerL,
+          createMap(235.215 / i, " L/100km")
+        ]
+      }
     },
     "ignoredKeywords" : ["L/100km", "km/L",
 
