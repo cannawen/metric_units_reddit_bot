@@ -91,7 +91,8 @@ function robotReply(message) {
         [8, "Bots have feelings too, you know (ಥ﹏ಥ)"],
         [1, "(ง •̀_•́)ง FITE ME"],
         [7, "^I'm ^^_sniff_ ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_"],
-        [2, "Look, I'm just trying my best here... converting numbers is all I know how to do"]
+        [1, "Look, I'm just trying my best here... I guess my best isn't good enough for you (ಥ﹏ಥ)"],
+        [1, "But... converting numbers is all I know how to do (ಥ﹏ಥ)"]
       ],
       "regex" : /bad bot/i
     },
