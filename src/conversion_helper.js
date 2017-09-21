@@ -46,13 +46,17 @@ const unitLookupList = [
     "isWeaklyValidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
     "conversionFunction" : (i) => {
       const km = i * 1.609344;
-      const kmMap = createMap(km, " km/h");
       if (i < 200) {
-        return kmMap;
+        return createMap(km, " km/h");
+        
+      } else if (i >= 6706166) {
+        return createMap(i/670616629.3844, "c");
+
       } else {
         let perSMap = distanceMap(km * 1000 / 60 / 60);
         perSMap['unit'] += "/s";
-        return [kmMap, perSMap];
+
+        return [createMap(km, " km/h"), perSMap];
       }
     },
     "ignoredKeywords" : ["km/h", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s",

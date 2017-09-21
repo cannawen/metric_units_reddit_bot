@@ -572,13 +572,13 @@ describe('conversion_helper', () => {
 
     context('mph', () => {
       context('input < 200', () => {
-        it('should convert', () => {
+        it('should convert km/h', () => {
           verifyConversion(1, " mph", 1.609344, " km/h");
         });
       });
 
       context('input >= 200', () => {
-        it('should convert', () => {
+        it('should convert km/h and m/s', () => {
           const imperialMap = createImperialMap(200, " mph");
           const expectedOutput = Object.assign({}, imperialMap);
 
@@ -588,6 +588,12 @@ describe('conversion_helper', () => {
           ];
 
           ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+        });
+      });
+
+      context('input >= 0.01 speed of light', () => {
+        it('should convert c', () => {
+          verifyConversion(6706166, " mph", 0.009999999561830132, "c");
         });
       });
     });
