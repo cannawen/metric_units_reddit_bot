@@ -1,5 +1,20 @@
 const rh = require('./regex_helper');
 
+function distanceMap(m) {
+  if (m < 0.01) {
+    return createMap(m * 1000, " mm");
+
+  } else if (m < 1) {
+    return createMap(m * 100, " cm");
+
+  } else if (m >= 1000) {
+    return createMap(m/1000, " km");
+
+  } else {
+    return createMap(m, " metres");
+  }
+}
+
 const unitLookupList = [
   {
     "imperialUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
@@ -40,7 +55,7 @@ const unitLookupList = [
     "standardInputUnit" : " feet",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
-    "conversionFunction" : (i) => createMap(i * 0.3048, " metres"),
+    "conversionFunction" : (i) => distanceMap(i * 0.3048),
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
         new RegExp(( rh.startRegex 
@@ -83,14 +98,7 @@ const unitLookupList = [
     "standardInputUnit" : " inches",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
-    "conversionFunction" : (i) => {
-      const cm = i * 2.54;
-      if (cm < 1) {
-        return createMap(cm * 10, " mm");
-      } else {
-        return createMap(cm, " cm");
-      }
-    },
+    "conversionFunction" : (i) => distanceMap(i * 2.54 / 100),
     "ignoredKeywords" : ["cms?", "mms?", "millimeters?", "centimeters?",
 
                         "monitor", "monitors", "screen", "tv", "tvs",
@@ -115,7 +123,7 @@ const unitLookupList = [
     "standardInputUnit" : " miles",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
-    "conversionFunction" : (i) => createMap(i * 1.609344, " km"),
+    "conversionFunction" : (i) => distanceMap(i * 1.609344 * 1000),
     "ignoredKeywords" : ["kms?", "kilometers?",
 
                          "churn", "credit card", "visa", "mastercard", "awardtravel",

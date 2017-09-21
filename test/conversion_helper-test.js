@@ -545,7 +545,8 @@ describe('conversion_helper', () => {
 
     context('feet', () => {
       it('should convert', () => {
-        verifyConversion(1, " feet", 0.3048, " metres");
+        verifyConversion(1, " feet", 30.48, " cm");
+        verifyConversion(4, " feet", 1.2192, " metres");
       });
     });
 

@@ -38,10 +38,12 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
             [
-              "3 feet"
+              "3 feet",
+              "5 feet",
             ],
             {
-              "3 feet" : "0.9 metres",
+              "3 feet" : "90 cm",
+              "5 feet" : "1.5 metres"
             }
           );
       });
@@ -55,7 +57,7 @@ describe('Converter', () => {
               "11'12\""
             ],
             {
-             "1'2\"": "0.36 metres",
+             "1'2\"": "35.66 cm",
              "13'4\"": "4.06 metres",
              "12'0\"": "3.66 metres"
             }
