@@ -44,7 +44,17 @@ const unitLookupList = [
     "standardInputUnit" : " mph",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
-    "conversionFunction" : (i) => createMap(i * 1.609344, " km/h"),
+    "conversionFunction" : (i) => {
+      const km = i * 1.609344;
+      const kmMap = createMap(km, " km/h");
+      if (i < 200) {
+        return kmMap;
+      } else {
+        let perSMap = distanceMap(km * 1000 / 60 / 60);
+        perSMap['unit'] += "/s";
+        return [kmMap, perSMap];
+      }
+    },
     "ignoredKeywords" : ["km/h", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s",
 
                          "britain", "british", "england", "scotland", "wales", "uk"]

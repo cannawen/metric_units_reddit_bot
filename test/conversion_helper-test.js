@@ -571,8 +571,24 @@ describe('conversion_helper', () => {
     });
 
     context('mph', () => {
-      it('should convert', () => {
-        verifyConversion(1, " mph", 1.609344, " km/h");
+      context('input < 200', () => {
+        it('should convert', () => {
+          verifyConversion(1, " mph", 1.609344, " km/h");
+        });
+      });
+
+      context('input >= 200', () => {
+        it('should convert', () => {
+          const imperialMap = createImperialMap(200, " mph");
+          const expectedOutput = Object.assign({}, imperialMap);
+
+          expectedOutput['metric'] = [
+            { "number" : "321.8688", "unit" : " km/h"},
+            { "number" : "89.408", "unit" : " metres/s" }
+          ];
+
+          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+        });
       });
     });
 
