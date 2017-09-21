@@ -117,7 +117,14 @@ const unitLookupList = [
     "standardInputUnit" : "°F",
     "isInvalidInput" : (i) => false,
     "isWeaklyValidInput" : (i) => i > 1000,
-    "conversionFunction" : (i) => createMap((i - 32) * 5/9, "°C"),
+    "conversionFunction" : (i) => {
+      let temperatureMap = createMap((i - 32) * 5/9, "°C");
+      if (i > 0 && i < 32) {
+        return [temperatureMap, createMap(i * 5/9, " change in °C")];
+      } else {
+        return temperatureMap;
+      }
+    },
     "ignoredKeywords" : [/\d*°C/, "degrees? c", "celsius", "kelvin"]
   }
 ];

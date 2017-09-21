@@ -582,8 +582,26 @@ describe('conversion_helper', () => {
     });
 
     context('°F', () => {
-      it('should convert', () => {
-        verifyConversion(32, "°F", 0, "°C");
+      context('input between 0 and 32', () => {
+        it('should convert with delta', () => {
+          const imperialMap = createImperialMap(10, "°F");
+          const expectedOutput = Object.assign({}, imperialMap);
+
+          expectedOutput['metric'] = [
+            { "number" : "-12.222222222222221", "unit" : "°C"},
+            { "number" : "5.555555555555555", "unit" : " change in °C" }
+          ];
+
+          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+        });
+      });
+
+      context('input not between 0 and 32', () => {
+        it('should convert without delta', () => {
+          verifyConversion(32, "°F", 0, "°C");
+          verifyConversion(0, "°F", -17.77777777777778, "°C");
+          verifyConversion(-40, "°F", -40, "°C");
+        });
       });
     });
 
