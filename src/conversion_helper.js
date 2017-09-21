@@ -7,9 +7,12 @@ function distanceMap(m) {
   } else if (m < 1) {
     return createMap(m * 100, " cm");
 
+  } else if (m > 94607304725808) {
+    return createMap(m/9460730472580800, " light-years")
+
   } else if (m >= 1000) {
     return createMap(m/1000, " km");
-
+    
   } else {
     return createMap(m, " metres");
   }

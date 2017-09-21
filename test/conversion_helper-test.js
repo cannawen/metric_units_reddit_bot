@@ -551,10 +551,8 @@ describe('conversion_helper', () => {
     });
 
     context('inches', () => {
-      context('greater than 1 cm', () => {
-        it('should convert in cm', () => {
-          verifyConversion(1, " inches", 2.54, " cm");
-        });
+      it('should convert in cm', () => {
+        verifyConversion(1, " inches", 2.54, " cm");
       });
 
       context('less than 1 cm', () => {
@@ -565,8 +563,14 @@ describe('conversion_helper', () => {
     });
 
     context('miles', () => {
-      it('should convert', () => {
+      it('should convert to km', () => {
         verifyConversion(1, " miles", 1.609344, " km");
+      });
+
+      context('greater than 0.01 light-year', () => {
+        it('should convert to light-years', () => {
+          verifyConversion(58786253732, " miles", 0.010000000000027884, " light-years");
+        });
       });
     });
 
