@@ -31,7 +31,7 @@ function weightMap(g) {
   }
 }
 
-const metricDistances = ["mm", "cm", "km", "light-?years?",
+const metricDistances = [/\bmm\b/, /\bcm\b/, /\bm\b/, /\bkm\b/, "light-?years?",
                          /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 
 const unitLookupList = [
@@ -143,7 +143,7 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 453.592),
-    "ignoredKeywords" : ["kgs?", "grams?", "kilograms?",
+    "ignoredKeywords" : [/\bg\b/, "kgs?", "grams?", "kilograms?",
 
                          "football", "soccer", "fifa"]
   },
