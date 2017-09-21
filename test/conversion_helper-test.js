@@ -538,8 +538,22 @@ describe('conversion_helper', () => {
 
   describe('#calculateMetric()', () => {
     context('lbs', () => {
-      it('should convert', () => {
-        verifyConversion(1, " lb", 0.453592, " kg");
+      context('under 1 kg', () => {
+        it('should convert to g', () => {
+          verifyConversion(1, " lb", 453.592, " g");
+        });
+      });
+      
+      context('under 1,000 kg', () => {
+        it('should convert to kg', () => {
+          verifyConversion(3, " lb", 1.3607759999999998, " kg");
+        });
+      });
+
+      context('over 1,000 kg', () => {
+        it('should convert to g', () => {
+          verifyConversion(2222, " lb", 1.007881424, " metric tons");
+        });
       });
     });
 
@@ -557,7 +571,7 @@ describe('conversion_helper', () => {
 
       context('less than 1 cm', () => {
         it('should convert in mm', () => {
-          verifyConversion(0.38, " inches", 9.652000000000001, " mm");
+          verifyConversion(0.38, " inches", 9.652, " mm");
         });
       });
     });

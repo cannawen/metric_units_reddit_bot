@@ -18,6 +18,19 @@ function distanceMap(m) {
   }
 }
 
+function weightMap(g) {
+  const kg = g/1000;
+  if (g < 1000) {
+    return createMap(g, " g");
+
+  } else if (kg < 1000) {
+    return createMap(kg, " kg");
+
+  } else {
+    return createMap(kg/1000, " metric tons")
+  }
+}
+
 const metricDistances = ["mm", "cm", "km", "light-?years?",
                          /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 
@@ -116,7 +129,7 @@ const unitLookupList = [
     "standardInputUnit" : " inches",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
-    "conversionFunction" : (i) => distanceMap(i * 2.54 / 100),
+    "conversionFunction" : (i) => distanceMap(i * 0.0254),
     "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
                         "ipad", "iphone", "phone", "tablet", "tablets",
                         "apple", "windows", "linux", "android", "ios",
@@ -129,7 +142,7 @@ const unitLookupList = [
     "standardInputUnit" : " lb",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 0.453592, " kg"),
+    "conversionFunction" : (i) => weightMap(i * 453.592),
     "ignoredKeywords" : ["kgs?", "grams?", "kilograms?",
 
                          "football", "soccer", "fifa"]
@@ -139,7 +152,7 @@ const unitLookupList = [
     "standardInputUnit" : " miles",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
-    "conversionFunction" : (i) => distanceMap(i * 1.609344 * 1000),
+    "conversionFunction" : (i) => distanceMap(i * 1609.344),
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
