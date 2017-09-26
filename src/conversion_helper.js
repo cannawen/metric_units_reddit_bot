@@ -81,6 +81,18 @@ const unitLookupList = [
     "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
+    "imperialUnits" : [/-?mi/, /-?miles?/],
+    "standardInputUnit" : " miles",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
+    "conversionFunction" : (i) => distanceMap(i * 1609.344),
+    "ignoredUnits" : metricDistances,
+    "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
+                         "air miles", "aeroplan", "points",
+                         "britain", "british", "england", "scotland", "wales", "uk",
+                         "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
+  },
+  {
     "imperialUnits" : [/-?feet/, /-ft/, /-?foot/],
     "weakImperialUnits" : [/[']/, /ft/],
     "standardInputUnit" : " feet",
@@ -176,18 +188,6 @@ const unitLookupList = [
                + roundToDecimalPlaces(input%1 * 16, 0) + " oz";
       }
     }
-  },
-  {
-    "imperialUnits" : [/-?mi/, /-?miles?/],
-    "standardInputUnit" : " miles",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
-    "conversionFunction" : (i) => distanceMap(i * 1609.344),
-    "ignoredUnits" : metricDistances,
-    "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
-                         "air miles", "aeroplan", "points",
-                         "britain", "british", "england", "scotland", "wales", "uk",
-                         "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
   },
   {
     "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
