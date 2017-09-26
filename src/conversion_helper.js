@@ -183,6 +183,14 @@ const unitLookupList = [
                         "rgb", "hz"]
   },
   {
+    "imperialUnits" : [/-?stones?/],
+    "standardInputUnit" : " stones",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => weightMap(i * 6350.29),
+    "ignoredUnits" : metricWeightUnits
+  },
+  {
     "imperialUnits" : "-?lbs?",
     "weakImperialUnits" : [/-?pounds?/],
     "standardInputUnit" : " lb",
@@ -222,7 +230,7 @@ const unitLookupList = [
     }
   },
   {
-    "imperialUnits" : [/oz/, /ounces?/],
+    "imperialUnits" : [/-?oz/, /-?ounces?/],
     "standardInputUnit" : " oz",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -231,7 +239,7 @@ const unitLookupList = [
   },
   {
     "imperialUnits" : [/\(?(?:uk|imp(?:erial)?)\)? gal(?:lons?)?/, 
-                       /gal(?:lons?)? \(?(?:uk|imp(?:erial)?\)?)/],
+                       /-?gal(?:lons?)? \(?(?:uk|imp(?:erial)?\)?)/],
     "standardInputUnit" : " gal (imp)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -239,7 +247,7 @@ const unitLookupList = [
     "ignoredUnits" : metricVolumeUnits
   },
   {
-    "imperialUnits" : [/gal(?:lons?)?/],
+    "imperialUnits" : [/-?gal(?:lons?)?/],
     "standardInputUnit" : " gal (US)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
