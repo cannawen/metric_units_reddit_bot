@@ -102,6 +102,19 @@ describe('Converter', () => {
       });
     });
 
+    context('psi', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "5 psi"
+          ],
+          {
+           "5 psi" : "34 kPa"
+          }
+        );
+      });
+    });
+
     context('inches', () => {
       it('should convert', () => {
         testConvert(

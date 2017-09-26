@@ -93,12 +93,20 @@ const unitLookupList = [
                          "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
   },
   {
+    "imperialUnits" : [/-?psi/, /-?pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
+    "standardInputUnit" : " psi",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : (i) => isHyperbole(i),
+    "conversionFunction" : (i) => createMap(i * 6.89476, " kPa"),
+    "ignoredUnits" : [/pascals?/, /pa/]
+  },
+  {
     "imperialUnits" : [/-?foot[ -·]?pounds?/, /-?pound[ -·]?foot/, 
                        /-?ft[ -·]?lbf?/, /-?lb[ -·]?ft/],
     "standardInputUnit" : " ft·lbf",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
-    "conversionFunction" : (i) => createMap(i*1.355818, " Nm"),
+    "conversionFunction" : (i) => createMap(i * 1.355818, " Nm"),
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
   },
   {
