@@ -39,10 +39,10 @@ function volumeMap(l) {
   }
 }
 
-const metricDistanceUnits = [/\bmm\b/, /\bcm\b/, /\bm\b/, /\bkm\b/, /light-?years?/,
+const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
-const metricWeightUnits = [/\bg\b/, /kgs?/, /grams?/, /kilograms?/];
-const metricVolumeUnits = [/\bl\b/, /(?:milli|centi|deca|kilo)?lit(?:er|re)s?/];
+const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
+const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/];
 
 const unitLookupList = [
   {
@@ -87,7 +87,7 @@ const unitLookupList = [
         return [createMap(km, " km/h"), perSMap];
       }
     },
-    "ignoredUnits" : ["km/hr?", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
+    "ignoredUnits" : ["km/hr?", "kmh", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
     "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
@@ -259,7 +259,7 @@ const unitLookupList = [
     "ignoredUnits" : ["imperial"].concat(metricVolumeUnits)
   },
   {
-    "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
+    "imperialUnits" : [/(?:° ?|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
     "weakImperialUnits" : ["f", "-?degrees?"],
     "standardInputUnit" : "°F",
     "isInvalidInput" : (i) => false,
@@ -272,7 +272,7 @@ const unitLookupList = [
         return temperatureMap;
       }
     },
-    "ignoredUnits" : [/°C/, "degrees? c", "celsius", "kelvin"]
+    "ignoredUnits" : [/° ?C/, "degrees? c", "celsius", "kelvin"]
   }
 ];
 
