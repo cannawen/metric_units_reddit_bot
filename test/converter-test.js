@@ -197,6 +197,19 @@ describe('Converter', () => {
       });
     });
 
+    context('mpg', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "25 gallons"
+          ],
+          {
+            "25 gal (US)" : "95 L"
+          }
+        );
+      });
+    });
+
     context('°F', () => {
       it('should convert', () => {
         testConvert(

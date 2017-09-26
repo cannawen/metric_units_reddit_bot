@@ -31,9 +31,14 @@ function weightMap(g) {
   }
 }
 
-const metricDistanceUnits = [/\bmm\b/, /\bcm\b/, /\bm\b/, /\bkm\b/, "light-?years?",
+function volumeMap(l) {
+  return createMap(l, " L");
+}
+
+const metricDistanceUnits = [/\bmm\b/, /\bcm\b/, /\bm\b/, /\bkm\b/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
-const metricWeightUnits = [/\bg\b/, "kgs?", "grams?", "kilograms?"];
+const metricWeightUnits = [/\bg\b/, /kgs?/, /grams?/, /kilograms?/];
+const metricVolumeUnits = [/\bl\b/, /(?:milli|centi|deca|kilo)?lit(?:er|re)s?/];
 
 const unitLookupList = [
   {
@@ -223,6 +228,14 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 28.3495),
     "ignoredUnits" : metricWeightUnits
+  },
+  {
+    "imperialUnits" : [/gal(?:lons?)?/],
+    "standardInputUnit" : " gal (US)",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 3.78541),
+    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits)
   },
   {
     "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
