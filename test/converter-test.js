@@ -53,6 +53,21 @@ describe('Converter', () => {
       });
     });
 
+    context('oz', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "10 oz",
+            "1001 oz"
+          ],
+          {
+            "10 oz" : "280 g",
+            "1,001 oz" : "28 kg"
+          }
+        );
+      });
+    });
+
     context('feet', () => {
       it('should convert', () => {
         testConvert(

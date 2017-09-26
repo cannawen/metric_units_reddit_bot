@@ -31,15 +31,16 @@ function weightMap(g) {
   }
 }
 
-const metricDistances = [/\bmm\b/, /\bcm\b/, /\bm\b/, /\bkm\b/, "light-?years?",
-                         /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
+const metricDistanceUnits = [/\bmm\b/, /\bcm\b/, /\bm\b/, /\bkm\b/, "light-?years?",
+                             /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
+const metricWeightUnits = [/\bg\b/, "kgs?", "grams?", "kilograms?"];
 
 const unitLookupList = [
   {
     "imperialUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
     "standardInputUnit" : " mpg (US)",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : isHyperbole,
+    "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => {
       const kmPerL = createMap(i * 0.425144, " km/L");
       if (i < 15) {
@@ -61,7 +62,7 @@ const unitLookupList = [
     "imperialUnits" : [/-?mph/, /miles (?:an|per) hour/],
     "standardInputUnit" : " mph",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
+    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
     "conversionFunction" : (i) => {
       const km = i * 1.609344;
       if (i < 200) {
@@ -84,9 +85,9 @@ const unitLookupList = [
     "imperialUnits" : [/-?mi/, /-?miles?/],
     "standardInputUnit" : " miles",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
+    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i === 8,
     "conversionFunction" : (i) => distanceMap(i * 1609.344),
-    "ignoredUnits" : metricDistances,
+    "ignoredUnits" : metricDistanceUnits,
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
@@ -96,7 +97,7 @@ const unitLookupList = [
     "imperialUnits" : [/-?psi/, /-?pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
     "standardInputUnit" : " psi",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : (i) => isHyperbole(i),
+    "isWeaklyInvalidInput" : (i) => isHyperbole(i),
     "conversionFunction" : (i) => createMap(i * 6.89476, " kPa"),
     "ignoredUnits" : [/pascals?/, /pa/]
   },
@@ -105,7 +106,7 @@ const unitLookupList = [
                        /-?ft[ -·]?lbf?/, /-?lb[ -·]?ft/],
     "standardInputUnit" : " ft·lbf",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
+    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i === 8,
     "conversionFunction" : (i) => createMap(i * 1.355818, " Nm"),
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
   },
@@ -114,9 +115,9 @@ const unitLookupList = [
     "weakImperialUnits" : [/[']/, /ft/],
     "standardInputUnit" : " feet",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
+    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
     "conversionFunction" : (i) => distanceMap(i * 0.3048),
-    "ignoredUnits" : metricDistances,
+    "ignoredUnits" : metricDistanceUnits,
     "ignoredKeywords" : ["size", "pole"],
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
@@ -158,9 +159,9 @@ const unitLookupList = [
     "weakImperialUnits" : [/["]/, /''/],
     "standardInputUnit" : " inches",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : isHyperbole,
+    "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 0.0254),
-    "ignoredUnits" : metricDistances,
+    "ignoredUnits" : metricDistanceUnits,
     "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
                         "ipad", "iphone", "phone", "tablet", "tablets",
                         "apple", "windows", "linux", "android", "ios",
@@ -172,9 +173,9 @@ const unitLookupList = [
     "weakImperialUnits" : [/-?pounds?/],
     "standardInputUnit" : " lb",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyValidInput" : isHyperbole,
+    "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 453.592),
-    "ignoredUnits" : [/\bg\b/, "kgs?", "grams?", "kilograms?"],
+    "ignoredUnits" : metricWeightUnits,
     "ignoredKeywords" : ["football", "soccer", "fifa"],
     "preprocess" : (input) => {
       const lbAndOz = 
@@ -207,11 +208,19 @@ const unitLookupList = [
     }
   },
   {
+    "imperialUnits" : [/oz/, /ounces?/],
+    "standardInputUnit" : " oz",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => weightMap(i * 28.3495),
+    "ignoredUnits" : metricWeightUnits
+  },
+  {
     "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
     "weakImperialUnits" : ["f", "-?degrees?"],
     "standardInputUnit" : "°F",
     "isInvalidInput" : (i) => false,
-    "isWeaklyValidInput" : (i) => i > 1000,
+    "isWeaklyInvalidInput" : (i) => i > 1000,
     "conversionFunction" : (i) => {
       let temperatureMap = createMap((i - 32) * 5/9, "°C");
       if (i > 0 && i < 32) {
@@ -437,8 +446,8 @@ function filterConversions(potentialConversions) {
     const imperialNumber = Number(input['imperial']['number']);
 
     const map = unitLookupMap[imperialUnit];
-    if (map['isWeaklyValidInput']) {
-      return map['isWeaklyValidInput'](imperialNumber) == false;
+    if (map['isWeaklyInvalidInput']) {
+      return map['isWeaklyInvalidInput'](imperialNumber) == false;
 
     } else {
       return true;
