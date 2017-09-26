@@ -32,6 +32,25 @@ describe('Converter', () => {
           }
         );
       });
+
+      context('and oz', () => {
+        it('should convert', () => {
+          testConvert(
+            [
+              "1lb4oz",
+              "2-pound 7-ounces"
+            ],
+            {
+              "1 lb 4 oz": "566.99 g",
+              "2 lb 7 oz": "1.11 kg"
+            }
+          );
+        });
+
+        it('should not convert over 16 oz', () => {
+          testConvert("I am 20 lb 200 oz", { });
+        });
+      });
     });
 
     context('feet', () => {

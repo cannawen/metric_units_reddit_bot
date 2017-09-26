@@ -87,14 +87,18 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
     "conversionFunction" : (i) => distanceMap(i * 0.3048),
+    "ignoredUnits" : metricDistances,
+    "ignoredKeywords" : ["size", "pole"],
     "preprocess" : (input) => {
       const feetAndInchesRegex = 
         new RegExp(( rh.startRegex 
           + rh.numberRegex
-          + rh.regexJoinToString(["[\']", " ?ft", /[- ]?feet/, /[- ]?ft/, /[- ]?foot/])
+          + "[- ]?"
+          + rh.regexJoinToString(["[\']", "ft", /feet/, /foot/])
           + "[- ]?"
           + rh.numberRegex
-          + rh.regexJoinToString([/["]/, / ?in/, /-in/, /[- ]?inch/, /[- ]?inches/])
+          + "[- ]?"
+          + rh.regexJoinToString([/["]/, /in/, /inch/, /inches/])
         ),'gi');
       return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
         const inchesLessThan12 = inches <= 12;
@@ -119,8 +123,6 @@ const unitLookupList = [
                + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
       }
     },
-    "ignoredUnits" : metricDistances,
-    "ignoredKeywords" : ["size", "pole"]
   },
   {
     "imperialUnits" : [/-in/, /-?inch/, /inches/],
@@ -138,13 +140,42 @@ const unitLookupList = [
   },
   {
     "imperialUnits" : "-?lbs?",
-    "weakImperialUnits" : [/-?pound/, /-?pounds/],
+    "weakImperialUnits" : [/-?pounds?/],
     "standardInputUnit" : " lb",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 453.592),
     "ignoredUnits" : [/\bg\b/, "kgs?", "grams?", "kilograms?"],
-    "ignoredKeywords" : ["football", "soccer", "fifa"]
+    "ignoredKeywords" : ["football", "soccer", "fifa"],
+    "preprocess" : (input) => {
+      const lbAndOz = 
+        new RegExp(( rh.startRegex 
+          + rh.numberRegex
+          + "[- ]?"
+          + rh.regexJoinToString([/lbs?/, /pounds?/])
+          + "[- ]?"
+          + rh.numberRegex
+          + "[- ]?"
+          + rh.regexJoinToString([/oz/, /ounces?/])
+        ),'gi');
+      return input.replace(lbAndOz, (match, lb, oz, offset, string) => {
+        const ozLessThan16 = Number(oz) <= 16;
+        if (ozLessThan16) {
+          const lbNumeral = roundToDecimalPlaces(Number(lb.replace(/[^\d-\.]/g, '')) + Number(oz)/16, 2);
+          return " " + lbNumeral + " lb ";
+        } else {
+          return "  ";
+        }
+      });
+    },
+    "postprocessInput" : (input) => {
+      if (input.toString().indexOf('.') == -1) {
+        return rh.addCommas(input) + " lb";
+      } else {
+        return rh.addCommas(Math.floor(input).toString()) + " lb " 
+               + roundToDecimalPlaces(input%1 * 16, 0) + " oz";
+      }
+    }
   },
   {
     "imperialUnits" : [/-?mi/, /-?miles?/],
@@ -325,7 +356,7 @@ function findPotentialConversions(comment) {
 
   let processedInput = unitLookupList.reduce((memo, map) => {
     if (map["preprocess"]) {
-      return map["preprocess"](input);
+      return map["preprocess"](memo);
     } else {
       return memo;
     }

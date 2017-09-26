@@ -76,6 +76,21 @@ describe('conversion_helper', () => {
           );
         }); 
       });
+
+      context('and oz', () => {
+        it('should convert', () => {
+          verifyPotentialConversions(
+            [
+              "1 lb 16oz",
+              "2 pound 8 oz",
+              "3 pound 20 oz"
+            ],
+            ["2.00", "2.50"],
+            " lb"
+          );
+        }); 
+      });
+
     });
 
     context('feet', () => {
