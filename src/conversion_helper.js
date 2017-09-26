@@ -51,9 +51,8 @@ const unitLookupList = [
         ]
       }
     },
-    "ignoredKeywords" : ["L/100km", "km/L",
-
-                         "basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
+    "ignoredUnits" : ["L/100km", "km/L"],
+    "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
                          "nba", "nhl", "nfl", "sport",
                          "play", "game",
                          "britain", "british", "england", "scotland", "wales", "uk"]
@@ -78,9 +77,8 @@ const unitLookupList = [
         return [createMap(km, " km/h"), perSMap];
       }
     },
-    "ignoredKeywords" : ["km/hr?", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s",
-
-                         "britain", "british", "england", "scotland", "wales", "uk"]
+    "ignoredUnits" : ["km/hr?", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
+    "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
     "imperialUnits" : [/-?feet/, /-ft/, /-?foot/],
@@ -121,7 +119,8 @@ const unitLookupList = [
                + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
       }
     },
-    "ignoredKeywords" : ["size", "pole"].concat(metricDistances)
+    "ignoredUnits" : metricDistances,
+    "ignoredKeywords" : ["size", "pole"]
   },
   {
     "imperialUnits" : [/-in/, /-?inch/, /inches/],
@@ -130,11 +129,12 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 0.0254),
+    "ignoredUnits" : metricDistances,
     "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
                         "ipad", "iphone", "phone", "tablet", "tablets",
                         "apple", "windows", "linux", "android", "ios",
                         "macbook", "laptop", "laptops", "computer", "computers", "notebook", "imac", "pc", "dell", "thinkpad", "lenovo",
-                        "rgb", "hz"].concat(metricDistances)
+                        "rgb", "hz"]
   },
   {
     "imperialUnits" : "-?lbs?",
@@ -143,9 +143,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 453.592),
-    "ignoredKeywords" : [/\bg\b/, "kgs?", "grams?", "kilograms?",
-
-                         "football", "soccer", "fifa"]
+    "ignoredUnits" : [/\bg\b/, "kgs?", "grams?", "kilograms?"],
+    "ignoredKeywords" : ["football", "soccer", "fifa"]
   },
   {
     "imperialUnits" : [/-?mi/, /-?miles?/],
@@ -153,11 +152,11 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
     "conversionFunction" : (i) => distanceMap(i * 1609.344),
+    "ignoredUnits" : metricDistances,
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
                          "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
-                         .concat(metricDistances)
   },
   {
     "imperialUnits" : [/(?:°|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
@@ -173,7 +172,7 @@ const unitLookupList = [
         return temperatureMap;
       }
     },
-    "ignoredKeywords" : [/\d*°C/, "degrees? c", "celsius", "kelvin"]
+    "ignoredUnits" : [/°C/, "degrees? c", "celsius", "kelvin"]
   }
 ];
 
@@ -211,12 +210,13 @@ const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis",
                       "ass", "anus", "anal", "butt", "tit", "kink", "bdsm", "blow job", "jizz", "cum",
                       "nsfw", "gonewild", "sex", "glory hole", "cuck", "porn", "incest", "piv", "milf"]
 
-function shouldConvertComment(comment, regexArray = globalIgnore) {
+function shouldConvertComment(comment, regexArray = globalIgnore, shouldBeUniqueWord = true) {
   const input = comment['body'];
   const postTitle = comment['postTitle'];
   const subreddit = comment['subreddit'];
 
-  const ignoredWordRegex = new RegExp(rh.startRegex
+  const ignoredWordRegex = new RegExp(
+    (shouldBeUniqueWord ? rh.startRegex : "")
     + rh.regexJoinToString(regexArray)
     + rh.endRegex
   , 'i');
@@ -332,7 +332,8 @@ function findPotentialConversions(comment) {
   }, input)
 
   return unitLookupList.reduce((memo, map) => {
-    if (!shouldConvertComment(comment, map['ignoredKeywords'])) {
+    if (!shouldConvertComment(comment, map['ignoredKeywords']) ||
+        !shouldConvertComment(comment, map['ignoredUnits'], false)) {
       return memo;
     }
 

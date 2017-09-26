@@ -340,7 +340,9 @@ describe('conversion_helper', () => {
         verifyPotentialConversions(
           [
             "size 11 feet",
-            "he plays basketball 32 mpg every day"
+            "he plays basketball 32 mpg every day",
+            "7°F",
+            "some°C"
           ],
           undefined
         );
