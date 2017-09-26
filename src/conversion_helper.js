@@ -155,6 +155,15 @@ const unitLookupList = [
     },
   },
   {
+    "imperialUnits" : [/-?yards?/],
+    "standardInputUnit" : " yards",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => distanceMap(i * 0.9144),
+    "ignoredUnits" : metricDistanceUnits,
+    ignoredKeywords : ["football", "golf", "(?:touch)?down"]
+  },
+  {
     "imperialUnits" : [/-in/, /-?inch/, /inches/],
     "weakImperialUnits" : [/["]/, /''/],
     "standardInputUnit" : " inches",

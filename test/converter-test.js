@@ -111,7 +111,22 @@ describe('Converter', () => {
             "5 foot-pounds"
           ],
           {
-           "5 ft·lbf" : "6.8 Nm"
+            "5 ft·lbf" : "6.8 Nm"
+          }
+        );
+      });
+    });
+
+    context('yards', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "1-yard",
+            "5 yards"
+          ],
+          {
+            "1 yards": "90 cm",
+            "5 yards" : "4.6 metres"
           }
         );
       });
@@ -124,7 +139,7 @@ describe('Converter', () => {
             "5 psi"
           ],
           {
-           "5 psi" : "34 kPa"
+            "5 psi" : "34 kPa"
           }
         );
       });
@@ -137,7 +152,7 @@ describe('Converter', () => {
             "1.1-in"
           ],
           {
-           "1.1 inches" : "2.8 cm"
+            "1.1 inches" : "2.8 cm"
           }
         );
       });
@@ -150,7 +165,7 @@ describe('Converter', () => {
             "40miles"
           ],
           {
-           "40 miles" : "64 km"
+            "40 miles" : "64 km"
           }
         );
       });
@@ -163,7 +178,7 @@ describe('Converter', () => {
             "40mph"
           ],
           {
-           "40 mph" : "64 km/h"
+            "40 mph" : "64 km/h"
           }
         );
       });
@@ -176,7 +191,7 @@ describe('Converter', () => {
             "25mpg"
           ],
           {
-           "25 mpg (US)" : "10.6 km/L or 9.4 L/100km"
+            "25 mpg (US)" : "10.6 km/L or 9.4 L/100km"
           }
         );
       });
@@ -189,7 +204,7 @@ describe('Converter', () => {
             "32 °F"
           ],
           {
-           "32°F" : "0°C"
+            "32°F" : "0°C"
          }
         );
       });
