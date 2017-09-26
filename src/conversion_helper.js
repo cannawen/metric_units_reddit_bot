@@ -230,6 +230,15 @@ const unitLookupList = [
     "ignoredUnits" : metricWeightUnits
   },
   {
+    "imperialUnits" : [/\(?(?:uk|imp(?:erial)?)\)? gal(?:lons?)?/, 
+                       /gal(?:lons?)? \(?(?:uk|imp(?:erial)?\)?)/],
+    "standardInputUnit" : " gal (imp)",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 4.54609),
+    "ignoredUnits" : metricVolumeUnits
+  },
+  {
     "imperialUnits" : [/gal(?:lons?)?/],
     "standardInputUnit" : " gal (US)",
     "isInvalidInput" : isZeroOrNegative,

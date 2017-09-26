@@ -197,7 +197,7 @@ describe('Converter', () => {
       });
     });
 
-    context('mpg', () => {
+    context('gallons', () => {
       it('should convert', () => {
         testConvert(
           [
@@ -205,6 +205,19 @@ describe('Converter', () => {
           ],
           {
             "25 gal (US)" : "95 L"
+          }
+        );
+      });
+    });
+
+    context('imperial gallons', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "25 imperial gallons"
+          ],
+          {
+            "25 gal (imp)" : "114 L"
           }
         );
       });
