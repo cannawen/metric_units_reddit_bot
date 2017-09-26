@@ -93,6 +93,15 @@ const unitLookupList = [
                          "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
   },
   {
+    "imperialUnits" : [/-?foot[ -·]?pounds?/, /-?pound[ -·]?foot/, 
+                       /-?ft[ -·]?lbf?/, /-?lb[ -·]?ft/],
+    "standardInputUnit" : " ft·lbf",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyValidInput" : (i) => isHyperbole(i) || i === 8,
+    "conversionFunction" : (i) => createMap(i*1.355818, " Nm"),
+    "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
+  },
+  {
     "imperialUnits" : [/-?feet/, /-ft/, /-?foot/],
     "weakImperialUnits" : [/[']/, /ft/],
     "standardInputUnit" : " feet",

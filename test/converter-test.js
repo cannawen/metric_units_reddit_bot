@@ -89,6 +89,19 @@ describe('Converter', () => {
       });
     });
 
+    context('foot-pounds', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "5 foot-pounds"
+          ],
+          {
+           "5 ft·lbf" : "6.8 Nm"
+          }
+        );
+      });
+    });
+
     context('inches', () => {
       it('should convert', () => {
         testConvert(

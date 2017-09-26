@@ -90,7 +90,6 @@ describe('conversion_helper', () => {
           );
         }); 
       });
-
     });
 
     context('feet', () => {
@@ -146,6 +145,23 @@ describe('conversion_helper', () => {
         it('should not convert values that are not feet and inches', () => {
           verifyPotentialConversions(["12'000", "2004-'05"], undefined, undefined);
         });
+      });
+    });
+
+    context('foot-pound', () => {
+      it('should find conversions', () => {
+        verifyPotentialConversions(
+          [
+            "1footpound",
+            "2pound-foot",
+            "3ftlb",
+            "4lb·ft",
+            "5-foot-pounds",
+            "6 lb-ft"
+          ],
+          [1, 2, 3, 4, 5, 6],
+          " ft·lbf"
+        );
       });
     });
 
@@ -578,6 +594,12 @@ describe('conversion_helper', () => {
       it('should convert', () => {
         verifyConversion(1, " feet", 30.48, " cm");
         verifyConversion(4, " feet", 1.2192, " metres");
+      });
+    });
+
+    context('foot-pounds', () => {
+      it('should convert', () => {
+        verifyConversion(1, " ft·lbf", 1.355818, " Nm");
       });
     });
 
