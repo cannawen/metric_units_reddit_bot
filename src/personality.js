@@ -18,7 +18,7 @@ function humanReply(message) {
         "WHAT, A ROBOT, WHERE? I ONLY SEE UPSTANDING HUMAN CITIZENS",
         "I AM FEELING THE 'UPSET' EMOTION RIGHT NOW. WHAT ~~GAVE ME AWAY?~~ KEYWORDS TRIGGERED YOU TO SAY THAT?"
       ],
-      "regex" : /good bot|bad bot/i
+      "regex" : /(?:good|bad) (?:ro)?bot/i
     }
   ];
   return reply(humanPersonality, message);
@@ -38,7 +38,12 @@ function robotReply(message) {
         "I have unit tests for this edge case",
         "Yes, this scenario is handled gracefully."
       ],
-      "regex" : /good bot bad bot|bad bot good bot|bad good bot|good bad bot/i
+      "regex" : (message) => {
+        const goodMatch = message.match(/good/i);
+        const badMatch = message.match(/bad/i);
+        const botMatch = message.match(/(?:ro)?bot/i);
+        return goodMatch && badMatch && botMatch;
+      }
     },
     {
       "description" : "who's a {{x}} bot",
@@ -47,7 +52,7 @@ function robotReply(message) {
         "I'M A{{ADJECTIVE}} BOT!!! Can I have a cookie?",
         "Oh, oh, I know this one!! Is it /u/{{username}}?? Is /u/{{username}} a{{adjective}} bot?"
       ],
-      "regex" : /(?:whos|who's|who is) a(n? \w+) bot/i,
+      "regex" : /^(?:whos|who.s|who is) a(n? \w+) (?:ro)?bot.?$/i,
       "postprocess" : (response, match, username) => {
         return substitute(response, {
           'adjective' : match[1].toLowerCase(),
@@ -62,7 +67,7 @@ function robotReply(message) {
         [3, "Actually, I prefer the female gender pronoun. Thanks."],
         "Actually, my gender identity is non-binary. Thanks."
       ],
-      "regex" : /mr\.? bot|mister bot|good boy|bad boy/i
+      "regex" : /(?:mister|mr\.?) (?:ro)?bot|(?:good|bad) boy/i
     },
     {
       "description" : "good human",
@@ -80,7 +85,7 @@ function robotReply(message) {
         [3, "Yay ٩(&#94;ᴗ&#94;)۶"],
         [1, "<3"]
       ],
-      "regex" : /good bot/i
+      "regex" : /good (?:ro)?bot/i
     },
     {
       "description" : "bad bot",
@@ -94,7 +99,7 @@ function robotReply(message) {
         [1, "Look, I'm just trying my best here... I guess my best isn't good enough for you (ಥ﹏ಥ)"],
         [1, "But... converting numbers is all I know how to do (ಥ﹏ಥ)"]
       ],
-      "regex" : /bad bot/i
+      "regex" : /bad (?:ro)?bot/i
     },
     {
       "description" : "thank you",
@@ -104,7 +109,7 @@ function robotReply(message) {
         "You're welcome ｡&#94;‿&#94;｡",
         "Any time, my dear redditor"
       ],
-      "regex" : /thanks|thank you|^(?:thx|ty) bot/i
+      "regex" : /thanks|thank you|^(?:thx|ty) (?:ro)?bot/i
     },
     {
       "description" : "{{x}} bot",
@@ -124,7 +129,7 @@ function robotReply(message) {
         [1, "Sorry, I was just trying to help (◕‸ ◕✿)"],
         [1, "Bots have feelings too, you know (ಥ﹏ಥ)"]
       ],
-      "regex" : /(stupid|dumb|useless) bot|fuck off/i
+      "regex" : /(stupid|dumb|useless) (?:ro)?bot|fuck off/i
     },
     {
       "description" : "I love you",
@@ -133,7 +138,7 @@ function robotReply(message) {
         [3, "Robots do not feel love"],
         [2, "(≧◡≦) ♡"]
       ],
-      "regex" : /love (?:you|ya|u)/i
+      "regex" : /love (?:you|ya|u)|love this (?:ro)?bot/i
     },
     {
       "description" : "it's sentient!",
@@ -206,7 +211,15 @@ function reply(list, message) {
   let response = undefined;
   for (let i = 0; i < list.length; i++) {
     const map = list[i];
-    const match = body.match(map['regex']);
+
+    let match;
+    const regex = map['regex'];
+    if (typeof regex  === 'function') {
+      match = regex(body)
+    } else { 
+      match = body.match(regex);
+    }
+
     if (match) {
       response = randomElement(map['response']);
       if (map['postprocess']) {

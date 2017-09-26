@@ -121,7 +121,7 @@ const unitLookupList = [
                + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
       }
     },
-    "ignoredKeywords" : ["size"].concat(metricDistances)
+    "ignoredKeywords" : ["size", "pole"].concat(metricDistances)
   },
   {
     "imperialUnits" : [/-in/, /-?inch/, /inches/],
@@ -156,7 +156,7 @@ const unitLookupList = [
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
-                         "italy", "italian", "croatia", "brasil", "brazil"]
+                         "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
                          .concat(metricDistances)
   },
   {

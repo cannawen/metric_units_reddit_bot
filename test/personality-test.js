@@ -15,12 +15,14 @@ describe('Personality', () => {
     context('Good bot', () => {
       it('should reply', () => {
         verify("good bot", "Good human");
+        verify("You are such a good robot", "Good human");
       });
     });
 
     context('Bad bot', () => {
       it('should reply', () => {
         verify("Bad bot!", "Bad carbon-based life form");
+        verify("You are such a bad robot!", "Bad carbon-based life form");
       });
     });
 
@@ -28,7 +30,7 @@ describe('Personality', () => {
       it('should reply', () => {
         verify("thank you, little bot!!!!", "Glad to be of service");
         verify("thanks, buddy", "Glad to be of service");
-        verify("thx bot", "Glad to be of service");
+        verify("thx robot", "Glad to be of service");
         verify("ty bot", "Glad to be of service");
       });
     });
@@ -38,6 +40,8 @@ describe('Personality', () => {
         verify("i love you, bot", "What is love?");
         verify("love ya, buddy", "What is love?");
         verify("love u", "What is love?");
+        verify("i totally love this robot", "What is love?");
+        verify("love this bot", "What is love?");
       });      
     });
 
@@ -51,7 +55,7 @@ describe('Personality', () => {
     context('Stupid bot|Dumb bot|Useless bot|fuck off', () => {
       it('should reply', () => {
         verify("such a stupid bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
-        verify("urg, dumb bot!", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
+        verify("urg, dumb robot!", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
         verify("so useless bot", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
         verify("fuck off", "To be fair, I _am_ still in beta ¯&#92;&#95;(ツ)&#95;/¯");
       });
@@ -77,9 +81,9 @@ describe('Personality', () => {
       });
     });
 
-    context('Who\'s a {{x}} bot', () => {
+    context('Whos a {{x}} bot', () => {
       it('should take precedence other triggers', () => {
-        verify("whos a good bot?", "ME! Is it me? Am I a good bot?");
+        verify("whos a good robot?", "ME! Is it me? Am I a good bot?");
       });
       
       it('should lowercase the adjective', () => {
@@ -87,19 +91,19 @@ describe('Personality', () => {
       });
 
       it('should appropriately conjugate a to an', () => {        
-        verify("Well, who's an elephant bot?", "ME! Is it me? Am I an elephant bot?");        
+        verify("who's an elephant bot?", "ME! Is it me? Am I an elephant bot?");        
       });
 
       it('should substitute username if needed', () => {        
         helperStub.random = function () { return 0.99 };
-        verify("who is a potato bot? Hmm?", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?");        
+        verify("who is a potato bot", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?");        
       });
     });
 
     context('Mr. bot|Mister bot|good boy|bad boy', () => {
       it('should reply', () => {
         verify("Thanks, mister bot", "Actually, I prefer the female gender pronoun. Thanks.");
-        verify("mr bot, you are funny", "Actually, I prefer the female gender pronoun. Thanks.");
+        verify("mr robot, you are funny", "Actually, I prefer the female gender pronoun. Thanks.");
         verify("good boy!", "Actually, I prefer the female gender pronoun. Thanks.");
         verify("bad boy.", "Actually, I prefer the female gender pronoun. Thanks.");
         verify("Yes mrs bot", undefined);
@@ -116,8 +120,8 @@ describe('Personality', () => {
     
     context('Good bot && Bad bot', () => {
       it('should reply', () => {
-        verify("bad bot good bot", "I have unit tests for this edge case");
-        verify("bad good bot", "I have unit tests for this edge case");
+        verify("bad bot\ngood bot", "I have unit tests for this edge case");
+        verify("bad good robot", "I have unit tests for this edge case");
         verify("good bad bot", "I have unit tests for this edge case");
       });
     });
@@ -148,7 +152,7 @@ describe('Personality', () => {
     context('Good bot|Bad bot', () => {
       it('should reply', () => {
         verifyHuman("good bot", "I AM HUMAN");
-        verifyHuman("bad bot", "I AM HUMAN");
+        verifyHuman("bad robot", "I AM HUMAN");
       });
     });
 
