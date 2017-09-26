@@ -32,7 +32,11 @@ function weightMap(g) {
 }
 
 function volumeMap(l) {
-  return createMap(l, " L");
+  if (l < 1) {
+    return createMap(l*1000, " mL");
+  } else {
+    return createMap(l, " L");
+  }
 }
 
 const metricDistanceUnits = [/\bmm\b/, /\bcm\b/, /\bm\b/, /\bkm\b/, /light-?years?/,
