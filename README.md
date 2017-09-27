@@ -58,5 +58,5 @@ License
 ---
 This source is distributed under GNU GPLv3
 
-Pull requests or derivative works welcome. <sup>but please don't make an imperial_units_bot just to spite me D:</sup>
+Pull requests or derivative works welcome. <sup>but please don't make a freedom_units_bot just to spite me D:</sup>
 
