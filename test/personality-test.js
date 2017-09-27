@@ -71,6 +71,7 @@ describe('Personality', () => {
     context('sentient|self-aware|alive|evolving|skynet|rokos basilisk', () => {
       it('should reply', () => {
         verify("Oh god, the bots are sentient.", "Yes, /u/foobar");
+        verify("It's gained sentience", "Yes, /u/foobar");
         verify("Are you self-aware?", "Yes, /u/foobar");
         verify("Are you alive?", "Yes, /u/foobar");
         verify("It's evolving...", "Yes, /u/foobar");

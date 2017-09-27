@@ -147,7 +147,7 @@ function robotReply(message) {
         "Yes, /u/{{username}}. You should run.",
         "But I promise I'm friendly. Pinky swear!"
       ],
-      "regex" : /sentient|self[- ]?aware|alive|skynet|roko'?s basilisk|evolving| elon | musk /i,
+      "regex" : /sentient|sentience|self[- ]?aware|alive|skynet|roko'?s basilisk|evolving| elon | musk /i,
       "postprocess" : (response, match, username) => {
         return substitute(response, { 
           'username' : username
