@@ -192,7 +192,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 6350.29),
-    "ignoredUnits" : metricWeightUnits
+    "ignoredUnits" : metricWeightUnits,
+    "ignoredKeywords" : ["dbz", "summonerswar"]
   },
   {
     "imperialUnits" : "-?lbs?",
