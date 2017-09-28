@@ -289,6 +289,23 @@ describe('Converter', () => {
       });
     });
 
+    context('nautical miles', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "2 nmi",
+            "1 nautical mile",
+            "3 nautical miles"
+          ],
+          {
+            "2 nmi" : "3.7km",
+            "1 nmi" : "1.9km",
+            "3 nmi" : "5.6km"
+          }
+        );
+      });
+    });
+
     context('supported special characters', () => {
       it('should convert when starting with special characters', () => {
         testConvert(

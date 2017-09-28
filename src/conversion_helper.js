@@ -330,6 +330,14 @@ const unitLookupList = [
       }
     },
     "ignoredUnits" : [/° ?C/, "degrees? c", "celsius", "kelvin"]
+  },
+  {
+    "imperialUnits" : [/nmi/, /nautical\smiles?/],
+    "standardInputUnit" : " nmi",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput": isHyperbole,
+    "conversionFunction" : (i) => createMap(i * 1.852, "km"),
+    "ignoredUnits" : metricDistanceUnits
   }
 ];
 
