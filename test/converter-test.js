@@ -53,6 +53,21 @@ describe('Converter', () => {
       });
     });
 
+    context('fl oz', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "10 fl oz",
+            "1001 oz. liquid"
+          ],
+          {
+            "10 fl. oz." : "300 mL",
+            "1,001 fl. oz." : "30 L"
+          }
+        );
+      });
+    });
+
     context('oz', () => {
       it('should convert', () => {
         testConvert(

@@ -226,6 +226,15 @@ const unitLookupList = [
     }
   },
   {
+    "imperialUnits" : [/-?(?:liquid|fluid|fl\.?)[ -]?(?:oz|ounces?)/,
+                       /-?(?:oz\.?|ounces?)[ -]?(?:liquid|fluid|fl)/],
+    "standardInputUnit" : " fl. oz.",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 0.0295735295625),
+    "ignoredUnits" : metricVolumeUnits
+  },
+  {
     "imperialUnits" : [/-?oz/, /-?ounces?/],
     "standardInputUnit" : " oz",
     "isInvalidInput" : isZeroOrNegative,
