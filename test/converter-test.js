@@ -173,6 +173,21 @@ describe('Converter', () => {
       });
     });
 
+    context('furlongs', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "2-furlongs",
+            "13-furlongs"
+          ],
+          {
+            "2 furlongs": "400 metres",
+            "13 furlongs" : "2.6 km"
+          }
+        );
+      });
+    });
+
     context('miles', () => {
       it('should convert', () => {
         testConvert(
