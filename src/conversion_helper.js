@@ -463,6 +463,14 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 35239.07040000007),
     "ignoredUnits" : metricWeightUnits
+  },
+  {
+    "imperialUnits" : [/nmi/, /nautical\smiles?/],
+    "standardInputUnit" : " nmi",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput": isHyperbole,
+    "conversionFunction" : (i) => distanceMap(i * 1852, "km"),
+    "ignoredUnits" : metricDistanceUnits
   }
 ];
 
