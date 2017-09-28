@@ -28,6 +28,8 @@ function formatReply(comment, conversions) {
     + " ^|"
     + " ^[" + source + "](https://github.com/cannawen/metric_units_reddit_bot)"
     + " ^|"
+    + " ^[" + transform("hacktoberfest") + "](https://github.com/cannawen/metric_units_reddit_bot/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest)"
+    + " ^|"
     + " ^[" + transform("block") + "](https://np.reddit.com/message/compose?to=metric_units&subject=stop&message=If%20you%20would%20like%20to%20stop%20seeing%20this%20bot%27s%20comments%2C%20please%20send%20this%20private%20message%20with%20the%20subject%20%27stop%27.%20If%20you%20are%20a%20moderator%2C%20please%20go%20to%20https%3A%2F%2Fwww.reddit.com%2Fr%2F" + subreddit + "%2Fabout%2Fbanned%2F)"
     + " ^|"
     + " ^" + version;

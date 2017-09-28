@@ -54,6 +54,13 @@ Questions or Comments?
 Feel free to message me [on reddit](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is) or [open a github issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)
 
 
+Contribute
+---
+Metric Units Bot is participating in [Hacktoberfest](https://hacktoberfest.digitalocean.com/)! [See a list of things we need help with](https://github.com/cannawen/metric_units_reddit_bot/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) and win free T-shirts!
+
+Feedback & code reviews are always welcome.
+
+
 License
 ---
 This source is distributed under GNU GPLv3
