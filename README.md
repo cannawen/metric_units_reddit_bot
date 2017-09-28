@@ -22,15 +22,8 @@ Create your bot's reddit account.
 
 Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.) From there, you should be able to get your OAuth username and secret
 
-Download the bot's code, and create a file `./private/environment.yaml` that looks like:
-```
-oauth-username: your-oauth-username
-oauth-secret: your-oauth-secret
-reddit-username: your-username-here
-reddit-password: your-password-here
-version: your-bot-version
-dev-mode: false #true will print POST requests to the console, instead of actually making the POST to the server
-```
+Download the bot's code, and create a file `./private/environment.yaml` that looks like [sample-environment.yaml](src/sample-environment.yaml)
+
 run `npm install` then `node ./src/bot.js` and you should have the bot up and running!
 
 Note: The bot sometimes "skips" comments during polling. To reduce the changes of this happening when testing, you can limit the bot to look a single subreddit instead of "r/all" by changing the line `network.getRedditComments("all")` in bot.js. I recommend running it in r/test (`network.getRedditComments("test")`)!

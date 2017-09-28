@@ -20,7 +20,7 @@ try {
     .safeLoad(fs.readFileSync('./private/excluded_subreddits.yaml', 'utf8'))
     .map(subreddit => subreddit.toLowerCase());
 } catch (e) {
-  helper.logError(e);
+  // helper.logError(e);
 }
 
 process.on('uncaughtException', function (err) {
