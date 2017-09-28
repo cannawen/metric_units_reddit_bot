@@ -1,0 +1,6 @@
+language: node_js
+before_script:
+  - mkdir ./private
+  - mv ./sample-environment.yaml ./private/environment.yaml
+node_js:
+  - "node"
