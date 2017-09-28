@@ -173,8 +173,8 @@ const unitLookupList = [
     "ignoredKeywords" : ["football", "golf", "(?:touch)?down"]
   },
   {
-    "imperialUnits" : [/in/, /inch/, /inches/],
-    "weakImperialUnits" : [/["]/, /''/],
+    "imperialUnits" : [/inch/, /inches/],
+    "weakImperialUnits" : [/["]/, /''/, /in/],
     "standardInputUnit" : " inches",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,

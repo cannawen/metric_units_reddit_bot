@@ -164,7 +164,7 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1.1-in"
+            "1.1-inch"
           ],
           {
             "1.1 inches" : "2.8 cm"

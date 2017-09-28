@@ -172,10 +172,9 @@ describe('conversion_helper', () => {
             "2inches",
             "3 inch",
             "4 inches",
-            "5-in",
-            "6-inch"
+            "5-inch"
           ],
-          [1, 2, 3, 4, 5, 6],
+          [1, 2, 3, 4, 5],
           " inches"
         );
       });
@@ -185,9 +184,11 @@ describe('conversion_helper', () => {
           verifyPotentialConversions(
             [
               "1inch",
-              "2\""
+              "2\"",
+              "3 in",
+              "4-in",
             ],
-            [1, 2],
+            [1, 2, 3, 4],
             " inches"
           );
         }); 
