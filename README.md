@@ -16,13 +16,13 @@ The app starts in [bot.js](src/bot.js), and it polls the Reddit servers in an in
 [personality.js](src/personality.js) create sassy responses to certain trigger words
 
 
-Running the code
+Running the code (in Production)
 ---
 Create your bot's reddit account.
 
 Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.) From there, you should be able to get your OAuth username and secret
 
-Download the code, and create a file `./private/environment.yaml` that looks like:
+Download the bot's code, and create a file `./private/environment.yaml` that looks like:
 ```
 oauth-username: your-oauth-username
 oauth-secret: your-oauth-secret
@@ -33,10 +33,14 @@ dev-mode: false #true will print POST requests to the console, instead of actual
 ```
 run `npm install` then `node ./src/bot.js` and you should have the bot up and running!
 
+Note: The bot sometimes "skips" comments during polling. To reduce the changes of this happening when testing, you can limit the bot to look a single subreddit instead of "r/all" by changing the line `network.getRedditComments("all")` in bot.js. I recommend running it in r/test (`network.getRedditComments("test")`)!
+
 
 Running the tests
 ---
 run `npm test`
+
+To run a single spec, add [.only](https://jaketrent.com/post/run-single-mocha-test/)
 
 
 Git hooks
