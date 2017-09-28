@@ -46,7 +46,7 @@ const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/];
 
 const unitLookupList = [
   {
-    "imperialUnits" : [/-?mpg/, /miles per gal(?:lon)?/],
+    "imperialUnits" : [/mpg/, /miles per gal(?:lon)?/],
     "standardInputUnit" : " mpg (US)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -68,7 +68,7 @@ const unitLookupList = [
                          "britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
-    "imperialUnits" : [/-?mph/, /miles (?:an|per) hour/],
+    "imperialUnits" : [/mph/, /miles (?:an|per) hour/],
     "standardInputUnit" : " mph",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
@@ -91,7 +91,7 @@ const unitLookupList = [
     "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
   },
   {
-    "imperialUnits" : [/-?mi/, /-?miles?/],
+    "imperialUnits" : [/mi/, /miles?/],
     "standardInputUnit" : " miles",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i === 8,
@@ -103,7 +103,7 @@ const unitLookupList = [
                          "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
   },
   {
-    "imperialUnits" : [/-?psi/, /-?pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
+    "imperialUnits" : [/psi/, /pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
     "standardInputUnit" : " psi",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i),
@@ -111,8 +111,8 @@ const unitLookupList = [
     "ignoredUnits" : [/pascals?/, /pa/]
   },
   {
-    "imperialUnits" : [/-?foot[ -·]?pounds?/, /-?pound[ -·]?foot/, 
-                       /-?ft[ -·]?lbf?/, /-?lb[ -·]?ft/],
+    "imperialUnits" : [/foot[ -·]?pounds?/, /pound[ -·]?foot/, 
+                       /ft[ -·]?lbf?/, /lb[ -·]?ft/],
     "standardInputUnit" : " ft·lbf",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i === 8,
@@ -120,8 +120,8 @@ const unitLookupList = [
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
   },
   {
-    "imperialUnits" : [/-?feet/, /-ft/, /-?foot/],
-    "weakImperialUnits" : [/[']/, /ft/],
+    "imperialUnits" : [/feet/, /ft/, /foot/],
+    "weakImperialUnits" : [/[']/],
     "standardInputUnit" : " feet",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
@@ -164,7 +164,7 @@ const unitLookupList = [
     },
   },
   {
-    "imperialUnits" : [/-?yards?/],
+    "imperialUnits" : [/yards?/],
     "standardInputUnit" : " yards",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -173,7 +173,7 @@ const unitLookupList = [
     "ignoredKeywords" : ["football", "golf", "(?:touch)?down"]
   },
   {
-    "imperialUnits" : [/-in/, /-?inch/, /inches/],
+    "imperialUnits" : [/in/, /inch/, /inches/],
     "weakImperialUnits" : [/["]/, /''/],
     "standardInputUnit" : " inches",
     "isInvalidInput" : isZeroOrNegative,
@@ -187,8 +187,8 @@ const unitLookupList = [
                         "rgb", "hz"]
   },
   {
-    "imperialUnits" : "-?lbs?",
-    "weakImperialUnits" : [/-?pounds?/],
+    "imperialUnits" : "lbs?",
+    "weakImperialUnits" : [/pounds?/],
     "standardInputUnit" : " lb",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -226,8 +226,8 @@ const unitLookupList = [
     }
   },
   {
-    "imperialUnits" : [/-?(?:liquid|fluid|fl\.?)[ -]?(?:oz|ounces?)/,
-                       /-?(?:oz\.?|ounces?)[ -]?(?:liquid|fluid|fl)/],
+    "imperialUnits" : [/(?:liquid|fluid|fl\.?)[ -]?(?:oz|ounces?)/,
+                       /(?:oz\.?|ounces?)[ -]?(?:liquid|fluid|fl)/],
     "standardInputUnit" : " fl. oz.",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -235,7 +235,7 @@ const unitLookupList = [
     "ignoredUnits" : metricVolumeUnits
   },
   {
-    "imperialUnits" : [/-?oz/, /-?ounces?/],
+    "imperialUnits" : [/oz/, /ounces?/],
     "standardInputUnit" : " oz",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -244,7 +244,7 @@ const unitLookupList = [
   },
   {
     "imperialUnits" : [/\(?(?:uk|imp(?:erial)?)\)? gal(?:lons?)?/, 
-                       /-?gal(?:lons?)? \(?(?:uk|imp(?:erial)?\)?)/],
+                       /gal(?:lons?)? \(?(?:uk|imp(?:erial)?\)?)/],
     "standardInputUnit" : " gal (imp)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -252,7 +252,7 @@ const unitLookupList = [
     "ignoredUnits" : metricVolumeUnits
   },
   {
-    "imperialUnits" : [/-?gal(?:lons?)?/],
+    "imperialUnits" : [/gal(?:lons?)?/],
     "standardInputUnit" : " gal (US)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
@@ -260,8 +260,8 @@ const unitLookupList = [
     "ignoredUnits" : ["imperial"].concat(metricVolumeUnits)
   },
   {
-    "imperialUnits" : [/(?:° ?|-?degrees?) ?(?:f|fahrenheit)/, /-?fahrenheit/],
-    "weakImperialUnits" : ["f", "-?degrees?"],
+    "imperialUnits" : [/(?:°|degrees?) ?(?:f|fahrenheit)/, /fahrenheit/],
+    "weakImperialUnits" : ["f", "degrees?"],
     "standardInputUnit" : "°F",
     "isInvalidInput" : (i) => false,
     "isWeaklyInvalidInput" : (i) => i > 1000,
@@ -347,7 +347,7 @@ function findPotentialConversions(comment) {
 
     const rangeRegex = new RegExp(rh.startRegex 
                          + rh.rangeRegex 
-                         + "(?= ?" 
+                         + "(?=[ -]?" 
                            + unitRegex 
                            + rh.endRegex 
                          + ")",
@@ -389,7 +389,7 @@ function findPotentialConversions(comment) {
 
     const regex = new RegExp(rh.startRegex
                     + rh.numberRegex 
-                    + "(?= ?" 
+                    + "(?=[ -]?" 
                       + unitRegex
                       + rh.endRegex
                     + ")",
@@ -432,6 +432,8 @@ function findPotentialConversions(comment) {
     }
   }, input)
 
+  let duplicateCache = {}
+
   return unitLookupList.reduce((memo, map) => {
     if (!shouldConvertComment(comment, map['ignoredKeywords']) ||
         !shouldConvertComment(comment, map['ignoredUnits'], false)) {
@@ -455,7 +457,21 @@ function findPotentialConversions(comment) {
       memo = memo.concat(weakConversions['potentialConversions']);
     }
     return memo;
-  }, []);
+  }, [])
+  //Remove duplicate conversions
+  .filter(item => {
+    const unit = item['imperial']['unit'];
+    const number = item['imperial']['number'];
+    if (duplicateCache[unit] === undefined) {
+      duplicateCache[unit] = [number];
+      return true;
+    } else if (duplicateCache[unit].indexOf(number) === -1) {
+      duplicateCache[unit].push(number);
+      return true;
+    } else {
+      return false;
+    }
+  });
 }
 
 /*

@@ -115,9 +115,8 @@ describe('conversion_helper', () => {
             [
               "1feet",
               "2'",
-              "3ft"
             ],
-            [1, 2, 3],
+            [1, 2],
             " feet"
           );
         }); 
