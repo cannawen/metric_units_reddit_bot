@@ -187,6 +187,15 @@ const unitLookupList = [
                         "rgb", "hz"]
   },
   {
+    "imperialUnits" : [/furlongs?/],
+    "weakImperialUnits" : [/fur/],
+    "standardInputUnit" : " furlongs",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => distanceMap(i * 201.168),
+    "ignoredUnits" : metricDistanceUnits
+  },
+  {
     "imperialUnits" : "lbs?",
     "weakImperialUnits" : [/pounds?/],
     "standardInputUnit" : " lb",
