@@ -187,15 +187,6 @@ const unitLookupList = [
                         "rgb", "hz"]
   },
   {
-    "imperialUnits" : [/-?stones?/],
-    "standardInputUnit" : " stones",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => weightMap(i * 6350.29),
-    "ignoredUnits" : metricWeightUnits,
-    "ignoredKeywords" : ["dbz", "summonerswar"]
-  },
-  {
     "imperialUnits" : "-?lbs?",
     "weakImperialUnits" : [/-?pounds?/],
     "standardInputUnit" : " lb",

@@ -68,19 +68,6 @@ describe('Converter', () => {
       });
     });
 
-    context('stone', () => {
-      it('should convert', () => {
-        testConvert(
-          [
-            "1 stone"
-          ],
-          {
-            "1 stones" : "6.4 kg"
-          }
-        );
-      });
-    });
-
     context('feet', () => {
       it('should convert', () => {
         testConvert(
