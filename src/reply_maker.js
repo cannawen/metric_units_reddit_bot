@@ -12,7 +12,7 @@ function formatReply(comment, conversions) {
   if (comment['subreddit'].match(/^totallynotrobots$/i)) {
     species = "HUMAN";
     source =  "~~SOURCE~~";
-    version = "~~" + "age"+ environment['version'].slice(1,).toUpperCase() + "~~";
+    version = "age"+ environment['version'].slice(1,).toUpperCase();
     subreddit = "I_AM_HUMAN_DO_NOT_BAN"
     transform = (x) => x.toUpperCase();
   }
