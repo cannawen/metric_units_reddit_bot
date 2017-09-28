@@ -60,7 +60,7 @@ Feel free to message me [on reddit](https://www.reddit.com/message/compose?to=ca
 
 Contribute
 ---
-Metric Units Bot is participating in [Hacktoberfest](https://hacktoberfest.digitalocean.com/)! [See a list of things we need help with](https://github.com/cannawen/metric_units_reddit_bot/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) and win free T-shirts!
+Metric Units Bot is participating in [Hacktoberfest](https://hacktoberfest.digitalocean.com/)! [See a list of things we need help with](https://github.com/cannawen/metric_units_reddit_bot/issues?q=is%3Aissue+is%3Aopen+label%3Ahacktoberfest) and win free T-shirts! You can also take a look at what's in [Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2091572) or come up with your own improvements
 
 Feedback & code reviews are always welcome.
 
