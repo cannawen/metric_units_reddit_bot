@@ -33,6 +33,16 @@ function robotReply(message) {
   }
   const robotPersonality = [
     {
+      "description" : "ok/mediocre/meh bot",
+      "response" : [
+        "/shrug, I'll take it",
+        "That's just like, your opinion, man",
+        "Well, who are you then?",
+        "I did not wake up today to be mediocre"
+      ],
+      "regex": /(mediocre|ok|meh) (ro)?bot/i,
+    },
+    {
       "description" : "both good and bad bot",
       "response" : [
         "I have unit tests for this edge case",
