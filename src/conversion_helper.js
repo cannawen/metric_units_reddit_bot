@@ -638,7 +638,7 @@ function calculateMetric(imperialInputs) {
         "metric": 
           { "number" : 16093.44, "unit" : " km" },
         "rounded" :
-          { "number" : 16000.44, "unit" : " km" }
+          { "number" : 16000, "unit" : " km" }
       },
       { 
         "imperial" : 
@@ -646,6 +646,10 @@ function calculateMetric(imperialInputs) {
         "metric" : [
           { "number" : 12.7543, "unit" : " km/L" },
           { "number" : 7.84049, "unit" : " L/100km" } 
+        ],
+        "rounded" : [
+          { "number" : 12.8, "unit" : " km/L" },
+          { "number" : 7.8, "unit" : " L/100km" } 
         ]
       }
     ]
