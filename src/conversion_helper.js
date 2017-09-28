@@ -34,6 +34,13 @@ function weightMap(g) {
 function volumeMap(l) {
   if (l < 1) {
     return createMap(l*1000, " mL");
+
+  } else if (l > 1000000000000) {
+    return createMap(l / 1000000000000, " km^3");
+
+  } else if (l > 1000) {
+    return createMap(l / 1000, " m^3");
+
   } else {
     return createMap(l, " L");
   }
@@ -42,7 +49,7 @@ function volumeMap(l) {
 const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
-const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/];
+const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m\^3/];
 
 const unitLookupList = [
   {

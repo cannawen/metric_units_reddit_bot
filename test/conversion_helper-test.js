@@ -701,6 +701,32 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('volumetric units', () => {
+      context('under 1 L', () => {
+        it('should convert to mL', () => {
+          verifyConversion(1, " fl. oz.", 29.5735295625, " mL");
+        });
+      });
+
+      context('under 1,000 L', () => {
+        it('should convert to L', () => {
+          verifyConversion(200, " fl. oz.", 5.9147059125, " L");
+        });
+      });
+
+      context('over 1,000 L', () => {
+        it('should convert to m^3', () => {
+          verifyConversion(2222, " gal (US)", 8.41118102, " m^3");
+        });
+      });
+
+      context('over 1,000000000000 L', () => {
+        it('should convert to km^3', () => {
+          verifyConversion(987654321012, " gal (US)", 3.7386765433020352, " km^3");
+        });
+      });
+    });
+
     function verifyConversion(imperialNumber, imperialUnit, metricNumber, metricUnit) {
       const imperialMap = createImperialMap(imperialNumber, imperialUnit);
 
