@@ -1,3 +1,6 @@
+![Build status](https://travis-ci.org/cannawen/metric_units_reddit_bot.svg?branch=master)
+
+
 What does the bot do?
 ---
 The bot finds comments with imperial units, and replies with metric units. See [./test/converter-test.js](test/converter-test.js) for what conversions are currently supported, and see [Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2091572) for what's coming up next.
