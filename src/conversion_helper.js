@@ -243,6 +243,46 @@ const unitLookupList = [
     "ignoredUnits" : metricWeightUnits
   },
   {
+    "imperialUnits" : [/teaspoons?/, /tsp/],
+    "standardInputUnit" : " tsp",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 0.00492892),
+    "ignoredUnits" : metricVolumeUnits
+  },
+  {
+    "imperialUnits" : [/tablespoons?/, /tbsp/, /tbl/],
+    "standardInputUnit" : " Tbsp",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 0.0147868),
+    "ignoredUnits" : metricVolumeUnits
+  },
+  {
+    "imperialUnits" : [/cups?/],
+    "standardInputUnit" : " cups",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 0.24),
+    "ignoredUnits" : metricVolumeUnits
+  },
+  {
+    "imperialUnits" : [/pints?/],
+    "standardInputUnit" : " pints",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 0.473176),
+    "ignoredUnits" : metricVolumeUnits
+  },
+  {
+    "imperialUnits" : [/quarts?/],
+    "standardInputUnit" : " quarts",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 0.946353),
+    "ignoredUnits" : metricVolumeUnits
+  },
+  {
     "imperialUnits" : [/\(?(?:uk|imp(?:erial)?)\)? gal(?:lons?)?/, 
                        /gal(?:lons?)? \(?(?:uk|imp(?:erial)?\)?)/],
     "standardInputUnit" : " gal (imp)",

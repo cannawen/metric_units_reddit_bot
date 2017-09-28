@@ -212,16 +212,39 @@ describe('Converter', () => {
       });
     });
 
+    context('teaspoons', () => {
+      it('should convert', () => {
+        testConvert(["25 teaspoons"], {"25 tsp" : "120 mL"});
+      });
+    });
+
+    context('tablespoons', () => {
+      it('should convert', () => {
+        testConvert(["25 tablespoons"], {"25 Tbsp" : "370 mL"});
+      });
+    });
+
+    context('cups', () => {
+      it('should convert', () => {
+        testConvert(["25 cups"], {"25 cups" : "6 L"});
+      });
+    });
+
+    context('pints', () => {
+      it('should convert', () => {
+        testConvert(["25 pints"], {"25 pints" : "12 L"});
+      });
+    });
+
+    context('quarts', () => {
+      it('should convert', () => {
+        testConvert(["25 quarts"], {"25 quarts" : "24 L"});
+      });
+    });
+
     context('gallons', () => {
       it('should convert', () => {
-        testConvert(
-          [
-            "25 gallons"
-          ],
-          {
-            "25 gal (US)" : "95 L"
-          }
-        );
+        testConvert(["25 gallons"], {"25 gal (US)" : "95 L"});
       });
     });
 
