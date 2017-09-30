@@ -51,7 +51,7 @@ To enable git hooks, copy the file [pre-commit](pre-commit) into your `./.git/ho
 
 Questions or Comments?
 ---
-Feel free to message me [on reddit](https://www.reddit.com/message/compose?to=cannawen&subject=metric%20units%20bot&message=I%20think%20your%20bot%20is) or [open a github issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)
+Feel free to [drop by the subreddit](https://www.reddit.com/r/metric_units/) or [open a github issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)
 
 
 Contribute
