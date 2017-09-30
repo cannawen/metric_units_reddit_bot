@@ -28,7 +28,7 @@ process.on('uncaughtException', function (err) {
 });
 
 network.refreshToken();
-helper.setIntervalSafely(postConversions, 2);
+helper.setIntervalSafely(postConversions, 1);
 helper.setIntervalSafely(replyToMessages, 60);
 
 function replyToMessages() {

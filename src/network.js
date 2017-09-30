@@ -8,7 +8,7 @@ const environment = helper.environment();
 
 var oauthAccessToken = undefined;
 var oauthTokenValidUntil = undefined;
-var lastProcessedCommentTimestamp = 0;
+var lastProcessedCommentId = undefined;
 
 function get(url) {
   let content;  
@@ -142,9 +142,15 @@ function getRedditComments(subreddit) {
     return;
   }
 
-  const unprocessedComments = content
+  let comments = content;
+
+  const lastProcessedIndex = comments.findIndex((el) => el['data']['name'] === lastProcessedCommentId);
+  if (lastProcessedIndex !== -1) {
+    comments = comments.slice(0, lastProcessedIndex)
+  }
+
+  const unprocessedComments = comments
     .map(comment => comment['data'])
-    .filter(data => data['created_utc'] > lastProcessedCommentTimestamp)
     .map(data => {
       return {
           'body': data['body'],
@@ -157,7 +163,7 @@ function getRedditComments(subreddit) {
         }
     });
 
-  lastProcessedCommentTimestamp = content[0]['data']['created_utc'];
+  lastProcessedCommentId = content[0]['data']['name'];
   return unprocessedComments;
 }
 
