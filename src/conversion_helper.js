@@ -118,8 +118,7 @@ const unitLookupList = [
     "ignoredUnits" : [/pascals?/, /pa/]
   },
   {
-    "imperialUnits" : [/foot[ -·]?pounds?/, /pound[ -·]?foot/, 
-                       /ft[ -·]?lbf?/, /lb[ -·]?ft/],
+    "imperialUnits" : [/(?:foot|ft)[ -·]?(?:pounds?|lbf?|lbs?)/, /(?:pounds?|lbs?)[ -·]?(?:foot|fts?)/],
     "standardInputUnit" : " ft·lbf",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i === 8,
