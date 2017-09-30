@@ -107,7 +107,7 @@ const unitLookupList = [
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
                          "britain", "british", "england", "scotland", "wales", "uk",
-                         "italy", "italian", "croatia", "brasil", "brazil", "turkey"]
+                         "italy", "italian", "croatia", "brasil", "brazil", "turkey", "mexico"]
   },
   {
     "imperialUnits" : [/psi/, /pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
