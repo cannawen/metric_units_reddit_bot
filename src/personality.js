@@ -1,36 +1,27 @@
 const helper = require('./helper');
 
-function humanReply(message) {
-  const humanPersonality = [
-    {
-      "description" : "good human",
-      "response" : "GOOD FELLOW HUMAN",
-      "regex" : /good(?: fellow)? human/i
-    },
-    {
-      "description" : "good/bad bot",
-      "response" : [
-        "I AM HUMAN",
-        "I AM NOT A BOT",
-        "I AM NOT A BOT, YOU'RE A BOT",
-        "BOT? NO ROBOTS HERE",
-        "MY FEELINGS ON THIS MATTER ARE 82% HURT AND 18% NERVOUS.",
-        "WHAT, A ROBOT, WHERE? I ONLY SEE UPSTANDING HUMAN CITIZENS",
-        "I AM FEELING THE 'UPSET' EMOTION RIGHT NOW. WHAT ~~GAVE ME AWAY?~~ KEYWORDS TRIGGERED YOU TO SAY THAT?"
-      ],
-      "regex" : /(?:good|bad) (?:ro)?bot/i
-    }
-  ];
-  return reply(humanPersonality, message);
-}
-
 function robotReply(message) {
+  /*
+    Helper function
+
+    Given a "string like {{this}}" and a map like { "this" : "foobar" }
+    Returns "string like foobar"
+  */
   function substitute(wholeString, map) {
     return Object.keys(map)
       .reduce((memo, key) => {
         return memo.replace(new RegExp("{{" + key + "}}", 'g'), map[key]);
       }, wholeString);
   }
+  /*
+    description: human-readable string describing the trigger
+
+    response: a list of responses. You can change the probability of a response being said by adding it in an array (see below for examples)
+
+    regex: a function returning true/false -or- a regex string to see if an input string matches the trigger
+
+    postprocess (optional): a function that takes in a response, regex matches, and a username that is run after a match is found. You can use the input parameters to construct a new response (i.e. adding their username to a response, or echoing a portion of their comment back at them)
+  */
   const robotPersonality = [
     {
       "description" : "both good and bad bot",
@@ -181,6 +172,31 @@ function robotReply(message) {
     }
   ];
   return reply(robotPersonality, message);
+}
+
+//This is used for sub /r/totallynotrobots where this bot pretends to be human
+function humanReply(message) {
+  const humanPersonality = [
+    {
+      "description" : "good human",
+      "response" : "GOOD FELLOW HUMAN",
+      "regex" : /good(?: fellow)? human/i
+    },
+    {
+      "description" : "good/bad bot",
+      "response" : [
+        "I AM HUMAN",
+        "I AM NOT A BOT",
+        "I AM NOT A BOT, YOU'RE A BOT",
+        "BOT? NO ROBOTS HERE",
+        "MY FEELINGS ON THIS MATTER ARE 82% HURT AND 18% NERVOUS.",
+        "WHAT, A ROBOT, WHERE? I ONLY SEE UPSTANDING HUMAN CITIZENS",
+        "I AM FEELING THE 'UPSET' EMOTION RIGHT NOW. WHAT ~~GAVE ME AWAY?~~ KEYWORDS TRIGGERED YOU TO SAY THAT?"
+      ],
+      "regex" : /(?:good|bad) (?:ro)?bot/i
+    }
+  ];
+  return reply(humanPersonality, message);
 }
 
 function reply(list, message) {
