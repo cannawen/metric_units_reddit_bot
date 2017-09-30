@@ -426,7 +426,7 @@ describe('conversion_helper', () => {
       });
 
       it('should not allow when values are likely hyperbole', () => {
-        verifyFilterConversions([100, 1000, 10000], " lb", undefined);
+        verifyFilterConversions([100, 1000, 100000000000000000000000], " lb", undefined);
       });
     });
 

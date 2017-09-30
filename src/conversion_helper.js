@@ -113,7 +113,7 @@ const unitLookupList = [
     "imperialUnits" : [/psi/, /pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
     "standardInputUnit" : " psi",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => isHyperbole(i),
+    "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => createMap(i * 6.89476, " kPa"),
     "ignoredUnits" : [/pascals?/, /pa/]
   },
@@ -350,7 +350,9 @@ function isZeroOrNegative(i) {
 }
 
 function isHyperbole(i) {
-  return i.toString().match(/^100+(?:\.0+)?$/) !== null;
+  const isOneFollowedByZeros = i.toString().match(/^100+(?:\.0+)?$/) !== null;
+  const isOneFollowedByExponentTerm = i.toString().match(/1e(?:\d)*/) !== null;
+  return isOneFollowedByZeros || isOneFollowedByExponentTerm;
 }
 
 function roundToDecimalPlaces(number, places) {
