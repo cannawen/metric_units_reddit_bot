@@ -176,7 +176,7 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 0.9144),
     "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["football", "golf", "(?:touch)?down"]
+    "ignoredKeywords" : ["football", "golf", "(?:touch)?down", "cfl", "nfl"]
   },
   {
     "imperialUnits" : [/inch/, /inches/],
