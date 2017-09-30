@@ -78,7 +78,6 @@ function replyToMessages() {
     return;
   }
 
-
   filterCommentReplies(messages)
     .filter(messageIsShort)
     .forEach(message => {

@@ -24,7 +24,7 @@ function formatReply(comment, conversions) {
     + "\n\n"
     + transform("^metric ^units ^" + species)
     + " ^|"
-    + " ^[" + transform("feedback") + "](https://www.reddit.com/r/metric_units/)"
+    + " ^[" + transform("feedback") + "](https://www.reddit.com/r/metric_units/comments/73edn2/constructive_feedback_thread/)"
     + " ^|"
     + " ^[" + source + "](https://github.com/cannawen/metric_units_reddit_bot)"
     + " ^|"
