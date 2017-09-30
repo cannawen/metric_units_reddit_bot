@@ -132,7 +132,7 @@ describe('Bot', () => {
   });
 
   describe('conversions', () => {
-    it('should trigger every 2 seconds', () => {
+    it('should trigger every 1 second', () => {
       commentSeconds.should.equal(1);
     });
 
