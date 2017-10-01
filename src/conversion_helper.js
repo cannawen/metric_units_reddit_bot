@@ -367,6 +367,19 @@ const unitLookupList = [
       }
     },
     "ignoredUnits" : [/° ?C/, "degrees? c", "celsius", "kelvin"]
+  },
+  {
+    "imperialUnits" : [/ac/, /acres?/],
+    "standardInputUnit" : " acres",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => createMap(i * 0.00404685642, " km^2"),
+    "ignoredUnits" : [
+      /[sS]quare [kK]ilometers?/,
+      /[sS]q.? [kK]m/,
+      /[sS]q.? [kK]ilometers?/,
+      /km[^]2/
+    ]
   }
 ];
 
