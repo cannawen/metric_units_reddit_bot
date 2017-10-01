@@ -25,7 +25,7 @@ Create your bot's reddit account.
 
 Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.) From there, you should be able to get your OAuth username and secret
 
-Download the bot's code, and create a file `./private/environment.yaml` that looks like [sample-environment.yaml](src/sample-environment.yaml)
+Download the bot's code, and create a file `./private/environment.yaml` that looks like [sample-environment.yaml](sample-environment.yaml)
 
 run `npm install` then `node ./src/bot.js` and you should have the bot up and running!
 
