@@ -24,32 +24,6 @@ function robotReply(message) {
   */
   const robotPersonality = [
     {
-      "description" : "ok/mediocre/meh bot",
-      "response" : [
-        "/shrug, I'll take it",
-        "That's just like, your opinion, man",
-        "Well, who are you then?",
-        "I did not wake up today to be mediocre"
-      ],
-      "regex": /(mediocre|ok|meh) (ro)?bot/i,
-    },
-    {
-      "description" : "cute/adorable/kawaii bot",
-      "response" : [
-        "Stop it, you're making me blush!",
-        "So... do... you want to grab a drink later? ^_blush_",
-        "You're not so bad yourself, /u/{{username}}...",
-        "Why, thank you. Do you visit this subreddit often?",
-        "Oh, you! (◕‿◕✿)"
-      ],
-      "regex": /(cute|adorable|kawaii) (ro)?bot/i,
-      "postprocess" : (response, match, username) => {
-        return substitute(response, {
-          'username' : username
-        });
-      }
-    },
-    {
       "description" : "both good and bad bot",
       "response" : [
         "I have unit tests for this edge case",
@@ -74,6 +48,32 @@ function robotReply(message) {
         return substitute(response, {
           'adjective' : match[1].toLowerCase(),
           'ADJECTIVE' : match[1].toUpperCase(),
+          'username' : username
+        });
+      }
+    },
+    {
+      "description" : "ok/mediocre/meh bot",
+      "response" : [
+        "/shrug, I'll take it",
+        "That's just like, your opinion, man",
+        "Well, who are you then?",
+        "I did not wake up today to be mediocre"
+      ],
+      "regex": /(mediocre|ok|meh) (ro)?bot/i,
+    },
+    {
+      "description" : "cute/adorable/kawaii bot",
+      "response" : [
+        "Stop it, you're making me blush!",
+        "So... do... you want to grab a drink later? ^_blush_",
+        "You're not so bad yourself, /u/{{username}}...",
+        "Why, thank you. Do you visit this subreddit often?",
+        "Oh, you! (◕‿◕✿)"
+      ],
+      "regex": /(cute|adorable|kawaii) (ro)?bot/i,
+      "postprocess" : (response, match, username) => {
+        return substitute(response, {
           'username' : username
         });
       }
