@@ -26,6 +26,14 @@ describe('Personality', () => {
       });
     });
 
+    context('mediocre|meh|ok bot', () => {
+      it('should reply', () => {
+        verify("mediocre bot!!", "/shrug, I'll take it");
+        verify("meh bot!!", "/shrug, I'll take it");
+        verify("ok bot!!", "/shrug, I'll take it");
+      });
+    });
+
     context('Thanks|Thank you|thx|ty', () => {
       it('should reply', () => {
         verify("thank you, little bot!!!!", "Glad to be of service");
