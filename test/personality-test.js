@@ -11,7 +11,7 @@ describe('Personality', () => {
     personality = proxyquire('../src/personality', { './helper': helperStub });
   });
 
-  describe('#reply()', () => {  
+  describe('#reply()', () => {
     context('Good bot', () => {
       it('should reply', () => {
         verify("good bot", "Good human");
@@ -34,6 +34,17 @@ describe('Personality', () => {
       });
     });
 
+    context('cute|adorable|kawaii bot', () => {
+      it('should reply', () => {
+        verify("cute bot!!", "Stop it, you're making me blush!");
+        verify("what a cute bot", "Stop it, you're making me blush!");
+        verify("adorable bot", "Stop it, you're making me blush!");
+        verify("such an adorable bot!!", "Stop it, you're making me blush!");
+        verify("kawaii bot", "Stop it, you're making me blush!");
+        verify("very kawaii bot!!", "Stop it, you're making me blush!");
+      });
+    });
+
     context('Thanks|Thank you|thx|ty', () => {
       it('should reply', () => {
         verify("thank you, little bot!!!!", "Glad to be of service");
@@ -50,7 +61,7 @@ describe('Personality', () => {
         verify("love u", "What is love?");
         verify("i totally love this robot", "What is love?");
         verify("love this bot", "What is love?");
-      });      
+      });
     });
 
     context('{{x}} bot', () => {
@@ -94,18 +105,18 @@ describe('Personality', () => {
       it('should take precedence other triggers', () => {
         verify("whos a good robot?", "ME! Is it me? Am I a good bot?");
       });
-      
+
       it('should lowercase the adjective', () => {
         verify("WHO'S A NAUGHTY BOT", "ME! Is it me? Am I a naughty bot?");
       });
 
-      it('should appropriately conjugate a to an', () => {        
-        verify("who's an elephant bot?", "ME! Is it me? Am I an elephant bot?");        
+      it('should appropriately conjugate a to an', () => {
+        verify("who's an elephant bot?", "ME! Is it me? Am I an elephant bot?");
       });
 
-      it('should substitute username if needed', () => {        
+      it('should substitute username if needed', () => {
         helperStub.random = function () { return 0.99 };
-        verify("who is a potato bot", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?");        
+        verify("who is a potato bot", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?");
       });
     });
 
@@ -126,7 +137,7 @@ describe('Personality', () => {
         verify("Don't hurt me", "No more");
       });
     });
-    
+
     context('Good bot && Bad bot', () => {
       it('should reply', () => {
         verify("bad bot\ngood bot", "I have unit tests for this edge case");
@@ -141,7 +152,7 @@ describe('Personality', () => {
         verify("☜", "(☞ﾟヮﾟ)☞");
       });
     });
-    
+
     context('Negations', () => {
       it('should not reply', () => {
         verify("not a good bot", undefined);
