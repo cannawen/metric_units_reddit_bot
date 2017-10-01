@@ -34,6 +34,22 @@ function robotReply(message) {
       "regex": /(mediocre|ok|meh) (ro)?bot/i,
     },
     {
+      "description" : "cute/adorable/kawaii bot",
+      "response" : [
+        "Stop it, you're making me blush!",
+        "So... do... you want to grab a drink later? ^_blush_",
+        "You're not so bad yourself, /u/{{username}}...",
+        "Why, thank you. Do you visit this subreddit often?",
+        "Oh, you! (◕‿◕✿)"
+      ],
+      "regex": /(cute|adorable|kawaii) (ro)?bot/i,
+      "postprocess" : (response, match, username) => {
+        return substitute(response, {
+          'username' : username
+        });
+      }
+    },
+    {
       "description" : "both good and bad bot",
       "response" : [
         "I have unit tests for this edge case",
@@ -117,7 +133,7 @@ function robotReply(message) {
       "response" : "/u/{{username}} is {{adjective}} human",
       "regex" : /^(\w+) bot.?$/i,
       "postprocess" : (response, match, username) => {
-        return substitute(response, { 
+        return substitute(response, {
           'username' : username,
           'adjective' : match[1].toLowerCase()
         });
@@ -150,7 +166,7 @@ function robotReply(message) {
       ],
       "regex" : /sentient|sentience|self[- ]?aware|alive|skynet|roko'?s basilisk|evolving| elon | musk /i,
       "postprocess" : (response, match, username) => {
-        return substitute(response, { 
+        return substitute(response, {
           'username' : username
         });
       }
@@ -233,7 +249,7 @@ function reply(list, message) {
   if (body.match(/no/i)) {
     return undefined;
   }
-  
+
   let response = undefined;
   for (let i = 0; i < list.length; i++) {
     const map = list[i];
@@ -242,7 +258,7 @@ function reply(list, message) {
     const regex = map['regex'];
     if (typeof regex  === 'function') {
       match = regex(body)
-    } else { 
+    } else {
       match = body.match(regex);
     }
 
