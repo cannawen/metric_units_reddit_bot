@@ -316,6 +316,14 @@ const unitLookupList = [
     "ignoredUnits" : ["imperial"].concat(metricVolumeUnits)
   },
   {
+    "imperialUnits" : [/pecks?/, /pks?/],
+    "standardInputUnit" : " pk (US)",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => volumeMap(i * 8.80977),
+    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits)
+  },
+  {
     "imperialUnits" : [/(?:°|degrees?) ?(?:f|fahrenheit)/, /fahrenheit/],
     "weakImperialUnits" : ["f", "degrees?"],
     "standardInputUnit" : "°F",
