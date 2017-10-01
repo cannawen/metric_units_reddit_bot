@@ -276,6 +276,25 @@ describe('Converter', () => {
       });
     });
 
+    context('pecks', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "1 peck",
+            "13 pecks",
+            "5 pk",
+            "5pk",
+          ], 
+          {
+            "1 pk (US)" : "9 L",
+            "13 pk (US)": "115 L",
+            "5 pk (US)" : "44 L",
+            "5 pk (US)" : "44 L"
+          }
+        );
+      });
+    });
+
     context('°F', () => {
       it('should convert', () => {
         testConvert(
