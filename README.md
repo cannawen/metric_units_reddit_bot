@@ -19,7 +19,7 @@ The app starts in [bot.js](src/bot.js), and it polls the Reddit servers in an in
 [personality.js](src/personality.js) create sassy responses to certain trigger words
 
 
-Running the code (in Production)
+Running the code
 ---
 Create your bot's reddit account.
 
@@ -29,7 +29,7 @@ Download the bot's code, and create a file `./private/environment.yaml` that loo
 
 run `npm install` then `node ./src/bot.js` and you should have the bot up and running!
 
-Note: The bot sometimes "skips" comments during polling. To reduce the changes of this happening when testing, you can limit the bot to look a single subreddit instead of "r/all" by changing the line `network.getRedditComments("all")` in bot.js. I recommend running it in r/test (`network.getRedditComments("test")`)!
+Note: You can run the bot in development mode (which won't POST requests to reddit servers) by changing the `dev-mode` environment variable to "true"
 
 
 Running the tests
@@ -37,16 +37,6 @@ Running the tests
 run `npm test`
 
 To run a single spec, add [.only](https://jaketrent.com/post/run-single-mocha-test/)
-
-
-Git hooks
----
-The pre-commit hook will run before each commit. It will only allow code to be committed if the following preconditions are met:
-- There are no failing tests
-- All tests are run (no `.only()` statements isolating tests)
-- There are no unnecessary console.log statements
-
-To enable git hooks, copy the file [pre-commit](pre-commit) into your `./.git/hooks/` directory
 
 
 Questions or Comments?
