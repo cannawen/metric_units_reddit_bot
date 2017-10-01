@@ -62,7 +62,7 @@ const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|
 
   standardInputUnit - The unit string that will be displayed to the user at the end of the conversion
 
-  isInvalidInput - These inputs should definately not be converted (i.e. a negative distance)
+  isInvalidInput - These inputs should definitely not be converted (i.e. a negative distance)
 
   isWeaklyInvalidInput - These input should probably not be converted (i.e. 8 Mile, the movie, or 1000000 miles, a hyperbole)
 
@@ -72,7 +72,7 @@ const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|
       unit: metric-unit
     }
 
-  ignoredUnits (optional) - If the OP has already converted the units, we don't want to duplicate their efforts!
+  ignoredUnits (optional) - If the OP has already converted the units, regardless of case sensitivity, we don't want to duplicate their efforts! 
 
   ignoredKeywords (optional) - Sometimes people yell at us for converting football yards to metric. So here is where we throw keywords that we don't want to convert
 
@@ -367,6 +367,19 @@ const unitLookupList = [
       }
     },
     "ignoredUnits" : [/° ?C/, "degrees? c", "celsius", "kelvin"]
+  },
+  {
+    "imperialUnits" : [/ac/, /acres?/],
+    "standardInputUnit" : " acres",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => createMap(i * 0.00404685642, " km^2"),
+    "ignoredUnits" : [
+      /square kilometers?/,
+      /sq.? km/,
+      /sq.? kilometers?/,
+      /km[^]2/
+    ]
   }
 ];
 
