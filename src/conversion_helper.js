@@ -284,7 +284,7 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 28.3495),
-    "ignoredUnits" : metricWeightUnits
+    "ignoredUnits" : ["leather"].concat(metricWeightUnits)
   },
   {
     "imperialUnits" : [/teaspoons?/, /tsp/],
