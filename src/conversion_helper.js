@@ -47,11 +47,11 @@ function volumeMap(l) {
 }
 
 function areaMap(m2) {
-  if (m2 >= 10000) {
-    return createMap(m2 / 10000, " hectares");
+  if (m2 >= 1000000) {
+    return createMap(m2 / 1000000, " km^2");
 
-  } else if (m2 >= 1000) {
-    return createMap(m2 / 1000, " km^2");
+  } else if (m2 >= 10000) {
+    return createMap(m2 / 10000, " hectares");
 
   } else {
     return createMap(m2, " m^2");
