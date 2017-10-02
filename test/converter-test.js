@@ -312,10 +312,22 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "300 acre",
+            "1 acre",
+            "2 acres",
+
+            "30 acres",
+            "60 acres",
+
+            "300 acres",
             "600 acres",
           ],
           {
+            "1 acres" : "4,000 m^2",
+            "2 acres" : "8,000 m^2",
+
+            "30 acres" : "12 hectares",
+            "60 acres" : "24 hectares",
+
             "300 acres" : "1.2 km^2",
             "600 acres" : "2.4 km^2",
           }

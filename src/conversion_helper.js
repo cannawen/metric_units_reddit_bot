@@ -46,6 +46,18 @@ function volumeMap(l) {
   }
 }
 
+function areaMap(m2) {
+  if (m2 >= 1000000) {
+    return createMap(m2 / 1000000, " km^2");
+
+  } else if (m2 >= 10000) {
+    return createMap(m2 / 10000, " hectares");
+
+  } else {
+    return createMap(m2, " m^2");
+  }
+}
+
 const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
@@ -378,7 +390,7 @@ const unitLookupList = [
     "standardInputUnit" : " acres",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 0.00404685642, " km^2"),
+    "conversionFunction" : (i) => areaMap(i * 4046.8564),
     "ignoredUnits" : [
       /square kilometers?/,
       /sq.? km/,
