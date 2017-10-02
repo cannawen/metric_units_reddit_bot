@@ -241,7 +241,7 @@ describe('Converter', () => {
 
     context('cups', () => {
       it('should convert', () => {
-        testConvert(["25 cups"], {"25 cups" : "6 L"});
+        testConvert(["25 cups (US)"], {"25 cups (US)" : "6 L"});
       });
     });
 

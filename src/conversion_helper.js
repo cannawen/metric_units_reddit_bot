@@ -51,6 +51,8 @@ const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m\^3/];
 
+const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
+
 /*
   Units at the start of the list will take precenence over units later (so "miles per hour" takes precedence over "miles")
 
@@ -100,8 +102,7 @@ const unitLookupList = [
     "ignoredUnits" : ["L/100km", "km/L"],
     "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
                          "nba", "nhl", "nfl", "sport",
-                         "play", "game",
-                         "britain", "british", "england", "scotland", "wales", "uk"]
+                         "play", "game"].concat(ukSubreddits)
   },
   {
     "imperialUnits" : [/mph/, /miles (?:an|per) hour/],
@@ -124,7 +125,7 @@ const unitLookupList = [
       }
     },
     "ignoredUnits" : ["km/hr?", "kmh", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
-    "ignoredKeywords" : ["britain", "british", "england", "scotland", "wales", "uk"]
+    "ignoredKeywords" : ukSubreddits
   },
   {
     "imperialUnits" : [/mi/, /miles?/],
@@ -135,8 +136,7 @@ const unitLookupList = [
     "ignoredUnits" : metricDistanceUnits,
     "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
                          "air miles", "aeroplan", "points",
-                         "britain", "british", "england", "scotland", "wales", "uk",
-                         "italy", "italian", "croatia", "brasil", "brazil", "turkey", "mexico"]
+                         "italy", "italian", "croatia", "brasil", "brazil", "turkey", "mexico"].concat(ukSubreddits)
   },
   {
     "imperialUnits" : [/psi/, /pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
@@ -205,7 +205,7 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 0.9144),
     "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["football", "golf", "(?:touch)?down", "cfl", "nfl"]
+    "ignoredKeywords" : ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow"]
   },
   {
     "imperialUnits" : [/inch/, /inches/],
@@ -238,7 +238,7 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 453.592),
     "ignoredUnits" : metricWeightUnits,
-    "ignoredKeywords" : ["football", "soccer", "fifa"],
+    "ignoredKeywords" : ["football", "soccer", "fifa", "bowling"],
     "preprocess" : (input) => {
       const lbAndOz = 
         new RegExp(( rh.startRegex 
@@ -276,7 +276,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 0.0295735295625),
-    "ignoredUnits" : metricVolumeUnits
+    "ignoredUnits" : metricVolumeUnits,
+    "ignoredKeywords" : ukSubreddits
   },
   {
     "imperialUnits" : [/oz/, /ounces?/],
@@ -284,7 +285,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 28.3495),
-    "ignoredUnits" : ["leather"].concat(metricWeightUnits)
+    "ignoredUnits" : metricWeightUnits,
+    "ignoredKeywords" : ["leather"].concat(ukSubreddits)
   },
   {
     "imperialUnits" : [/teaspoons?/, /tsp/],
@@ -304,7 +306,7 @@ const unitLookupList = [
   },
   {
     "imperialUnits" : [/cups?/],
-    "standardInputUnit" : " cups",
+    "standardInputUnit" : " cups (US)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 0.24),
@@ -317,7 +319,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 0.473176),
-    "ignoredUnits" : metricVolumeUnits
+    "ignoredUnits" : metricVolumeUnits,
+    "ignoredKeywords" : ukSubreddits
   },
   {
     "imperialUnits" : [/quarts?/],
@@ -342,7 +345,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 3.78541),
-    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits)
+    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits),
+    "ignoredKeywords" : ukSubreddits
   },
   {
     "imperialUnits" : [/pecks?/, /pks?/],
@@ -350,7 +354,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 8.80977),
-    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits)
+    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits),
+    "ignoredKeywords" : ukSubreddits
   },
   {
     "imperialUnits" : [/(?:°|degrees?) ?(?:f|fahrenheit)/, /fahrenheit/],
