@@ -374,7 +374,7 @@ const unitLookupList = [
     "ignoredUnits" : [/° ?C/, "degrees? c", "celsius", "kelvin"]
   },
   {
-    "imperialUnits" : [/ac/, /acres?/],
+    "imperialUnits" : [/acres?/],
     "standardInputUnit" : " acres",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,

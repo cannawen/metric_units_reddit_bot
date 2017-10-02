@@ -314,12 +314,10 @@ describe('Converter', () => {
           [
             "300 acre",
             "600 acres",
-            "900 ac"
           ],
           {
             "300 acres" : "1.2 km^2",
             "600 acres" : "2.4 km^2",
-            "900 acres" : "3.6 km^2"
           }
         );
       });
