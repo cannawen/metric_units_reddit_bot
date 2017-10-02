@@ -397,6 +397,14 @@ const unitLookupList = [
       /sq.? kilometers?/,
       /km[^]2/
     ]
+  },
+  {
+    "imperialUnits" : [/bushels?/],
+    "standardInputUnit" : " bushels",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => weightMap(i * 35239.07040000007),
+    "ignoredUnits" : metricWeightUnits
   }
 ];
 
