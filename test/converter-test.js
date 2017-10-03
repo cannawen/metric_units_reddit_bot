@@ -350,6 +350,29 @@ describe('Converter', () => {
       }) 
     })
 
+    context('lbf', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "1 lbf",
+            "2 lbf",
+            "1 pound-force",
+            "2 pounds-force",
+            "1 pound force",
+            "2 pounds force"
+          ],
+          {
+            "1 lbf" : "4.44822 N",
+            "2 lbf" : "8.89644 N",
+            "1 lbf" : "4.44822 N",
+            "2 lbf" : "8.89644 N",
+            "1 lbf" : "4.44822 N",
+            "2 lbf" : "8.89644 N"
+          }
+        );
+      });
+    });
+
     context('supported special characters', () => {
       it('should convert when starting with special characters', () => {
         testConvert(
