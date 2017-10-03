@@ -335,6 +335,21 @@ describe('Converter', () => {
       });
     });
 
+    context('bushels', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "1 bushel",
+            "2 bushels"
+          ],
+          {
+            "1 bushels" : "35 kg",
+            "2 bushels" : "70 kg"
+          }
+        );
+      }) 
+    })
+
     context('supported special characters', () => {
       it('should convert when starting with special characters', () => {
         testConvert(
