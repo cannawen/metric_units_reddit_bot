@@ -159,6 +159,14 @@ const unitLookupList = [
     "ignoredUnits" : [/pascals?/, /pa/]
   },
   {
+    "imperialUnits" : [/ozt/, /oz t/, /troy ounces?/],
+    "standardInputUnit" : " troy ounces",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => weightMap(i * 31.1034768),
+    "ignoredUnits" : metricWeightUnits
+  },
+  {
     "imperialUnits" : [/(?:foot|ft)[ -·]?(?:pounds?|lbf?|lbs?)/, /(?:pounds?|lbs?)[ -·]?(?:foot|fts?)/],
     "standardInputUnit" : " ft·lbf",
     "isInvalidInput" : isZeroOrNegative,
