@@ -625,6 +625,12 @@ describe('conversion_helper', () => {
           verifyConversion(58786253732, " miles", 0.010000000000027884, " light-years");
         });
       });
+
+      context('greater than or equal to 1 light-second', () => {
+        it('should convert to light-seconds', () => {
+            verifyConversion(372565, " miles", 2.000001105297968, "light-seconds");
+        });
+      });
     });
 
     context('mph', () => {
