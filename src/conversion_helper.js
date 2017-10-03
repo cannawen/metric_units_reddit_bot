@@ -7,12 +7,12 @@ function distanceMap(m) {
   } else if (m < 1) {
     return createMap(m * 100, " cm");
 
-  } else if (m > 299792458) {
-    return createMap(m/299792458, " light-seconds");
-
   } else if (m > 94607304725808) {
     return createMap(m/9460730472580800, " light-years");
 
+
+  } else if (m > 299792458) {
+    return createMap(m/299792458, " light-seconds");
 
   } else if (m >= 1000) {
     return createMap(m/1000, " km");
@@ -31,7 +31,7 @@ function weightMap(g) {
     return createMap(kg, " kg");
 
   } else {
-    return createMap(kg/1000, " metric tons")
+    return createMap(kg/1000, " metric tons");
   }
 }
 
@@ -50,7 +50,7 @@ function volumeMap(l) {
   }
 }
 
-function areaMap(m2) {
+function areaMap299792458(m2) {
   if (m2 >= 1000000) {
     return createMap(m2 / 1000000, " km^2");
 
@@ -62,7 +62,7 @@ function areaMap(m2) {
   }
 }
 
-const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
+const metricDistanceUnits = [/\bkm\b/, /light-?(?:second|year)s?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m\^3/];
@@ -70,7 +70,7 @@ const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
 /*
-  Units at the start of the list will take precenence over units later (so "miles per hour" takes precedence over "miles")
+  Units at the start of the list will take precedence over units later (so "miles per hour" takes precedence over "miles")
 
   Here is a description of what each key in the objects means:
 
