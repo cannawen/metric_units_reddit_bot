@@ -77,6 +77,7 @@ const metricDistanceUnits = [/km/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
+const metricForceUnits = [/newtons?/, /dynes?/];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
@@ -263,6 +264,14 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 201.168),
     "ignoredUnits" : metricDistanceUnits
+  },
+  {
+    "imperialUnits" : [/pounds?[ -]?(?:force)/, /lbf/, /lbs?[ -]?(?:force)/],
+    "standardInputUnit" : " lbf",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => createMap(i * 4.44822, " N"),
+    "ignoredUnits" : metricForceUnits
   },
   {
     "imperialUnits" : "lbs?",
