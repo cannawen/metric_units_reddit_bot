@@ -58,6 +58,17 @@ function areaMap(m2) {
   }
 }
 
+function pressureMap(pa) {
+  if (pa < 1000) {
+    return createMap(pa, " Pa");
+
+  } else {
+    const kPa = pa / 1000;
+
+    return createMap(kPa, " kPa");
+  }
+}
+
 const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
@@ -155,7 +166,7 @@ const unitLookupList = [
     "standardInputUnit" : " psi",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 6.89476, " kPa"),
+    "conversionFunction" : (i) => pressureMap(i * 6894.76),
     "ignoredUnits" : [/pascals?/, /pa/]
   },
   {
