@@ -106,7 +106,7 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
 
   ignoredKeywords (optional) - Sometimes people yell at us for converting football yards to metric. So here is where we throw keywords that we don't want to convert
 
-  preprocess (optional) - A function that runs before any conversions are done that changes the input string into a more easily parsed format (i.e. 6'6" to 6.5 feet)
+  preprocess (optional) - A function that runs before any conversions are done that takes the comment and changes the input string into a more easily parsed format (i.e. 6'6" to 6.5 feet)
 
   postprocess (optional) - A function that runs after all conversions have been done that takes the imperial input (6.5 feet) and converts it to a better format (6'6")
 */
@@ -192,7 +192,8 @@ const unitLookupList = [
     "conversionFunction" : (i) => distanceMap(i * 0.3048),
     "ignoredUnits" : metricDistanceUnits,
     "ignoredKeywords" : ["size", "pole"],
-    "preprocess" : (input) => {
+    "preprocess" : (comment) => {
+      const input = comment['body'];
       const feetAndInchesRegex = 
         new RegExp(( rh.startRegex 
           + rh.numberRegex
@@ -282,7 +283,8 @@ const unitLookupList = [
     "conversionFunction" : (i) => weightMap(i * 453.592),
     "ignoredUnits" : metricWeightUnits,
     "ignoredKeywords" : ["football", "soccer", "fifa", "bowling"],
-    "preprocess" : (input) => {
+    "preprocess" : (comment) => {
+      const input = comment['body']
       const lbAndOz = 
         new RegExp(( rh.startRegex 
           + rh.numberRegex
@@ -328,8 +330,33 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 28.3495),
-    "ignoredUnits" : metricWeightUnits,
+    "ignoredUnits" : ["oz t", "ozt"].concat(metricWeightUnits),
     "ignoredKeywords" : ["leather"].concat(ukSubreddits)
+  },
+  {
+    "imperialUnits" : [/ozt/, /oz t/, /troy ounces?/],
+    "standardInputUnit" : " troy ounces",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => weightMap(i * 31.1034768),
+    "ignoredUnits" : metricWeightUnits,
+    "preprocess" : (comment) => {
+      const input = comment['body'];
+      const specialSubredditsRegex = new RegExp(
+          rh.regexJoinToString([/silverbugs/, /pmsforsale/]));
+      const unitRegex = new RegExp(( rh.startRegex
+            + rh.numberRegex
+            + "[- ]?"
+            + rh.regexJoinToString([/oz/, /ounces?/])
+            ),'gi');
+
+      if (specialSubredditsRegex.test(comment['subreddit'])) {
+        return input.replace(unitRegex, (match, oz, offset, string) => {
+          return " " + oz + " troy ounces ";
+        });
+      }
+      return input;
+    }
   },
   {
     "imperialUnits" : [/teaspoons?/, /tsp/],
@@ -586,15 +613,16 @@ function findPotentialConversions(comment) {
 
   //---------------------------------------------------------
 
-  let input = comment['body'];
-
-  let processedInput = unitLookupList.reduce((memo, map) => {
+  let processedComment = unitLookupList.reduce((memo, map) => {
     if (map["preprocess"]) {
-      return map["preprocess"](memo);
+      memo['body'] = map["preprocess"](memo);
+      return memo;
     } else {
       return memo;
     }
-  }, input)
+  }, comment)
+
+  let processedInput = processedComment['body'];
 
   let duplicateCache = {}
 
