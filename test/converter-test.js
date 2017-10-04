@@ -183,23 +183,12 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1.1-inch"
+            "1.1-inch",
+            "1,001 2/3 inch"
           ],
           {
-            "1.1 inches" : "2.8 cm"
-          }
-        );
-      });
-    });
-
-    context('inches', () => {
-      it('should convert', () => {
-        testConvert(
-          [
-            "1 2/3 inch"
-          ],
-          {
-            "1.67 inches" : "4.24 cm"
+            "1.1 inches" : "2.8 cm",
+            "1,001.67 inches" : "25.44 metres"
           }
         );
       });
@@ -210,11 +199,13 @@ describe('Converter', () => {
         testConvert(
           [
             "2-furlongs",
-            "13-furlongs"
+            "13-furlongs",
+            "13/26 furlongs"
           ],
           {
             "2 furlongs": "400 metres",
-            "13 furlongs" : "2.6 km"
+            "13 furlongs" : "2.6 km",
+            "0.50 furlongs": "100.58 metres"
           }
         );
       });

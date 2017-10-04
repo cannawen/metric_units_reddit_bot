@@ -41,6 +41,37 @@ describe('conversion_helper', () => {
     });
   });
 
+  describe('#preprocessComment()', () => {
+    context('comment contains mixed', () => {
+        it('should convert mixed values into decimals', () => {
+          const comment = createComment("subredditname", "post title", "post text 10 5/7 miles");
+          ch.preprocessComment(comment)['body'].should.equal("post text 10.71 miles");
+        });
+        it('should convert mixed values into decimals', () => {
+          const comment = createComment("subredditname", "post title", "post text 1,707 05/09 miles more text");
+          ch.preprocessComment(comment)['body'].should.equal("post text 1,707.56 miles more text");
+        });
+        it('should convert mixed values into decimals', () => {
+          const comment = createComment("subredditname", "post title", "post text 98 7654/3,210 inches");
+          ch.preprocessComment(comment)['body'].should.equal("post text 100.38 inches");
+        });
+    });
+    context('comment contains fraction', () => {
+        it('should convert fractions into decimals', () => {
+          const comment = createComment("subredditname", "post title", "post text 9/10 miles");
+          ch.preprocessComment(comment)['body'].should.equal("post text 0.90 miles");
+        });
+        it('should convert fractions into decimals', () => {
+          const comment = createComment("subredditname", "post title", "post text 177/100 miles more text");
+          ch.preprocessComment(comment)['body'].should.equal("post text 1.77 miles more text");
+        });
+        it('should convert fractions into decimals', () => {
+          const comment = createComment("subredditname", "post title", "post text 987,654/3210 inches");
+          ch.preprocessComment(comment)['body'].should.equal("post text 307.68 inches");
+        });
+    });
+  });
+
   describe('#findPotentialConversions()', () => {
     context('lbs', () => {
       it('should find conversions', () => {
