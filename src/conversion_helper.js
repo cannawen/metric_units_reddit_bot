@@ -73,10 +73,10 @@ function pressureMap(pa) {
   }
 }
 
-const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
+const metricDistanceUnits = [/km/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
-const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m\^3/];
+const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
@@ -171,7 +171,8 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => pressureMap(i * 6894.76),
-    "ignoredUnits" : [/pascals?/, /pa/]
+    "ignoredUnits" : [/pascals?/],
+    "ignoredKeywords" : ["homebrewing"]
   },
   {
     "imperialUnits" : [/(?:foot|ft)[ -·]?(?:pounds?|lbf?|lbs?)/, /(?:pounds?|lbs?)[ -·]?(?:foot|fts?)/],
@@ -456,7 +457,7 @@ function roundToDecimalPlaces(number, places) {
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
 }
 
-const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal",
+const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal", "shooting", "shootings", "casualties", "casualty",
 
                       "america", "usa", "united states",
 
