@@ -7,7 +7,8 @@ function conversions(comment) {
     return {};
   }
 
-  const potentialConversions = ch.findPotentialConversions(comment);
+  const preprocessedcomment = ch.preprocessComment(comment);
+  const potentialConversions = ch.findPotentialConversions(preprocessedcomment);
   const filteredConversions = ch.filterConversions(potentialConversions);
   const metricConversions = ch.calculateMetric(filteredConversions);
   const roundedConversions = ch.roundConversions(metricConversions);

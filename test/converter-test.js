@@ -166,11 +166,13 @@ describe('Converter', () => {
           [
             "1 troy ounces",
             "1.25 oz t",
+            "5/6 oz t",
             "5 ozt"
           ],
           {
             "1 troy ounces" : "31 g",
             "1.25 troy ounces" : "38.88 g",
+            "0.83 troy ounces" : "25.82 g",
             "5 troy ounces" : "160 g"
           }
         );
@@ -185,6 +187,19 @@ describe('Converter', () => {
           ],
           {
             "1.1 inches" : "2.8 cm"
+          }
+        );
+      });
+    });
+
+    context('inches', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "1 2/3 inch"
+          ],
+          {
+            "1.67 inches" : "4.24 cm"
           }
         );
       });

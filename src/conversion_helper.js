@@ -523,6 +523,32 @@ function shouldConvertComment(comment, regexArray = globalIgnore, shouldBeUnique
 
 /*
   Input: String
+    "1 3/4 miles"
+  Output: String processed to fix user formatting
+    "1.75 miles"
+*/
+function preprocessComment(comment) {
+  function fractionProcessor(input) {
+    var mixedRegex = new RegExp((rh.numberRegex + /(?:\s*)/.source + rh.numberRegex + "/" + rh.numberRegex), 'gi');
+    var fractionRegex = new RegExp(rh.numberRegex + "/" + rh.numberRegex, 'gi');
+
+    input = input.replace(mixedRegex, function(match) {
+        return match[0].toString() + (match[2]/match[4]).toFixed(2).substr(1);
+    });
+
+    input = input.replace(fractionRegex, function(match) {
+        return (match[0]/match[2]).toFixed(2);
+    });
+
+    return input;
+  }
+
+  comment['body'] = fractionProcessor(comment['body']);
+  return comment;
+}
+
+/*
+  Input: String
     "1-2 mi away at 3 miles an hour"
   Output: Array of input numbers and standardized units
     [
@@ -886,6 +912,7 @@ function formatConversion(conversions) {
 module.exports = {
   globalIgnore,
   "shouldConvertComment" : shouldConvertComment,
+  "preprocessComment": preprocessComment,
   "findPotentialConversions" : findPotentialConversions,
   "filterConversions" : filterConversions,
   "calculateMetric" : calculateMetric,
