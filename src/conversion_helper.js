@@ -217,7 +217,13 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 0.9144),
     "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow"]
+    "ignoredKeywords": ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow",
+                        "patriots", "cowboys", "raiders", "seahawks", "eagles",
+                        "steelers", "giants", "49ers", "broncos", "packers",
+                        "bears", "vikings", "browns", "redskins", "panthers", "rams",
+                        "falcons", "lions", "chargers", "jets", "texans", "chiefs",
+                        "ravens", "bills", "saints", "bengals", "buccaneers", "colts",
+                        "jaguars", "dolphins", "titans"]
   },
   {
     "imperialUnits" : [/inch/, /inches/],
