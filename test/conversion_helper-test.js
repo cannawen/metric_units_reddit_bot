@@ -590,6 +590,20 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('psi', () => {
+      context('under 1 kPa', () => {
+        it('should convert to Pa', () => {
+          verifyConversion(0.05, " psi", 344.73800000000006, " Pa");
+        })
+      })
+
+      context('over 1kPa', () => {
+        it('should convert to kPa', () => {
+          verifyConversion(0.5, " psi", 3.44738, " kPa")
+        })
+      })
+    });
+
     context('feet', () => {
       it('should convert', () => {
         verifyConversion(1, " feet", 30.48, " cm");
@@ -623,6 +637,12 @@ describe('conversion_helper', () => {
       context('greater than 0.01 light-year', () => {
         it('should convert to light-years', () => {
           verifyConversion(58786253732, " miles", 0.010000000000027884, " light-years");
+        });
+      });
+
+      context('greater than or equal to 1 light-second', () => {
+        it('should convert to light-seconds', () => {
+            verifyConversion(372565, " miles", 2.000001105297986, " light-seconds");
         });
       });
     });

@@ -8,11 +8,15 @@ function distanceMap(m) {
     return createMap(m * 100, " cm");
 
   } else if (m > 94607304725808) {
-    return createMap(m/9460730472580800, " light-years")
+    return createMap(m/9460730472580800, " light-years");
+
+
+  } else if (m >= 299792458) {
+    return createMap(m/299792458, " light-seconds");
 
   } else if (m >= 1000) {
     return createMap(m/1000, " km");
-    
+
   } else {
     return createMap(m, " metres");
   }
@@ -27,7 +31,7 @@ function weightMap(g) {
     return createMap(kg, " kg");
 
   } else {
-    return createMap(kg/1000, " metric tons")
+    return createMap(kg/1000, " metric tons");
   }
 }
 
@@ -58,16 +62,27 @@ function areaMap(m2) {
   }
 }
 
-const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
+function pressureMap(pa) {
+  if (pa < 1000) {
+    return createMap(pa, " Pa");
+
+  } else {
+    const kPa = pa / 1000;
+
+    return createMap(kPa, " kPa");
+  }
+}
+
+const metricDistanceUnits = [/km/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
-const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m\^3/];
+const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
 /*
-  Units at the start of the list will take precenence over units later (so "miles per hour" takes precedence over "miles")
+  Units at the start of the list will take precedence over units later (so "miles per hour" takes precedence over "miles")
 
   Here is a description of what each key in the objects means:
 
@@ -156,8 +171,9 @@ const unitLookupList = [
     "standardInputUnit" : " psi",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 6.89476, " kPa"),
-    "ignoredUnits" : [/pascals?/, /pa/]
+    "conversionFunction" : (i) => pressureMap(i * 6894.76),
+    "ignoredUnits" : [/pascals?/],
+    "ignoredKeywords" : ["homebrewing"]
   },
   {
     "imperialUnits" : [/(?:foot|ft)[ -·]?(?:pounds?|lbf?|lbs?)/, /(?:pounds?|lbs?)[ -·]?(?:foot|fts?)/],
@@ -218,7 +234,13 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 0.9144),
     "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow"]
+    "ignoredKeywords": ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow",
+                        "patriots", "cowboys", "raiders", "seahawks", "eagles",
+                        "steelers", "giants", "49ers", "broncos", "packers",
+                        "bears", "vikings", "browns", "redskins", "panthers", "rams",
+                        "falcons", "lions", "chargers", "jets", "texans", "chiefs",
+                        "ravens", "bills", "saints", "bengals", "buccaneers", "colts",
+                        "jaguars", "dolphins", "titans"]
   },
   {
     "imperialUnits" : [/inch/, /inches/],
@@ -370,8 +392,8 @@ const unitLookupList = [
     "ignoredKeywords" : ukSubreddits
   },
   {
-    "imperialUnits" : [/pecks?/, /pks?/],
-    "standardInputUnit" : " pk (US)",
+    "imperialUnits" : [/pecks?/],
+    "standardInputUnit" : " pecks (US)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 8.80977),
@@ -444,7 +466,7 @@ function roundToDecimalPlaces(number, places) {
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
 }
 
-const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal",
+const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal", "shooting", "shootings", "casualties", "casualty",
 
                       "america", "usa", "united states",
 
