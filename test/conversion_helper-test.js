@@ -590,6 +590,20 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('psi', () => {
+      context('under 1 kPa', () => {
+        it('should convert to Pa', () => {
+          verifyConversion(0.05, " psi", 344.73800000000006, " Pa");
+        })
+      })
+
+      context('over 1kPa', () => {
+        it('should convert to kPa', () => {
+          verifyConversion(0.5, " psi", 3.44738, " kPa")
+        })
+      })
+    });
+
     context('feet', () => {
       it('should convert', () => {
         verifyConversion(1, " feet", 30.48, " cm");
