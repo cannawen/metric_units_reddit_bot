@@ -164,12 +164,12 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1.25 troy ounces",
+            "1 troy ounces",
             "1.25 oz t",
             "5 ozt"
           ],
           {
-            "1.25 troy ounces" : "38.88 g",
+            "1 troy ounces" : "31 g",
             "1.25 troy ounces" : "38.88 g",
             "5 troy ounces" : "160 g"
           }
