@@ -62,7 +62,7 @@ const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m\^3/];
-const metricForceUnits = [/newtons?/, /N/, /dynes?/];
+const metricForceUnits = [/newtons?/, /dynes?/];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
