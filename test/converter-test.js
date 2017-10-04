@@ -356,18 +356,26 @@ describe('Converter', () => {
           [
             "1 lbf",
             "2 lbf",
-            "1 pound-force",
-            "2 pounds-force",
-            "1 pound force",
-            "2 pounds force"
+            "0.1 pound-force",
+            "0.2 pounds-force",
+            "10 pound force",
+            "20 pounds force",
+            "3 lb force",
+            "4 lbs force",
+            "5 lb-force",
+            "6 lbs-force"
           ],
           {
-            "1 lbf" : "4.44822 N",
-            "2 lbf" : "8.89644 N",
-            "1 lbf" : "4.44822 N",
-            "2 lbf" : "8.89644 N",
-            "1 lbf" : "4.44822 N",
-            "2 lbf" : "8.89644 N"
+            "1 lbf" : "4.4 N",
+            "2 lbf" : "9 N",
+            "0.1 lbf" : "0.4 N",
+            "0.2 lbf" : "0.9 N",
+            "10 lbf" : "44 N",
+            "20 lbf" : "90 N",
+            "3 lbf" : "13 N",
+            "4 lbf" : "18 N",
+            "5 lbf" : "22 N",
+            "6 lbf" : "27 N"
           }
         );
       });

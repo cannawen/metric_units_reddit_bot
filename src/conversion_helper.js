@@ -244,6 +244,14 @@ const unitLookupList = [
     "ignoredUnits" : metricDistanceUnits
   },
   {
+    "imperialUnits" : [/pounds?[ -]?(?:force)/, /lbf/, /lbs?[ -]?(?:force)/],
+    "standardInputUnit" : " lbf",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => createMap(i * 4.44822, " N"),
+    "ignoredUnits" : metricForceUnits
+  },
+  {
     "imperialUnits" : "lbs?",
     "weakImperialUnits" : [/pounds?/],
     "standardInputUnit" : " lb",
@@ -406,14 +414,6 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => weightMap(i * 35239.07040000007),
     "ignoredUnits" : metricWeightUnits
-  },
-  {
-    "imperialUnits" : [/pounds?[ -]?(?:force)?/, /lbf/],
-    "standardInputUnit" : " lbf",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 1.44822, " N"),
-    "ignoredUnits" : metricForceUnits
   }
 ];
 
