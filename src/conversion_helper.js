@@ -62,7 +62,18 @@ function areaMap(m2) {
   }
 }
 
-const metricDistanceUnits = [/\bkm\b/, /light-?(?:second|year)s?/,
+function pressureMap(pa) {
+  if (pa < 1000) {
+    return createMap(pa, " Pa");
+
+  } else {
+    const kPa = pa / 1000;
+
+    return createMap(kPa, " kPa");
+  }
+}
+
+const metricDistanceUnits = [/\bkm\b/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m\^3/];
@@ -159,7 +170,7 @@ const unitLookupList = [
     "standardInputUnit" : " psi",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 6.89476, " kPa"),
+    "conversionFunction" : (i) => pressureMap(i * 6894.76),
     "ignoredUnits" : [/pascals?/, /pa/]
   },
   {
@@ -221,7 +232,13 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => distanceMap(i * 0.9144),
     "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow"]
+    "ignoredKeywords": ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow",
+                        "patriots", "cowboys", "raiders", "seahawks", "eagles",
+                        "steelers", "giants", "49ers", "broncos", "packers",
+                        "bears", "vikings", "browns", "redskins", "panthers", "rams",
+                        "falcons", "lions", "chargers", "jets", "texans", "chiefs",
+                        "ravens", "bills", "saints", "bengals", "buccaneers", "colts",
+                        "jaguars", "dolphins", "titans"]
   },
   {
     "imperialUnits" : [/inch/, /inches/],
