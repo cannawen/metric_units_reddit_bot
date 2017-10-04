@@ -383,8 +383,8 @@ const unitLookupList = [
     "ignoredKeywords" : ukSubreddits
   },
   {
-    "imperialUnits" : [/pecks?/, /pks?/],
-    "standardInputUnit" : " pk (US)",
+    "imperialUnits" : [/pecks?/],
+    "standardInputUnit" : " pecks (US)",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 8.80977),
