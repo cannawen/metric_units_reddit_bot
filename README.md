@@ -21,23 +21,27 @@ The app starts in [bot.js](src/bot.js), and it polls the Reddit servers in an in
 
 Running the code
 ---
-Create your bot's reddit account.
+For changes not related to networking, running tests is often enough. But if you want to see the bot hitting the Reddit servers:
 
-Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.) From there, you should be able to get your OAuth username and secret
+1. Create your bot's reddit account.
+2. Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.) 
+3. Get your OAuth username and secret
+4. Download the bot's code, and create a file `./private/environment.yaml` that looks like [sample-environment.yaml](sample-environment.yaml)
+5. run `npm install`
+6. run `node ./src/bot.js`
+7. You should have the bot up and running!
 
-Download the bot's code, and create a file `./private/environment.yaml` that looks like [sample-environment.yaml](sample-environment.yaml)
-
-run `npm install` then `node ./src/bot.js` and you should have the bot up and running!
-
-Note: You can run the bot in development mode (which won't POST requests to reddit servers) by changing the `dev-mode` environment variable to "true"
+Note:
+- You can run the bot in development mode (which won't POST requests to reddit servers) by changing the `dev-mode` environment variable to "true"
 
 
 Running the tests
 ---
 run `npm test`
 
-To run a single spec, add [.only](https://jaketrent.com/post/run-single-mocha-test/)
-
+Notes:
+- To run a single spec, add [.only](https://jaketrent.com/post/run-single-mocha-test/)
+- You do not need to create a reddit app to run the tests, you can use the [sample-environment.yaml](sample-environment.yaml) default values.
 
 Questions or Comments?
 ---
