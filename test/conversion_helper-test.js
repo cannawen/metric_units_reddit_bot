@@ -44,16 +44,20 @@ describe('conversion_helper', () => {
   describe('#preprocessComment()', () => {
     context('comment contains mixed', () => {
         it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 10 5/7 miles");
-          ch.preprocessComment(comment)['body'].should.equal("post text 10.71 miles");
+          const comment = createComment("subredditname", "post title", "post text 10 5/7-miles");
+          ch.preprocessComment(comment)['body'].should.equal("post text 10.71-miles");
         });
         it('should convert mixed values into decimals', () => {
           const comment = createComment("subredditname", "post title", "post text 1,707 05/09 miles more text");
-          ch.preprocessComment(comment)['body'].should.equal("post text 1,707.56 miles more text");
+          ch.preprocessComment(comment)['body'].should.equal("post text 1707.56 miles more text");
         });
         it('should convert mixed values into decimals', () => {
           const comment = createComment("subredditname", "post title", "post text 98 7654/3,210 inches");
           ch.preprocessComment(comment)['body'].should.equal("post text 100.38 inches");
+        });
+        it('should convert mixed values into decimals', () => {
+          const comment = createComment("subredditname", "post title", "post text 5+18/09 inches");
+          ch.preprocessComment(comment)['body'].should.equal("post text 7.00 inches");
         });
     });
     context('comment contains fraction', () => {
