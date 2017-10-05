@@ -642,7 +642,7 @@ describe('conversion_helper', () => {
 
       context('greater than or equal to 1 light-second', () => {
         it('should convert to light-seconds', () => {
-            verifyConversion(372565, " miles", 2.000001105297986, " light-seconds");
+            verifyConversion(3725650, " miles", 20.00001105297986, " light-seconds");
         });
       });
     });

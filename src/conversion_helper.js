@@ -11,7 +11,7 @@ function distanceMap(m) {
     return createMap(m/9460730472580800, " light-years");
 
 
-  } else if (m >= 299792458) {
+  } else if (m >= 3218688000) {
     return createMap(m/299792458, " light-seconds");
 
   } else if (m >= 1000) {
