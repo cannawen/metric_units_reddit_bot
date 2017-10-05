@@ -72,6 +72,17 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "chazzlabs",
+      "name": "Charles",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3136972?v=4",
+      "profile": "http://charleslabas.com/",
+      "contributions": [
+        "code",
+        "question",
+        "ideas"
+      ]
     }
   ]
 }
