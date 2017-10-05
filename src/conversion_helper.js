@@ -78,6 +78,7 @@ const metricDistanceUnits = [/km/, /light-?years?/,
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
+const liquidKeywords = ['liquid', 'water', 'tea', 'beer', 'soda', 'cider', 'juice', 'coffee', 'liquor', 'milk', 'bottle', 'spirits', 'rum', 'vodka', 'tequila', 'wine', 'oil'];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
@@ -322,7 +323,27 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 0.0295735295625),
     "ignoredUnits" : metricVolumeUnits,
-    "ignoredKeywords" : ukSubreddits
+    "ignoredKeywords" : ukSubreddits,
+    "preprocess" : (comment) => {
+      const input = comment['body'];
+      const ozRegex = new RegExp(( rh.startRegex 
+          + rh.numberRegex
+          + "[- ]?"
+          + rh.regexJoinToString([/oz/, /ounces?/])
+        ),'gi');
+      const ozAndLiquidRegex = new RegExp(( ozRegex.source
+          + ".+?\\b"
+          + rh.regexJoinToString(liquidKeywords)
+        ),'i');
+
+      if (!ozAndLiquidRegex.test(input)) {
+        return input;
+      }
+
+      return input.replace(ozRegex, (oz, offset, string) => {
+        return " " + oz + " fl. oz";
+      });
+    }
   },
   {
     "imperialUnits" : [/oz/, /ounces?/],
