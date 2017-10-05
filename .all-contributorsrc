@@ -18,6 +18,15 @@
         "question",
         "review"
       ]
+    },
+    {
+      "login": "esclear",
+      "name": "Daniel Albert",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7432848?v=4",
+      "profile": "https://esclear.de/",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
