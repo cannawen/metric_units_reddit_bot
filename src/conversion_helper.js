@@ -12,7 +12,7 @@ function distanceMap(m) {
 
 
   } else if (m >= 3218688000) {
-    return createMap(m/3218688000, " light-seconds");
+    return createMap(m/299792458, " light-seconds");
 
   } else if (m >= 1000) {
     return createMap(m/1000, " km");
