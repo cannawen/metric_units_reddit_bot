@@ -4,3 +4,8 @@ before_script:
   - mv ./sample-environment.yaml ./private/environment.yaml
 node_js:
   - "node"
+install:
+  - npm install
+script:
+  # - npm run-script lint
+  - npm test
