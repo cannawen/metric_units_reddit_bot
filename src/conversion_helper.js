@@ -1,20 +1,22 @@
 const rh = require('./regex_helper');
+let inRangeVal = -Infinity;
 
 function distanceMap(m) {
-  if (m < 0.01) {
+  inRangeVal = Math.max(m, inRangeVal);
+  if (inRangeVal < 0.01) {
     return createMap(m * 1000, " mm");
 
-  } else if (m < 1) {
+  } else if (inRangeVal < 1) {
     return createMap(m * 100, " cm");
 
-  } else if (m > 94607304725808) {
+  } else if (inRangeVal > 94607304725808) {
     return createMap(m/9460730472580800, " light-years");
 
 
-  } else if (m >= 3218688000) {
+  } else if (inRangeVal >= 3218688000) {
     return createMap(m/299792458, " light-seconds");
 
-  } else if (m >= 1000) {
+  } else if (inRangeVal >= 1000) {
     return createMap(m/1000, " km");
 
   } else {
@@ -23,11 +25,12 @@ function distanceMap(m) {
 }
 
 function weightMap(g) {
-  const kg = g/1000;
-  if (g < 1000) {
+  inRangeVal = Math.max(g, inRangeVal);
+  const kg = g/1000, inRangeValKg = inRangeVal/1000;
+  if (inRangeVal < 1000) {
     return createMap(g, " g");
 
-  } else if (kg < 1000) {
+  } else if (inRangeValKg < 1000) {
     return createMap(kg, " kg");
 
   } else {
@@ -36,13 +39,14 @@ function weightMap(g) {
 }
 
 function volumeMap(l) {
-  if (l < 1) {
+  inRangeVal = Math.max(l, inRangeVal);
+  if (inRangeVal < 1) {
     return createMap(l*1000, " mL");
 
-  } else if (l > 1000000000000) {
+  } else if (inRangeVal > 1000000000000) {
     return createMap(l / 1000000000000, " km^3");
 
-  } else if (l > 1000) {
+  } else if (inRangeVal > 1000) {
     return createMap(l / 1000, " m^3");
 
   } else {
@@ -51,10 +55,11 @@ function volumeMap(l) {
 }
 
 function areaMap(m2) {
-  if (m2 >= 1000000) {
+  inRangeVal = Math.max(m2, inRangeVal);
+  if (inRangeVal >= 1000000) {
     return createMap(m2 / 1000000, " km^2");
 
-  } else if (m2 >= 10000) {
+  } else if (inRangeVal >= 10000) {
     return createMap(m2 / 10000, " hectares");
 
   } else {
@@ -63,7 +68,8 @@ function areaMap(m2) {
 }
 
 function pressureMap(pa) {
-  if (pa < 1000) {
+  inRangeVal = Math.max(pa, inRangeVal);
+  if (inRangeVal < 1000) {
     return createMap(pa, " Pa");
 
   } else {
@@ -481,7 +487,7 @@ const unitLookupMap = unitLookupList.reduce((memo, map) => {
 
 function createMap(value, unit) {
   return {
-    "number" : value.toString(),
+    "number" : [value.toString()],
     "unit" : unit
   };
 }
@@ -500,6 +506,17 @@ function roundToDecimalPlaces(number, places) {
   const multiplier = Math.pow(10, places);
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
 }
+
+function ContainsArray(wrapper, main) {
+  let ret = false;
+  wrapper.forEach(function(item) {
+    if(JSON.stringify(item) === JSON.stringify(main)) {
+      ret = true;
+    }
+  });
+  return ret;
+}
+
 
 const globalIgnore = ["kill", "suicide", "death", "die", "depression", "crisis", "emergency", "therapy", "therapist", "murder", "rip", "rest in peace", "fatal", "shooting", "shootings", "casualties", "casualty",
 
@@ -568,8 +585,7 @@ function preprocessComment(comment) {
     "1-2 mi away at 3 miles an hour"
   Output: Array of input numbers and standardized units
     [
-      { "imperial": { "number" : 1, "unit" : " miles" } },
-      { "imperial": { "number" : 2, "unit" : " miles" } },
+      { "imperial": { "number" : [1, 2], "unit" : " miles" } },
       { "imperial": { "number" : 3, "unit" : " mph" } }
     ]
 */
@@ -604,13 +620,7 @@ function findPotentialConversions(comment) {
 
               potentialConversions.push({
                 "imperial": {
-                  "number" : in1, 
-                  "unit" : standardUnit
-                }
-              });
-              potentialConversions.push({
-                "imperial": {
-                  "number" : in2, 
+                  "number" : [in1, in2], 
                   "unit" : standardUnit
                 }
               });
@@ -640,7 +650,7 @@ function findPotentialConversions(comment) {
         .forEach(match => {
           potentialConversions.push({
             "imperial" : {
-              "number" : match, 
+              "number" : [match], 
               "unit" : standardUnit
             }
           })
@@ -668,7 +678,7 @@ function findPotentialConversions(comment) {
 
   let duplicateCache = {}
 
-  return unitLookupList.reduce((memo, map) => {
+  let result = unitLookupList.reduce((memo, map) => {
     if (!shouldConvertComment(comment, map['ignoredKeywords']) ||
         !shouldConvertComment(comment, map['ignoredUnits'], false)) {
       return memo;
@@ -678,6 +688,7 @@ function findPotentialConversions(comment) {
                           map['imperialUnits'],
                           map['standardInputUnit'], 
                           processedInput);
+
     processedInput = conversions['string'];
     memo = memo.concat(conversions['potentialConversions']);
 
@@ -699,13 +710,14 @@ function findPotentialConversions(comment) {
     if (duplicateCache[unit] === undefined) {
       duplicateCache[unit] = [number];
       return true;
-    } else if (duplicateCache[unit].indexOf(number) === -1) {
+    } else if (!ContainsArray(duplicateCache[unit], number)) {
       duplicateCache[unit].push(number);
       return true;
     } else {
       return false;
     }
   });
+  return result;
 }
 
 /*
@@ -724,11 +736,17 @@ function findPotentialConversions(comment) {
 function filterConversions(potentialConversions) {
   const possiblyValidConversions = potentialConversions.filter(input => {
     const imperialUnit = input['imperial']['unit'];
-    const imperialNumber = Number(input['imperial']['number']);
+    const imperialNumber = input['imperial']['number'];
 
     const map = unitLookupMap[imperialUnit];
     if (map['isInvalidInput']) {
-      return map['isInvalidInput'](imperialNumber) == false;
+      let result = false;
+      imperialNumber.forEach(function(item) {
+        if (!map['isInvalidInput'](Number(item))) {
+          result = true;
+        }
+      });
+      return result;
 
     } else {
       return true;
@@ -737,11 +755,17 @@ function filterConversions(potentialConversions) {
 
   const stronglyValidInput = possiblyValidConversions.filter(input => {
     const imperialUnit = input['imperial']['unit'];
-    const imperialNumber = Number(input['imperial']['number']);
+    const imperialNumber = input['imperial']['number'];
 
     const map = unitLookupMap[imperialUnit];
     if (map['isWeaklyInvalidInput']) {
-      return map['isWeaklyInvalidInput'](imperialNumber) == false;
+      let result = false;
+      imperialNumber.forEach(function(item) {
+        if (!map['isWeaklyInvalidInput'](Number(item))) {
+          result = true;
+        }
+      });
+      return result;
 
     } else {
       return true;
@@ -782,10 +806,22 @@ function filterConversions(potentialConversions) {
 function calculateMetric(imperialInputs) {
   return imperialInputs.map(input => {
     const imperialUnit = input['imperial']['unit'];
-    const imperialNumber = Number(input['imperial']['number']);
+    const imperialNumber = input['imperial']['number'];
 
     const map = unitLookupMap[imperialUnit];
-    input['metric'] =  map['conversionFunction'](imperialNumber)
+    inRangeVal = -Infinity;
+    imperialNumber.forEach(function(item) {
+        input['metric'] = map['conversionFunction'](Number(item));
+    });
+    input['metric'] = undefined;
+    imperialNumber.forEach(function(item) {
+        if(input['metric'] === undefined) {
+          input['metric'] = map['conversionFunction'](Number(item));
+        }
+        else {
+          input['metric'].push(map['conversionFunction'](Number(item))['number'][0]);
+        }
+    });
     return input;
   });
 }
@@ -870,16 +906,30 @@ function roundConversions(conversions) {
   return conversions.map(conversion => {
     function createMetricMap(imperial, metric, unit) {
       let rounded;
-      if (imperial.toString().indexOf('.') !== -1) {
-        const decimals = imperial.split('.')[1].length;
-        rounded = roundToDecimalPlaces(metric, decimals);
+      let result = {
+        'number': [],
+        'unit': unit
+      };
 
-      } else if ((imperial > 100 || metric > 100) && imperial.toString()[imperial.length - 1] == '0') {
-        rounded = round(metric, 5);
-      } else {
-        rounded = round(metric, 3);
-      }
-      return createMap(rounded, unit);
+      imperial.forEach(function(item) {
+        if (item.toString().indexOf('.') !== -1) {
+          const decimals = item.split('.')[1].length;
+          metric.forEach(function(metric_item) {
+            result['number'].push(roundToDecimalPlaces(metric_item, decimals));
+          });
+
+        } else if ((item > 100 || metric > 100) && item.toString()[item.length - 1] == '0') {
+          metric.forEach(function(metric_item) {
+            result['number'].push(round(metric_item, 5).toString());
+          });
+        } else {
+          metric.forEach(function(metric_item) {
+            result['number'].push(round(metric_item, 3).toString());
+          });
+        }
+
+      });
+      return result;
     }
 
     const metricConversions = conversion['metric'];
@@ -903,11 +953,25 @@ function formatConversion(conversions) {
     const roundedConversions = conversion['rounded'];
     if (Array.isArray(roundedConversions)) {
       conversion['formatted'] = roundedConversions.map(rc => {
-        return createMap(rh.addCommas(rc['number']), rc['unit']);
+        let result = {
+          'number': [],
+          'unit': rc['unit']
+        };
+        rc['number'].forEach(function(item) {
+            result['number'].push(rh.addCommas(item));
+        });
+        return result;
       });
     } else {
       const metric = conversion['rounded']['number'];
-      conversion['formatted'] = createMap(rh.addCommas(metric), conversion['rounded']['unit'])
+      let result = {
+        'number': [],
+        'unit': conversion['rounded']['unit']
+      };
+      metric.forEach(function(item) {
+          result['number'].push(rh.addCommas(item));
+      });
+      conversion['formatted'] = result;
     }
 
     const imperialUnit = conversion['imperial']['unit'];
@@ -915,10 +979,15 @@ function formatConversion(conversions) {
 
     const postprocessInput = unitLookupMap[imperialUnit]['postprocessInput'];
     if (postprocessInput) {
-      conversion['imperial']['number'] = postprocessInput(imperialNumber);
+      conversion['imperial']['number'] = [];
+      imperialNumber.forEach(function(item) {
+        conversion['imperial']['number'].push(postprocessInput(item));
+      });
       conversion['imperial']['unit'] = "";
     } else {
-      conversion['imperial']['number'] = rh.addCommas(imperialNumber);
+      imperialNumber.forEach(function(item) {
+        conversion['imperial']['number'].push(rh.addCommas(item));
+      });
     }
 
     return conversion;
