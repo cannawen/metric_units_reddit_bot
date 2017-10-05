@@ -1,13 +1,13 @@
 # Contributing
 
-Thank you for your interest in contributing to metric_units reddit bot! 
+Thank you for your interest in contributing to metric_units reddit bot!
 
 This document is a guideline to help our community run smoothly. If at any point you feel like these guidelines should be changed, please open a PR against this file with the proposed changes!
 
 ## Etiquette
 
 - Be nice
-- Please help enforce these contributing guidelines!
+- Help enforce these guidelines! Please point people towards this page if you see anything questionable
 - Keep issues on-topic. Please create a new issue for new topics
 
 ## Coding
