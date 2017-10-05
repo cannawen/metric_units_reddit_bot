@@ -717,6 +717,7 @@ function findPotentialConversions(comment) {
       return false;
     }
   });
+
   return result;
 }
 
@@ -978,8 +979,8 @@ function formatConversion(conversions) {
     const imperialNumber = conversion['imperial']['number'];
 
     const postprocessInput = unitLookupMap[imperialUnit]['postprocessInput'];
+    conversion['imperial']['number'] = [];
     if (postprocessInput) {
-      conversion['imperial']['number'] = [];
       imperialNumber.forEach(function(item) {
         conversion['imperial']['number'].push(postprocessInput(item));
       });

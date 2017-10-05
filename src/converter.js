@@ -13,16 +13,25 @@ function conversions(comment) {
   const metricConversions = ch.calculateMetric(filteredConversions);
   const roundedConversions = ch.roundConversions(metricConversions);
   const formattedConversions = ch.formatConversion(roundedConversions);
+  //console.log(formattedConversions[0]);
   
   return formattedConversions.reduce((memo, conversion) => {
-    const key = conversion['imperial']['number'] + conversion['imperial']['unit'];
+    function parse(item) {
+      let result = item[0];
+      if(item.length > 1){
+        result += '-'+item[1];
+      }
+      return result;
+    }
+    let key = parse(conversion['imperial']['number']);
+    key += conversion['imperial']['unit'];
     const formatted = conversion['formatted'];
 
     let value;
     if (Array.isArray(formatted)) {
-      value = formatted.map(el => el['number'] + el['unit']).join(' or ');
+      value = formatted.map(el => parse(el['number']) + el['unit']).join(' or ');
     } else {
-      value = formatted['number'] + formatted['unit'];
+      value = parse(formatted['number']) + formatted['unit'];
     }
     
     memo[key] = value ;
