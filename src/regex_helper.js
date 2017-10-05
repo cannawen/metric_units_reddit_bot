@@ -40,11 +40,18 @@ const rangeRegex
   + / ?(?:-|to) ?/.source
   + numberRegex;
 
+const fractionRegex
+  = numberRegex
+  + "/"
+  + numberRegex
+  + /([\s-])/.source;
+
 module.exports = {
   "regexJoinToString" : regexJoinToString,
   "addCommas" : addCommas,
   startRegex,
   endRegex,
   numberRegex,
-  rangeRegex
+  rangeRegex,
+  fractionRegex
 }

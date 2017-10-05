@@ -166,11 +166,13 @@ describe('Converter', () => {
           [
             "1 troy ounces",
             "1.25 oz t",
+            "5/6 oz t",
             "5 ozt"
           ],
           {
             "1 troy ounces" : "31 g",
             "1.25 troy ounces" : "38.88 g",
+            "0.83 troy ounces" : "25.82 g",
             "5 troy ounces" : "160 g"
           }
         );
@@ -181,10 +183,12 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1.1-inch"
+            "1.1-inch",
+            "1,001 2/3 inch"
           ],
           {
-            "1.1 inches" : "2.8 cm"
+            "1.1 inches" : "2.8 cm",
+            "1,001.67 inches" : "25.44 metres"
           }
         );
       });
@@ -195,11 +199,13 @@ describe('Converter', () => {
         testConvert(
           [
             "2-furlongs",
-            "13-furlongs"
+            "13-furlongs",
+            "13/26 furlongs"
           ],
           {
             "2 furlongs": "400 metres",
-            "13 furlongs" : "2.6 km"
+            "13 furlongs" : "2.6 km",
+            "0.50 furlongs": "100.58 metres"
           }
         );
       });
