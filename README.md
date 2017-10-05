@@ -3,12 +3,10 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
-# What does the bot do?
+# Vision
 
-The bot finds comments with imperial units, and replies with metric units. See [./test/converter-test.js](./test/converter-test.js) for what conversions are currently supported, and see [Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2091572) for what's coming up next.
-
-There is a chance it will reply to certain triggers like "good bot". See [personality-test.js](./test/personality-test.js) for what the triggers are.
-
+- To [convert imperial units into metric](./test/converter-test.js)
+- To surprise and delight with [unexpected sassy responses](./test/personality-test.js)
 
 # How does the code work?
 
