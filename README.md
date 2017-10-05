@@ -1,5 +1,5 @@
 ![Build status](https://travis-ci.org/cannawen/metric_units_reddit_bot.svg?branch=master)
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 
 
 # What does the bot do?
@@ -56,8 +56,8 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md)
 Thanks goes to these wonderful people ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-| [<img src="https://avatars1.githubusercontent.com/u/1088336?v=4" width="100px;"/><br /><sub>Canna Wen</sub>](https://www.cannawen.com)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=cannawen "Code") [📖](https://github.com/cannawen/metric_units_reddit_bot/commits?author=cannawen "Documentation") [💬](#question-cannawen "Answering Questions") [👀](#review-cannawen "Reviewed Pull Requests") | [<img src="https://avatars2.githubusercontent.com/u/7432848?v=4" width="100px;"/><br /><sub>Daniel Albert</sub>](https://esclear.de/)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=esclear "Code") | [<img src="https://avatars0.githubusercontent.com/u/38579?v=4" width="100px;"/><br /><sub>Bob Clingan</sub>](http://www.bobclingan.com)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=bclingan "Code") |
-| :---: | :---: | :---: |
+| [<img src="https://avatars1.githubusercontent.com/u/1088336?v=4" width="100px;"/><br /><sub>Canna Wen</sub>](https://www.cannawen.com)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=cannawen "Code") [📖](https://github.com/cannawen/metric_units_reddit_bot/commits?author=cannawen "Documentation") [💬](#question-cannawen "Answering Questions") [👀](#review-cannawen "Reviewed Pull Requests") | [<img src="https://avatars2.githubusercontent.com/u/7432848?v=4" width="100px;"/><br /><sub>Daniel Albert</sub>](https://esclear.de/)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=esclear "Code") | [<img src="https://avatars0.githubusercontent.com/u/38579?v=4" width="100px;"/><br /><sub>Bob Clingan</sub>](http://www.bobclingan.com)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=bclingan "Code") | [<img src="https://avatars3.githubusercontent.com/u/7226476?v=4" width="100px;"/><br /><sub>fbontin</sub>](http://fbontin.github.io)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=fbontin "Code") |
+| :---: | :---: | :---: | :---: |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
