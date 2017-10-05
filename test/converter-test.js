@@ -396,6 +396,23 @@ describe('Converter', () => {
             "5 lbf" : "22 N",
             "6 lbf" : "27 N"
           }
+        )
+      })
+    });
+
+    context('nautical miles', () => {
+      it('should convert', () => {
+        testConvert(
+          [
+            "2 nmi",
+            "1 nautical mile",
+            "3 nautical miles"
+          ],
+          {
+            "2 nmi" : "3.7 km",
+            "1 nmi" : "1.9 km",
+            "3 nmi" : "5.6 km"
+          }
         );
       });
     });
