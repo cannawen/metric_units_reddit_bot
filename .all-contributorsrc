@@ -83,6 +83,15 @@
         "question",
         "ideas"
       ]
+    },
+    {
+      "login": "JuanPotato",
+      "name": "Hasan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9531780?v=4",
+      "profile": "https://github.com/JuanPotato",
+      "contributions": [
+        "code"
+      ]
     }
   ]
 }
