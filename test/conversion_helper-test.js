@@ -62,8 +62,8 @@ describe('conversion_helper', () => {
     });
     context('comment contains fraction', () => {
         it('should convert fractions into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 9/10 miles");
-          ch.preprocessComment(comment)['body'].should.equal("post text 0.90 miles");
+          const comment = createComment("subredditname", "post title", "post text 9/10-miles");
+          ch.preprocessComment(comment)['body'].should.equal("post text 0.90-miles");
         });
         it('should convert fractions into decimals', () => {
           const comment = createComment("subredditname", "post title", "post text 177/100 miles more text");
