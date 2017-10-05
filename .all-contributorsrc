@@ -14,7 +14,7 @@
       "profile": "https://www.cannawen.com",
       "contributions": [
         "code",
-        "doc",
+        "test",
         "question",
         "review"
       ]
@@ -25,7 +25,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/7432848?v=4",
       "profile": "https://esclear.de/",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -43,7 +44,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/7226476?v=4",
       "profile": "http://fbontin.github.io",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -61,7 +63,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/7240098?v=4",
       "profile": "https://github.com/manuporto",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -71,6 +74,7 @@
       "profile": "https://twitter.com/annuhdo",
       "contributions": [
         "code",
+        "test",
         "doc"
       ]
     },
@@ -81,9 +85,8 @@
       "profile": "http://charleslabas.com/",
       "contributions": [
         "code",
-        "question",
-        "ideas",
-        "doc"
+        "test",
+        "question"
       ]
     },
     {
@@ -92,7 +95,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/9531780?v=4",
       "profile": "https://github.com/JuanPotato",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -101,7 +105,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/20388195?v=4",
       "profile": "http://www.MFogleman.com",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -110,7 +115,8 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/5065375?v=4",
       "profile": "https://github.com/eliotw",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -119,7 +125,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/12798396?v=4",
       "profile": "https://github.com/Doomki",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -128,7 +135,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/381258?v=4",
       "profile": "https://twitter.com/winglian",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -137,7 +145,8 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/19378450?v=4",
       "profile": "https://github.com/nicoferraro96",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -146,7 +155,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/6984346?v=4",
       "profile": "http://nibnalin.me",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -155,7 +165,8 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/20612753?v=4",
       "profile": "https://github.com/thepassenger-hub",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     },
     {
@@ -164,7 +175,8 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/132009?v=4",
       "profile": "https://github.com/munumafia",
       "contributions": [
-        "code"
+        "code",
+        "test"
       ]
     }
   ]

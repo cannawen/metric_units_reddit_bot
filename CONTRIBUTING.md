@@ -30,7 +30,7 @@ This document is a guideline to help our community run smoothly. If at any point
 ### Adding yourself to the contributors list (optional)
 
 - Do you want to be included in the awesome table at the bottom of the README?
-- Run the following command: `all-contributors add {{your-github-username}} code`
+- Run the following command: `all-contributors add {{your-github-username}} code,test`
 - See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more details
 - Submmit the changes to the `README` and `.all-contributorsrc` files along with your PR.
 - You can manually edit the `.all-contributorsrc` file and run `all-contributors generate` to update the README
