@@ -67,7 +67,4 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 
 # License
 
-This source is distributed under GNU GPLv3
-
-Pull requests or derivative works welcome. <sup>but please don't make a freedom_units_bot just to spite me D:</sup>
-
+This source is distributed under [GNU GPLv3](./LICENSE.txt)
