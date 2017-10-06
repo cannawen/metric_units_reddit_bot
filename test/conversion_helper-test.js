@@ -456,6 +456,10 @@ describe('conversion_helper', () => {
         verifyFilterConversions([[1, 2], [2, 10], [5, 7]], " lb", [[1, 2], [2, 10], [5, 7]]);
       });
 
+      it('should not allow ranges with one bad number', () => {
+        verifyFilterConversions([[-1, 2]], " lb", undefined);
+      });
+
       it('should not allow zero or negative values', () => {
         verifyFilterConversions([[0], [-10]], " lb", undefined);
       });

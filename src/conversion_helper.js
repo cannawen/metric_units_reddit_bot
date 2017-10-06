@@ -507,14 +507,13 @@ function roundToDecimalPlaces(number, places) {
   return (Math.round(number * multiplier)/multiplier).toFixed(places);
 }
 
-function ContainsArray(wrapper, main) {
-  let ret = false;
-  wrapper.forEach(function(item) {
-    if(JSON.stringify(item) === JSON.stringify(main)) {
-      ret = true;
+function containsArray(searchSpace, targetArray) {
+  for(let i in searchSpace) {
+    if(JSON.stringify(searchSpace[i]) === JSON.stringify(targetArray)) {
+      return true;
     }
-  });
-  return ret;
+  }
+  return false;
 }
 
 
@@ -710,7 +709,7 @@ function findPotentialConversions(comment) {
     if (duplicateCache[unit] === undefined) {
       duplicateCache[unit] = [number];
       return true;
-    } else if (!ContainsArray(duplicateCache[unit], number)) {
+    } else if (!containsArray(duplicateCache[unit], number)) {
       duplicateCache[unit].push(number);
       return true;
     } else {
@@ -739,10 +738,10 @@ function filterConversions(potentialConversions) {
 
     const map = unitLookupMap[imperialUnit];
     if (map['isInvalidInput']) {
-      let result = false;
+      let result = true;
       imperialNumber.forEach(function(item) {
-        if (!map['isInvalidInput'](Number(item))) {
-          result = true;
+        if (map['isInvalidInput'](Number(item))) {
+          result = false;
         }
       });
       return result;
@@ -758,10 +757,10 @@ function filterConversions(potentialConversions) {
 
     const map = unitLookupMap[imperialUnit];
     if (map['isWeaklyInvalidInput']) {
-      let result = false;
+      let result = true;
       imperialNumber.forEach(function(item) {
-        if (!map['isWeaklyInvalidInput'](Number(item))) {
-          result = true;
+        if (map['isWeaklyInvalidInput'](Number(item))) {
+          result = false;
         }
       });
       return result;
