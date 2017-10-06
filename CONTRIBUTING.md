@@ -41,4 +41,18 @@ This document is a guideline to help our community run smoothly. If at any point
 - Please write "closes #{issue number}" in your PR description so the issue is automatically closed
 - Please make sure all tests are passing
 
+## Collaborators
+
+### Help, I've been added as a collaborator! What does that mean?
+
+- We appreciate the time you have taken to get to know the project, and you have been given push access to the main repository
+- You can choose your own role, and be as involved (or not involved) with the project as you want. You can (but are not limited to): answer questions, tag issues, review PRs, do nothing, etc.
+- Feel empowered to make branches on the main repo, or push minor changes directly to master
+- Don't stress about making mistakes, 'tis only a reddit bot ¯\\\_(ツ)_/¯ (and force-pushes are disabled on master, so what's the worst that can happen...)
+
+### How do I become a collaborator?
+
+- Show an interest in the project by contributing to code and/or discussions :)
+
+
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
