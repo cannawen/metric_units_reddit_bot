@@ -7,8 +7,14 @@ This document is a guideline to help our community run smoothly. If at any point
 ## Etiquette
 
 - Be nice
-- Help enforce these guidelines! Please point people towards this page if you see anything questionable
-- Keep issues on-topic. Please create a new issue for new topics
+- Help enforce these guidelines! Please direct people towards this page if you see anything questionable
+- Keep issues and PRs on-topic. Please create a new issue for new topics
+
+## Making an issue
+
+- If you find a bug, have a question, or have a feature request, please [open an issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)!
+- Bug reports should contain a link to the reddit comment, or reproduction steps
+- Issues will be tagged ["maintainer approved"](https://github.com/cannawen/metric_units_reddit_bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22maintainer+approved%22) if they are ready to be coded
 
 ## Coding
 
@@ -18,8 +24,8 @@ This document is a guideline to help our community run smoothly. If at any point
 
 ### Finding something to work on
 
-- You can find an [unassigned issue](https://github.com/cannawen/metric_units_reddit_bot/issues) and leave a comment saying you would like to work on it
-- You can create your own issue to work on. If you come up with your own idea, you must get a collaborator to approve it
+- You can find a ["help wanted" issue](https://github.com/cannawen/metric_units_reddit_bot/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20label%3A%22maintainer%20approved%22%20label%3A%22help%20wanted%22%20) and leave a comment saying you would like to work on it
+- If there are no open issues, you can come up with your own issue
 - If you are working on something that you would like to submit back to the community, it **must be associated with an open issue**. This is necessary for transparency, so no efforts are duplicated and there are no crazy merge conflicts
 
 ### Working on an issue
@@ -27,19 +33,26 @@ This document is a guideline to help our community run smoothly. If at any point
 - If you volunteer to fix an issue, you have 7 days to complete it. You are allowed to ask for an extension, but this rule is here to ensure issues do not go "stale"
 - Feel free to ask any questions on your issue thread! Also, feel free to reply to other people's questions if you know the answer :)
 
+### Making a PR
+
+REQUIRED INFORMATION:
+- If you are making a PR, you should already have an open issue assigned to you.
+- Write "closes #{issue number}" in your PR description so the issue is linked and automatically closed upon merge
+- Include a brief description of what the PR addresses
+- All tests should be passing
+
+OPTIONAL:
+- You can talk about design decisions you made
+- Include link to other relevant issues or PRs
+- Add yourself to the contributors list (instructions below)
+
 ### Adding yourself to the contributors list (optional)
 
 - Do you want to be included in the awesome table at the bottom of the README?
 - Run the following command: `all-contributors add {{your-github-username}} code,test`
-- See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more details
+- See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more contribution types
 - Submmit the changes to the `README` and `.all-contributorsrc` files along with your PR.
 - You can manually edit the `.all-contributorsrc` file and run `all-contributors generate` to update the README
-
-### Making a PR
-
-- If you are making a PR, you should already have an open issue assigned to you.
-- Please write "closes #{issue number}" in your PR description so the issue is automatically closed
-- Please make sure all tests are passing
 
 ## Collaborators
 
