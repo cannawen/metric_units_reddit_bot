@@ -48,11 +48,13 @@ OPTIONAL:
 
 ### Adding yourself to the contributors list (optional)
 
-- Do you want to be included in the awesome table at the bottom of the README?
-- Run the following command: `all-contributors add {{your-github-username}} code,test`
-- See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more contribution types
-- Submmit the changes to the `README` and `.all-contributorsrc` files along with your PR.
-- You can manually edit the `.all-contributorsrc` file and run `all-contributors generate` to update the README
+Do you want to be included in the awesome table at the bottom of the README?
+
+- Run `npm install` if you haven't yet.
+- Run the following command: `npm run all-contributors add your-github-username tag1,tag2` (tags can be: bug, code, doc, review, test, [and others](https://github.com/kentcdodds/all-contributors#emoji-key))
+- The script will change the `README` and `.all-contributorsrc` files and create a commit. Be sure to include it with your PR.
+
+You can also manually edit `.all-contributorsrc` and run `npm run all-contributors generate` to update the README. See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more details
 
 ## Collaborators
 
