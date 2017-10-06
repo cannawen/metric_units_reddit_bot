@@ -8,6 +8,7 @@
 
 - To [convert imperial units into metric](./test/converter-test.js)
 - To surprise and delight with [unexpected sassy responses](./test/personality-test.js)
+- To collect [ALL THE KARMA](https://www.reddit.com/user/metric_units)
 
 # How does the code work?
 

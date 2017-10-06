@@ -50,7 +50,7 @@ So you have finished working on your issue, congratulations! It's time to get it
 
 If you are not finished an issue but would like feedback, you can make a PR asking for reviews with `[WIP]` at the start of your PR title. Remember to remove the `[WIP]` when it is ready to be merged!
 
-## Add yourself to the contributors list
+# Add yourself to the contributors list
 
 Do you want to be included in the awesome table at the bottom of the [README](./README.md)?
 
@@ -86,7 +86,7 @@ The people who are most active in the community
 
 - A user submits an issue
 - A collaborator reviews it, and asks any clarifying questions
-- A collaborator assigns tags: `maintainer approved`, `hacktoberfest`, `discussion`, `duplicate`, `invalid`, `wontfix`
+- A collaborator assigns tags: `maintainer approved`, `hacktoberfest`, `discussion`, `blocked`, `duplicate`, `invalid`, `wontfix`
 - If it is ready for development, help wanted` and the category of the issue (`feature`, `bug`, or `chore`) are added.
 - Wait for a contributor to volunteer
 - When a contributor comments that they would like to work on the issue, a collaborator will replace the `help wanted` tag with `in progress`
