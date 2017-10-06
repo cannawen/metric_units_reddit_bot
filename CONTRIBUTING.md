@@ -6,7 +6,7 @@ This document is a guideline to help our community run smoothly. If at any point
 
 ## Etiquette
 
-- Be nice
+- Be open and inclusive of everyone
 - Help enforce these guidelines! Please direct people towards this page if you see anything questionable
 - Keep issues and PRs on-topic. Please create a new issue for new topics
 
