@@ -6,13 +6,13 @@ Thank you for your interest in contributing to metric_units reddit bot! This doc
 
 - Be open and inclusive of everyone
 - Help enforce these guidelines! Please direct people towards this page if you see anything questionable
-- Keep issues and PRs on-topic. Please create a new issue for new topics
+- Keep issues and PRs on-topic. Create a new issue for new topics
 
 ## Making an issue
 
-- If you find a bug, have a question, or have a feature request, please [open an issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)!
-- Bug reports should contain a link to the reddit comment, or reproduction steps
-- Issues will be tagged ["maintainer approved"](https://github.com/cannawen/metric_units_reddit_bot/issues?q=is%3Aissue+is%3Aopen+label%3A%22maintainer+approved%22) if they are ready to be worked on
+- If you find a bug, have a question, or have a feature request, please [open an issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)
+- Bug reports should contain a link to the reddit comment or reproduction steps
+- Issues will be triaged (see "The lifecycle of issue tags" section below)
 
 ## Coding
 
@@ -23,6 +23,7 @@ Thank you for your interest in contributing to metric_units reddit bot! This doc
 ### Finding something to work on
 
 - You can find a ["help wanted" issue](https://github.com/cannawen/metric_units_reddit_bot/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20label%3A%22maintainer%20approved%22%20label%3A%22help%20wanted%22%20) and leave a comment saying you would like to work on it
+- A maintainer will confirm the issue is assigned to you, and change the tag to "in progress"
 - If there are no open issues, you can come up with your own issue
 - If you are working on something that you would like to submit back to the community, it **must be associated with a "maintainer approved" issue**. This is necessary for transparency, so no efforts are duplicated and there are no crazy merge conflicts
 
@@ -45,7 +46,7 @@ Thank you for your interest in contributing to metric_units reddit bot! This doc
 - Include link to other relevant issues or PRs
 - Add yourself to the contributors list (instructions below)
 
-### Adding yourself to the contributors list (optional)
+### Adding yourself to the contributors list
 
 Do you want to be included in the awesome table at the bottom of the [README](./README.md)?
 
@@ -60,7 +61,7 @@ If you have contributed to the repo but are having trouble following the above i
 
 ## Collaborators
 
-### Help, I've been added as a collaborator! What does that mean?
+### Help, I've been added as a collaborator! What do??
 
 - We appreciate the time you have taken to get to know the project, and you have been given push access to the main repository
 - You can choose your own role, and be as involved (or not involved) with the project as you want. You can (but are not limited to): answer questions, tag and approve issues, review PRs, merge PRs, do nothing, etc.
@@ -72,6 +73,28 @@ If you have contributed to the repo but are having trouble following the above i
 
 - Show an interest in the project by contributing to code and/or discussions
 
+## The lifecycle of issue tags
+
+- A user submits an issue
+- A collaborator reviews it, and asks any clarifying questions
+- A collaborator assigns one or more tags: `maintainer approved`, `hacktoberfest`, `discussion`, `duplicate`, `invalid`, `wontfix`
+- If it is ready for development, a tag `help wanted` and the category of the issue (`feature`, `bug`, or `chore`) is added.
+- Wait someone to volunteer to pick up the issue
+- Once a volunteer is assigned an issue, the `help wanted` tag should be replaced with `in progress`
+- If there has been no progress on the issue in 7 days, the issue should be closed and a new issue should be created to be re-assigned
+- The contributor should close the issue via a PR description containing "closes #{issue number}"
+
+## The lifecycle of a PR
+
+- A PR containing the description "closes #{issue number}" is submitted by a contributor
+- A maintainer reviews the PR and uses github's built-in "review changes" system to request changes
+- The contributor should address any concerns
+- Repeat
+- Once both parties are satisfied, the PR will be merged into master
+
+The code is released to production a few times a week
+
+---
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome! 
-If at any point you feel like these guidelines should be changed, please open a PR against this file with the proposed changes and we can discuss it!
+If at any point you feel like these guidelines should be changed, please open a PR against this file with the proposed changes and we can discuss it as a community
