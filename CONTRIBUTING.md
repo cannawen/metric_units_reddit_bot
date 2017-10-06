@@ -35,26 +35,31 @@ This document is a guideline to help our community run smoothly. If at any point
 
 ### Making a PR
 
-REQUIRED INFORMATION:
+#### Required information
 - If you are making a PR, you should already have an open issue assigned to you.
 - Write "closes #{issue number}" in your PR description so the issue is linked and automatically closed upon merge
 - Include a brief description of what the PR addresses
 - All tests should be passing
 
-OPTIONAL:
-- You can talk about design decisions you made
+#### Optional
+- You can talk about the overall architecture changes or design decisions made in the PR
 - Include link to other relevant issues or PRs
 - Add yourself to the contributors list (instructions below)
 
 ### Adding yourself to the contributors list (optional)
 
-Do you want to be included in the awesome table at the bottom of the README?
+Do you want to be included in the awesome table at the bottom of the [README](./README.md)?
 
-- Run `npm install` if you haven't yet.
-- Run the following command: `npm run all-contributors add your-github-username tag1,tag2` (tags can be: bug, code, doc, review, test, [and others](https://github.com/kentcdodds/all-contributors#emoji-key))
+#### For coders
+- Run `npm install` if you haven't yet
+- Run the following command: `npm run all-contributors add your-github-username tag1,tag2` (tags can be: code, test, doc, [and others](https://www.npmjs.com/package/all-contributors-cli))
 - The script will change the `README` and `.all-contributorsrc` files and create a commit. Be sure to include it with your PR.
 
 You can also manually edit `.all-contributorsrc` and run `npm run all-contributors generate` to update the README. See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more details
+
+#### For non-coders
+If you are having trouble following the above instructions, just let a collaborator know that you would like to be added ([and which contribution icons you want](https://github.com/kentcdodds/all-contributors#emoji-key))!
+
 
 ## Collaborators
 
