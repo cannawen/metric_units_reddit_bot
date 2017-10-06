@@ -73,6 +73,21 @@ function pressureMap(pa) {
   }
 }
 
+function velocityMap(ms) {
+  if (ms <= 56) {
+    return createMap(ms * 3.6, " km/h");
+
+  } else if (ms >= 2997924.58) {
+    return createMap(ms / 299792458, "c");
+
+  } else {
+    let perSMap = distanceMap(ms);
+    perSMap['unit'] += "/s";
+
+    return [createMap(ms * 3.6, " km/h"), perSMap];
+  }
+}
+
 const metricDistanceUnits = [/km/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
@@ -138,21 +153,7 @@ const unitLookupList = [
     "standardInputUnit" : " mph",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
-    "conversionFunction" : (i) => {
-      const km = i * 1.609344;
-      if (i < 200) {
-        return createMap(km, " km/h");
-        
-      } else if (i >= 6706166) {
-        return createMap(i/670616629.3844, "c");
-
-      } else {
-        let perSMap = distanceMap(km * 1000 / 60 / 60);
-        perSMap['unit'] += "/s";
-
-        return [createMap(km, " km/h"), perSMap];
-      }
-    },
+    "conversionFunction" : (i) => velocityMap(i * 0.44704), // 1 mph = 0.44704 m/s
     "ignoredUnits" : ["km/hr?", "kmh", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
     "ignoredKeywords" : ukSubreddits
   },
