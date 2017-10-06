@@ -18,7 +18,8 @@
     "proxyquire": "^1.8.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "all-contributors": "all-contributors"
   },
   "repository": {
     "type": "git",
