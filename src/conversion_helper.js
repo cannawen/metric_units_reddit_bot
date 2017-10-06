@@ -78,7 +78,7 @@ const metricDistanceUnits = [/km/, /light-?years?/,
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
-const liquidKeywords = ['liquid', 'water', 'tea', 'beer', 'soda', 'cider', 'juice', 'coffee', 'liquor', 'milk', 'bottle', 'spirits', 'rum', 'vodka', 'tequila', 'wine', 'oil'];
+const liquidKeywords = ['liquids?', 'water', 'teas?', 'beers?', 'sodas?', 'pops?', 'colas?', 'ciders?', 'juices?', 'coffees?', 'liquors?', 'milk', 'bottles?', 'spirits?', 'rums?', 'vodkas?', 'tequilas?', 'wines?', 'oils?', "cups?", "cans?", "tall boys?", "brews?", "breastfeeding", "breastfee?d"];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
