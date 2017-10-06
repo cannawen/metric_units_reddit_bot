@@ -1,3 +1,17 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Vision](#vision)
+- [How does the code work?](#how-does-the-code-work)
+- [Running the code](#running-the-code)
+- [Running the tests](#running-the-tests)
+- [Questions or Comments?](#questions-or-comments)
+- [Contribute](#contribute)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ![Build status](https://travis-ci.org/cannawen/metric_units_reddit_bot.svg?branch=master)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
