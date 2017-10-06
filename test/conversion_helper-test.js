@@ -393,9 +393,10 @@ describe('conversion_helper', () => {
         verifyPotentialConversions(
           [
             "1-2°F 1-2°F",
-            "-3 to -4°F"
+            "-3 to -4°F",
+            "-10-20°F"
           ],
-          [[1, 2], [-3, -4]],
+          [[1, 2], [-3, -4], [-10, 20]],
           "°F"
         );
       });
@@ -440,7 +441,6 @@ describe('conversion_helper', () => {
         }, expectedOutput);
       }
 
-      console.log(input);
       const comment = createComment("foobar", "foobar", input);
       ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
     }
@@ -450,6 +450,10 @@ describe('conversion_helper', () => {
     context('lbs', () => {
       it('should allow normal numbers', () => {
         verifyFilterConversions([[1], [2], [3]], " lb", [[1], [2], [3]]);
+      });
+
+      it('should allow ranges', () => {
+        verifyFilterConversions([[1, 2], [2, 10], [5, 7]], " lb", [[1, 2], [2, 10], [5, 7]]);
       });
 
       it('should not allow zero or negative values', () => {
@@ -778,6 +782,37 @@ describe('conversion_helper', () => {
       });
     });
 
+    //Ranges checking
+    context('miles', () => {
+      it('should convert to km', () => {
+        verifyConversion(["0.1", "1"], " miles", ["0.1609344", "1.609344"], " km");
+      });
+
+      it('should convert to metres', () => {
+        verifyConversion(["0.1", "0.2"], " miles", ["160.9344", "321.8688"], " metres");
+      });
+    });
+
+    context('lbs', () => {
+      context('under 1 kg', () => {
+        it('should convert to g', () => {
+          verifyConversion(["1", "2"], " lb", ["453.592", "907.184"], " g");
+        });
+      });
+      
+      context('under 1,000 kg', () => {
+        it('should convert to kg', () => {
+          verifyConversion(["1", "3"], " lb", ["0.453592", "1.3607759999999998"], " kg");
+        });
+      });
+
+      context('over 1,000 kg', () => {
+        it('should convert to g', () => {
+          verifyConversion(["500", "2222"], " lb", ["0.226796", "1.007881424"], " metric tons");
+        });
+      });
+    });
+
     function verifyConversion(imperialNumber, imperialUnit, metricNumber, metricUnit) {
       const imperialMap = createImperialMap(imperialNumber, imperialUnit);
 
@@ -793,6 +828,14 @@ describe('conversion_helper', () => {
       it('should convert with output decimal places', () => {
         verifyRounding(["6.66"], ["1.2345678"], ["1.23"]);
         verifyRounding(["6.6"], ["-1.99872"], ["-2.0"]);
+      });
+    });
+
+    //Ranges
+    context('has decimal places', () => {
+      it('should convert with output decimal places', () => {
+        verifyRounding(["6.66", "7.8"], ["1.2345678", "2.39333"], ["1.23", "2.4"]);
+        verifyRounding(["6.6", "1.707"], ["-1.99872", "-0.509"], ["-2.0", "-0.509"]);
       });
     });
 
@@ -850,6 +893,14 @@ describe('conversion_helper', () => {
       });
     });
 
+    //Ranges
+    context('number over 1,000', () => {
+      it('should add commas', () => {
+        verifyUserFacing(["1000", "2000"], ["1,000", "2,000"]);
+        verifyUserFacing(["1000.00", "1000000"], ["1,000.00", "1,000,000"]);
+      });
+    });
+
     function verifyUserFacing(rounded, expected) {
       const input = {
         'imperial' : createMap(["1"], ' miles'),
@@ -898,6 +949,26 @@ describe('conversion_helper', () => {
             'metric' : createMap(["2"], " metres"),
             'rounded' : createMap(["2"], " metres"),
             'formatted' : createMap(["2"], " metres")
+          }
+
+          actual.should.deep.equal(expected);
+        });
+      });
+
+      //Ranges
+      context('whole', () => {
+        it('should convert', () => {
+          const actual = ch.formatConversion([{
+            'imperial' : createMap(["5", "8"], " feet"),
+            'metric' : createMap(["2", "3"], " metres"),
+            'rounded' : createMap(["2", "3"], " metres")
+          }])[0];
+
+          const expected = {
+            'imperial' : createMap(["5 feet", "8 feet"], ""),
+            'metric' : createMap(["2", "3"], " metres"),
+            'rounded' : createMap(["2", "3"], " metres"),
+            'formatted' : createMap(["2", "3"], " metres")
           }
 
           actual.should.deep.equal(expected);

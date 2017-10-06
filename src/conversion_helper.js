@@ -678,7 +678,7 @@ function findPotentialConversions(comment) {
 
   let duplicateCache = {}
 
-  let result = unitLookupList.reduce((memo, map) => {
+  return unitLookupList.reduce((memo, map) => {
     if (!shouldConvertComment(comment, map['ignoredKeywords']) ||
         !shouldConvertComment(comment, map['ignoredUnits'], false)) {
       return memo;
@@ -717,8 +717,6 @@ function findPotentialConversions(comment) {
       return false;
     }
   });
-
-  return result;
 }
 
 /*
@@ -811,18 +809,38 @@ function calculateMetric(imperialInputs) {
 
     const map = unitLookupMap[imperialUnit];
     inRangeVal = -Infinity;
+    let multipleResults = false;
     imperialNumber.forEach(function(item) {
-        input['metric'] = map['conversionFunction'](Number(item));
+        var tempMap = map['conversionFunction'](Number(item));
+        if(Array.isArray(tempMap)) {
+          multipleResults = true;
+        }
     });
-    input['metric'] = undefined;
-    imperialNumber.forEach(function(item) {
-        if(input['metric'] === undefined) {
-          input['metric'] = map['conversionFunction'](Number(item));
+
+    if(multipleResults) {
+      input['metric'] = [];
+      imperialNumber.forEach(function(item) {
+        var tempMap = map['conversionFunction'](Number(item));
+        if(input['metric'].length) {
+          for(var i = 0;i < tempMap.length;i++) {
+            input['metric'][i]['number'].push(tempMap[i]['number'][0]);
+          }
         }
         else {
-          input['metric'].push(map['conversionFunction'](Number(item))['number'][0]);
+          input['metric'] = tempMap;
         }
-    });
+      });
+    }
+    else {
+      input['metric'] = {
+        'number': []
+      };
+      imperialNumber.forEach(function(item) {
+        var tempMap = map['conversionFunction'](Number(item));
+        input['metric']['number'].push(tempMap['number'][0]);
+        input['metric']['unit'] = tempMap['unit'];
+      });
+    }
     return input;
   });
 }
@@ -912,23 +930,17 @@ function roundConversions(conversions) {
         'unit': unit
       };
 
+      let index = 0;
       imperial.forEach(function(item) {
         if (item.toString().indexOf('.') !== -1) {
           const decimals = item.split('.')[1].length;
-          metric.forEach(function(metric_item) {
-            result['number'].push(roundToDecimalPlaces(metric_item, decimals));
-          });
-
+            result['number'].push(roundToDecimalPlaces(metric[index], decimals));
         } else if ((item > 100 || metric > 100) && item.toString()[item.length - 1] == '0') {
-          metric.forEach(function(metric_item) {
-            result['number'].push(round(metric_item, 5).toString());
-          });
+            result['number'].push(round(metric[index], 5).toString());
         } else {
-          metric.forEach(function(metric_item) {
-            result['number'].push(round(metric_item, 3).toString());
-          });
+            result['number'].push(round(metric[index], 3).toString());
         }
-
+        index++;
       });
       return result;
     }

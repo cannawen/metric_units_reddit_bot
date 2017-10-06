@@ -13,7 +13,6 @@ function conversions(comment) {
   const metricConversions = ch.calculateMetric(filteredConversions);
   const roundedConversions = ch.roundConversions(metricConversions);
   const formattedConversions = ch.formatConversion(roundedConversions);
-  //console.log(formattedConversions[0]);
   
   return formattedConversions.reduce((memo, conversion) => {
     function parse(item) {
