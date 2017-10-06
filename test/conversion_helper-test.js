@@ -699,8 +699,8 @@ describe('conversion_helper', () => {
           const expectedOutput = Object.assign({}, imperialMap);
 
           expectedOutput['metric'] = [
-            { "number" : ["321.8688"], "unit" : " km/h"},
-            { "number" : ["89.408"], "unit" : " metres/s" }
+            { "numbers" : ["321.8688"], "unit" : " km/h"},
+            { "numbers" : ["89.408"], "unit" : " metres/s" }
           ];
 
           ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
@@ -727,8 +727,8 @@ describe('conversion_helper', () => {
           const expectedOutput = Object.assign({}, imperialMap);
 
           expectedOutput['metric'] = [
-            { "number" : ["6.37716"], "unit" : " km/L"},
-            { "number" : ["15.681000000000001"], "unit" : " L/100km" }
+            { "numbers" : ["6.37716"], "unit" : " km/L"},
+            { "numbers" : ["15.681000000000001"], "unit" : " L/100km" }
           ];
 
           ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
@@ -743,8 +743,8 @@ describe('conversion_helper', () => {
           const expectedOutput = Object.assign({}, imperialMap);
 
           expectedOutput['metric'] = [
-            { "number" : ["-12.222222222222221"], "unit" : "°C"},
-            { "number" : ["5.555555555555555"], "unit" : " change in °C" }
+            { "numbers" : ["-12.222222222222221"], "unit" : "°C"},
+            { "numbers" : ["5.555555555555555"], "unit" : " change in °C" }
           ];
 
           ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
@@ -821,7 +821,7 @@ describe('conversion_helper', () => {
       const imperialMap = createImperialMap(imperialNumber, imperialUnit);
 
       const expectedOutput = Object.assign({}, imperialMap);
-      expectedOutput['metric'] = { "number" : metricNumber, "unit" : metricUnit };
+      expectedOutput['metric'] = { "numbers" : metricNumber, "unit" : metricUnit };
 
       ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput])
     }
@@ -897,8 +897,7 @@ describe('conversion_helper', () => {
       });
     });
 
-    //Ranges
-    context('number over 1,000', () => {
+    context('Ranges with numbers over 1,000', () => {
       it('should add commas', () => {
         verifyUserFacing(["1000", "2000"], ["1,000", "2,000"]);
         verifyUserFacing(["1000.00", "1000000"], ["1,000.00", "1,000,000"]);
@@ -988,7 +987,7 @@ function createImperialMap(value, unit) {
 
 function createMap(value, unit) {
   return {
-    "number" : value,
+    "numbers" : value,
     "unit" : unit
   };
 }

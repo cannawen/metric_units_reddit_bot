@@ -22,15 +22,15 @@ function conversions(comment) {
       }
       return result;
     }
-    let key = parse(conversion['imperial']['number']);
+    let key = parse(conversion['imperial']['numbers']);
     key += conversion['imperial']['unit'];
     const formatted = conversion['formatted'];
 
     let value;
     if (Array.isArray(formatted)) {
-      value = formatted.map(el => parse(el['number']) + el['unit']).join(' or ');
+      value = formatted.map(el => parse(el['numbers']) + el['unit']).join(' or ');
     } else {
-      value = parse(formatted['number']) + formatted['unit'];
+      value = parse(formatted['numbers']) + formatted['unit'];
     }
     
     memo[key] = value ;
