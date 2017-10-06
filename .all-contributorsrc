@@ -1,0 +1,179 @@
+{
+  "projectName": "metric_units_reddit_bot",
+  "projectOwner": "cannawen",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "cannawen",
+      "name": "Canna Wen",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1088336?v=4",
+      "profile": "https://www.cannawen.com",
+      "contributions": [
+        "code",
+        "question",
+        "ideas",
+        "review"
+      ]
+    },
+    {
+      "login": "esclear",
+      "name": "Daniel Albert",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/7432848?v=4",
+      "profile": "https://esclear.de/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "bclingan",
+      "name": "Bob Clingan",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/38579?v=4",
+      "profile": "http://www.bobclingan.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "fbontin",
+      "name": "fbontin",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/7226476?v=4",
+      "profile": "http://fbontin.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nitinkgp23",
+      "name": "Nitin Choudhary",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16208882?v=4",
+      "profile": "http://www.nitinchoudhary.in",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "manuporto",
+      "name": "Manuel Porto",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7240098?v=4",
+      "profile": "https://github.com/manuporto",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "annuhdo",
+      "name": "Anna Do",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/6846913?v=4",
+      "profile": "https://twitter.com/annuhdo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "chazzlabs",
+      "name": "Charles",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3136972?v=4",
+      "profile": "http://charleslabas.com/",
+      "contributions": [
+        "code",
+        "question",
+        "ideas"
+      ]
+    },
+    {
+      "login": "JuanPotato",
+      "name": "Hasan",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9531780?v=4",
+      "profile": "https://github.com/JuanPotato",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "MFogleman",
+      "name": "Marc Fogleman",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/20388195?v=4",
+      "profile": "http://www.MFogleman.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "eliotw",
+      "name": "Eliot Wong",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5065375?v=4",
+      "profile": "https://github.com/eliotw",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Doomki",
+      "name": "Doomki",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/12798396?v=4",
+      "profile": "https://github.com/Doomki",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "winglian",
+      "name": "Wing Lian",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/381258?v=4",
+      "profile": "https://twitter.com/winglian",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nicoferraro96",
+      "name": "NFerraro",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/19378450?v=4",
+      "profile": "https://github.com/nicoferraro96",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "nalinbhardwaj",
+      "name": "Nalin Bhardwaj",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6984346?v=4",
+      "profile": "http://nibnalin.me",
+      "contributions": [
+        "code",
+        "question"
+      ]
+    },
+    {
+      "login": "thepassenger-hub",
+      "name": "thepassenger-hub",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/20612753?v=4",
+      "profile": "https://github.com/thepassenger-hub",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "munumafia",
+      "name": "Sean Grimes",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/132009?v=4",
+      "profile": "https://github.com/munumafia",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "rafd",
+      "name": "Rafal Dittwald",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/89664?v=4",
+      "profile": "http://rafal.dittwald.com",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ]
+}
