@@ -178,6 +178,15 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "rafd",
+      "name": "Rafal Dittwald",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/89664?v=4",
+      "profile": "http://rafal.dittwald.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
