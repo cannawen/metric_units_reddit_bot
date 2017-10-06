@@ -402,7 +402,7 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i * 0.24),
     "ignoredUnits" : metricVolumeUnits,
-    "ignoredKeywords" : ["bra", "band", "sizes?"]
+    "ignoredKeywords" : ["bra", "band", "sizes?", "clio"]
   },
   {
     "imperialUnits" : [/pints?/],
