@@ -29,7 +29,7 @@ Thank you for your interest in contributing to metric_units reddit bot! This doc
 
 ### Working on an issue
 
-- If you volunteer to fix an issue, you have 7 days to complete it. You may ask for an extension if you need more time, but this rule is here to ensure issues do not go "stale"
+- If you are assigned an issue, you have 7 days to complete it. You may ask for an extension if you need more time, but this rule is here to ensure issues do not go "stale"
 - Feel free to ask any questions on your issue thread! Also, feel free to reply to other people's questions if you know the answer or have suggestions
 - You can move the [pre-commit](./pre-commit) file into your `./.git/hooks` directory, and that will only allow you to commit code that are passing the tests
 
@@ -65,7 +65,8 @@ If you have contributed to the repo but are having trouble following the above i
 
 - We appreciate the time you have taken to get to know the project, and you have been given push access to the main repository
 - You can choose your own role, and be as involved (or not involved) with the project as you want. You can (but are not limited to): answer questions, tag and approve issues, review PRs, merge PRs, do nothing, etc.
-- Feel empowered to make branches on the main repo, or push changes directly to master. Use your judgement for when it's OK to push to master vs. when it makes sense to create a PR for review.
+- Your help in managing the community would be much appreciated (but is not required if that is something you are not interested in)
+- Feel empowered to make branches on the main repo, or push changes directly to master. Use your judgement
 - Delete remote branches once they are merged in
 - Don't stress about making mistakes, 'tis only a reddit bot ¯\\\_(ツ)_/¯ (and force-pushes are disabled on master, so what's the worst that can happen!)
 
