@@ -686,6 +686,7 @@ describe('conversion_helper', () => {
       context('input < 200', () => {
         it('should convert km/h', () => {
           verifyConversion(1, " mph", 1.609344, " km/h");
+          verifyConversion(199, " mph", 320.259456, " km/h");
         });
       });
 
@@ -705,7 +706,7 @@ describe('conversion_helper', () => {
 
       context('input >= 0.01 speed of light', () => {
         it('should convert c', () => {
-          verifyConversion(6706166, " mph", 0.009999999561830132, "c");
+          verifyConversion(80470000, " mph", 0.1199940420115572, "c");
         });
       });
     });
