@@ -1,3 +1,26 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Introduction](#introduction)
+- [Etiquette](#etiquette)
+- [Make an issue](#make-an-issue)
+- [Contribute Code](#contribute-code)
+  - [New to Github](#new-to-github)
+  - [Find something to work on](#find-something-to-work-on)
+  - [Work on an issue](#work-on-an-issue)
+  - [Make a PR](#make-a-pr)
+    - [Required](#required)
+    - [Optional](#optional)
+  - [Add yourself to the contributors list](#add-yourself-to-the-contributors-list)
+- [Collaborators](#collaborators)
+  - [Help, I've been added as a collaborator! What do??](#help-ive-been-added-as-a-collaborator-what-do)
+  - [How do I become a collaborator?](#how-do-i-become-a-collaborator)
+- [The lifecycle of an issue](#the-lifecycle-of-an-issue)
+- [The lifecycle of a PR](#the-lifecycle-of-a-pr)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Introduction
 
 Thank you for your interest in contributing to metric_units reddit bot! This document is a guideline to help our community run smoothly.
