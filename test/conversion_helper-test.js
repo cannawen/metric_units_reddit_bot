@@ -74,6 +74,27 @@ describe('conversion_helper', () => {
           ch.preprocessComment(comment)['body'].should.equal("post text 307.68 inches");
         });
     });
+    context('comment contains multiplier', () => {
+      it('should convert multiplier into value', () => {
+        const comment = createComment("test", "post title", "Something like 40k miles");
+        ch.preprocessComment(comment)['body'].should.equal("Something like 40000 miles");
+      });
+      it('should convert multipliers if there is a space in between', () => {
+        const comment = createComment("test", "post title", "Something like 40 k miles");
+        ch.preprocessComment(comment)['body'].should.equal("Something like 40000 miles");
+      });
+      it('should convert numbers with decimals', () => {
+        const comment = createComment("test", "post title", "I won 3.2mill at the lottery");
+        ch.preprocessComment(comment)['body'].should.equal("I won 3200000 at the lottery");
+      });
+      it('should not convert multipliers that are a part of a unit', () => {
+        const kmComment = createComment("test", "post title", "The road is 30km long");
+        const mphComment = createComment("test", "post title", "My car can do 100mph");
+
+        ch.preprocessComment(kmComment)['body'].should.equal("The road is 30km long");
+        ch.preprocessComment(mphComment)['body'].should.equal("My car can do 100mph");
+      });
+    });
   });
 
   describe('#findPotentialConversions()', () => {

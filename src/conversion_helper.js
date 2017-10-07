@@ -580,7 +580,36 @@ function preprocessComment(comment) {
     return input;
   }
 
+  function abbreviationProcessor(comment) {
+    const abbreviations = {
+      k: 1000,
+      thousand: 1000,
+      m: 1000000,
+      mill: 1000000,
+    };
+
+    const abbreviationsRegex = Object.keys(abbreviations).map(
+      abbrev => new RegExp('\\s?' + abbrev + '\\b')
+    );
+    const match = new RegExp(rh.numberRegex + rh.regexJoinToString(abbreviationsRegex), 'gi');
+
+    comment = comment.replace(match, function(value) {
+      const text = /[a-z]+/gi;
+      const abbreviation = value.match(text)[0];
+
+      if (abbreviations[abbreviation]) {
+        value = value.replace(text, '');
+        value = parseFloat(value) * abbreviations[abbreviation];
+      }
+
+      return value;
+    })
+
+    return comment;
+  }
+
   comment['body'] = fractionProcessor(comment['body']);
+  comment['body'] = abbreviationProcessor(comment['body']);
   return comment;
 }
 
