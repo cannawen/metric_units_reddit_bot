@@ -26,7 +26,8 @@ function distanceMap(m) {
 
 function weightMap(g) {
   inRangeVal = Math.max(g, inRangeVal);
-  const kg = g/1000, inRangeValKg = inRangeVal/1000;
+  const kg = g/1000;
+  const inRangeValKg = inRangeVal/1000;
   if (inRangeVal < 1000) {
     return createMap(g, " g");
 
@@ -585,7 +586,7 @@ function preprocessComment(comment) {
   Output: Array of input numbers and standardized units
     [
       { "imperial": { "numbers" : [1, 2], "unit" : " miles" } },
-      { "imperial": { "numbers" : 3, "unit" : " mph" } }
+      { "imperial": { "numbers" : [3], "unit" : " mph" } }
     ]
 */
 function findPotentialConversions(comment) {
@@ -721,14 +722,14 @@ function findPotentialConversions(comment) {
 /*
   Input: Array of input numbers and standardized units
     [
-      { "imperial": { "numbers" : 10000, "unit" : " miles" } },
-      { "imperial": { "numbers" : -2, "unit" : " miles" } },
-      { "imperial": { "numbers" : 3, "unit" : " mph" } }
+      { "imperial": { "numbers" : [10000], "unit" : " miles" } },
+      { "imperial": { "numbers" : [-2], "unit" : " miles" } },
+      { "imperial": { "numbers" : [3], "unit" : " mph" } }
     ]
   Output: Valid conversions
     [
-      { "imperial": { "numbers" : 10000, "unit" : " miles" } },
-      { "imperial": { "numbers" : 3, "unit" : " mph" } }
+      { "imperial": { "numbers" : [10000], "unit" : " miles" } },
+      { "imperial": { "numbers" : [3], "unit" : " mph" } }
     ]
 */
 function filterConversions(potentialConversions) {
@@ -738,13 +739,12 @@ function filterConversions(potentialConversions) {
 
     const map = unitLookupMap[imperialUnit];
     if (map['isInvalidInput']) {
-      let result = true;
-      imperialNumbers.forEach(function(item) {
-        if (map['isInvalidInput'](Number(item))) {
-          result = false;
+      for(item in imperialNumbers) {
+        if(map['isInvalidInput'](Number(imperialNumbers[item]))) {
+          return false;
         }
-      });
-      return result;
+      }
+      return true;
 
     } else {
       return true;
@@ -757,13 +757,12 @@ function filterConversions(potentialConversions) {
 
     const map = unitLookupMap[imperialUnit];
     if (map['isWeaklyInvalidInput']) {
-      let result = true;
-      imperialNumbers.forEach(function(item) {
-        if (map['isWeaklyInvalidInput'](Number(item))) {
-          result = false;
+      for(item in imperialNumbers) {
+        if(map['isWeaklyInvalidInput'](Number(imperialNumbers[item]))) {
+          return false;
         }
-      });
-      return result;
+      }
+      return true;
 
     } else {
       return true;
@@ -780,23 +779,23 @@ function filterConversions(potentialConversions) {
 /*
   Input: imperial conversions
     [
-      { "imperial" : { "numbers" : 10000, "unit" : " miles" } },
-      { "imperial" : { "numbers" : 30, "unit" : " mpg" } }
+      { "imperial" : { "numbers" : [10000], "unit" : " miles" } },
+      { "imperial" : { "numbers" : [30], "unit" : " mpg" } }
     ]
   Output: metric and imperial conversions
     [
       { 
         "imperial" : 
-          { "numbers" : 10000, "unit" : " miles" }, 
+          { "numbers" : [10000], "unit" : " miles" }, 
         "metric": 
-          { "numbers" : 16093.44, "unit" : " km" } 
+          { "numbers" : [16093.44], "unit" : " km" } 
       },
       { 
         "imperial" : 
-          { "numbers" : 30, "unit" : " mpg" }, 
+          { "numbers" : [30], "unit" : " mpg" }, 
         "metric" : [
-          { "numbers" : 12.7543, "unit" : " km/L" },
-          { "numbers" : 7.84049, "unit" : " L/100km" } 
+          { "numbers" : [12.7543], "unit" : " km/L" },
+          { "numbers" : [7.84049], "unit" : " L/100km" } 
         ]
       }
     ]
@@ -810,7 +809,7 @@ function calculateMetric(imperialInputs) {
     inRangeVal = -Infinity;
     let multipleResults = false;
     imperialNumbers.forEach(function(item) {
-        var tempMap = map['conversionFunction'](Number(item));
+        const tempMap = map['conversionFunction'](Number(item));
         if(Array.isArray(tempMap)) {
           multipleResults = true;
         }
@@ -819,7 +818,7 @@ function calculateMetric(imperialInputs) {
     if(multipleResults) {
       input['metric'] = [];
       imperialNumbers.forEach(function(item) {
-        var tempMap = map['conversionFunction'](Number(item));
+        const tempMap = map['conversionFunction'](Number(item));
         if(input['metric'].length) {
           for(var i = 0;i < tempMap.length;i++) {
             input['metric'][i]['numbers'].push(tempMap[i]['numbers'][0]);
@@ -835,7 +834,7 @@ function calculateMetric(imperialInputs) {
         'numbers': []
       };
       imperialNumbers.forEach(function(item) {
-        var tempMap = map['conversionFunction'](Number(item));
+        const tempMap = map['conversionFunction'](Number(item));
         input['metric']['numbers'].push(tempMap['numbers'][0]);
         input['metric']['unit'] = tempMap['unit'];
       });
@@ -849,16 +848,16 @@ function calculateMetric(imperialInputs) {
     [
       { 
         "imperial" : 
-          { "numbers" : 10000, "unit" : " miles" }, 
+          { "numbers" : [10000], "unit" : " miles" }, 
         "metric": 
-          { "numbers" : 16093.44, "unit" : " km" } 
+          { "numbers" : [16093.44], "unit" : " km" } 
       },
       { 
         "imperial" : 
-          { "numbers" : 30, "unit" : " mpg" }, 
+          { "numbers" : [30], "unit" : " mpg" }, 
         "metric" : [
-          { "numbers" : 12.7543, "unit" : " km/L" },
-          { "numbers" : 7.84049, "unit" : " L/100km" } 
+          { "numbers" : [12.7543], "unit" : " km/L" },
+          { "numbers" : [7.84049], "unit" : " L/100km" } 
         ]
       }
     ]
@@ -866,22 +865,22 @@ function calculateMetric(imperialInputs) {
     [
       { 
         "imperial" : 
-          { "numbers" : 10000, "unit" : " miles" }, 
+          { "numbers" : [10000], "unit" : " miles" }, 
         "metric": 
-          { "numbers" : 16093.44, "unit" : " km" },
+          { "numbers" : [16093.44], "unit" : " km" },
         "rounded" :
-          { "numbers" : 16000, "unit" : " km" }
+          { "numbers" : [16000], "unit" : " km" }
       },
       { 
         "imperial" : 
-          { "numbers" : 30, "unit" : " mpg" }, 
+          { "numbers" : [30], "unit" : " mpg" }, 
         "metric" : [
-          { "numbers" : 12.7543, "unit" : " km/L" },
-          { "numbers" : 7.84049, "unit" : " L/100km" } 
+          { "numbers" : [12.7543], "unit" : " km/L" },
+          { "numbers" : [7.84049], "unit" : " L/100km" } 
         ],
         "rounded" : [
-          { "numbers" : 12.8, "unit" : " km/L" },
-          { "numbers" : 7.8, "unit" : " L/100km" } 
+          { "numbers" : [12.8], "unit" : " km/L" },
+          { "numbers" : [7.8], "unit" : " L/100km" } 
         ]
       }
     ]
@@ -929,17 +928,15 @@ function roundConversions(conversions) {
         'unit': unit
       };
 
-      let index = 0;
-      imperial.forEach(function(item) {
+      result['numbers'] = imperial.map(function(item, index) {
         if (item.toString().indexOf('.') !== -1) {
           const decimals = item.split('.')[1].length;
-            result['numbers'].push(roundToDecimalPlaces(metric[index], decimals));
+            return roundToDecimalPlaces(metric[index], decimals);
         } else if ((item > 100 || metric > 100) && item.toString()[item.length - 1] == '0') {
-            result['numbers'].push(round(metric[index], 5).toString());
+            return round(metric[index], 5).toString();
         } else {
-            result['numbers'].push(round(metric[index], 3).toString());
+            return round(metric[index], 3).toString();
         }
-        index++;
       });
       return result;
     }
@@ -965,41 +962,30 @@ function formatConversion(conversions) {
     const roundedConversions = conversion['rounded'];
     if (Array.isArray(roundedConversions)) {
       conversion['formatted'] = roundedConversions.map(rc => {
-        let result = {
-          'numbers': [],
+        return {
+          'numbers': rc['numbers'].map(rh.addCommas),
           'unit': rc['unit']
         };
-        rc['numbers'].forEach(function(item) {
-            result['numbers'].push(rh.addCommas(item));
-        });
-        return result;
       });
     } else {
       const metric = conversion['rounded']['numbers'];
-      let result = {
-        'numbers': [],
+      conversion['formatted'] = {
+        'numbers': metric.map(rh.addCommas),
         'unit': conversion['rounded']['unit']
       };
-      metric.forEach(function(item) {
-          result['numbers'].push(rh.addCommas(item));
-      });
-      conversion['formatted'] = result;
     }
 
     const imperialUnit = conversion['imperial']['unit'];
     const imperialNumbers = conversion['imperial']['numbers'];
 
     const postprocessInput = unitLookupMap[imperialUnit]['postprocessInput'];
-    conversion['imperial']['numbers'] = [];
     if (postprocessInput) {
-      imperialNumbers.forEach(function(item) {
-        conversion['imperial']['numbers'].push(postprocessInput(item));
-      });
-      conversion['imperial']['unit'] = "";
+      conversion['imperial'] = {
+        'numbers':imperialNumbers.map(postprocessInput),
+        'unit': ""
+      };
     } else {
-      imperialNumbers.forEach(function(item) {
-        conversion['imperial']['numbers'].push(rh.addCommas(item));
-      });
+      conversion['imperial']['numbers'] = imperialNumbers.map(rh.addCommas);
     }
 
     return conversion;
