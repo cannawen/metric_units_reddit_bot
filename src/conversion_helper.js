@@ -158,6 +158,13 @@ const unitLookupList = [
     "ignoredKeywords" : ukSubreddits
   },
   {
+    "imperialUnits" : [/f(?:oo|ee)?t (?:\/|per) s(?:ec(?:ond)?)?/],
+    "standardInputUnit" : " ft/sec",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => velocityMap(i * 0.3048) // 1 ft/s = 0.3048 m/s
+  },
+  {
     "imperialUnits" : [/mi/, /miles?/],
     "standardInputUnit" : " miles",
     "isInvalidInput" : isZeroOrNegative,
