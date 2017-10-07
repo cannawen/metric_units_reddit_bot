@@ -73,18 +73,18 @@ function pressureMap(pa) {
   }
 }
 
-function velocityMap(ms) {
-  if (ms <= 56) {
-    return createMap(ms * 3.6, " km/h");
+function velocityMap(mPerS) {
+  if (mPerS < 89.408) {
+    return createMap(mPerS * 3.6, " km/h");
 
-  } else if (ms >= 2997924.58) {
-    return createMap(ms / 299792458, "c");
+  } else if (mPerS >= 2997924.58) {
+    return createMap(mPerS / 299792458, "c");
 
   } else {
-    let perSMap = distanceMap(ms);
+    let perSMap = distanceMap(mPerS);
     perSMap['unit'] += "/s";
 
-    return [createMap(ms * 3.6, " km/h"), perSMap];
+    return [createMap(mPerS * 3.6, " km/h"), perSMap];
   }
 }
 
