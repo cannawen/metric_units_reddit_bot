@@ -710,6 +710,12 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('ft/sec', () => {
+      it('should convert m/s', () => {
+        verifyConversion(42, " ft/sec", 46.08576, " km/h");
+      });
+    });
+
     context('mpg', () => {
       context('input < 15', () => {
         it('should convert only with delta', () => {
