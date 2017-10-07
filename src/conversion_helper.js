@@ -158,7 +158,7 @@ const unitLookupList = [
     "ignoredKeywords" : ukSubreddits
   },
   {
-    "imperialUnits" : [/f(?:oo|ee)?t per second/, /ft\/s(ec)?/],
+    "imperialUnits" : [/f(?:oo|ee)?t (?:\/|per) s(?:ec(?:ond)?)?/],
     "standardInputUnit" : " ft/sec",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
