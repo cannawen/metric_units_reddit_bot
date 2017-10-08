@@ -78,7 +78,7 @@ describe('conversion_helper', () => {
 
   describe('#findPotentialConversions()', () => {
     context('troy oz', () => {
-      it.skip('should convert oz to troy oz in precious metal sub', () => {
+      it('should convert oz to troy oz in precious metal sub', () => {
         const comment = createComment("Pmsforsale", "post title", "5 ounces of gold");
         const expectedOutput = [ 
           { 
