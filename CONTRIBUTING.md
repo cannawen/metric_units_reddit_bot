@@ -1,6 +1,12 @@
 # Contributing Guidelines
 
-Thank you for your interest in contributing to metric_units reddit bot!
+Interested in contributing to the metric_units bot? There are so many things you can do!  
+- Report bugs
+- Suggest features
+- Answer questions
+- Fix documentation
+- Contribute code  
+This document serves as a guideline for how to do these things
 
 # Code of Conduct
 
@@ -12,15 +18,18 @@ This community will not tolerate unkind behaviour.
 
 - Be friendly and inclusive of everyone
 - Give and recieve constructive criticism gracefully
-- Each issue or PR should address one topic. Create new issues for new topics
+- Each GitHub issue should address one topic. Create new issues for new topics
 - Help enforce these guidelines! Please direct people towards this page if you see anything questionable
+
+# Introduce yourself
+
+Say hello over at the [Contributor Introductions](https://www.reddit.com/r/metric_units/comments/750nuf/contributor_introductions/) thread! Talk to other contributors. We're a friendly bunch, we promise.
 
 # Make an issue
 
 - If you find a bug, have a question, or have a feature request, please [open an issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)
 - Bug reports should contain a link to a reddit comment or reproduction steps
 - Issues will be triaged by a maintainer
-- If you see a bug that is looks relatively straightforward to fix, you can submit a PR with a failing `.skip`ed test and a detailed issue describing how to make the test pass! This will help first-time contributors get started in Open Source
 
 # Contribute Code
 

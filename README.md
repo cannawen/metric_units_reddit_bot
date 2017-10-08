@@ -8,7 +8,6 @@
 # Vision
 - To create a [friendly community](./CONTRIBUTING.md) of metric/reddit/programming enthusiasts
 - To [encourage newbies to participate in open source](./NEW-TO-OSS.md)
-
 - To [convert imperial units into metric](./test/converter-test.js)
 - To surprise and delight with [unexpected sassy responses](./test/personality-test.js)
 
