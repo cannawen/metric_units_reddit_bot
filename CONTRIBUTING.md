@@ -20,8 +20,11 @@ This community will not tolerate unkind behaviour.
 - If you find a bug, have a question, or have a feature request, please [open an issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)
 - Bug reports should contain a link to a reddit comment or reproduction steps
 - Issues will be triaged by a maintainer
+- If you see a bug that is looks relatively straightforward to fix, you can submit a PR with a failing `.skip`ed test and a detailed issue describing how to make the test pass! This will help first-time contributors get started in Open Source
 
 # Contribute Code
+
+It's most satifying if you contribute to an Open Source project that you care about! Please read our [vision statement](./README.md) to see if this project resonates with you.
 
 ## New to Open Source Software
 
@@ -96,6 +99,7 @@ Let's be a Panel #1 community, not a Panel #2 :)
 ## How do I become a collaborator?
 
 - Show an interest in the project by contributing to code and/or discussions
+- Take initiative, and suggest process improvements or write `first timers only` issues for others
 
 # The lifecycle of an issue
 
