@@ -77,6 +77,36 @@ describe('conversion_helper', () => {
   });
 
   describe('#findPotentialConversions()', () => {
+    context('troy oz', () => {
+      it.skip('should convert oz to troy oz in precious metal sub', () => {
+        const comment = createComment("Pmsforsale", "post title", "5 ounces of gold");
+        const expectedOutput = [ 
+          { 
+            "imperial": 
+            { 
+              "numbers" : ["5"], 
+              "unit" : " troy ounces"
+            } 
+          } 
+        ];
+        ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
+      });
+
+      it('should convert keep oz as-is in a regular subreddit', () => {
+        const comment = createComment("regularSubreddit", "post title", "5 ounces of gold");
+        const expectedOutput = [ 
+          { 
+            "imperial": 
+            { 
+              "numbers" : ["5"], 
+              "unit" : " oz"
+            } 
+          } 
+        ];
+        ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
+      });
+    });
+
     context('lbs', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
@@ -690,6 +720,7 @@ describe('conversion_helper', () => {
       context('input < 200', () => {
         it('should convert km/h', () => {
           verifyConversion(["1"], " mph", ["1.609344"], " km/h");
+          verifyConversion(["199"], " mph", ["320.259456"], " km/h");
         });
       });
 
@@ -709,8 +740,14 @@ describe('conversion_helper', () => {
 
       context('input >= 0.01 speed of light', () => {
         it('should convert c', () => {
-          verifyConversion(["6706166"], " mph", ["0.009999999561830132"], "c");
+          verifyConversion(["80470000"], " mph", ["0.1199940420115572"], "c");
         });
+      });
+    });
+
+    context('ft/sec', () => {
+      it('should convert m/s', () => {
+        verifyConversion(["42"], " ft/sec", ["46.08576"], " km/h");
       });
     });
 

@@ -84,11 +84,30 @@ function pressureMap(pa, changeFn) {
   }
 }
 
+function velocityMap(mPerS, changeFn) {
+  mPerS = mPerS.map(changeFn);
+  console.log(mPerS);
+  const unitDecider = Math.max.apply(null, mPerS);
+  if (unitDecider < 89.408) {
+    return createMap(mPerS.map((i) => i * 3.6), " km/h");
+
+  } else if (unitDecider >= 2997924.58) {
+    return createMap(mPerS.map((i) => i / 299792458), "c");
+
+  } else {
+    let perSMap = distanceMap(mPerS, ((i) => i));
+    perSMap['unit'] += "/s";
+
+    return [createMap(mPerS.map((i) => i * 3.6), " km/h"), perSMap];
+  }
+}
+
 const metricDistanceUnits = [/km/, /light-?years?/,
                              /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
+const liquidKeywords = ['liquids?', 'water', 'teas?', 'beers?', 'sodas?', 'pops?', 'colas?', 'ciders?', 'juices?', 'coffees?', 'liquors?', 'milk', 'bottles?', 'spirits?', 'rums?', 'vodkas?', 'tequilas?', 'wines?', 'oils?', "cups?", "cans?", "tall boys?", "brews?", "breastfeeding", "breastfee?d"];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
@@ -149,24 +168,16 @@ const unitLookupList = [
     "standardInputUnit" : " mph",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
-    "conversionFunction" : (i) => {
-      const km = i.map((j) => j * 1.609344);
-      const unitDecider = Math.max.apply(null, i);
-      if (unitDecider < 200) {
-        return createMap(km, " km/h");
-        
-      } else if (unitDecider >= 6706166) {
-        return createMap(i.map((j) => j / 670616629.3844), "c");
-
-      } else {
-        let perSMap = distanceMap(km, (j) => j * 1000 / 60 / 60);
-        perSMap['unit'] += "/s";
-
-        return [createMap(km, " km/h"), perSMap];
-      }
-    },
+    "conversionFunction" : (i) => velocityMap(i, (j) => j * 0.44704), // 1 mph = 0.44704 m/s
     "ignoredUnits" : ["km/hr?", "kmh", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
     "ignoredKeywords" : ukSubreddits
+  },
+  {
+    "imperialUnits" : [/f(?:oo|ee)?t (?:\/|per) s(?:ec(?:ond)?)?/],
+    "standardInputUnit" : " ft/sec",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => velocityMap(i, (j) => j * 0.3048) // 1 ft/s = 0.3048 m/s
   },
   {
     "imperialUnits" : [/mi/, /miles?/],
@@ -335,7 +346,27 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i, (j) => j * 0.0295735295625),
     "ignoredUnits" : metricVolumeUnits,
-    "ignoredKeywords" : ukSubreddits
+    "ignoredKeywords" : ukSubreddits,
+    "preprocess" : (comment) => {
+      const input = comment['body'];
+      const ozRegex = new RegExp(( rh.startRegex 
+          + rh.numberRegex
+          + "[- ]?"
+          + rh.regexJoinToString([/oz/, /ounces?/])
+        ),'gi');
+      const ozAndLiquidRegex = new RegExp(( ozRegex.source
+          + ".+?\\b"
+          + rh.regexJoinToString(liquidKeywords)
+        ),'i');
+
+      if (!ozAndLiquidRegex.test(input)) {
+        return input;
+      }
+
+      return input.replace(ozRegex, (oz, offset, string) => {
+        return " " + oz + " fl. oz";
+      });
+    }
   },
   {
     "imperialUnits" : [/oz/, /ounces?/],
@@ -394,7 +425,7 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => volumeMap(i, (j) => j * 0.24),
     "ignoredUnits" : metricVolumeUnits,
-    "ignoredKeywords" : ["bra", "band", "sizes?"]
+    "ignoredKeywords" : ["bra", "band", "sizes?", "clio"]
   },
   {
     "imperialUnits" : [/pints?/],

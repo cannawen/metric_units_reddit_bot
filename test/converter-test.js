@@ -58,11 +58,13 @@ describe('Converter', () => {
         testConvert(
           [
             "10 fl oz",
-            "1001 oz. liquid"
+            "1001 oz. liquid",
+            "20 oz of water"
           ],
           {
             "10 fl. oz." : "300 mL",
-            "1,001 fl. oz." : "30 L"
+            "1,001 fl. oz." : "30 L",
+            "20 fl. oz." : "600 mL",
           }
         );
       });
