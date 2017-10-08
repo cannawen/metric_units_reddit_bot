@@ -70,6 +70,8 @@ Thanks goes to these wonderful people who have contributed ([emoji key](https://
 | [<img src="https://avatars3.githubusercontent.com/u/6984346?v=4" width="100px;"/><br /><sub>Nalin Bhardwaj</sub>](http://nibnalin.me)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=nalinbhardwaj "Code") [💬](#question-nalinbhardwaj "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/20612753?v=4" width="100px;"/><br /><sub>thepassenger-hub</sub>](https://github.com/thepassenger-hub)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=thepassenger-hub "Code") | [<img src="https://avatars0.githubusercontent.com/u/132009?v=4" width="100px;"/><br /><sub>Sean Grimes</sub>](https://github.com/munumafia)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=munumafia "Code") | [<img src="https://avatars2.githubusercontent.com/u/89664?v=4" width="100px;"/><br /><sub>Rafal Dittwald</sub>](http://rafal.dittwald.com)<br />[📖](https://github.com/cannawen/metric_units_reddit_bot/commits?author=rafd "Documentation") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
+See the [Contributor Introductions thread](https://www.reddit.com/r/metric_units/comments/750nuf/contributor_introductions/) to learn more about the people who help make this project happen!
+
 # All contributions welcome
 
 This project follows the [all-contributors](https://github.com/kentcdodds/all-contributors) specification. Contributions of any kind welcome!
