@@ -77,6 +77,36 @@ describe('conversion_helper', () => {
   });
 
   describe('#findPotentialConversions()', () => {
+    context('troy oz', () => {
+      it.skip('should convert oz to troy oz in precious metal sub', () => {
+        const comment = createComment("Pmsforsale", "post title", "5 ounces of gold");
+        const expectedOutput = [ 
+          { 
+            "imperial": 
+            { 
+              "number" : "5", 
+              "unit" : " troy ounces"
+            } 
+          } 
+        ];
+        ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
+      });
+
+      it('should convert keep oz as-is in a regular subreddit', () => {
+        const comment = createComment("regularSubreddit", "post title", "5 ounces of gold");
+        const expectedOutput = [ 
+          { 
+            "imperial": 
+            { 
+              "number" : "5", 
+              "unit" : " oz"
+            } 
+          } 
+        ];
+        ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
+      });
+    });
+
     context('lbs', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
