@@ -29,6 +29,7 @@ Say hello over at the [Contributor Introductions](https://www.reddit.com/r/metri
 # Make an issue
 
 - If you find a bug, have a question, or have a feature request, please [open an issue](https://github.com/cannawen/metric_units_reddit_bot/issues/new)
+- Please try to search for the bug before you create a new one, to prevent duplicates!
 - Bug reports should contain a link to a reddit comment or reproduction steps
 - Issues will be triaged by a maintainer
 
