@@ -6,13 +6,14 @@ Interested in contributing to the metric_units bot? There are so many things you
 - Answer questions
 - Fix documentation
 - Contribute code  
+
 This document serves as a guideline for how to do these things
 
 # Code of Conduct
 
 This community will not tolerate unkind behaviour.  
 
-[Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md)
+[Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md) (tl;dr - don't be a [m/s^3](https://en.wikipedia.org/wiki/Jerk_(physics)))
 
 # Etiquette
 
@@ -84,7 +85,7 @@ Do you want to be included in the awesome table at the bottom of the [README](./
 
 You can also manually edit `.all-contributorsrc` and run `npm run all-contributors generate` to update the README. See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more details
 
-If you have contributed to the repo but are having trouble following the above instructions, just let a collaborator know that you would like to be added ([and which contribution icons you want](https://github.com/kentcdodds/all-contributors#emoji-key))!
+If you have contributed (making a bug report, feature request, fixed documentation, etc.) but are having trouble following the above instructions, just let a collaborator know that you would like to be added ([and which contribution icons you want](https://github.com/kentcdodds/all-contributors#emoji-key))!
 
 # Collaborators
 
@@ -100,15 +101,18 @@ The people who are most active in the community
 - Delete remote branches once they are merged in
 - Don't stress about making mistakes, 'tis only a reddit bot ¯\\\_(ツ)_/¯ (and force-pushes are disabled on master, so what's the worst that can happen...)  
 
-Your help in maintaining the project would be much appreciated (but is not required)
+Your help in maintaining the project & community would be much appreciated
 
 ![Please help](https://cdn-images-1.medium.com/max/803/1*Q_8HbGbbfEmAjwPqB8D60A.png)  
-Let's be a Panel #1 community, not a Panel #2 :)
+Let's be like Panel #1, not Panel #2 :)
 
 ## How do I become a collaborator?
 
-- Show an interest in the project by contributing to code and/or discussions
-- Take initiative, and suggest process improvements or write `first timers only` issues for others
+Take initiative, and be an active member of the community! Some examples:  
+- Suggest process improvements
+- Answer questions that people ask on GitHub or on reddit
+- Take on larger or more complex issues
+- Write `first timers only` issues
 
 # The lifecycle of an issue
 
