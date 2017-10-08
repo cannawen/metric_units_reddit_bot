@@ -14,6 +14,7 @@ If you are new to OSS and github, you can [read this article](https://opensource
 - Please read through the [Contributing Guidelines](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md)
 - We aim to be newbie-friedly, so let us know if anything is confusing and needs more documentation (or create a pull request yourself, filling in any missing documentation to help the next person!)
 - We want to hear from you! Don't be shy to ask any questions about our process, or technical details
+- When asking for help, be sure to include any relevant screenshots or error messages, along with what steps you have taken to try to fix the problem! This will help us understand what is going wrong, and what suggestions _not_ to give you, since you have already tried them ;)
 
 ## All contributions
 Remember, contributing to OSS does not always mean code.  
