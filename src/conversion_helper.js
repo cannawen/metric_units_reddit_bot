@@ -1,7 +1,7 @@
 const rh = require('./regex_helper');
 
 function distanceMap(m) {
-  const unitDecider = Math.max.apply(null, m);
+  const unitDecider = Math.max(...m);
   if (unitDecider < 0.01) {
     return createMap(m.map((i) => i * 1000), " mm");
 
@@ -25,7 +25,7 @@ function distanceMap(m) {
 
 function weightMap(g) {
   const kg = g.map((i) => i / 1000);
-  const unitDecider = Math.max.apply(null, g);
+  const unitDecider = Math.max(...g);
   const unitDeciderKg = unitDecider/1000;
   if (unitDecider < 1000) {
     return createMap(g, " g");
@@ -39,7 +39,7 @@ function weightMap(g) {
 }
 
 function volumeMap(l) {
-  const unitDecider = Math.max.apply(null, l);
+  const unitDecider = Math.max(...l);
   if (unitDecider < 1) {
     return createMap(l.map((i) => i * 1000), " mL");
 
@@ -55,7 +55,7 @@ function volumeMap(l) {
 }
 
 function areaMap(m2) {
-  const unitDecider = Math.max.apply(null, m2);
+  const unitDecider = Math.max(...m2);
   if (unitDecider >= 1000000) {
     return createMap(m2.map((i) => i / 1000000), " km^2");
 
@@ -68,7 +68,7 @@ function areaMap(m2) {
 }
 
 function pressureMap(pa) {
-  const unitDecider = Math.max.apply(null, pa);
+  const unitDecider = Math.max(...pa);
   if (unitDecider < 1000) {
     return createMap(pa, " Pa");
 
@@ -80,8 +80,7 @@ function pressureMap(pa) {
 }
 
 function velocityMap(mPerS) {
-  console.log(mPerS);
-  const unitDecider = Math.max.apply(null, mPerS);
+  const unitDecider = Math.max(...mPerS);
   if (unitDecider < 89.408) {
     return createMap(mPerS.map((i) => i * 3.6), " km/h");
 
@@ -142,7 +141,7 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => {
       const kmPerL = createMap(i.map((j) => j * 0.425144), " km/L");
-      const unitDecider = Math.max.apply(null, i);
+      const unitDecider = Math.max(...i);
       if (unitDecider < 15) {
         return kmPerL;
       } else {
@@ -172,6 +171,14 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => velocityMap(i.map((j) => j * 0.3048)) // 1 ft/s = 0.3048 m/s
+  },
+  {
+    "imperialUnits" : [/(?:pounds?|lbs?)\/(?:inch|in)/] ,
+    "standardInputUnit" : " lbs/inch",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => {return [createMap(i.map((j) => j * 0.017858), " kg/mm"), createMap(i.map((j) => j * 175.126835), " N/m")]},  // 1 lbs/inch = 0.017858 kg/mm
+    "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/]
   },
   {
     "imperialUnits" : [/mi/, /miles?/],
@@ -381,7 +388,7 @@ const unitLookupList = [
     "preprocess" : (comment) => {
       const input = comment['body'];
       const specialSubredditsRegex = new RegExp(
-          rh.regexJoinToString([/silverbugs/, /pmsforsale/]));
+          rh.regexJoinToString([/silverbugs/, /pmsforsale/]),'gi');
       const unitRegex = new RegExp(( rh.startRegex
             + rh.numberRegex
             + "[- ]?"
@@ -473,7 +480,7 @@ const unitLookupList = [
     "isWeaklyInvalidInput" : (i) => i > 1000,
     "conversionFunction" : (i) => {
       const temperatureMap = createMap(i.map((j) => (j - 32) * 5/9), "°C");
-      const unitDecider = Math.max.apply(null, i);
+      const unitDecider = Math.max(...i);
       if (unitDecider > 0 && unitDecider < 32) {
         return [temperatureMap, createMap(i.map((j) => j * 5/9), " change in °C")];
       } else {

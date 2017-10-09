@@ -78,7 +78,7 @@ describe('conversion_helper', () => {
 
   describe('#findPotentialConversions()', () => {
     context('troy oz', () => {
-      it.skip('should convert oz to troy oz in precious metal sub', () => {
+      it('should convert oz to troy oz in precious metal sub', () => {
         const comment = createComment("Pmsforsale", "post title", "5 ounces of gold");
         const expectedOutput = [ 
           { 
@@ -686,6 +686,20 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('lbs/inch', () => {
+      it('should convert', () => {
+          const imperialMap = createImperialMap([1], " lbs/inch");
+          const expectedOutput = Object.assign({}, imperialMap);
+
+          expectedOutput['metric'] = [
+            { "numbers" : ["0.017858"], "unit" : " kg/mm"},
+            { "numbers" : ["175.126835"], "unit" : " N/m" }
+          ];
+
+          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+      });
+    });
+	
     context('inches', () => {
       it('should convert in cm', () => {
         verifyConversion(["1"], " inches", ["2.54"], " cm");

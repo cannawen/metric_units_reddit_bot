@@ -15,22 +15,14 @@ function conversions(comment) {
   const formattedConversions = ch.formatConversion(roundedConversions);
   
   return formattedConversions.reduce((memo, conversion) => {
-    function parse(item) {
-      let result = item[0];
-      if(item.length > 1){
-        result += '-'+item[1];
-      }
-      return result;
-    }
-    let key = parse(conversion['imperial']['numbers']);
-    key += conversion['imperial']['unit'];
+    const key = conversion['imperial']['numbers'].join('-') + conversion['imperial']['unit'];
     const formatted = conversion['formatted'];
 
     let value;
     if (Array.isArray(formatted)) {
-      value = formatted.map(el => parse(el['numbers']) + el['unit']).join(' or ');
+      value = formatted.map(el => el['numbers'].join('-') + el['unit']).join(' or ');
     } else {
-      value = parse(formatted['numbers']) + formatted['unit'];
+      value = formatted['numbers'].join('-') + formatted['unit'];
     }
     
     memo[key] = value ;

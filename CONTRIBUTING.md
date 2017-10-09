@@ -82,7 +82,7 @@ Do you want to be included in the awesome table at the bottom of the [README](./
 
 - Run `npm install` if you haven't yet
 - Run the following command: `npm run all-contributors add your-github-username tag1,tag2` (tags can be: code, test, doc, [and others](https://www.npmjs.com/package/all-contributors-cli))
-- The script will change the `README` and `.all-contributorsrc` files and create a commit. Be sure to include it with your PR.
+- The script will change the `README` and `.all-contributorsrc` files. Be sure to include these changes with your PR.
 
 You can also manually edit `.all-contributorsrc` and run `npm run all-contributors generate` to update the README. See [all-contributors-cli](https://www.npmjs.com/package/all-contributors-cli) for more details
 
