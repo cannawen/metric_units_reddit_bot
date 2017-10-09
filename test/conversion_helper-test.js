@@ -1,6 +1,7 @@
 const should = require('chai').should();
 
 const ch = require('../src/conversion_helper');
+const pp = require('../src/preprocess');
 
 describe('conversion_helper', () => {
   describe('#shouldConvertComment()', () => {
@@ -40,63 +41,6 @@ describe('conversion_helper', () => {
       });
     });
   });
-
-  describe('#preprocessComment()', () => {
-    context('comment contains mixed', () => {
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 10 5/7-miles");
-          ch.preprocessComment(comment)['body'].should.equal("post text 10.71-miles");
-        });
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 1,707 05/09 miles more text");
-          ch.preprocessComment(comment)['body'].should.equal("post text 1707.56 miles more text");
-        });
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 98 7654/3,210 inches");
-          ch.preprocessComment(comment)['body'].should.equal("post text 100.38 inches");
-        });
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 5+18/09 inches");
-          ch.preprocessComment(comment)['body'].should.equal("post text 7.00 inches");
-        });
-    });
-    context('comment contains fraction', () => {
-        it('should convert fractions into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 9/10-miles");
-          ch.preprocessComment(comment)['body'].should.equal("post text 0.90-miles");
-        });
-        it('should convert fractions into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 177/100 miles more text");
-          ch.preprocessComment(comment)['body'].should.equal("post text 1.77 miles more text");
-        });
-        it('should convert fractions into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 987,654/3210 inches");
-          ch.preprocessComment(comment)['body'].should.equal("post text 307.68 inches");
-        });
-    });
-    context('comment contains multiplier', () => {
-      it('should convert multiplier into value', () => {
-        const comment = createComment("test", "post title", "Something like 40k miles");
-        ch.preprocessComment(comment)['body'].should.equal("Something like 40000 miles");
-      });
-      it('should convert multipliers if there is a space in between', () => {
-        const comment = createComment("test", "post title", "Something like 40 k miles");
-        ch.preprocessComment(comment)['body'].should.equal("Something like 40000 miles");
-      });
-      it('should convert numbers with decimals', () => {
-        const comment = createComment("test", "post title", "I won 3.2mill at the lottery");
-        ch.preprocessComment(comment)['body'].should.equal("I won 3200000 at the lottery");
-      });
-      it('should not convert multipliers that are a part of a unit', () => {
-        const kmComment = createComment("test", "post title", "The road is 30km long");
-        const mphComment = createComment("test", "post title", "My car can do 100mph");
-
-        ch.preprocessComment(kmComment)['body'].should.equal("The road is 30km long");
-        ch.preprocessComment(mphComment)['body'].should.equal("My car can do 100mph");
-      });
-    });
-  });
-
   describe('#findPotentialConversions()', () => {
     context('lbs', () => {
       it('should find conversions', () => {
