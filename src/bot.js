@@ -136,34 +136,24 @@ function replyToMessages() {
     .filter(message => message['subject'].match(/refresh (\w+)/i))
     .forEach(message => {
       const commentId = message['subject'].match(/refresh (\w+)/i)[1];
-      let commentData = network.getComment('t1_' + commentId);
+      const comment = network.getComment('t1_' + commentId);
 
-      if (commentData.length === 0) return;
-
-      commentData = commentData[0]['data'];
-
-      const comment = {
-        'body': commentData['body'],
-        'id': commentData['name'],
-        'postTitle': 'This is a dummy value.',
-        'timestamp' : commentData['created_utc'],
-        'subreddit' : commentData['subreddit'],
-        'username' : commentData['author'],
-        'link_id' : commentData['link_id']
-      }
+      if (! comment) return;
 
       const commentReplies = network.getCommentReplies(comment['link_id'], commentId);
 
-      const botReplyId = commentReplies['json']['data']['things'].find(reply => {
+      const botReply = commentReplies.find(reply => {
         return reply['data']['author'].toLowerCase() == environment['reddit-username'].toLowerCase();
-      })['data']['id'];
+      });
+
+      if (! botReply) return;
 
       const conversions = converter.conversions(comment);
       const reply = replier.formatReply(comment, conversions);
 
       if (Object.keys(conversions).length === 0) return;
 
-      network.editComment('t1_' + botReplyId, reply);
+      network.editComment('t1_' + botReply['data']['id'], reply);
     });
 
   //cleanup old replyMetadata

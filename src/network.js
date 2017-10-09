@@ -172,7 +172,21 @@ function postComment(parentId, markdownBody) {
 }
 
 function getComment(commentId) {
-  return get('https://www.reddit.com/api/info.json?id=' + commentId);
+  const comment = get('https://www.reddit.com/api/info.json?id=' + commentId);
+
+  if (comment.length == 0) return;
+
+  const data = comment[0]['data'];
+
+  return {
+    'body': data['body'],
+    'author': data['author'],
+    'id': data['name'],
+    'link_id' : data['link_id'],
+    'postTitle': 'This is a dummy value.',
+    'subreddit': data['subreddit'],
+    'timestamp' : data['created_utc']
+  }
 }
 
 function editComment(commentId, markdownBody) {
@@ -180,7 +194,11 @@ function editComment(commentId, markdownBody) {
 }
 
 function getCommentReplies(linkId, commentId) {
-  return get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId);
+  const replies = get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId);
+
+  if (! replies.length === 0) return null;
+
+  return replies['json']['data']['things'];
 }
 
 function getUnreadMessages() {
