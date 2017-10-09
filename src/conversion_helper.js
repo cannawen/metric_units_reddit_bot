@@ -165,6 +165,14 @@ const unitLookupList = [
     "conversionFunction" : (i) => velocityMap(i * 0.3048) // 1 ft/s = 0.3048 m/s
   },
   {
+    "imperialUnits" : [/(?:pounds?|lbs?)\/(?:inch|in)/] ,
+    "standardInputUnit" : " lbs/inch",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => {return [createMap(i * 0.017858, " kg/mm"), createMap(i * 175.126835, " N/m")]},  // 1 lbs/inch = 0.017858 kg/mm
+    "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/]
+  },
+  {
     "imperialUnits" : [/mi/, /miles?/],
     "standardInputUnit" : " miles",
     "isInvalidInput" : isZeroOrNegative,

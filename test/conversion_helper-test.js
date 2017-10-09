@@ -682,6 +682,20 @@ describe('conversion_helper', () => {
       });
     });
 
+    context('lbs/inch', () => {
+      it('should convert', () => {
+          const imperialMap = createImperialMap(1, " lbs/inch");
+          const expectedOutput = Object.assign({}, imperialMap);
+
+          expectedOutput['metric'] = [
+            { "number" : "0.017858", "unit" : " kg/mm"},
+            { "number" : "175.126835", "unit" : " N/m" }
+          ];
+
+          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+      });
+    });
+	
     context('inches', () => {
       it('should convert in cm', () => {
         verifyConversion(1, " inches", 2.54, " cm");
