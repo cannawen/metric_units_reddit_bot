@@ -682,6 +682,12 @@ describe('conversion_helper', () => {
       });
     });
 
+	context('lbs/inch', () => {
+      it('should convert', () => {
+        verifyConversion(1, " lbs/inch", 0.017858, " kg/mm");
+      });
+    });
+	
     context('inches', () => {
       it('should convert in cm', () => {
         verifyConversion(1, " inches", 2.54, " cm");
