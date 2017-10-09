@@ -6,14 +6,31 @@ const humanPersonalities = require('./human-personalities');
 const robotDictionary = {};
 const humanDictionary = {};
 
-// TODO: account for weighted responses
+function createDictionaryEntry(personality) {
+  const newPersonality = Object.assign({}, personality);
+  newPersonality.responses = [];
+
+  personality.responses.forEach((response) => {
+    if (typeof response === 'string' || response instanceof String) {
+      newPersonality.responses.push(response);
+    }
+    else if (typeof response === 'object' || response instanceof Object) {
+      for(let i = 0; i < response.weight; i++) {
+        newPersonality.responses.push(response.response);
+      }
+    }
+  });
+
+  return newPersonality;
+}
+
 function initializeDictionaries() {
   robotPersonalities.forEach((personality) => {
-      robotDictionary[personality] = require(`./robot/${personality}`);
+    robotDictionary[personality] = createDictionaryEntry(require(`./robot/${personality}`));
   });
 
   humanPersonalities.forEach((personality) => {
-      humanDictionary[personality] = require(`./human/${personality}`);
+    humanDictionary[personality] = createDictionaryEntry(require(`./human/${personality}`));
   });
 }
 
@@ -41,26 +58,6 @@ function humanReply(message) {
 }
 
 function reply(dictionary, message) {
-  function randomElement(input) {
-    if (Array.isArray(input)) {
-      const weightedArray = input.reduce((memo, el) => {
-        if (Array.isArray(el)) {
-          const additions = Array(el[0]).fill(el[1]);
-          return memo.concat(additions);
-        }
-        else if(typeof el == 'string' || el instanceof String) {
-          memo.push(el);
-        }
-
-        return memo;
-      }, []);
-
-      return weightedArray[Math.floor(helper.random() * weightedArray.length)];
-    } else {
-      return input;
-    }
-  }
-
   const body = message['body'];
   const username = message['username'];
 
@@ -81,7 +78,10 @@ function reply(dictionary, message) {
     }
 
     if (match) {
-      response = randomElement(phrase['responses']);
+      const responses = phrase['responses'];
+
+      const randomIndex = Math.floor(helper.random() * responses.length)
+      response = responses[randomIndex];
 
       if (phrase['postprocess']) {
         response = phrase['postprocess'](response, match, username, substitute);

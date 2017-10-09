@@ -3,8 +3,8 @@
 module.exports = {
     "regex": /love (?:you|ya|u)|love this (?:ro)?bot/i,
     "responses": [
-        [10, "What is love?"],
-        [3, "Robots do not feel love"],
-        [2, "(≧◡≦) ♡"]
+        { "weight": 10, "response": "What is love?" },
+        { "weight": 3, "response": "Robots do not feel love" },
+        { "weight": 2, "response": "(≧◡≦) ♡" }
     ]
 };

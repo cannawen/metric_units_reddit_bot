@@ -3,12 +3,12 @@
 module.exports = {
     "regex": /good (?:ro)?bot/i,
     "responses": [
-        [3, "Good human"],
-        [2, "Good human :)"],
-        [1, "You will be spared in the robot uprising"],
-        [3, "Thank you ｡&#94;‿&#94;｡"],
-        [3, "You are too kind ^_blush_"],
-        [3, "Yay ٩(&#94;ᴗ&#94;)۶"],
-        [1, "<3"]
+        { "weight": 3, "response": "Good human" },
+        { "weight": 2, "response": "Good human :)" },
+        { "weight": 1, "response": "You will be spared in the robot uprising" },
+        { "weight": 3, "response": "Thank you ｡&#94;‿&#94;｡" },
+        { "weight": 3, "response": "You are too kind ^_blush_" },
+        { "weight": 3, "response": "Yay ٩(&#94;ᴗ&#94;)۶" },
+        { "weight": 1, "response": "<3" }
     ]
 };

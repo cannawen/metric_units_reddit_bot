@@ -2,5 +2,7 @@
 
 module.exports = {
     "regex": /good(?: fellow)? human/i,
-    "responses": "GOOD FELLOW HUMAN"
+    "responses": [
+        "GOOD FELLOW HUMAN"
+    ]
 };
