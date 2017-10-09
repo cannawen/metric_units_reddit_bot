@@ -9,6 +9,7 @@
   "dependencies": {
     "deasync": "^0.1.10",
     "js-yaml": "^3.9.1",
+    "lodash.foreach": "^4.5.0",
     "request": "^2.81.0"
   },
   "devDependencies": {
@@ -20,7 +21,7 @@
     "proxyquire": "^1.8.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --recursive",
     "lint": "eslint **/*.js"
   },
   "repository": {

@@ -15,7 +15,7 @@ const personality = require('./personality');
 const environment = helper.environment();
 let replyMetadata = {};
 let excludedSubreddits = [];
-try { 
+try {
   excludedSubreddits = yaml
     .safeLoad(fs.readFileSync('./private/excluded_subreddits.yaml', 'utf8'))
     .map(subreddit => subreddit.toLowerCase());
@@ -30,6 +30,8 @@ process.on('uncaughtException', function (err) {
 network.refreshToken();
 helper.setIntervalSafely(postConversions, 1);
 helper.setIntervalSafely(replyToMessages, 60);
+
+personality.initializeDictionaries();
 
 function replyToMessages() {
   function filterCommentReplies(messages) {
@@ -63,7 +65,7 @@ function replyToMessages() {
         }
       });
   }
-  
+
   function messageIsShort(message) {
     return message['body'].length < 30;
   }
@@ -71,7 +73,7 @@ function replyToMessages() {
   const now = helper.now();
 
   network.refreshToken();
-  
+
   const messages = network.getUnreadMessages();
   network.markAllMessagesAsRead();
   if (!messages) {
@@ -85,7 +87,7 @@ function replyToMessages() {
       if (reply === undefined) {
         return;
       }
-      
+
       if (message['subreddit'].match(/^totallynotrobots$/i)) {
         const humanReply = personality.humanReply(message);
         if (humanReply) {
@@ -93,7 +95,7 @@ function replyToMessages() {
           network.postComment(message['id'], humanReply);
         }
         return;
-      } 
+      }
 
       const postTitle = message['postTitle'];
 
@@ -104,21 +106,21 @@ function replyToMessages() {
 
       if (replyMetadata[postTitle] === undefined) {
         shouldReply = true;
-        replyMetadata[postTitle] = { 
-          'timestamp' : now, 
+        replyMetadata[postTitle] = {
+          'timestamp' : now,
           'personalityReplyChance' : 0.5
         };
 
       } else if (helper.random() < replyMetadata[postTitle]['personalityReplyChance']) {
         shouldReply = true;
-        Object.assign(replyMetadata[postTitle], { 
-          'timestamp' : now, 
+        Object.assign(replyMetadata[postTitle], {
+          'timestamp' : now,
           'personalityReplyChance': replyMetadata[postTitle]['personalityReplyChance'] / 2
         });
       }
 
       analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
-      
+
       if (shouldReply) {
         network.postComment(message['id'], reply);
       }
@@ -177,7 +179,7 @@ function postConversions() {
     //If we have not seen this post within 24 hours
     if (replyMetadata[postTitle] === undefined) {
       replyMetadata[postTitle] = {
-          'timestamp' : helper.now(), 
+          'timestamp' : helper.now(),
           'personalityReplyChance' : 1,
           'conversions' : newConversions
       }
@@ -219,12 +221,12 @@ function postConversions() {
   function hasConversions(map) {
     return Object.keys(map['conversions']).length > 0;
   }
-  
+
   const comments = network.getRedditComments("all");
   if (!comments) {
     return;
   }
-  
+
   comments
     .filter(commentIsntFromABot)
     .filter(allowedToPostInSubreddit)
@@ -248,4 +250,4 @@ function postConversions() {
       analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
       network.postComment(comment['id'], reply);
     })
-};  
+};

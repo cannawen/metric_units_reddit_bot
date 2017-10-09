@@ -6,9 +6,21 @@ let helperStub = {};
 let personality;
 
 describe('Personality', () => {
-  beforeEach(() => {
+  before(() => {
     helperStub.random = function () { return 0 };
-    personality = proxyquire('../src/personality', { './helper': helperStub });
+    personality = proxyquire('../../src/personality', { '../helper': helperStub });
+
+    personality.initializeDictionaries();
+  });
+
+  describe('#initializeDictionaries()', () => {
+    it('should create the robot dictionary from the given list of robot personalities', () => {
+        should.equal(Object.keys(personality.robotDictionary).length, 18);
+    });
+
+    it('should create the human dictionary from the given list of human personalities', () => {
+        should.equal(Object.keys(personality.humanDictionary).length, 2);
+    });
   });
 
   describe('#reply()', () => {
@@ -102,6 +114,11 @@ describe('Personality', () => {
     });
 
     context('Whos a {{x}} bot', () => {
+      after(() => {
+        // This must be reset after testing this section otherwise it interferes with subsequent tests
+        helperStub.random = function () { return 0; };
+      });
+
       it('should take precedence other triggers', () => {
         verify("whos a good robot?", "ME! Is it me? Am I a good bot?");
       });
