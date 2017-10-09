@@ -684,7 +684,15 @@ describe('conversion_helper', () => {
 
     context('lbs/inch', () => {
       it('should convert', () => {
-        verifyConversion(1, " lbs/inch", 0.017858, " kg/mm");
+          const imperialMap = createImperialMap(1, " lbs/inch");
+          const expectedOutput = Object.assign({}, imperialMap);
+
+          expectedOutput['metric'] = [
+            { "number" : "0.017858", "unit" : " kg/mm"},
+            { "number" : "175.126835", "unit" : " N/m" }
+          ];
+
+          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
       });
     });
 	

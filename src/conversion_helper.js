@@ -169,12 +169,8 @@ const unitLookupList = [
     "standardInputUnit" : " lbs/inch",
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i * 0.017858, " kg/mm"),  // 1 lbs/inch = 0.017858 kg/mm
-    "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/],
-    "postprocessInput" : (input) => {
-      const nm = input * 0.0098; // 1 kg/mm = 0.0098 N/m
-      return rh.addCommas(input) + " kg/mm or " + rh.addCommas(nm) + "N/m";
-    }
+    "conversionFunction" : (i) => {return [createMap(i * 0.017858, " kg/mm"), createMap(i * 175.126835, " N/m")]},  // 1 lbs/inch = 0.017858 kg/mm
+    "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/]
   },
   {
     "imperialUnits" : [/mi/, /miles?/],
