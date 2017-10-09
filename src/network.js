@@ -11,7 +11,7 @@ var oauthTokenValidUntil = undefined;
 var lastProcessedCommentId = undefined;
 
 function get(url) {
-  let content;  
+  let content;
 
   if (url.startsWith('http')) {
     content = networkRequest({ url: url }, false);
@@ -41,7 +41,7 @@ function post(urlPath, form) {
 
 function networkRequest(options, oauthRequest) {
   function redditOauthHeader() {
-    const userAgent = 
+    const userAgent =
      "script:" + environment['reddit-username'] + ":" + environment['version']
       + " (by: /u/" + environment['reddit-username'] + ")";
 
@@ -129,7 +129,7 @@ function printBannedSubreddits() {
       .filter(match => match !== null)
       .map(match => match[1])
       .forEach(subreddit => helper.log("- " + subreddit));
-    
+
     const lastMessageId = messages[messages.length - 1]['data']['name'];
 
     messages = get("/message/inbox?limit=100&after=" + lastMessageId)
@@ -171,6 +171,18 @@ function postComment(parentId, markdownBody) {
   post('/api/comment', { 'parent' : parentId, 'text' : markdownBody });
 }
 
+function getComment(commentId) {
+  return get('https://www.reddit.com/api/info.json?id=' + commentId);
+}
+
+function editComment(commentId, markdownBody) {
+  post('/api/editusertext', { 'thing_id' : commentId, 'text' : markdownBody });
+}
+
+function getCommentReplies(linkId, commentId) {
+  return get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId);
+}
+
 function getUnreadMessages() {
   return get("/message/unread?limit=100");
 }
@@ -186,7 +198,10 @@ function blockAuthorOfMessageWithId(id) {
 module.exports = {
   "refreshToken" : refreshToken,
   "getRedditComments" : getRedditComments,
+  "getComment" : getComment,
   "postComment" : postComment,
+  "editComment" : editComment,
+  "getCommentReplies" : getCommentReplies,
   "getUnreadMessages" : getUnreadMessages,
   "markAllMessagesAsRead" : markAllMessagesAsRead,
   "blockAuthorOfMessageWithId" : blockAuthorOfMessageWithId
