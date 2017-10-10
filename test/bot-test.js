@@ -154,7 +154,8 @@ describe('Bot', () => {
       './reply_maker' : replyStub,
       './analytics' : { trackConversion: (x) => x,
                         trackPersonality: (x) => x,
-                        trackUnsubscribe: (x) => x },
+                        trackUnsubscribe: (x) => x,
+                        trackEdit: (x) => x },
       './personality' : personalityStub
     });
   });
