@@ -7,6 +7,7 @@ function formatReply(comment, conversions) {
   let source = "source"
   let version = environment['version'];
   let subreddit = comment['subreddit'];
+  let commentId = comment['id'];
   let transform = (x) => x;
 
   if (comment['subreddit'].match(/^totallynotrobots$/i)) {
@@ -17,22 +18,31 @@ function formatReply(comment, conversions) {
     transform = (x) => x.toUpperCase();
   }
 
+  const items = [
+    {"value" : "metric units " + species },
+    {"type" : "link", "value" : "feedback", "href" : "https://redd.it/73edn2" },
+    {"type" : "link", "value" : "source", "href" : "https://github.com/cannawen/metric_units_reddit_bot" },
+    {"type" : "link", "value" : "hacktoberfest", "href" : "https://redd.it/73ef7e" },
+    {"type" : "link", "value" : "block", "href" : formatRedditComposeLink(environment['reddit-username'], 'block', stopMessage) },
+    {"type" : "link", "value" : "refresh conversion", "href" : formatRedditComposeLink(environment['reddit-username'], 'refresh ' + commentId, "Please click 'send' below and I will update my comment to convert any new or updated values in your comment.") },
+    {"value" : version }
+  ];
+
+  const footer = items.map(item => {
+    item.value = transform(item.value);
+    item.value = '^' + item.value.replace(/ /g, ' ^');
+    if (item.type == 'link') item.value = `[${item.value}](${item.href})`;
+    return item.value;
+  }).join(' ^| ');
+
   return Object.keys(conversions)
     .map(nonMetricValue => nonMetricValue + " ≈ " + conversions[nonMetricValue])
     .map(transform)
-    .join("  \n")
-    + "\n\n"
-    + transform("^metric ^units ^" + species)
-    + " ^|"
-    + " ^[" + transform("feedback") + "](https://www.reddit.com/r/metric_units/comments/73edn2/constructive_feedback_thread/)"
-    + " ^|"
-    + " ^[" + source + "](https://github.com/cannawen/metric_units_reddit_bot)"
-    + " ^|"
-    + " ^[" + transform("hacktoberfest") + "](https://www.reddit.com/r/metric_units/comments/73ef7e/contribute_to_metric_units/)"
-    + " ^|"
-    + " ^[" + transform("block") + "](https://www.reddit.com/message/compose?to=metric_units&subject=stop&message=If%20you%20would%20like%20to%20stop%20seeing%20this%20bot%27s%20comments%2C%20please%20send%20this%20private%20message%20with%20the%20subject%20%27stop%27.%20If%20you%20are%20a%20moderator%2C%20please%20go%20to%20https%3A%2F%2Fwww.reddit.com%2Fr%2F" + subreddit + "%2Fabout%2Fbanned%2F)"
-    + " ^|"
-    + " ^" + version;
+    .join("  \n") + '\n\n' + footer;
+}
+
+function formatRedditComposeLink(to, subject, message) {
+  return 'https://www.reddit.com/message/compose?to=' + to + '&subject=' + encodeURIComponent(subject) + '&message=' + encodeURIComponent(message);
 }
 
 module.exports = {
