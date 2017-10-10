@@ -150,7 +150,11 @@ const unitLookupList = [
                          "hawks", "celtics", "nets", "hornets", "bulls", "cavaliers", "mavericks", "nuggets", "pistons",
                          "warriors", "rockets", "pacers", "clippers", "lakers", "grizzlies", "heat", "bucks", "timberwolves",
                          "pelicans", "knicks", "thunder", "magic", "76ers", "suns", "trail blazers", "kings", "spurs", 
-                         "raptors", "jazz"].concat(ukSubreddits)
+                         "raptors", "jazz", "wizards",
+                         "denvernuggets", "laclippers", "memphisgrizzlies", "nolapelicans", "ripcity", "nbaspurs", 
+                         "utahjazz", "atlantahawks", "bostonceltics", "gonets", "charlottehornets", "chicagobulls", 
+                         "clevelandcavs", "detroitpistons", "mkebucks", "nyknicks", "orlandomagic", "sixers", 
+                         "torontoraptors", "washingtonwizards"].concat(ukSubreddits)
   },
   {
     "imperialUnits" : [/mph/, /miles (?:an|per) hour/],
