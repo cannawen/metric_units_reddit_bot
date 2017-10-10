@@ -591,33 +591,7 @@ function shouldConvertComment(comment, regexArray = globalIgnore, shouldBeUnique
   Output: Comment with body processed to fix user formatting
     "1.75 miles"
 */
-function preprocessComment(comment) {
-  function fractionProcessor(input) {
-    const frac = new RegExp(rh.fractionRegex, 'gi');
-    
-    const mixed = new RegExp(rh.numberRegex
-                    + /(?:[\s+-]+)/.source
-                    + rh.fractionRegex, 'gi');
 
-    input = input.replace(mixed, function(p1, p2, p3, p4, p5) {
-        p2 = p2.replace(/,+/g, '');
-        p3 = p3.replace(/,+/g, '');
-        p4 = p4.replace(/,+/g, '');
-        return (parseInt(p2)+parseInt(p3)/parseInt(p4)).toFixed(2) + p5;
-    });
-
-    input = input.replace(frac, function(p1, p2, p3, p4) {
-        p2 = p2.replace(/,+/g, '');
-        p3 = p3.replace(/,+/g, '');
-        return (p2/p3).toFixed(2) + p4;
-    });
-
-    return input;
-  }
-
-  comment['body'] = fractionProcessor(comment['body']);
-  return comment;
-}
 
 /*
   Input: String
@@ -1003,7 +977,6 @@ function formatConversion(conversions) {
 module.exports = {
   globalIgnore,
   "shouldConvertComment" : shouldConvertComment,
-  "preprocessComment": preprocessComment,
   "findPotentialConversions" : findPotentialConversions,
   "filterConversions" : filterConversions,
   "calculateMetric" : calculateMetric,

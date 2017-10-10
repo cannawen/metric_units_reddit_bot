@@ -1,13 +1,14 @@
 const analytics = require('./analytics');
 const rh = require('./regex_helper');
 const ch = require('./conversion_helper');
+const pp = require('./preprocess');
 
 function conversions(comment) {
   if (!ch.shouldConvertComment(comment)) {
     return {};
   }
 
-  const preprocessedcomment = ch.preprocessComment(comment);
+  const preprocessedcomment = pp.preprocessComment(comment);
   const potentialConversions = ch.findPotentialConversions(preprocessedcomment);
   const filteredConversions = ch.filterConversions(potentialConversions);
   const metricConversions = ch.calculateMetric(filteredConversions);
