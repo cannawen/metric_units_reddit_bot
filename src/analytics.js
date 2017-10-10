@@ -15,6 +15,10 @@ function trackConversion(data) {
   track("conversion", data);
 }
 
+function trackEdit(data) {
+  track("edit", data);
+}
+
 function trackUnsubscribe(data) {
   track("unsubscribe", data);
 }
@@ -39,6 +43,7 @@ function track(category, data) {
 module.exports = {
   "trackPersonality" : trackPersonality,
   "trackConversion" : trackConversion,
+  "trackEdit" : trackEdit,
   "trackUnsubscribe" : trackUnsubscribe,
   "trackError" : trackError
 }

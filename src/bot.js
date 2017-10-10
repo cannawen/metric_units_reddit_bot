@@ -154,6 +154,7 @@ function replyToMessages() {
       if (Object.keys(conversions).length === 0) return;
 
       network.editComment('t1_' + botReply['data']['id'], reply);
+      analytics.trackEdit([message['timestamp'], 'https://reddit.com/comments/' + comment['link_id'].replace(/t3_/g, '') + '//' + commentId, comment['body'], conversions]);
     });
 
   //cleanup old replyMetadata
