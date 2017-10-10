@@ -185,7 +185,7 @@ function getComment(commentId) {
     'author': data['author'],
     'id': data['name'],
     'link_id' : data['link_id'],
-    'postTitle': 'This is a dummy value.',
+    'postTitle': '', // api/info does not return a value for postTitle but this property is required by shouldConvertComment
     'subreddit': data['subreddit'],
     'timestamp' : data['created_utc']
   }
