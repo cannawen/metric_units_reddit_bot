@@ -250,6 +250,16 @@ describe('Converter', () => {
           }
         );
       });
+      it('should convert', () => {
+        testConvert(
+          [
+            "25-30mpg"
+          ],
+          {
+            "25-30 mpg (US)" : "10.6-13 km/L or 9.4-8 L/100km"
+          }
+        );
+      });
     });
 
     context('teaspoons', () => {
