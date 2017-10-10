@@ -15,7 +15,7 @@ const personality = require('./personality');
 const environment = helper.environment();
 let replyMetadata = {};
 let excludedSubreddits = [];
-try { 
+try {
   excludedSubreddits = yaml
     .safeLoad(fs.readFileSync('./private/excluded_subreddits.yaml', 'utf8'))
     .map(subreddit => subreddit.toLowerCase());
@@ -63,7 +63,7 @@ function replyToMessages() {
         }
       });
   }
-  
+
   function messageIsShort(message) {
     return message['body'].length < 30;
   }
@@ -71,7 +71,7 @@ function replyToMessages() {
   const now = helper.now();
 
   network.refreshToken();
-  
+
   const messages = network.getUnreadMessages();
   network.markAllMessagesAsRead();
   if (!messages) {
@@ -85,7 +85,7 @@ function replyToMessages() {
       if (reply === undefined) {
         return;
       }
-      
+
       if (message['subreddit'].match(/^totallynotrobots$/i)) {
         const humanReply = personality.humanReply(message);
         if (humanReply) {
@@ -93,7 +93,7 @@ function replyToMessages() {
           network.postComment(message['id'], humanReply);
         }
         return;
-      } 
+      }
 
       const postTitle = message['postTitle'];
 
@@ -104,21 +104,21 @@ function replyToMessages() {
 
       if (replyMetadata[postTitle] === undefined) {
         shouldReply = true;
-        replyMetadata[postTitle] = { 
-          'timestamp' : now, 
+        replyMetadata[postTitle] = {
+          'timestamp' : now,
           'personalityReplyChance' : 0.5
         };
 
       } else if (helper.random() < replyMetadata[postTitle]['personalityReplyChance']) {
         shouldReply = true;
-        Object.assign(replyMetadata[postTitle], { 
-          'timestamp' : now, 
+        Object.assign(replyMetadata[postTitle], {
+          'timestamp' : now,
           'personalityReplyChance': replyMetadata[postTitle]['personalityReplyChance'] / 2
         });
       }
 
       analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
-      
+
       if (shouldReply) {
         network.postComment(message['id'], reply);
       }
@@ -130,6 +130,42 @@ function replyToMessages() {
       analytics.trackUnsubscribe([message['timestamp'], message['username']]);
       network.postComment(message['id'], replier.stopMessage);
       network.blockAuthorOfMessageWithId(message['id']);
+    });
+
+  filterPrivateMessages(messages)
+    .filter(message => message['subject'].match(/refresh (\w+)/i))
+    .forEach(message => {
+      const commentId = message['subject'].match(/refresh (\w+)/i)[1];
+      const comment = network.getComment('t1_' + commentId);
+
+      if (! comment) {
+        return;
+      }
+
+      const commentReplies = network.getCommentReplies(comment['link_id'], commentId);
+
+      const botReply = commentReplies.find(reply => {
+        return reply['data']['author'].toLowerCase() == environment['reddit-username'].toLowerCase();
+      });
+
+      if (! botReply) {
+        return;
+      }
+
+      const conversions = converter.conversions(comment);
+      const reply = replier.formatReply(comment, conversions);
+
+      if (Object.keys(conversions).length === 0) {
+        return;
+      }
+
+      network.editComment('t1_' + botReply['data']['id'], reply);
+
+      if (! comment['link_id']) {
+        comment['link_id'] = 't3_value';
+      }
+
+      analytics.trackEdit([message['timestamp'], 'https://reddit.com/comments/' + comment['link_id'].replace(/t3_/g, '') + '//' + commentId, comment['body'], conversions]);
     });
 
   //cleanup old replyMetadata
@@ -177,7 +213,7 @@ function postConversions() {
     //If we have not seen this post within 24 hours
     if (replyMetadata[postTitle] === undefined) {
       replyMetadata[postTitle] = {
-          'timestamp' : helper.now(), 
+          'timestamp' : helper.now(),
           'personalityReplyChance' : 1,
           'conversions' : newConversions
       }
@@ -219,12 +255,12 @@ function postConversions() {
   function hasConversions(map) {
     return Object.keys(map['conversions']).length > 0;
   }
-  
+
   const comments = network.getRedditComments("all");
   if (!comments) {
     return;
   }
-  
+
   comments
     .filter(commentIsntFromABot)
     .filter(allowedToPostInSubreddit)
@@ -248,4 +284,5 @@ function postConversions() {
       analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
       network.postComment(comment['id'], reply);
     })
-};  
+
+};
