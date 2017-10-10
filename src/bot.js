@@ -136,7 +136,7 @@ function replyToMessages() {
     .filter(message => message['subject'].match(/refresh (\w+)/i))
     .forEach(message => {
       const commentId = message['subject'].match(/refresh (\w+)/i)[1];
-      const comment = network.getComment('t1_' + commentId);
+      const comment = network.getComment(commentId);
 
       if (! comment) {
         return;
