@@ -119,7 +119,8 @@ describe('conversion_helper', () => {
             "6-lbs"
           ],
           [[1], [2], [3], [4], [5], [6]],
-          " lb"
+          " lb",
+          undefined
         );
       });
 
@@ -137,7 +138,8 @@ describe('conversion_helper', () => {
               "7-pounds"
             ],
             [[1], [2], [3], [4], [5], [6], [7]],
-            " lb"
+            " lb",
+            undefined
           );
         }); 
       });
@@ -151,7 +153,8 @@ describe('conversion_helper', () => {
               "3 pound 20 oz"
             ],
             [["2.00"], ["2.50"]],
-            " lb"
+            " lb",
+            undefined
           );
         }); 
       });
@@ -170,7 +173,8 @@ describe('conversion_helper', () => {
             "7-foot"
           ],
           [[1], [2], [3], [4], [5], [6], [7]],
-          " feet"
+          " feet",
+          undefined
         );
       });
 
@@ -182,7 +186,8 @@ describe('conversion_helper', () => {
               "2'",
             ],
             [[1], [2]],
-            " feet"
+            " feet",
+            undefined
           );
         }); 
       });
@@ -202,12 +207,13 @@ describe('conversion_helper', () => {
               "2004-'05"
             ],
             [["1.17"], ["3.33"], ["5.50"], ["7.67"], ["9.88"], ["12.00"], ["4000.00"]],
-            " feet"
+            " feet",
+            undefined
           );
         });
 
         it('should not convert values that are not feet and inches', () => {
-          verifyPotentialConversions(["12'000", "2004-'05"], undefined, undefined);
+          verifyPotentialConversions(["12'000", "2004-'05"], undefined, undefined, undefined);
         });
       });
     });
@@ -224,7 +230,8 @@ describe('conversion_helper', () => {
             "6 lb-ft"
           ],
           [[1], [2], [3], [4], [5], [6]],
-          " ft·lbf"
+          " ft·lbf",
+          undefined
         );
       });
     });
@@ -240,7 +247,8 @@ describe('conversion_helper', () => {
             "5-inch"
           ],
           [[1], [2], [3], [4], [5]],
-          " inches"
+          " inches",
+          undefined
         );
       });
 
@@ -254,7 +262,8 @@ describe('conversion_helper', () => {
               "4-in",
             ],
             [[1], [2], [3], [4]],
-            " inches"
+            " inches",
+            undefined
           );
         }); 
       });
@@ -275,7 +284,8 @@ describe('conversion_helper', () => {
             "9-miles"
           ],
           [[1], [2], [3], [4], [5], [6], [7], [8], [9]],
-          " miles"
+          " miles",
+          undefined
         );
       });
     });
@@ -293,7 +303,8 @@ describe('conversion_helper', () => {
             "7-mph"
           ],
           [[1], [2], [3], [4], [5], [6], [7]],
-          " mph"
+          " mph",
+          undefined
         );
       });
     });
@@ -311,7 +322,8 @@ describe('conversion_helper', () => {
             "7-mpg"
           ],
           [[1], [2], [3], [4], [5], [6], [7]],
-          " mpg (US)"
+          " mpg (US)",
+          undefined
         );
       });
     });
@@ -341,7 +353,8 @@ describe('conversion_helper', () => {
             "19-fahrenheit"
           ],
           [[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19]],
-          "°F"
+          "°F",
+          undefined
         );
       });
 
@@ -361,7 +374,8 @@ describe('conversion_helper', () => {
               "9-degrees"
             ],
             [[1], [2], [3], [4], [5], [6], [7], [8], [9]],
-            "°F"
+            "°F",
+            undefined
           );
         }); 
       });
@@ -375,7 +389,8 @@ describe('conversion_helper', () => {
             "2°f"
           ],
           [[1], [2]],
-          "°F"
+          "°F",
+          undefined
         );
       });
     });
@@ -385,7 +400,8 @@ describe('conversion_helper', () => {
         verifyPotentialConversions(
           "-1°F",
           [[-1]],
-          "°F"
+          "°F",
+          undefined
         );
       });
     });
@@ -398,7 +414,8 @@ describe('conversion_helper', () => {
             "1,000,000°F"
           ],
           [[1000], [1000000]],
-          "°F"
+          "°F",
+          undefined
         );
       });
     });
@@ -413,7 +430,8 @@ describe('conversion_helper', () => {
             "-44,444.4444°F"
           ],
           [[1.1], [-2.22], [3333.333], [-44444.4444]],
-          "°F"
+          "°F",
+          undefined
         );
       });
     });
@@ -427,7 +445,8 @@ describe('conversion_helper', () => {
             "-10-20°F"
           ],
           [[1, 2], [-3, -4], [-10, 20]],
-          "°F"
+          "°F",
+          ["-", "to", "-"]
         );
       });
     });
@@ -447,26 +466,30 @@ describe('conversion_helper', () => {
 
       context('contains non-ignored conversion', () => {
         it('should convert non-ignored conversion', () => {
-          verifyPotentialConversions(["size 5 lbs and 11 feet"], [[5]], " lb");
+          verifyPotentialConversions(["size 5 lbs and 11 feet"], [[5]], " lb", undefined);
         });
       });
     });
 
-    function verifyPotentialConversions(input, numbers, unit) {
+    function verifyPotentialConversions(input, numbers, unit, joiners) {
       if (Array.isArray(input)) {
         input = " " + input.join("  ") + " ";
       }
       let expectedOutput = [];
       if (Array.isArray(numbers)) {
-        expectedOutput = numbers.reduce((memo, el) => {
+        expectedOutput = numbers.reduce((memo, el, currentIndex) => {
           let inputNumber = [];
           el.forEach(function(item) {
             inputNumber.push(item.toString());
           });
-          let inputUnit = unit;
+          const inputUnit = unit;
 
-          memo.push(createImperialMap(inputNumber, inputUnit));
+          let expectedMap = createImperialMap(inputNumber, inputUnit);
+          if(joiners) {
+            expectedMap['imperial']['joiner'] = joiners[currentIndex];
+          }
 
+          memo.push(expectedMap);
           return memo;
         }, expectedOutput);
       }
