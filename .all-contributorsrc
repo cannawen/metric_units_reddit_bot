@@ -5,7 +5,7 @@
     "README.md"
   ],
   "imageSize": 100,
-  "commit": true,
+  "commit": false,
   "contributors": [
     {
       "login": "cannawen",
@@ -173,6 +173,24 @@
       "profile": "http://rafal.dittwald.com",
       "contributions": [
         "doc"
+      ]
+    },
+    {
+      "login": "namantw",
+      "name": "namantw",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/31323328?v=4",
+      "profile": "https://github.com/namantw",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Skuhoo",
+      "name": "Dan C",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/20829776?v=4",
+      "profile": "https://github.com/Skuhoo",
+      "contributions": [
+        "code"
       ]
     }
   ]

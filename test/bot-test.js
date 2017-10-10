@@ -1,6 +1,6 @@
 const assert = require('assert');
 const should = require('chai').should();
-const proxyquire =  require('proxyquire')
+const proxyquire =  require('proxyquire');
 
 describe('Bot', () => {
   let bot;
@@ -14,6 +14,14 @@ describe('Bot', () => {
   let getUnreadMessagesReturnValue;
   let getUnreadMessagesCalled;
   let markAllMessagesAsReadCalled;
+  let getCommentId;
+  let getCommentReturnValue;
+  let getCommentRepliesLinkId;
+  let getCommentRepliesCommentId;
+  let getCommentRepliesCalled;
+  let editCommentId;
+  let editCommentBody;
+  let editCommentCalled;
 
   //Helper
   let commentFunction;
@@ -45,11 +53,11 @@ describe('Bot', () => {
 
     //Network
     refreshTokenCount = 0;
-    networkStub.refreshToken = () => { 
+    networkStub.refreshToken = () => {
       refreshTokenCount = refreshTokenCount + 1;
     };
     getRedditCommentsParam = undefined;
-    networkStub.getRedditComments = (param) => { 
+    networkStub.getRedditComments = (param) => {
       getRedditCommentsParam = param;
       return getRedditCommentsReturnValue;
     };
@@ -69,13 +77,35 @@ describe('Bot', () => {
     networkStub.markAllMessagesAsRead = () => {
       markAllMessagesAsReadCalled = true;
     };
+    getCommentId = undefined;
+    networkStub.getComment = (id) => {
+      getCommentId = id;
+      return getCommentReturnValue;
+    };
+    getCommentRepliesLinkId = undefined;
+    getCommentRepliesCommentId = undefined;
+    getCommentRepliesCalled = false;
+    networkStub.getCommentReplies = (linkId, commentId) => {
+      getCommentRepliesLinkId = linkId;
+      getCommentRepliesCommentId = commentId;
+      getCommentRepliesCalled = true;
+      return getCommentRepliesReturnValue;
+    };
+    editCommentId = undefined;
+    editCommentBody = undefined;
+    editCommentCalled = false;
+    networkStub.editComment = (id, body) => {
+      editCommentId = id;
+      editCommentBody = body;
+      editCommentCalled = true;
+    };
 
     //Helper
     commentFunction = undefined;
     commentSeconds = undefined;
     privateMessageFunction = undefined;
     privateMessageSeconds = undefined;
-    helperStub.setIntervalSafely = (f, seconds) => { 
+    helperStub.setIntervalSafely = (f, seconds) => {
       if (commentFunction === undefined) {
         commentFunction = f;
         commentSeconds = seconds;
@@ -85,6 +115,10 @@ describe('Bot', () => {
       }
     };
     helperStub.random = () => randomNumber;
+
+    helperStub.environment = () => {
+      return { 'reddit-username' : 'metric_units' };
+    }
 
     //Converter
     conversionCommentParam = undefined;
@@ -113,14 +147,15 @@ describe('Bot', () => {
       return personalityRetunValue;
     };
 
-    bot = proxyquire('../src/bot', { 
+    bot = proxyquire('../src/bot', {
       './helper': helperStub,
       './network' : networkStub,
       './converter' : converterStub,
       './reply_maker' : replyStub,
       './analytics' : { trackConversion: (x) => x,
                         trackPersonality: (x) => x,
-                        trackUnsubscribe: (x) => x },
+                        trackUnsubscribe: (x) => x,
+                        trackEdit: (x) => x },
       './personality' : personalityStub
     });
   });
@@ -184,7 +219,7 @@ describe('Bot', () => {
           let botComment = createComment({'body': '79 miles I am a bot.'});
           let longComment = createComment({'body': '79 miles careful: the variable settings will be modified, though. jQuery doesnt return a new instance. The reason for this (and for the naming) is that .extend() was developed to extend object  doesnt return a new instance. The reason for this (and for the naming) is that .extend() was developed too'})
           let sarcasticComment = createComment({'body': '79 miles /s'});
-          
+
           getRedditCommentsReturnValue = [
             noNumberComment,
             botComment,
@@ -262,7 +297,7 @@ describe('Bot', () => {
               postCommentId = undefined;
               postCommentBody = undefined;
               privateMessageFunction();
-              
+
               should.equal(postCommentId, undefined);
               should.equal(postCommentBody, undefined);
             });
@@ -282,6 +317,65 @@ describe('Bot', () => {
             privateMessageFunction();
             postCommentId.should.equal('789');
             postCommentBody.should.equal('please block me');
+          });
+        });
+
+        context('direct message with valid refresh request', () => {
+          beforeEach(() => {
+            let directMessage = createNetworkComment(
+              't4',
+              { 'name' : '401', 'subject' : 'refresh do4agao' }
+            );
+            getUnreadMessagesReturnValue = [directMessage];
+            let comment = createNetworkComment(
+              't1',
+              { 'body': 'value 1', 'id': '101', 'link_id' : '301' }
+            );
+            getCommentReturnValue = [comment];
+            let userReply = createNetworkComment(
+              't1',
+              { 'body': 'value 1 is value 2', 'author': 'not_bot',
+                'id': '102', 'link_id' : '301' }
+            );
+            let botReply = createNetworkComment(
+              't1',
+              { 'body': 'value 1 is value 2', 'author': 'metric_units',
+                'id': '103', 'link_id' : '301' }
+            );
+            getCommentRepliesReturnValue = [
+              userReply,
+              botReply
+            ];
+          });
+
+          it('should edit comment with new conversion value', () => {
+            conversionReturnValue = {"1": "2"};
+            replyReturnValue = "value 1 is value 2";
+            privateMessageFunction();
+
+            editCommentId.should.equal('t1_103');
+            editCommentBody.should.equal('value 1 is value 2');
+          });
+
+          it('should not edit comment if no value to convert is found', () => {
+            conversionReturnValue = {};
+            privateMessageFunction();
+
+            editCommentCalled.should.equal(false);
+          });
+        });
+
+        context('direct message with invalid refresh request', () => {
+          it('should skip message if request for id that does not exist on reddit', () => {
+            let directMessage = createNetworkComment(
+              't4',
+              { 'name' : '789', 'subject' : 'refresh blah' }
+            );
+            getUnreadMessagesReturnValue = [directMessage];
+            getCommentReturnValue = null;
+            privateMessageFunction();
+
+            getCommentRepliesCalled.should.equal(false);
           });
         });
       });
@@ -329,4 +423,3 @@ function createNetworkComment(kind, map) {
             }, map)
   }
 }
-

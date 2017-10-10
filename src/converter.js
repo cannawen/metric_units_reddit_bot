@@ -16,14 +16,14 @@ function conversions(comment) {
   const formattedConversions = ch.formatConversion(roundedConversions);
   
   return formattedConversions.reduce((memo, conversion) => {
-    const key = conversion['imperial']['number'] + conversion['imperial']['unit'];
+    const key = conversion['imperial']['numbers'].join('-') + conversion['imperial']['unit'];
     const formatted = conversion['formatted'];
 
     let value;
     if (Array.isArray(formatted)) {
-      value = formatted.map(el => el['number'] + el['unit']).join(' or ');
+      value = formatted.map(el => el['numbers'].join('-') + el['unit']).join(' or ');
     } else {
-      value = formatted['number'] + formatted['unit'];
+      value = formatted['numbers'].join('-') + formatted['unit'];
     }
     
     memo[key] = value ;

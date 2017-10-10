@@ -40,5 +40,17 @@ describe('reply_maker', () => {
         .should
         .include("^METRIC ^UNITS ^HUMAN")
     });
+
+    it('should include footer links', () => {
+      replier.formatReply({ 'subreddit': 'all', 'id' : '101' }, {"foo" : "bar"} )
+      .should
+      .include("[^feedback](https://redd.it/73edn2)")
+      .and
+      .include("[^source](https://github.com/cannawen/metric_units_reddit_bot)")
+      .and
+      .include("[^block](https://www.reddit.com/message/compose")
+      .and
+      .include("[^refresh ^conversion](https://www.reddit.com/message/compose")
+    });
   });
 });
