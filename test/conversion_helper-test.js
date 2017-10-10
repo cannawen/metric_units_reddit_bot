@@ -1,7 +1,6 @@
 const should = require('chai').should();
 
 const ch = require('../src/conversion_helper');
-const pp = require('../src/preprocess');
 
 describe('conversion_helper', () => {
   describe('#shouldConvertComment()', () => {
@@ -74,7 +73,7 @@ describe('conversion_helper', () => {
             [1, 2, 3, 4, 5, 6, 7],
             " lb"
           );
-        }); 
+        });
       });
 
       context('and oz', () => {
@@ -88,7 +87,7 @@ describe('conversion_helper', () => {
             ["2.00", "2.50"],
             " lb"
           );
-        }); 
+        });
       });
     });
 
@@ -119,7 +118,7 @@ describe('conversion_helper', () => {
             [1, 2],
             " feet"
           );
-        }); 
+        });
       });
 
       context('and inches', () => {
@@ -191,7 +190,7 @@ describe('conversion_helper', () => {
             [1, 2, 3, 4],
             " inches"
           );
-        }); 
+        });
       });
     });
 
@@ -298,7 +297,7 @@ describe('conversion_helper', () => {
             [1, 2, 3, 4, 5, 6, 7, 8, 9],
             "°F"
           );
-        }); 
+        });
       });
     });
 
@@ -536,14 +535,14 @@ describe('conversion_helper', () => {
     });
 
     context('Mix of invalid, weak, and strong conversions', () => {
-      it('should allow weak and strong conversions', () => {        
+      it('should allow weak and strong conversions', () => {
         const potentialConversions = [
           createImperialMap(3, " lb"),
           createImperialMap(-10, " lb"),
           createImperialMap(10000, " lb"),
           createImperialMap(2, " feet"),
         ];
-        
+
         const expectedConversions = [
           createImperialMap(3, " lb"),
           createImperialMap(10000, " lb"),
@@ -559,7 +558,7 @@ describe('conversion_helper', () => {
         memo.push(createImperialMap(value, unit));
         return memo;
       }, []);
-      
+
       const expectedConversions = expectedValues.reduce((memo, value) => {
         memo.push(createImperialMap(value, unit));
         return memo;
@@ -576,7 +575,7 @@ describe('conversion_helper', () => {
           verifyConversion(1, " lb", 453.592, " g");
         });
       });
-      
+
       context('under 1,000 kg', () => {
         it('should convert to kg', () => {
           verifyConversion(3, " lb", 1.3607759999999998, " kg");
@@ -778,14 +777,14 @@ describe('conversion_helper', () => {
           it('should round to 3%', () => {
             verifyRounding(20, 96.888, 97);
             verifyRounding(20, -98.88, -100);
-          });        
+          });
         });
 
         context('greater than 100', () => {
           it('should round to 5%', () => {
             verifyRounding(200, 96.888, 100);
             verifyRounding(200, -94.88, -95);
-          });        
+          });
         });
       });
     });
