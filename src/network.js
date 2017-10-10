@@ -174,7 +174,9 @@ function postComment(parentId, markdownBody) {
 function getComment(commentId) {
   const comment = get('https://www.reddit.com/api/info.json?id=' + commentId);
 
-  if (comment.length == 0) return;
+  if (comment.length == 0) {
+    return;
+  }
 
   const data = comment[0]['data'];
 
@@ -196,8 +198,10 @@ function editComment(commentId, markdownBody) {
 function getCommentReplies(linkId, commentId) {
   const replies = get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId);
 
-  if (! replies.length === 0) return null;
-
+  if (! replies.length === 0) {
+    return null;
+  }
+  
   return replies['json']['data']['things'];
 }
 
