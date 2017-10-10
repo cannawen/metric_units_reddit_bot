@@ -151,9 +151,10 @@ const unitLookupList = [
                          "warriors", "rockets", "pacers", "clippers", "lakers", "grizzlies", "heat", "bucks", "timberwolves",
                          "pelicans", "knicks", "thunder", "magic", "76ers", "suns", "trail blazers", "kings", "spurs", 
                          "raptors", "jazz", "wizards",
-                         "denvernuggets", "laclippers", "memphisgrizzlies", "nolapelicans", "ripcity", "nbaspurs", 
-                         "utahjazz", "atlantahawks", "bostonceltics", "gonets", "charlottehornets", "chicagobulls", 
-                         "clevelandcavs", "detroitpistons", "mkebucks", "nyknicks", "orlandomagic", "sixers", 
+                         "mavericks", "denvernuggets", "warriors", "rockets", "laclippers", "lakers", "memphisgrizzlies", 
+                         "timberwolves", "nolapelicans", "thunders", "suns", "ripcity", "kings", "nbaspurs", "utahjazz", 
+                         "atlantahawks", "bostonceltics", "gonets", "charlottehornets", "chicagobulls", "clevelandcavs", 
+                         "detroitpistons", "pacers", "heat", "mkebucks", "nyknicks", "orlandomagic", "sixers", 
                          "torontoraptors", "washingtonwizards"].concat(ukSubreddits)
   },
   {
