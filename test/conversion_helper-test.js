@@ -40,42 +40,6 @@ describe('conversion_helper', () => {
       });
     });
   });
-
-  describe('#preprocessComment()', () => {
-    context('comment contains mixed', () => {
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 10 5/7-miles");
-          ch.preprocessComment(comment)['body'].should.equal("post text 10.71-miles");
-        });
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 1,707 05/09 miles more text");
-          ch.preprocessComment(comment)['body'].should.equal("post text 1707.56 miles more text");
-        });
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 98 7654/3,210 inches");
-          ch.preprocessComment(comment)['body'].should.equal("post text 100.38 inches");
-        });
-        it('should convert mixed values into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 5+18/09 inches");
-          ch.preprocessComment(comment)['body'].should.equal("post text 7.00 inches");
-        });
-    });
-    context('comment contains fraction', () => {
-        it('should convert fractions into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 9/10-miles");
-          ch.preprocessComment(comment)['body'].should.equal("post text 0.90-miles");
-        });
-        it('should convert fractions into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 177/100 miles more text");
-          ch.preprocessComment(comment)['body'].should.equal("post text 1.77 miles more text");
-        });
-        it('should convert fractions into decimals', () => {
-          const comment = createComment("subredditname", "post title", "post text 987,654/3210 inches");
-          ch.preprocessComment(comment)['body'].should.equal("post text 307.68 inches");
-        });
-    });
-  });
-
   describe('#findPotentialConversions()', () => {
     context('troy oz', () => {
       it('should convert oz to troy oz in precious metal sub', () => {
@@ -141,7 +105,7 @@ describe('conversion_helper', () => {
             " lb",
             undefined
           );
-        }); 
+        });
       });
 
       context('and oz', () => {
@@ -156,7 +120,7 @@ describe('conversion_helper', () => {
             " lb",
             undefined
           );
-        }); 
+        });
       });
     });
 
@@ -189,7 +153,7 @@ describe('conversion_helper', () => {
             " feet",
             undefined
           );
-        }); 
+        });
       });
 
       context('and inches', () => {
@@ -265,7 +229,7 @@ describe('conversion_helper', () => {
             " inches",
             undefined
           );
-        }); 
+        });
       });
     });
 
@@ -377,7 +341,7 @@ describe('conversion_helper', () => {
             "°F",
             undefined
           );
-        }); 
+        });
       });
     });
 
@@ -628,14 +592,14 @@ describe('conversion_helper', () => {
     });
 
     context('Mix of invalid, weak, and strong conversions', () => {
-      it('should allow weak and strong conversions', () => {        
+      it('should allow weak and strong conversions', () => {
         const potentialConversions = [
           createImperialMap(["3"], " lb"),
           createImperialMap(["-10"], " lb"),
           createImperialMap(["10000"], " lb"),
           createImperialMap(["2"], " feet"),
         ];
-        
+
         const expectedConversions = [
           createImperialMap(["3"], " lb"),
           createImperialMap(["10000"], " lb"),
@@ -651,7 +615,7 @@ describe('conversion_helper', () => {
         memo.push(createImperialMap(value, unit));
         return memo;
       }, []);
-      
+
       const expectedConversions = expectedValues.reduce((memo, value) => {
         memo.push(createImperialMap(value, unit));
         return memo;
@@ -668,7 +632,7 @@ describe('conversion_helper', () => {
           verifyConversion(["1"], " lb", ["453.592"], " g");
         });
       });
-      
+
       context('under 1,000 kg', () => {
         it('should convert to kg', () => {
           verifyConversion(["3"], " lb", ["1.3607759999999998"], " kg");

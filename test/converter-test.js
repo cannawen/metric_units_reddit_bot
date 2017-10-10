@@ -256,7 +256,7 @@ describe('Converter', () => {
             "25-30mpg"
           ],
           {
-            "25-30 mpg (US)" : "10.6-13 km/L or 9.4-8 L/100km"
+            "25 - 30 mpg (US)" : "10.6 - 13 km/L or 9.4 - 8 L/100km"
           }
         );
       });
@@ -302,10 +302,12 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "25 imperial gallons"
+            "25 imperial gallons",
+            "25 or 26 imperial gallons"
           ],
           {
-            "25 gal (imp)" : "114 L"
+            "25 gal (imp)" : "114 L",
+            "25 or 26 gal (imp)" : "114 or 120 L"
           }
         );
       });
@@ -351,6 +353,8 @@ describe('Converter', () => {
 
             "300 acres",
             "600 acres",
+
+            "30 to 60 acres",
           ],
           {
             "1 acres" : "4,000 m^2",
@@ -361,6 +365,8 @@ describe('Converter', () => {
 
             "300 acres" : "1.2 km^2",
             "600 acres" : "2.4 km^2",
+
+            "30 to 60 acres" : "12 to 24 hectares",
           }
         );
       });
