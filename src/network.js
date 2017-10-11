@@ -196,8 +196,8 @@ function editComment(commentId, markdownBody) {
 }
 
 function getCommentReplies(linkId, commentId) {
-  const replies = get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId);
-
+  const replies = get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId.replace(/t1_/g, ''));
+  
   if (! replies.length === 0) {
     return null;
   }
