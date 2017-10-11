@@ -55,7 +55,6 @@ Welcome! We aim to be a newbie-friendly community, so we have reserved `first ti
 
 - If you are assigned an issue, you have 7 days to complete it. You may ask for an extension if you need more time, but this rule is here to ensure issues do not go "stale"
 - Feel free to ask any questions on your issue thread!
-- You can move the [pre-commit](./pre-commit) file into your `./.git/hooks` directory. This will run the tests every time you commit code and ensures you don't have extra console.log statements
 
 ## Make a PR
 
