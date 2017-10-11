@@ -190,7 +190,7 @@ function getRedditComments(subreddit) {
         return el['data']['name'] === lastProcessedCommentId;
       });
       if (lastProcessedIndex !== -1) {
-        comments = comments.slice(lastProcessedIndex + 1, comments.length);
+        comments = comments.slice(0, lastProcessedIndex)
       }
 
       const unprocessedComments = comments

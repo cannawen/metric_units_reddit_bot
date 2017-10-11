@@ -137,7 +137,7 @@ describe('network', () => {
     });
 
     it('should not process previously processed comments', () => {
-      const first = { data: { children: [{ data: { name: 'first_processed' }}]}};
+      const first = { data: { children: [{ data: { name: 'c' }}]}};
       response.body = JSON.stringify(first);
       return network.getRedditComments('test')
         .then(() => {
@@ -146,17 +146,15 @@ describe('network', () => {
           // We want to test that that one gets skipped on subsequent calls.
           const second = { data: { children: [
             {
-              data: {
-                name: 'first_processed',
-              }
+              data: { name: 'a' }
             }, {
-              data: {
-                name: 'second_processed',
-              }
+              data: { name: 'b' }
+            }, {
+              data: { name: 'c' }
             }
           ]}};
           response.body = JSON.stringify(second);
-          return network.getRedditComments('test').should.eventually.have.length(1);
+          return network.getRedditComments('test').should.eventually.have.length(2);
         });
     });
   });
