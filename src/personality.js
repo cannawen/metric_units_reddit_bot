@@ -195,6 +195,11 @@ function robotReply(message) {
       "description" : "Don't hurt me",
       "response":  "No more",
       "regex" : /^don'?t hurt me.?$/i
+    },
+    {
+      "description" : "I would walk 500 miles",
+      "response":  "And I would walk 804.672km more",
+      "regex" : /^I would walk 500 miles.?$/i
     }
   ];
   return reply(robotPersonality, message);
