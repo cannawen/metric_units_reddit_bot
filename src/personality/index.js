@@ -6,70 +6,81 @@ const humanPersonalities = require('./human-personalities');
 const robotDictionary = {};
 const humanDictionary = {};
 
+function loadResponseConfig(path) {
+  return require(path);
+}
+
 function createDictionaryEntry(personality) {
-  const newPersonality = Object.assign({}, personality);
-  newPersonality.responses = [];
+  const dictionaryEntry = Object.assign({}, personality);
+  dictionaryEntry.responses = [];
 
   personality.responses.forEach((response) => {
     if (typeof response === 'string' || response instanceof String) {
-      newPersonality.responses.push(response);
+      dictionaryEntry.responses.push(response);
     }
+
     else if (typeof response === 'object' || response instanceof Object) {
-      for(let i = 0; i < response.weight; i++) {
-        newPersonality.responses.push(response.response);
+      for (let i = 0; i < response.weight; i++) {
+        dictionaryEntry.responses.push(response.response);
       }
     }
   });
 
-  return newPersonality;
+  return dictionaryEntry;
 }
 
 function initializeDictionaries() {
   robotPersonalities.forEach((personality) => {
-    robotDictionary[personality] = createDictionaryEntry(require(`./robot/${personality}`));
+    const responseConfig = loadResponseConfig(`./robot/${personality}`);
+    robotDictionary[personality] = createDictionaryEntry(responseConfig);
   });
 
   humanPersonalities.forEach((personality) => {
-    humanDictionary[personality] = createDictionaryEntry(require(`./human/${personality}`));
+    const responseConfig = loadResponseConfig(`./human/${personality}`);
+    humanDictionary[personality] = createDictionaryEntry(responseConfig);
   });
 }
 
-// TODO: Address the need to pass the substitute function
+/*
+  This function defines the values available for replacement during postprcessing
+*/
+function createPostprocessMap(match, username) {
+  return Object.assign(
+    { username: username },
+    match !== undefined && { adjective: match.toLowerCase() },
+    match !== undefined && { ADJECTIVE: match.toLowerCase() }
+  );
+}
+
 /*
   Helper function
 
   Given a "string like {{this}}" and a map like { "this" : "foobar" }
   Returns "string like foobar"
 */
-function substitute(wholeString, map) {
+function postprocess(response, match, username) {
+  const map = createPostprocessMap(match[1], username);
+  console.log('map', map);
+
   return Object.keys(map)
     .reduce((memo, key) => {
-      return memo.replace(new RegExp("{{" + key + "}}", 'g'), map[key]);
-    }, wholeString);
-}
-
-function robotReply(message) {
-  return reply(robotDictionary, message);
-}
-
-//This is used for sub /r/totallynotrobots where this bot pretends to be human
-function humanReply(message) {
-  return reply(humanDictionary, message);
+      return memo.replace(new RegExp(`{{${key}}}`, 'g'), map[key]);
+    }, response);
 }
 
 function reply(dictionary, message) {
-  const body = message['body'];
-  const username = message['username'];
+  let response;
+
+  const body = message.body;
+  const username = message.username;
 
   if (body.match(/no/i)) {
     return undefined;
   }
 
-  let response = undefined;
-
   forEach(dictionary, (phrase) => {
     let match;
-    let regex = phrase['regex'];
+    const regex = phrase.regex;
 
     if (typeof regex === 'function') {
       match = regex(body);
@@ -78,14 +89,10 @@ function reply(dictionary, message) {
     }
 
     if (match) {
-      const responses = phrase['responses'];
+      const randomIndex = Math.floor(helper.random() * phrase.responses.length);
+      const randomResponse = phrase.responses[randomIndex];
 
-      const randomIndex = Math.floor(helper.random() * responses.length)
-      response = responses[randomIndex];
-
-      if (phrase['postprocess']) {
-        response = phrase['postprocess'](response, match, username, substitute);
-      }
+      response = postprocess(randomResponse, match, username);
 
       return false;
     }
@@ -94,10 +101,19 @@ function reply(dictionary, message) {
   return response;
 }
 
+function robotReply(message) {
+  return reply(robotDictionary, message);
+}
+
+// This is used for sub /r/totallynotrobots where this bot pretends to be human
+function humanReply(message) {
+  return reply(humanDictionary, message);
+}
+
 module.exports = {
-  "initializeDictionaries": initializeDictionaries,
-  "robotDictionary": (() => robotDictionary)(),
-  "humanDictionary": (() => humanDictionary)(),
-  "humanReply" : humanReply,
-  "robotReply" : robotReply
+  robotDictionary: (() => robotDictionary)(),
+  humanDictionary: (() => humanDictionary)(),
+  initializeDictionaries: initializeDictionaries,
+  humanReply: humanReply,
+  robotReply: robotReply
 };

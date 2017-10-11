@@ -6,10 +6,5 @@ module.exports = {
         { "weight": 3, "response": "Yes, /u/{{username}}" },
         "Yes, /u/{{username}}. You should run.",
         "But I promise I'm friendly. Pinky swear!"
-    ],
-    "postprocess": (response, match, username, substitute) => {
-        return substitute(response, {
-            'username': username
-        });
-    }
+    ]
 };

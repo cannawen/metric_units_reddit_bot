@@ -8,10 +8,5 @@ module.exports = {
       "You're not so bad yourself, /u/{{username}}...",
       "Why, thank you. Do you visit this subreddit often?",
       "Oh, you! (◕‿◕✿)"
-    ],
-    "postprocess" : (response, match, username, substitute) => {
-      return substitute(response, {
-        'username' : username
-      });
-    }
+    ]
   };
