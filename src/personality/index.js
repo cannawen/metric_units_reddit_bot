@@ -1,7 +1,6 @@
+const fs = require('fs');
 const forEach = require('lodash.foreach');
 const helper = require('../helper');
-const robotPersonalities = require('./robot-personalities');
-const humanPersonalities = require('./human-personalities');
 
 const robotDictionary = {};
 const humanDictionary = {};
@@ -30,6 +29,9 @@ function createDictionaryEntry(personality) {
 }
 
 function initializeDictionaries() {
+  const robotPersonalities = fs.readdirSync(`${__dirname}/robot`);
+  const humanPersonalities = fs.readdirSync(`${__dirname}/human`);
+
   robotPersonalities.forEach((personality) => {
     const responseConfig = loadResponseConfig(`./robot/${personality}`);
     robotDictionary[personality] = createDictionaryEntry(responseConfig);
@@ -60,7 +62,6 @@ function createPostprocessMap(match, username) {
 */
 function postprocess(response, match, username) {
   const map = createPostprocessMap(match[1], username);
-  console.log('map', map);
 
   return Object.keys(map)
     .reduce((memo, key) => {
@@ -68,35 +69,51 @@ function postprocess(response, match, username) {
     }, response);
 }
 
-function reply(dictionary, message) {
-  let response;
+function getRandomElement(array) {
+  return array[Math.floor(helper.random() * array.length)];
+}
 
-  const body = message.body;
-  const username = message.username;
+/*
+  Returns an array of objects with the structure { key, match }, each of which
+  represents a matched phrase from the given dictionary against the given message
+*/
+function findMatches(dictionary, message) {
+  const matches = [];
 
-  if (body.match(/no/i)) {
-    return undefined;
+  if (message.match(/no/i)) {
+    return matches;
   }
 
-  forEach(dictionary, (phrase) => {
+  forEach(dictionary, (phrase, key) => {
     let match;
     const regex = phrase.regex;
 
     if (typeof regex === 'function') {
-      match = regex(body);
+      match = regex(message);
     } else {
-      match = body.match(regex);
+      match = message.match(regex);
     }
 
     if (match) {
-      const randomIndex = Math.floor(helper.random() * phrase.responses.length);
-      const randomResponse = phrase.responses[randomIndex];
-
-      response = postprocess(randomResponse, match, username);
-
-      return false;
+      matches.push({ key: key, match: match });
     }
   });
+
+  return matches;
+}
+
+function reply(dictionary, message) {
+  let response;
+
+  const matches = findMatches(dictionary, message.body);
+
+  if (matches.length > 0) {
+    const randomMatch = getRandomElement(matches);
+    const randomPhrase = dictionary[randomMatch.key];
+    const randomResponse = getRandomElement(randomPhrase.responses);
+
+    response = postprocess(randomResponse, randomMatch.match, message.username);
+  }
 
   return response;
 }

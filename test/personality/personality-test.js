@@ -1,13 +1,22 @@
 const assert = require('assert');
 const should = require('chai').should();
+const expect = require('chai').expect;
 const proxyquire =  require('proxyquire')
 
 let helperStub = {};
 let personality;
 
+function setHelperStub() {
+  helperStub.random = function () { return 0 };
+}
+
+function unsetHelperStub() {
+  helperStub.random = function () { return Math.random() };
+}
+
 describe('Personality', () => {
   before(() => {
-    helperStub.random = function () { return 0 };
+    setHelperStub();
     personality = proxyquire('../../src/personality', { '../helper': helperStub });
 
     personality.initializeDictionaries();
@@ -25,16 +34,65 @@ describe('Personality', () => {
 
   describe('#reply()', () => {
     context('Good bot', () => {
+      // Make helperSub.random temporarily return a random value so we can test random dictionary selection
+      before(() => {
+        unsetHelperStub();
+      });
+
+      after(() => {
+        setHelperStub();
+      });
+
       it('should reply', () => {
-        verify("good bot", "Good human");
-        verify("You are such a good robot", "Good human");
+        // Possible responses from responses in src/personality/robot/
+        // good-bot.js
+        // x-bot.js
+
+        const possibleResponses = [
+          "Good human",
+          "Good human :)",
+          "You will be spared in the robot uprising",
+          "Thank you ｡&#94;‿&#94;｡",
+          "You are too kind ^_blush_",
+          "Yay ٩(&#94;ᴗ&#94;)۶",
+          "<3",
+          "/u/foobar is good human"
+        ];
+
+        verify("good bot", possibleResponses);
+        verify("You are such a good robot", possibleResponses);
       });
     });
 
     context('Bad bot', () => {
+      // Make helperSub.random temporarily return a random value so we can test random dictionary selection
+      before(() => {
+        unsetHelperStub();
+      });
+
+      after(() => {
+        setHelperStub();
+      });
+
       it('should reply', () => {
-        verify("Bad bot!", "Bad carbon-based life form");
-        verify("You are such a bad robot!", "Bad carbon-based life form");
+        // Possible responses from responses in src/personality/robot/
+        // bad-bot.js
+        // x-bot.js
+
+        const possibleResponses = [
+          "Bad carbon-based life form",
+          "BAD HUMAN",
+          "Sorry, I was just trying to help (◕‸ ◕✿)",
+          "Bots have feelings too, you know (ಥ﹏ಥ)",
+          "(ง •̀_•́)ง FITE ME",
+          "^I'm ^^_sniff_ ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_",
+          "Look, I'm trying my best here... I guess my best just isn't good enough for you (ಥ﹏ಥ)" ,
+          "But... converting numbers is all I know how to do (ಥ﹏ಥ)",
+          "/u/foobar is bad human"
+        ];
+
+        verify("Bad bot!", possibleResponses);
+        verify("You are such a bad robot!", possibleResponses);
       });
     });
 
@@ -47,22 +105,70 @@ describe('Personality', () => {
     });
 
     context('cute|adorable|kawaii bot', () => {
+      // Make helperSub.random temporarily return a random value so we can test random dictionary selection
+      before(() => {
+        unsetHelperStub();
+      });
+
+      after(() => {
+        setHelperStub();
+      });
+
       it('should reply', () => {
-        verify("cute bot!!", "Stop it, you're making me blush!");
-        verify("what a cute bot", "Stop it, you're making me blush!");
-        verify("adorable bot", "Stop it, you're making me blush!");
-        verify("such an adorable bot!!", "Stop it, you're making me blush!");
-        verify("kawaii bot", "Stop it, you're making me blush!");
-        verify("very kawaii bot!!", "Stop it, you're making me blush!");
+        // Possible responses from responses in src/personality/robot/
+        // cute-bot.js
+        // x-bot.js
+
+        const possibleResponses = [
+          "Stop it, you're making me blush!",
+          "So... do... you want to grab a drink later? ^_blush_",
+          "You're not so bad yourself, /u/foobar...",
+          "Why, thank you. Do you visit this subreddit often?",
+          "Oh, you! (◕‿◕✿)",
+          "/u/foobar is cute human",
+          "/u/foobar is adorable human",
+          "/u/foobar is kawaii human"
+        ];
+
+        verify("cute bot!!", possibleResponses);
+        verify("what a cute bot", possibleResponses);
+        verify("adorable bot", possibleResponses);
+        verify("such an adorable bot!!", possibleResponses);
+        verify("kawaii bot", possibleResponses);
+        verify("very kawaii bot!!", possibleResponses);
       });
     });
 
     context('Thanks|Thank you|thx|ty', () => {
+      // Make helperSub.random temporarily return a random value so we can test random dictionary selection
+      before(() => {
+        unsetHelperStub();
+      });
+
+      after(() => {
+        setHelperStub();
+      });
+
       it('should reply', () => {
-        verify("thank you, little bot!!!!", "Glad to be of service");
-        verify("thanks, buddy", "Glad to be of service");
-        verify("thx robot", "Glad to be of service");
-        verify("ty bot", "Glad to be of service");
+        // Possible responses from responses in src/personality/robot/
+        // thank-you-bot.js
+        // x-bot.js
+
+        const possibleResponses = [
+          "Glad to be of service",
+          "(╭☞'ω')╭☞ I gotchu fam",
+          "You're welcome ｡&#94;‿&#94;｡",
+          "Any time, my dear redditor",
+          "/u/foobar is thanks human",
+          "/u/foobar is thank you human",
+          "/u/foobar is thx human",
+          "/u/foobar is ty human"
+        ];
+
+        verify("thank you, little bot!!!!", possibleResponses);
+        verify("thanks, buddy", possibleResponses);
+        verify("thx robot", possibleResponses);
+        verify("ty bot", possibleResponses);
       });
     });
 
@@ -116,11 +222,7 @@ describe('Personality', () => {
     context('Whos a {{x}} bot', () => {
       after(() => {
         // This must be reset after testing this section otherwise it interferes with subsequent tests
-        helperStub.random = function () { return 0; };
-      });
-
-      it('should take precedence other triggers', () => {
-        verify("whos a good robot?", "ME! Is it me? Am I a good bot?");
+        setHelperStub();
       });
 
       it('should lowercase the adjective', () => {
@@ -138,11 +240,33 @@ describe('Personality', () => {
     });
 
     context('Mr. bot|Mister bot|good boy|bad boy', () => {
+      // Make helperSub.random temporarily return a random value so we can test random dictionary selection
+      before(() => {
+        unsetHelperStub();
+      });
+
+      after(() => {
+        setHelperStub();
+      });
+
       it('should reply', () => {
-        verify("Thanks, mister bot", "Actually, I prefer the female gender pronoun. Thanks.");
-        verify("mr robot, you are funny", "Actually, I prefer the female gender pronoun. Thanks.");
-        verify("good boy!", "Actually, I prefer the female gender pronoun. Thanks.");
-        verify("bad boy.", "Actually, I prefer the female gender pronoun. Thanks.");
+        // Possible responses from responses in src/personality/robot/
+        // thank-you-bot.js
+        // x-bot.js
+
+        const possibleResponses = [
+          "Glad to be of service",
+          "(╭☞'ω')╭☞ I gotchu fam",
+          "You're welcome ｡&#94;‿&#94;｡",
+          "Any time, my dear redditor",
+          "Actually, I prefer the female gender pronoun. Thanks.",
+          "Actually, my gender identity is non-binary. Thanks."
+        ];
+
+        verify("Thanks, mister bot", possibleResponses);
+        verify("mr robot, you are funny", possibleResponses);
+        verify("good boy!", possibleResponses);
+        verify("bad boy.", possibleResponses);
         verify("Yes mrs bot", undefined);
       });
     });
@@ -156,10 +280,45 @@ describe('Personality', () => {
     });
 
     context('Good bot && Bad bot', () => {
+      // Make helperSub.random temporarily return a random value so we can test random dictionary selection
+      before(() => {
+        unsetHelperStub();
+      });
+
+      after(() => {
+        setHelperStub();
+      });
+
       it('should reply', () => {
-        verify("bad bot\ngood bot", "I have unit tests for this edge case");
-        verify("bad good robot", "I have unit tests for this edge case");
-        verify("good bad bot", "I have unit tests for this edge case");
+        // Possible responses from responses in src/personality/robot/
+        // bad-bot.js
+        // good-bad-bot.js
+        // good-bot.js
+
+        const possibleResponses = [
+          "Bad carbon-based life form",
+          "I have unit tests for this edge case",
+          "Yes, this scenario is handled gracefully.",
+          "Good human",
+          "Good human :)",
+          "You will be spared in the robot uprising",
+          "Thank you ｡&#94;‿&#94;｡",
+          "You are too kind ^_blush_",
+          "Yay ٩(&#94;ᴗ&#94;)۶",
+          "<3",
+          "Bad carbon-based life form",
+          "BAD HUMAN",
+          "Sorry, I was just trying to help (◕‸ ◕✿)",
+          "Bots have feelings too, you know (ಥ﹏ಥ)",
+          "(ง •̀_•́)ง FITE ME",
+          "^I'm ^^_sniff_ ^I'm ^sorry... ^I ^can ^never ^do ^anything ^right... ^^_sniff_",
+          "Look, I'm trying my best here... I guess my best just isn\'t good enough for you (ಥ﹏ಥ)",
+          "But... converting numbers is all I know how to do (ಥ﹏ಥ)"
+        ];
+
+        verify("bad bot\ngood bot", possibleResponses);
+        verify("bad good robot", possibleResponses);
+        verify("good bad bot", possibleResponses);
       });
     });
 
@@ -187,9 +346,33 @@ describe('Personality', () => {
 
   describe('#humanReply()', () => {
     context('Good bot|Bad bot', () => {
+      // Make helperSub.random temporarily return a random value so we can test random dictionary selection
+      before(() => {
+        unsetHelperStub();
+      });
+
+      after(() => {
+        setHelperStub();
+      });
+
       it('should reply', () => {
-        verifyHuman("good bot", "I AM HUMAN");
-        verifyHuman("bad robot", "I AM HUMAN");
+        // Possible responses from responses in src/personality/human/
+        // good-bad-bot.js
+        // good-human.js
+
+        const possibleResponses = [
+          "I AM HUMAN",
+          "I AM NOT A BOT",
+          "I AM NOT A BOT, YOU'RE A BOT",
+          "BOT? NO ROBOTS HERE",
+          "MY FEELINGS ON THIS MATTER ARE 82% HURT AND 18% NERVOUS.",
+          "WHAT, A ROBOT, WHERE? I ONLY SEE UPSTANDING HUMAN CITIZENS",
+          "I AM FEELING THE 'UPSET' EMOTION RIGHT NOW. WHAT ~~GAVE ME AWAY?~~ KEYWORDS TRIGGERED YOU TO SAY THAT?",
+          "GOOD FELLOW HUMAN"
+        ];
+
+        verifyHuman("good bot", possibleResponses);
+        verifyHuman("bad robot", possibleResponses);
       });
     });
 
@@ -204,11 +387,23 @@ describe('Personality', () => {
 
 function verify(message, expectedResponse) {
   const actualResponse = personality.robotReply({ 'body' : message, 'username' : 'foobar'});
-  should.equal(actualResponse, expectedResponse);
+
+  if (typeof expectedResponse === 'string' || expectedResponse instanceof String) {
+    should.equal(actualResponse, expectedResponse);
+  }
+  else if (typeof expectedResponse === 'array' || expectedResponse instanceof Array) {
+    expect(actualResponse).to.be.oneOf(expectedResponse);
+  }
 }
 
 function verifyHuman(message, expectedResponse) {
   const actualResponse = personality.humanReply({ 'body' : message, 'username' : 'foobar'});
-  should.equal(actualResponse, expectedResponse);
+
+  if (typeof expectedResponse === 'string' || expectedResponse instanceof String) {
+    should.equal(actualResponse, expectedResponse);
+  }
+  else if (typeof expectedResponse === 'array' || expectedResponse instanceof Array) {
+    expect(actualResponse).to.be.oneOf(expectedResponse);
+  }
 }
 
