@@ -1,4 +1,3 @@
-const deasync = require('deasync');
 const fs = require('fs');
 const https = require('https');
 const path = require('path');
@@ -27,9 +26,11 @@ process.on('uncaughtException', function (err) {
   helper.logError(err);
 });
 
-network.refreshToken();
-helper.setIntervalSafely(postConversions, 1);
-helper.setIntervalSafely(replyToMessages, 60);
+network.refreshToken()
+  .then(() => {
+    helper.setIntervalSafely(postConversions, 1);
+    helper.setIntervalSafely(replyToMessages, 60);
+  });
 
 function replyToMessages() {
   function filterCommentReplies(messages) {
@@ -70,125 +71,131 @@ function replyToMessages() {
 
   const now = helper.now();
 
-  network.refreshToken();
+  return network.refreshToken().then(() => {
+    return network.getUnreadMessages().then((messages) => {
+      network.markAllMessagesAsRead();
 
-  const messages = network.getUnreadMessages();
-  network.markAllMessagesAsRead();
-  if (!messages) {
-    return;
-  }
-
-  filterCommentReplies(messages)
-    .filter(messageIsShort)
-    .forEach(message => {
-      const reply = personality.robotReply(message);
-      if (reply === undefined) {
+      if (!messages) {
         return;
       }
 
-      if (message['subreddit'].match(/^totallynotrobots$/i)) {
-        const humanReply = personality.humanReply(message);
-        if (humanReply) {
-          analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, true]);
-          network.postComment(message['id'], humanReply);
-        }
-        return;
-      }
+      filterCommentReplies(messages)
+        .filter(messageIsShort)
+        .forEach(message => {
+          const reply = personality.robotReply(message);
+          if (reply === undefined) {
+            return;
+          }
 
-      const postTitle = message['postTitle'];
+          if (message['subreddit'].match(/^totallynotrobots$/i)) {
+            const humanReply = personality.humanReply(message);
+            if (humanReply) {
+              analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, true]);
+              network.postComment(message['id'], humanReply);
+            }
+            return;
+          }
 
-      // Always replies if no personality in post within the last 24h
-      // Replies are 50% less likely for each reply within 24 hours
-      // Possible refactor candidate, story #150342011
-      let shouldReply = false;
+          const postTitle = message['postTitle'];
 
-      if (replyMetadata[postTitle] === undefined) {
-        shouldReply = true;
-        replyMetadata[postTitle] = {
-          'timestamp' : now,
-          'personalityReplyChance' : 0.5
-        };
+          // Always replies if no personality in post within the last 24h
+          // Replies are 50% less likely for each reply within 24 hours
+          // Possible refactor candidate, story #150342011
+          let shouldReply = false;
 
-      } else if (helper.random() < replyMetadata[postTitle]['personalityReplyChance']) {
-        shouldReply = true;
-        Object.assign(replyMetadata[postTitle], {
-          'timestamp' : now,
-          'personalityReplyChance': replyMetadata[postTitle]['personalityReplyChance'] / 2
+          if (replyMetadata[postTitle] === undefined) {
+            shouldReply = true;
+            replyMetadata[postTitle] = {
+              'timestamp' : now,
+              'personalityReplyChance' : 0.5
+            };
+
+          } else if (helper.random() < replyMetadata[postTitle]['personalityReplyChance']) {
+            shouldReply = true;
+            Object.assign(replyMetadata[postTitle], {
+              'timestamp' : now,
+              'personalityReplyChance': replyMetadata[postTitle]['personalityReplyChance'] / 2
+            });
+          }
+
+          analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
+
+          if (shouldReply) {
+            network.postComment(message['id'], reply);
+          }
         });
-      }
 
-      analytics.trackPersonality([message['timestamp'], message['link'], message['body'], reply, shouldReply]);
+      filterPrivateMessages(messages)
+        .filter(message => message['subject'].match(/stop/i))
+        .forEach(message => {
+          analytics.trackUnsubscribe([message['timestamp'], message['username']]);
+          network.postComment(message['id'], replier.stopMessage);
+          network.blockAuthorOfMessageWithId(message['id']);
+        });
 
-      if (shouldReply) {
-        network.postComment(message['id'], reply);
-      }
-    });
+      filterPrivateMessages(messages)
+        .filter(message => message['subject'].match(/refresh (\w+)/i))
+        .forEach(message => {
+          const commentId = message['subject'].match(/refresh (\w+)/i)[1];
 
-  filterPrivateMessages(messages)
-    .filter(message => message['subject'].match(/stop/i))
-    .forEach(message => {
-      analytics.trackUnsubscribe([message['timestamp'], message['username']]);
-      network.postComment(message['id'], replier.stopMessage);
-      network.blockAuthorOfMessageWithId(message['id']);
-    });
+          network.getComment(commentId)
+            .then((comment) => {
+              if (! comment) {
+                return;
+              }
 
-  filterPrivateMessages(messages)
-    .filter(message => message['subject'].match(/refresh (\w+)/i))
-    .forEach(message => {
-      const commentId = message['subject'].match(/refresh (\w+)/i)[1];
-      const comment = network.getComment(commentId);
+              network.getCommentReplies(comment['link_id'], commentId)
+                .then((commentReplies) => {
+                  const botReply = commentReplies.find(reply => {
+                    return reply['data']['author'].toLowerCase() == environment['reddit-username'].toLowerCase();
+                  });
 
-      if (! comment) {
-        return;
-      }
+                  if (! botReply) {
+                    return;
+                  }
 
-      const commentReplies = network.getCommentReplies(comment['link_id'], commentId);
+                  const conversions = converter.conversions(comment);
+                  const reply = replier.formatReply(comment, conversions);
 
-      const botReply = commentReplies.find(reply => {
-        return reply['data']['author'].toLowerCase() == environment['reddit-username'].toLowerCase();
+                  if (Object.keys(conversions).length === 0) {
+                    return;
+                  }
+
+                  network.editComment('t1_' + botReply['data']['id'], reply);
+
+                  if (! comment['link_id']) {
+                    comment['link_id'] = 't3_value';
+                  }
+
+                  analytics.trackEdit([message['timestamp'], 'https://reddit.com/comments/' + comment['link_id'].replace(/t3_/g, '') + '//' + commentId, comment['body'], conversions]);
+                });
+            });
+        });
+
+      //cleanup old replyMetadata
+      replyMetadata = Object
+        .keys(replyMetadata)
+        .reduce((memo, key) => {
+          const lessThan24hAgo = replyMetadata[key]['timestamp'] > now - 24*60*60*1000;
+          if (lessThan24hAgo) {
+            memo[key] = replyMetadata[key];
+          }
+          return memo;
+        }, {});
       });
-
-      if (! botReply) {
-        return;
-      }
-
-      const conversions = converter.conversions(comment);
-      const reply = replier.formatReply(comment, conversions);
-
-      if (Object.keys(conversions).length === 0) {
-        return;
-      }
-
-      network.editComment('t1_' + botReply['data']['id'], reply);
-
-      if (! comment['link_id']) {
-        comment['link_id'] = 't3_value';
-      }
-
-      analytics.trackEdit([message['timestamp'], 'https://reddit.com/comments/' + comment['link_id'].replace(/t3_/g, '') + '//' + commentId, comment['body'], conversions]);
     });
-
-  //cleanup old replyMetadata
-  replyMetadata = Object
-    .keys(replyMetadata)
-    .reduce((memo, key) => {
-      const lessThan24hAgo = replyMetadata[key]['timestamp'] > now - 24*60*60*1000;
-      if (lessThan24hAgo) {
-        memo[key] = replyMetadata[key];
-      }
-      return memo;
-    }, {});
 };
 
 function postConversions() {
   function allowedToPostInSubreddit(comment) {
-      return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
+    return excludedSubreddits.indexOf(comment['subreddit'].toLowerCase()) === -1;
   }
 
   function commentIsntFromABot(comment) {
     const noBotInCommentBody = comment['body'].match(/\bbot\b/gi) === null;
     const noBotInAuthorName = comment['author'].match(/bot/gi) === null;
     const thisBotDidntWriteComment = comment['author'].toLowerCase() !== environment['reddit-username'].toLowerCase();
+
     return noBotInCommentBody && noBotInAuthorName && thisBotDidntWriteComment;
   }
 
@@ -256,33 +263,34 @@ function postConversions() {
     return Object.keys(map['conversions']).length > 0;
   }
 
-  const comments = network.getRedditComments("all");
-  if (!comments) {
-    return;
-  }
-
-  comments
-    .filter(commentIsntFromABot)
-    .filter(allowedToPostInSubreddit)
-    .filter(postIsShort)
-    .filter(hasNumber)
-    .filter(isNotSarcastic)
-    .map(comment => {
-      return {
-        "comment" : comment,
-        "conversions" : converter.conversions(comment)
+  return network.getRedditComments("all")
+    .then((comments) => {
+      if (!comments) {
+        return;
       }
-    })
-    .map(filterIfAlreadyReplied)
-    .filter(hasConversions)
-    .forEach(map => {
-      const comment = map['comment'];
-      const conversions = map['conversions'];
 
-      const reply = replier.formatReply(comment, conversions);
+      comments
+        .filter(commentIsntFromABot)
+        .filter(allowedToPostInSubreddit)
+        .filter(postIsShort)
+        .filter(hasNumber)
+        .filter(isNotSarcastic)
+        .map(comment => {
+          return {
+            "comment" : comment,
+            "conversions" : converter.conversions(comment)
+          }
+        })
+        .map(filterIfAlreadyReplied)
+        .filter(hasConversions)
+        .forEach(map => {
+          const comment = map['comment'];
+          const conversions = map['conversions'];
 
-      analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
-      network.postComment(comment['id'], reply);
-    })
+          const reply = replier.formatReply(comment, conversions);
 
+          analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
+          network.postComment(comment['id'], reply);
+        })
+    });
 };

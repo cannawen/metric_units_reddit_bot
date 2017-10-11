@@ -7,13 +7,13 @@
   },
   "main": "compile-pages.js",
   "dependencies": {
-    "deasync": "^0.1.10",
     "js-yaml": "^3.9.1",
     "request": "^2.81.0"
   },
   "devDependencies": {
     "all-contributors-cli": "^4.5.0",
     "chai": "^4.1.0",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^4.8.0",
     "eslint-config-airbnb-base": "^12.0.2",
     "eslint-plugin-import": "^2.7.0",
