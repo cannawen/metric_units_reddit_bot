@@ -166,6 +166,12 @@ describe('Personality', () => {
         verify("Hello test", undefined);
       });
     });
+
+    context('500 miles', () => {
+      it('should reply', () => {
+        verify('I would walk 500 miles', 'And I would walk 804.672km more');
+      });
+    });
   });
 
   describe('#humanReply()', () => {
