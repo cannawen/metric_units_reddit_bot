@@ -154,7 +154,12 @@ const unitLookupList = [
     "ignoredUnits" : ["L/100km", "km/L"],
     "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
                          "nba", "nhl", "nfl", "sport",
-                         "play", "game"].concat(ukSubreddits)
+                         "play", "game",
+                         "mavericks", "denvernuggets", "warriors", "rockets", "laclippers", "lakers", "memphisgrizzlies", 
+                         "timberwolves", "nolapelicans", "thunders", "suns", "ripcity", "kings", "nbaspurs", "utahjazz", 
+                         "atlantahawks", "bostonceltics", "gonets", "charlottehornets", "chicagobulls", "clevelandcavs", 
+                         "detroitpistons", "pacers", "heat", "mkebucks", "nyknicks", "orlandomagic", "sixers", 
+                         "torontoraptors", "washingtonwizards"].concat(ukSubreddits)
   },
   {
     "imperialUnits" : [/mph/, /miles (?:an|per) hour/],
