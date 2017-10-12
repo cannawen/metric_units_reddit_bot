@@ -1,5 +1,5 @@
 ![Build status](https://travis-ci.org/cannawen/metric_units_reddit_bot.svg?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/chazzlabs/metric_units_reddit_bot/badge.svg)](https://coveralls.io/github/chazzlabs/metric_units_reddit_bot)
+[![Coverage Status](https://coveralls.io/repos/github/cannawen/metric_units_reddit_bot/badge.svg?branch=master)](https://coveralls.io/github/cannawen/metric_units_reddit_bot?branch=master)
 
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
