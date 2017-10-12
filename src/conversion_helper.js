@@ -592,19 +592,11 @@ function shouldConvertComment(comment, regexArray = globalIgnore, shouldBeUnique
 }
 
 /*
-  Input: Comment
-    "1 3/4 miles"
-  Output: Comment with body processed to fix user formatting
-    "1.75 miles"
-*/
-
-
-/*
   Input: String
     "1-2 mi away at 3 miles an hour"
   Output: Array of input numbers and standardized units
     [
-      { "imperial": { "numbers" : [1, 2], "unit" : " miles" } },
+      { "imperial": { "numbers" : [1, 2], "unit" : " miles", "joiner": "-" } },
       { "imperial": { "numbers" : [3], "unit" : " mph" } }
     ]
 */
@@ -628,19 +620,21 @@ function findPotentialConversions(comment) {
             string = string.replace(new RegExp(range + " ?" + unitRegex, 'gi'), '');
             return range;
           })
-          .map(range => range.replace(/to/gi, "-").replace(/[^\d.-]/g, ''))
+          .map(range => range.replace(/\s/g, ""))
           .forEach(range => {
-            const match = range.match(/\d-(?=-?\d)/);
+            const match = range.match(/(?:\d)/.source + rh.rangeJoiners + /(?=-?\d)/.source);
             if (match) {
               const toIndex = match.index + 1;
+              const joiner = match[1];
 
               const in1 = range.substring(0, toIndex).replace(/[^\d-\.]/g, '');
-              const in2 = range.substring(toIndex + 1).replace(/[^\d-\.]/g, '');
+              const in2 = range.substring(toIndex + joiner.length).replace(/[^\d-\.]/g, '');
 
               potentialConversions.push({
                 "imperial": {
                   "numbers" : [in1, in2], 
-                  "unit" : standardUnit
+                  "unit" : standardUnit,
+                  "joiner": joiner
                 }
               });
             } else {
@@ -826,7 +820,7 @@ function calculateMetric(imperialInputs) {
 
     const map = unitLookupMap[imperialUnit];
     input['metric'] = map['conversionFunction'](imperialNumbers);
-    
+
     return input;
   });
 }

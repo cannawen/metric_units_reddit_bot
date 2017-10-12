@@ -35,9 +35,12 @@ const numberRegex
     + ")"
   + ")";
 
+const rangeJoiners
+  = /(-|to|or)/.source;
+
 const rangeRegex
   = numberRegex
-  + / ?(?:-|to) ?/.source
+  + " ?" + rangeJoiners + " ?"
   + numberRegex;
 
 const fractionRegex
@@ -52,6 +55,7 @@ module.exports = {
   startRegex,
   endRegex,
   numberRegex,
+  rangeJoiners,
   rangeRegex,
   fractionRegex
 }
