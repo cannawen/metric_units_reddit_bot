@@ -9,3 +9,5 @@ install:
 script:
   # - npm run-script lint
   - npm test
+after_success:
+  - npm run cover
