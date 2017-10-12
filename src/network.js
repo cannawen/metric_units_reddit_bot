@@ -11,7 +11,7 @@ var oauthTokenValidUntil = undefined;
 var lastProcessedCommentId = undefined;
 
 function get(url) {
-  let content;  
+  let content;
 
   if (url.startsWith('http')) {
     content = networkRequest({ url: url }, false);
@@ -41,7 +41,7 @@ function post(urlPath, form) {
 
 function networkRequest(options, oauthRequest) {
   function redditOauthHeader() {
-    const userAgent = 
+    const userAgent =
      "script:" + environment['reddit-username'] + ":" + environment['version']
       + " (by: /u/" + environment['reddit-username'] + ")";
 
@@ -129,7 +129,7 @@ function printBannedSubreddits() {
       .filter(match => match !== null)
       .map(match => match[1])
       .forEach(subreddit => helper.log("- " + subreddit));
-    
+
     const lastMessageId = messages[messages.length - 1]['data']['name'];
 
     messages = get("/message/inbox?limit=100&after=" + lastMessageId)
@@ -171,6 +171,40 @@ function postComment(parentId, markdownBody) {
   post('/api/comment', { 'parent' : parentId, 'text' : markdownBody });
 }
 
+function getComment(commentId) {
+  const comment = get('https://www.reddit.com/api/info.json?id=' + commentId);
+
+  if (comment.length == 0) {
+    return;
+  }
+
+  const data = comment[0]['data'];
+
+  return {
+    'body': data['body'],
+    'author': data['author'],
+    'id': data['name'],
+    'link_id' : data['link_id'],
+    'postTitle': '', // api/info does not return a value for postTitle but this property is required by shouldConvertComment
+    'subreddit': data['subreddit'],
+    'timestamp' : data['created_utc']
+  }
+}
+
+function editComment(commentId, markdownBody) {
+  post('/api/editusertext', { 'thing_id' : commentId, 'text' : markdownBody });
+}
+
+function getCommentReplies(linkId, commentId) {
+  const replies = get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId.replace(/t1_/g, ''));
+  
+  if (! replies.length === 0) {
+    return null;
+  }
+  
+  return replies['json']['data']['things'];
+}
+
 function getUnreadMessages() {
   return get("/message/unread?limit=100");
 }
@@ -186,7 +220,10 @@ function blockAuthorOfMessageWithId(id) {
 module.exports = {
   "refreshToken" : refreshToken,
   "getRedditComments" : getRedditComments,
+  "getComment" : getComment,
   "postComment" : postComment,
+  "editComment" : editComment,
+  "getCommentReplies" : getCommentReplies,
   "getUnreadMessages" : getUnreadMessages,
   "markAllMessagesAsRead" : markAllMessagesAsRead,
   "blockAuthorOfMessageWithId" : blockAuthorOfMessageWithId

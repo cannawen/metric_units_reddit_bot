@@ -134,6 +134,42 @@ function replyToMessages() {
       network.blockAuthorOfMessageWithId(message['id']);
     });
 
+  filterPrivateMessages(messages)
+    .filter(message => message['subject'].match(/refresh (\w+)/i))
+    .forEach(message => {
+      const commentId = message['subject'].match(/refresh (\w+)/i)[1];
+      const comment = network.getComment(commentId);
+
+      if (! comment) {
+        return;
+      }
+
+      const commentReplies = network.getCommentReplies(comment['link_id'], commentId);
+
+      const botReply = commentReplies.find(reply => {
+        return reply['data']['author'].toLowerCase() == environment['reddit-username'].toLowerCase();
+      });
+
+      if (! botReply) {
+        return;
+      }
+
+      const conversions = converter.conversions(comment);
+      const reply = replier.formatReply(comment, conversions);
+
+      if (Object.keys(conversions).length === 0) {
+        return;
+      }
+
+      network.editComment('t1_' + botReply['data']['id'], reply);
+
+      if (! comment['link_id']) {
+        comment['link_id'] = 't3_value';
+      }
+
+      analytics.trackEdit([message['timestamp'], 'https://reddit.com/comments/' + comment['link_id'].replace(/t3_/g, '') + '//' + commentId, comment['body'], conversions]);
+    });
+
   //cleanup old replyMetadata
   replyMetadata = Object
     .keys(replyMetadata)
