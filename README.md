@@ -1,4 +1,5 @@
 ![Build status](https://travis-ci.org/cannawen/metric_units_reddit_bot.svg?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/chazzlabs/metric_units_reddit_bot/badge.svg)](https://coveralls.io/github/chazzlabs/metric_units_reddit_bot)
 
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
@@ -24,11 +25,11 @@ The app starts in [bot.js](./src/bot.js), and it polls the Reddit servers in an 
 
 # Running the code
 
-For changes not related to networking, running tests is often enough.  
+For changes not related to networking, running tests is often enough.
 But if you want to see the bot hitting the Reddit servers:
 
 1. Create your bot's reddit account.
-2. Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.) 
+2. Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.)
 3. Get your OAuth username (random characters below "personal use script") and secret
 4. Fork the main github repo and download the bot's code from your own repo
 5. Create a file `./private/environment.yaml` that looks like [sample-environment.yaml](./sample-environment.yaml)
@@ -56,10 +57,10 @@ Feel free to [drop by the subreddit](https://www.reddit.com/r/metric_units/) or 
 
 # Contribute
 
-See [Contributing Guideline](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md) 
+See [Contributing Guideline](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md)
 
-First time getting involved in Open Source Software? Welcome, and we hope you stick around!  
-See [New to OSS guide](./NEW-TO-OSS.md)  
+First time getting involved in Open Source Software? Welcome, and we hope you stick around!
+See [New to OSS guide](./NEW-TO-OSS.md)
 
 Thanks goes to these wonderful people who have contributed ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
