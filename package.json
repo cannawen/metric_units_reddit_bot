@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "engines": {
-    "node": ">=6.2.1"
+    "node": ">=8.0.0"
   },
   "main": "compile-pages.js",
   "dependencies": {
