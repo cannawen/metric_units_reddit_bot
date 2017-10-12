@@ -266,12 +266,13 @@ const unitLookupList = [
     "conversionFunction" : (i) => distanceMap(i.map((j) => j * 0.9144)),
     "ignoredUnits" : metricDistanceUnits,
     "ignoredKeywords": ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow",
-                        "patriots", "cowboys", "raiders", "seahawks", "eagles",
-                        "steelers", "giants", "49ers", "broncos", "packers",
-                        "bears", "vikings", "browns", "redskins", "panthers", "rams",
-                        "falcons", "lions", "chargers", "jets", "texans", "chiefs",
-                        "ravens", "bills", "saints", "bengals", "buccaneers", "colts",
-                        "jaguars", "dolphins", "titans"]
+                        "denverbroncos", "kansascitychiefs", "chargers", "oaklandraiders",
+                        "texans", "colts", "jaguars", "tennesseetitans", "ravens",
+                        "bengals", "browns", "steelers", "buffalobills", "miamidolphins",
+                        "patriots", "nyjets", "cowboys", "nygiants", "eagles", "redskins",
+                        "chibears", "detroitlions", "greenbaypackers", "minnesotavikings",
+                        "falcons", "panthers", "saints", "buccaneers", "azcardinals",
+                        "losangelesrams", "49ers", "seahawks"]
   },
   {
     "imperialUnits" : [/inch/, /inches/],
