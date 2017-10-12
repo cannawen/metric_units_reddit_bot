@@ -1,4 +1,4 @@
-const rh = require('./regex_helper');
+const rh = require('../regex_helper');
 
 function distanceMap(m) {
   const unitDecider = Math.max(...m);
@@ -134,49 +134,9 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
   postprocess (optional) - A function that runs after all conversions have been done that takes the imperial input (6.5 feet) and converts it to a better format (6'6")
 */
 const unitLookupList = [
-  {
-    "imperialUnits" : [/mpg/, /miles per gal(?:lon)?/],
-    "standardInputUnit" : " mpg (US)",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => {
-      const kmPerL = createMap(i.map((j) => j * 0.425144), " km/L");
-      const unitDecider = Math.max(...i);
-      if (unitDecider < 15) {
-        return kmPerL;
-      } else {
-        return [
-          kmPerL,
-          createMap(i.map((j) => 235.215 / j), " L/100km")
-        ]
-      }
-    },
-    "ignoredUnits" : ["L/100km", "km/L"],
-    "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
-                         "nba", "nhl", "nfl", "sport",
-                         "play", "game",
-                         "mavericks", "denvernuggets", "warriors", "rockets", "laclippers", "lakers", "memphisgrizzlies", 
-                         "timberwolves", "nolapelicans", "thunders", "suns", "ripcity", "kings", "nbaspurs", "utahjazz", 
-                         "atlantahawks", "bostonceltics", "gonets", "charlottehornets", "chicagobulls", "clevelandcavs", 
-                         "detroitpistons", "pacers", "heat", "mkebucks", "nyknicks", "orlandomagic", "sixers", 
-                         "torontoraptors", "washingtonwizards"].concat(ukSubreddits)
-  },
-  {
-    "imperialUnits" : [/mph/, /miles (?:an|per) hour/],
-    "standardInputUnit" : " mph",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
-    "conversionFunction" : (i) => velocityMap(i.map((j) => j * 0.44704)), // 1 mph = 0.44704 m/s
-    "ignoredUnits" : ["km/hr?", "kmh", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
-    "ignoredKeywords" : ukSubreddits
-  },
-  {
-    "imperialUnits" : [/f(?:oo|ee)?t (?:\/|per) s(?:ec(?:ond)?)?/],
-    "standardInputUnit" : " ft/sec",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => velocityMap(i.map((j) => j * 0.3048)) // 1 ft/s = 0.3048 m/s
-  },
+  require("./all/mpg"),
+  require("./all/mph"),
+  require("./all/ftPerSec"),
   {
     "imperialUnits" : [/(?:pounds?|lbs?)\/(?:inch|in)/] ,
     "standardInputUnit" : " lbs/inch",

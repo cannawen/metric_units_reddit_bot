@@ -1,6 +1,6 @@
 const analytics = require('./analytics');
 const rh = require('./regex_helper');
-const ch = require('./conversion_helper');
+const ch = require('./conversions/conversion_helper');
 const pp = require('./preprocess');
 
 function conversions(comment) {
