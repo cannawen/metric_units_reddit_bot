@@ -17,7 +17,9 @@ function conversions(comment) {
   
   return formattedConversions.reduce((memo, conversion) => {
     let joiner = "";
-    if("joiner" in conversion['imperial']) joiner = " " + conversion['imperial']['joiner'] + " ";
+    if("joiner" in conversion['imperial']) {
+      joiner = " " + conversion['imperial']['joiner'] + " ";
+    }
     const key = conversion['imperial']['numbers'].join(joiner) + conversion['imperial']['unit'];
     const formatted = conversion['formatted'];
 

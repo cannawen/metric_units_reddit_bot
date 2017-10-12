@@ -40,7 +40,7 @@ const rangeJoiners
 
 const rangeRegex
   = numberRegex
-  + /(?: )?/.source + rangeJoiners + /(?: )?/.source
+  + " ?" + rangeJoiners + " ?"
   + numberRegex;
 
 const fractionRegex
