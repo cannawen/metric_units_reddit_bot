@@ -1,29 +1,49 @@
 const fs = require('fs');
 const forEach = require('lodash.foreach');
 const helper = require('../helper');
+const yaml = require('js-yaml');
 
 const robotDictionary = {};
 const humanDictionary = {};
 
 function loadResponseConfig(path) {
-  return require(path);
+  return yaml.safeLoad(fs.readFileSync(path, 'utf8'));
+}
+
+/*
+  The js-yaml module does not like regular expressions, so we must define them as strings
+  and parse them into Javascript RegExp objects
+*/
+function parseRegex(regexString) {
+  const regexStringParts = regexString.split('/');
+  const regex = regexStringParts[1];
+  const flags = regexStringParts[2];
+
+  return new RegExp(regex, flags);
 }
 
 function createDictionaryEntry(personality) {
   const dictionaryEntry = Object.assign({}, personality);
   dictionaryEntry.responses = [];
+  dictionaryEntry.regex = [];
 
   personality.responses.forEach((response) => {
-    if (typeof response === 'string' || response instanceof String) {
+    if (helper.isString(response)) {
       dictionaryEntry.responses.push(response);
     }
-
-    else if (typeof response === 'object' || response instanceof Object) {
+    else if (helper.isObject(response)) {
       for (let i = 0; i < response.weight; i++) {
         dictionaryEntry.responses.push(response.response);
       }
     }
   });
+
+  if (helper.isString(personality.regex)) {
+    dictionaryEntry.regex = [parseRegex(personality.regex)];
+  }
+  else if (Array.isArray(personality.regex)) {
+    dictionaryEntry.regex = personality.regex.map((regex) => parseRegex(regex));
+  }
 
   return dictionaryEntry;
 }
@@ -33,12 +53,12 @@ function initializeDictionaries() {
   const humanPersonalities = fs.readdirSync(`${__dirname}/human`);
 
   robotPersonalities.forEach((personality) => {
-    const responseConfig = loadResponseConfig(`./robot/${personality}`);
+    const responseConfig = loadResponseConfig(`${__dirname}/robot/${personality}`);
     robotDictionary[personality] = createDictionaryEntry(responseConfig);
   });
 
   humanPersonalities.forEach((personality) => {
-    const responseConfig = loadResponseConfig(`./human/${personality}`);
+    const responseConfig = loadResponseConfig(`${__dirname}/human/${personality}`);
     humanDictionary[personality] = createDictionaryEntry(responseConfig);
   });
 }
@@ -85,14 +105,7 @@ function findMatches(dictionary, message) {
   }
 
   forEach(dictionary, (phrase, key) => {
-    let match;
-    const regex = phrase.regex;
-
-    if (typeof regex === 'function') {
-      match = regex(message);
-    } else {
-      match = message.match(regex);
-    }
+    const match = phrase.regex.reduce((accumulator, expression) => accumulator && message.match(expression), true);
 
     if (match) {
       matches.push({ key: key, match: match });

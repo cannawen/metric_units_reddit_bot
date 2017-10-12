@@ -1,0 +1,8 @@
+description: Responds to both "good" and "bad" bot
+regex:
+  - "/good/i"
+  - "/bad/i"
+  - "/(?:ro)?bot/i"
+responses:
+    - I have unit tests for this edge case
+    - Yes, this scenario is handled gracefully.

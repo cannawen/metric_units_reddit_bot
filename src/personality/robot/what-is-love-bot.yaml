@@ -1,0 +1,4 @@
+description: Responds to "What is love?"
+regex: "/^what is love.?$/i"
+responses:
+    - Baby don't hurt me

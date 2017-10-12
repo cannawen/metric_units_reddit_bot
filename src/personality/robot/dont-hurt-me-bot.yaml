@@ -1,0 +1,4 @@
+description: Responds to "Don't hurt me"
+regex: "/^don'?t hurt me.?$/i"
+responses:
+    - No more

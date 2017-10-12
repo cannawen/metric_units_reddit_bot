@@ -1,0 +1,4 @@
+description: Responds to "good human"
+regex: "/good(?: fellow)? human/i"
+responses:
+    - GOOD FELLOW HUMAN

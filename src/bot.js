@@ -27,11 +27,11 @@ process.on('uncaughtException', function (err) {
   helper.logError(err);
 });
 
+personality.initializeDictionaries();
+
 network.refreshToken();
 helper.setIntervalSafely(postConversions, 1);
 helper.setIntervalSafely(replyToMessages, 60);
-
-personality.initializeDictionaries();
 
 function replyToMessages() {
   function filterCommentReplies(messages) {
