@@ -195,6 +195,16 @@ function robotReply(message) {
       "description" : "Don't hurt me",
       "response":  "No more",
       "regex" : /^don'?t hurt me.?$/i
+    },
+    {
+      "description":"The user wasted metric_unit's time",
+      "response":[
+        "Conversions don't grow on trees!"
+        "A bot never forgets! Now where are those values I'm suppose to convert...",    
+        "I'll never get those bytes back. They were my favourite bytes.",
+        "I wasted 100 cpu cycles converting your values and now they're gone!\n\n100 cpu cycles ≈ 1 human hour."
+      ],
+      "regex": /^_time_waster$/i
     }
   ];
   return reply(robotPersonality, message);

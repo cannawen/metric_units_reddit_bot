@@ -357,11 +357,11 @@ describe('Bot', () => {
             editCommentBody.should.equal('value 1 is value 2');
           });
 
-          it('should not edit comment if no value to convert is found', () => {
+          it('should edit comment with sassy reply if no value to convert is found', () => {
             conversionReturnValue = {};
             privateMessageFunction();
 
-            editCommentCalled.should.equal(false);
+            editCommentCalled.should.equal(true);
           });
         });
 

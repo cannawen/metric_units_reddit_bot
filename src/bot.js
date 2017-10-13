@@ -153,10 +153,10 @@ function replyToMessages() {
       }
 
       const conversions = converter.conversions(comment);
-      const reply = replier.formatReply(comment, conversions);
+      let reply = replier.formatReply(comment, conversions);
 
       if (Object.keys(conversions).length === 0) {
-        return;
+        reply = personality.robotReply({ "body" : "_time_waster", "username" : comment['author'] });
       }
 
       network.editComment('t1_' + botReply['data']['id'], reply);
