@@ -27,7 +27,7 @@
     "test": "mocha",
     "lint": "eslint **/*.js",
     "all-contributors": "all-contributors",
-    "precommit": "lint-staged && npm test"
+    "precommit": "npm test"
   },
   "repository": {
     "type": "git",
