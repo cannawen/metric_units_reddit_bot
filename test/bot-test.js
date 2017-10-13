@@ -1,5 +1,8 @@
 const assert = require('assert');
-const should = require('chai').should();
+const chai = require('chai')
+const should = chai.should();
+const chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
 const proxyquire =  require('proxyquire');
 
 describe('Bot', () => {
@@ -55,32 +58,35 @@ describe('Bot', () => {
     refreshTokenCount = 0;
     networkStub.refreshToken = () => {
       refreshTokenCount = refreshTokenCount + 1;
+      return Promise.resolve();
     };
     getRedditCommentsParam = undefined;
     networkStub.getRedditComments = (param) => {
       getRedditCommentsParam = param;
-      return getRedditCommentsReturnValue;
+      return Promise.resolve(getRedditCommentsReturnValue);
     };
     postCommentId = undefined;
     postCommentBody = undefined;
     networkStub.postComment = (id, body) => {
       postCommentId = id;
       postCommentBody = body;
+      return Promise.resolve();
     };
     getUnreadMessagesCalled = false;
     getUnreadMessagesReturnValue = undefined;
     networkStub.getUnreadMessages = () => {
       getUnreadMessagesCalled = true;
-      return getUnreadMessagesReturnValue
+      return Promise.resolve(getUnreadMessagesReturnValue);
     };
     markAllMessagesAsReadCalled = false;
     networkStub.markAllMessagesAsRead = () => {
       markAllMessagesAsReadCalled = true;
+      return Promise.resolve();
     };
     getCommentId = undefined;
     networkStub.getComment = (id) => {
       getCommentId = id;
-      return getCommentReturnValue;
+      return Promise.resolve(getCommentReturnValue);
     };
     getCommentRepliesLinkId = undefined;
     getCommentRepliesCommentId = undefined;
@@ -89,7 +95,7 @@ describe('Bot', () => {
       getCommentRepliesLinkId = linkId;
       getCommentRepliesCommentId = commentId;
       getCommentRepliesCalled = true;
-      return getCommentRepliesReturnValue;
+      return Promise.resolve(getCommentRepliesReturnValue);
     };
     editCommentId = undefined;
     editCommentBody = undefined;
@@ -98,6 +104,7 @@ describe('Bot', () => {
       editCommentId = id;
       editCommentBody = body;
       editCommentCalled = true;
+      return Promise.resolve();
     };
 
     //Helper
@@ -173,8 +180,10 @@ describe('Bot', () => {
 
     context('on trigger', () => {
       it('should get reddit comments to r/all', () => {
-        commentFunction();
-        getRedditCommentsParam.should.equal("all");
+        return commentFunction().then(() => {
+          getRedditCommentsParam.should.equal("all");
+        }).should.eventually.be.fulfilled;
+
       });
 
       context('given valid comment', () => {
@@ -190,8 +199,9 @@ describe('Bot', () => {
         });
 
         it('should create conversion', () => {
-          commentFunction();
-          conversionCommentParam.should.equal(comment);
+          return commentFunction().then(() => {
+            conversionCommentParam.should.deep.equal(comment);
+          }).should.eventually.be.fulfilled;
         });
 
         context('given valid conversion', () => {
@@ -200,15 +210,17 @@ describe('Bot', () => {
           });
 
           it('should create reply', () => {
-            commentFunction();
-            replyCommentParam.should.equal(comment);
-            replyConversionParam.should.deep.equal({"1" : "2"});
+            return commentFunction().then(() => {
+              replyCommentParam.should.equal(comment);
+              replyConversionParam.should.deep.equal({"1" : "2"});
+            }).should.eventually.be.fulfilled;
           });
 
           it('should post reply', () => {
-            commentFunction();
-            postCommentId.should.equal('123');
-            postCommentBody.should.equal('comment 1 converts to comment 2');
+            return commentFunction().then(() => {
+              postCommentId.should.equal('123');
+              postCommentBody.should.equal('comment 1 converts to comment 2');
+            }).should.eventually.be.fulfilled;
           });
         });
       });
@@ -229,8 +241,9 @@ describe('Bot', () => {
         });
 
         it('should not attempt to create conversion', () => {
-          commentFunction();
-          should.equal(conversionCommentParam, undefined);
+          return commentFunction().then(() => {
+            should.equal(conversionCommentParam, undefined);
+          }).should.eventually.be.fulfilled;
         });
       });
     });
@@ -243,13 +256,15 @@ describe('Bot', () => {
 
     context('on trigger', () => {
       it('should refresh network token', () => {
-        privateMessageFunction();
-        refreshTokenCount.should.equal(2);
+        return privateMessageFunction().then(() => {
+          refreshTokenCount.should.equal(2);
+        }).should.eventually.be.fulfilled;
       });
 
       it('should get all unread messages', () => {
-        privateMessageFunction();
-        getUnreadMessagesCalled.should.equal(true);
+        return privateMessageFunction().then(() => {
+          getUnreadMessagesCalled.should.equal(true);
+        }).should.eventually.be.fulfilled;
       });
 
       context('valid private reply', () => {
@@ -258,8 +273,9 @@ describe('Bot', () => {
         });
 
         it('should mark all messages as read', () => {
-          privateMessageFunction();
-          markAllMessagesAsReadCalled.should.equal(true);
+          return privateMessageFunction().then(() => {
+            markAllMessagesAsReadCalled.should.equal(true);
+          }).should.eventually.be.fulfilled;
         });
 
         context('comment reply', () => {
@@ -273,33 +289,36 @@ describe('Bot', () => {
           });
 
           it('should make sassy response', () => {
-            privateMessageFunction();
-            personalityMessageParam['body'].should.equal('good bot');
-            postCommentId.should.equal('456');
-            postCommentBody.should.equal('sassy response');
+            return privateMessageFunction().then(() => {
+              personalityMessageParam['body'].should.equal('good bot');
+              postCommentId.should.equal('456');
+              postCommentBody.should.equal('sassy response');
+            }).should.eventually.be.fulfilled;
           });
 
           context('second comment reply with the same title', () => {
             it('should reply 50% of the time', () => {
-              privateMessageFunction();
-              randomNumber = 0.49;
-              postCommentId = undefined;
-              postCommentBody = undefined;
-              privateMessageFunction();
-
-              postCommentId.should.equal('456');
-              postCommentBody.should.equal('sassy response');
+              return privateMessageFunction().then(() => {
+                randomNumber = 0.49;
+                postCommentId = undefined;
+                postCommentBody = undefined;
+                return privateMessageFunction().then(() => {
+                  postCommentId.should.equal('456');
+                  postCommentBody.should.equal('sassy response');
+                }).should.eventually.be.fulfilled;
+              }).should.eventually.be.fulfilled;
             });
 
             it('should not reply 50% of the time', () => {
-              privateMessageFunction();
-              randomNumber = 0.51;
-              postCommentId = undefined;
-              postCommentBody = undefined;
-              privateMessageFunction();
-
-              should.equal(postCommentId, undefined);
-              should.equal(postCommentBody, undefined);
+              return privateMessageFunction().then(() => {
+                randomNumber = 0.51;
+                postCommentId = undefined;
+                postCommentBody = undefined;
+                return privateMessageFunction().then(() => {
+                  should.equal(postCommentId, undefined);
+                  should.equal(postCommentBody, undefined);
+                }).should.eventually.be.fulfilled;
+              }).should.eventually.be.fulfilled;
             });
           });
         });
@@ -314,9 +333,10 @@ describe('Bot', () => {
           });
 
           it('should ask the user to block the bot', () => {
-            privateMessageFunction();
-            postCommentId.should.equal('789');
-            postCommentBody.should.equal('please block me');
+            return privateMessageFunction().then(() => {
+              postCommentId.should.equal('789');
+              postCommentBody.should.equal('please block me');
+            }).should.eventually.be.fulfilled;
           });
         });
 
@@ -351,17 +371,19 @@ describe('Bot', () => {
           it('should edit comment with new conversion value', () => {
             conversionReturnValue = {"1": "2"};
             replyReturnValue = "value 1 is value 2";
-            privateMessageFunction();
 
-            editCommentId.should.equal('t1_103');
-            editCommentBody.should.equal('value 1 is value 2');
+            return privateMessageFunction().then(() => {
+              editCommentId.should.equal('t1_103');
+              editCommentBody.should.equal('value 1 is value 2');
+            }).should.eventually.be.fulfilled;
           });
 
           it('should not edit comment if no value to convert is found', () => {
             conversionReturnValue = {};
-            privateMessageFunction();
 
-            editCommentCalled.should.equal(false);
+            return privateMessageFunction().then(() => {
+              editCommentCalled.should.equal(false);
+            }).should.eventually.be.fulfilled;
           });
         });
 
@@ -373,9 +395,10 @@ describe('Bot', () => {
             );
             getUnreadMessagesReturnValue = [directMessage];
             getCommentReturnValue = null;
-            privateMessageFunction();
 
-            getCommentRepliesCalled.should.equal(false);
+            return privateMessageFunction().then(() => {
+              getCommentRepliesCalled.should.equal(false);
+            }).should.eventually.be.fulfilled;
           });
         });
       });
@@ -391,9 +414,10 @@ describe('Bot', () => {
         });
 
         it('should not reply', () => {
-          privateMessageFunction();
-          should.equal(postCommentId, undefined);
-          should.equal(postCommentBody, undefined);
+          return privateMessageFunction().then(() => {
+            should.equal(postCommentId, undefined);
+            should.equal(postCommentBody, undefined);
+          }).should.eventually.be.fulfilled;
         });
       });
     });

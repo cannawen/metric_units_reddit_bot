@@ -202,6 +202,16 @@
         "code", 
         "bug"
       ]
+    },
+    {
+      "login": "aterranova-bv",
+      "name": "Andrew Terranova",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/12698411?v=4",
+      "profile": "https://github.com/aterranova-bv",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ]
 }
