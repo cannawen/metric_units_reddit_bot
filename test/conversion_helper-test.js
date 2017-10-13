@@ -1,6 +1,6 @@
 const should = require('chai').should();
 
-const ch = require('../src/conversion_helper');
+const ch = require('../src/conversions/conversion_helper');
 
 describe('conversion_helper', () => {
   describe('#shouldConvertComment()', () => {
