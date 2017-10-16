@@ -3,19 +3,20 @@ const path = require('path');
 const request = require('request');
 
 const helper = require('./helper');
+
 const environment = helper.environment();
 
-var oauthAccessToken = undefined;
-var oauthTokenValidUntil = undefined;
-var lastProcessedCommentId = undefined;
+let oauthAccessToken;
+let oauthTokenValidUntil;
+let lastProcessedCommentId;
 
 function get(url) {
   let requestPromise;
 
   if (url.startsWith('http')) {
-    requestPromise = networkRequest({ url: url }, false);
+    requestPromise = networkRequest({ url }, false);
   } else {
-    requestPromise = networkRequest({ url: 'https://oauth.reddit.com' + url }, true);
+    requestPromise = networkRequest({ url: `https://oauth.reddit.com${url}` }, true);
   }
 
   return requestPromise;
@@ -28,9 +29,9 @@ function post(urlPath, form) {
   }
 
   return networkRequest({
-    url: 'https://oauth.reddit.com' + urlPath,
+    url: `https://oauth.reddit.com${urlPath}`,
     method: 'POST',
-    form: form
+    form,
   }, true);
 }
 
@@ -43,17 +44,17 @@ function post(urlPath, form) {
 function networkRequest(options, oauthRequest) {
   function redditOauthHeader() {
     const userAgent =
-     "script:" + environment['reddit-username'] + ":" + environment['version']
-      + " (by: /u/" + environment['reddit-username'] + ")";
+     `script:${environment['reddit-username']}:${environment.version
+     } (by: /u/${environment['reddit-username']})`;
 
     return {
       headers: {
-        'User-Agent': userAgent
+        'User-Agent': userAgent,
       },
       auth: {
-        'bearer': oauthAccessToken
+        bearer: oauthAccessToken,
       },
-    }
+    };
   }
 
   if (oauthRequest) {
@@ -61,9 +62,9 @@ function networkRequest(options, oauthRequest) {
   }
 
   return new Promise((resolve, reject) => {
-    request(options, function(err, res) {
+    request(options, (err, res) => {
       if (err) {
-        console.error("network error:", err);
+        console.error('network error:', err);
         oauthTokenValidUntil = 0;
         reject(err);
       }
@@ -93,18 +94,18 @@ function refreshToken() {
       method: 'POST',
       auth: {
         user: environment['oauth-username'],
-        pass: environment['oauth-secret']
+        pass: environment['oauth-secret'],
       },
       form: {
-        'grant_type': 'password',
-        'username': environment['reddit-username'],
-        'password': environment['reddit-password']
-      }
-    }, function(err, res) {
+        grant_type: 'password',
+        username: environment['reddit-username'],
+        password: environment['reddit-password'],
+      },
+    }, (err, res) => {
       try {
-        var json = JSON.parse(res.body);
+        const json = JSON.parse(res.body);
         oauthAccessToken = json.access_token;
-        oauthTokenValidUntil = helper.now() + 55*60*1000;
+        oauthTokenValidUntil = helper.now() + 55 * 60 * 1000;
         resolve();
       } catch (e) {
         // console.error("oauth error:", e);
@@ -115,7 +116,7 @@ function refreshToken() {
   });
 }
 
-//Utility to generate excluded subreddits yaml
+// Utility to generate excluded subreddits yaml
 function printBannedSubreddits() {
   /**
    * Gets all messages from the inbox recursively.
@@ -123,14 +124,14 @@ function printBannedSubreddits() {
    * @param  {Array}  messagesList   - The running total list of all messages.
    * @return {Promise} The promise of messages.
    */
-  function getMessages (lastMessageId, messagesList) {
+  function getMessages(lastMessageId, messagesList) {
     // Default messagesList to an empty array when it is missing.
     messagesList = messagesList || [];
 
     // Build up the endpoint.
     const limit = 100;
-    const messageUrl = `/message/inbox?limit=${ limit }`;
-    const endpoint = (!lastMessageId) ? messageUrl : `${ messageUrl }&after=${ lastMessageId }`;
+    const messageUrl = `/message/inbox?limit=${limit}`;
+    const endpoint = (!lastMessageId) ? messageUrl : `${messageUrl}&after=${lastMessageId}`;
 
     return new Promise((resolve, reject) => {
       get(endpoint)
@@ -145,15 +146,13 @@ function printBannedSubreddits() {
               // which means we've reached the end of the messages.
               // We don't have to recurse anymore.
               resolve(messagesList);
-            }
-            else {
+            } else {
               // We don't know if there are more messages or not,
               // we must query for the next batch.
-              const lastMessageId = messages[messages.length - 1]['data']['name'];
+              const lastMessageId = messages[messages.length - 1].data.name;
               resolve(getMessages(lastMessageId, messagesList));
             }
-          }
-          else {
+          } else {
             // We did not get any messages back from this query.
             resolve(messagesList);
           }
@@ -170,91 +169,87 @@ function printBannedSubreddits() {
     .then((messages) => {
       // Run filter logic against the entire list of messages.
       messages
-        .filter(data => data['kind'] === 't4')
-        .map(data => data['data'])
-        .map (message => message['subject'].match(/^You\'ve been banned from participating in r\/(.+)$/i))
+        .filter(data => data.kind === 't4')
+        .map(data => data.data)
+        .map(message => message.subject.match(/^You\'ve been banned from participating in r\/(.+)$/i))
         .filter(match => match !== null)
         .map(match => match[1])
-        .forEach(subreddit => helper.log("- " + subreddit));
+        .forEach(subreddit => helper.log(`- ${subreddit}`));
     });
 }
 
 function getRedditComments(subreddit) {
-  return get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100&raw_json=1")
+  return get(`https://www.reddit.com/r/${subreddit}/comments.json?limit=100&raw_json=1`)
     .then(json => json.data.children)
     .then((comments) => {
       if (!comments) {
         return;
       }
 
-      const lastProcessedIndex = comments.findIndex((el) => {
-        return el['data']['name'] === lastProcessedCommentId;
-      });
+      const lastProcessedIndex = comments.findIndex(el => el.data.name === lastProcessedCommentId);
       if (lastProcessedIndex !== -1) {
-        comments = comments.slice(0, lastProcessedIndex)
+        comments = comments.slice(0, lastProcessedIndex);
       }
 
       const unprocessedComments = comments
-        .map(comment => comment['data'])
-        .map(data => {
-          return {
-              'body': data['body'],
-              'author': data['author'],
-              'id': data['name'],
-              'postTitle': data['link_title'],
-              'link': data['link_permalink'] + data['id'],
-              'subreddit': data['subreddit'],
-              'timestamp' : data['created_utc']
-            }
-        });
+        .map(comment => comment.data)
+        .map(data => ({
+          body: data.body,
+          author: data.author,
+          id: data.name,
+          postTitle: data.link_title,
+          link: data.link_permalink + data.id,
+          subreddit: data.subreddit,
+          timestamp: data.created_utc,
+        }));
 
-      lastProcessedCommentId = comments[0] ? comments[0]['data']['name'] : lastProcessedCommentId;
+      lastProcessedCommentId = comments[0] ? comments[0].data.name : lastProcessedCommentId;
       return unprocessedComments;
     });
 }
 
 function postComment(parentId, markdownBody) {
-  return post('/api/comment', { 'parent' : parentId, 'text' : markdownBody });
+  return post('/api/comment', { parent: parentId, text: markdownBody });
 }
 
 function getComment(commentId) {
-  return get('https://www.reddit.com/api/info.json?id=' + commentId)
+  return get(`https://www.reddit.com/api/info.json?id=${commentId}`)
     .then(json => json.data.children)
     .then(comment => {
       if (comment.length == 0) {
         return;
       }
 
-      const data = comment[0]['data'];
+      const data = comment[0].data;
 
       return {
-        'body': data['body'],
-        'author': data['author'],
-        'id': data['name'],
-        'link_id' : data['link_id'],
-        'postTitle': '', // api/info does not return a value for postTitle but this property is required by shouldConvertComment
-        'subreddit': data['subreddit'],
-        'timestamp' : data['created_utc']
-      }
+        body: data.body,
+        author: data.author,
+        id: data.name,
+        link_id: data.link_id,
+        postTitle: '', // api/info does not return a value for postTitle but this property is required by shouldConvertComment
+        subreddit: data.subreddit,
+        timestamp: data.created_utc,
+      };
     });
 }
 
 function editComment(commentId, markdownBody) {
-  return post('/api/editusertext', { 'thing_id' : commentId, 'text' : markdownBody });
+  return post('/api/editusertext', { thing_id: commentId, text: markdownBody });
 }
 
 function getCommentReplies(linkId, commentId) {
-  return get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId.replace(/t1_/g, '') + '&depth=1')
+  return get(`https://www.reddit.com/api/morechildren.json?api_type=json&link_id=${linkId}&children=${commentId.replace(/t1_/g, '')}&depth=1`)
     .then((replies) => {
       if (replies.length === 0) {
         return [];
       }
-      return replies['json']['data']['things'];
+      return replies.json.data.things;
     });
 }
 
 function getUnreadMessages() {
-  return get("/message/unread?limit=100")
+  return get('/message/unread?limit=100')
     .then(json => json.data.children);
 }
 
@@ -263,17 +258,17 @@ function markAllMessagesAsRead() {
 }
 
 function blockAuthorOfMessageWithId(id) {
-  return post("/api/block", { 'id' : id });
+  return post('/api/block', { id });
 }
 
 module.exports = {
-  "refreshToken" : refreshToken,
-  "getRedditComments" : getRedditComments,
-  "getComment" : getComment,
-  "postComment" : postComment,
-  "editComment" : editComment,
-  "getCommentReplies" : getCommentReplies,
-  "getUnreadMessages" : getUnreadMessages,
-  "markAllMessagesAsRead" : markAllMessagesAsRead,
-  "blockAuthorOfMessageWithId" : blockAuthorOfMessageWithId
-}
+  refreshToken,
+  getRedditComments,
+  getComment,
+  postComment,
+  editComment,
+  getCommentReplies,
+  getUnreadMessages,
+  markAllMessagesAsRead,
+  blockAuthorOfMessageWithId,
+};

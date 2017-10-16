@@ -40,12 +40,10 @@ function abbreviationProcessor(commentBody) {
 
   const newCommentBody = abbreviations.reduce((newCommentBody, abbreviation) => {
     const abbrevRegex = rh.regexJoinToString(abbreviation.regexArray);
-    const regex = new RegExp(rh.numberRegex + '\\s?' + abbrevRegex + '\\b', 'gi');
+    const regex = new RegExp(`${rh.numberRegex}\\s?${abbrevRegex}\\b`, 'gi');
     const { value } = abbreviation;
 
-    return newCommentBody.replace(regex, (match) => {
-      return replaceAbbreviation(match, abbrevRegex, value);
-    });
+    return newCommentBody.replace(regex, match => replaceAbbreviation(match, abbrevRegex, value));
   }, commentBody);
 
   return newCommentBody;
@@ -59,9 +57,7 @@ const preprocessFunctions = [
 ];
 
 function preprocessComment(comment) {
-  comment.body = preprocessFunctions.reduce((processedBody, preprocessFunction) => {
-    return preprocessFunction(processedBody);
-  }, comment.body);
+  comment.body = preprocessFunctions.reduce((processedBody, preprocessFunction) => preprocessFunction(processedBody), comment.body);
 
   return comment;
 }

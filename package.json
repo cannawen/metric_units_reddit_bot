@@ -11,7 +11,8 @@
     "husky": "^0.14.3",
     "js-yaml": "^3.9.1",
     "lint-staged": "^4.2.3",
-    "request": "^2.81.0"
+    "request": "^2.81.0",
+    "mkdirp": "^0.5.1"
   },
   "devDependencies": {
     "all-contributors-cli": "^4.5.0",

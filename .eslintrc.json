@@ -10,6 +10,7 @@
     "rules": {
       "mocha/no-exclusive-tests": "error",
       "no-console": "error",
-      "semi": ["error", "always"]
+      "semi": ["error", "always"],
+      "linebreak-style": "off"
     }
 }
