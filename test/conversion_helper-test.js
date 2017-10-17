@@ -1,71 +1,122 @@
-const should = require('chai').should();
-
 const ch = require('../src/conversion_helper');
+
+function createMap(value, unit) {
+  return {
+    numbers: value,
+    unit,
+  };
+}
+
+function createImperialMap(value, unit) {
+  return { imperial: createMap(value, unit) };
+}
+
+function createComment(subreddit, title, text) {
+  return {
+    subreddit,
+    postTitle: title,
+    body: text,
+  };
+}
 
 describe('conversion_helper', () => {
   describe('#shouldConvertComment()', () => {
     context('comment contains quote', () => {
       it('should not convert', () => {
-        const comment = createComment("foo", "bar", "\n&gt; About 202 miles away");
+        const comment = createComment('foo', 'bar', '\n&gt; About 202 miles away');
+        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, []).should.be.false;
 
-        const comment2 = createComment("foo", "bar", ">1.5lbs");
+        const comment2 = createComment('foo', 'bar', '>1.5lbs');
+        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment2, []).should.be.false;
       });
     });
 
     it('should convert if ignored keywords do not match', () => {
-      const ignoredKeywords = ["foo", "bar"];
-      const comment = createComment("hello", "foobar", "foobar");
+      const ignoredKeywords = ['foo', 'bar'];
+      const comment = createComment('hello', 'foobar', 'foobar');
+      // eslint-disable-next-line no-unused-expressions
       ch.shouldConvertComment(comment, ignoredKeywords).should.be.true;
     });
 
     context('comment contains ignored keyword', () => {
       it('should not convert if subreddit matches', () => {
-        const ignoredKeywords = ["foo", "bar"];
-        const comment = createComment("foobar", "hello", "hello");
+        const ignoredKeywords = ['foo', 'bar'];
+        const comment = createComment('foobar', 'hello', 'hello');
+        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
       });
 
       it('should not convert if post title matches', () => {
-        const ignoredKeywords = ["foo", "bar"];
-        const comment = createComment("hello", "This the bar stuff", "hello");
+        const ignoredKeywords = ['foo', 'bar'];
+        const comment = createComment('hello', 'This the bar stuff', 'hello');
+        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
       });
 
       it('should not convert if body matches', () => {
-        const ignoredKeywords = ["foo", "bar"];
-        const comment = createComment("hello", "hello", "foo");
+        const ignoredKeywords = ['foo', 'bar'];
+        const comment = createComment('hello', 'hello', 'foo');
+        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
       });
     });
   });
+
   describe('#findPotentialConversions()', () => {
+    function verifyPotentialConversions(input, numbers, unit, joiners) {
+      let body = input;
+      if (Array.isArray(body)) {
+        body = ` ${body.join('  ')} `;
+      }
+      let expectedOutput = [];
+      if (Array.isArray(numbers)) {
+        expectedOutput = numbers.reduce((memo, el, currentIndex) => {
+          const inputNumber = [];
+          el.forEach((item) => {
+            inputNumber.push(item.toString());
+          });
+
+          const expectedMap = createImperialMap(inputNumber, unit);
+          if (joiners) {
+            expectedMap.imperial.joiner = joiners[currentIndex];
+          }
+
+          memo.push(expectedMap);
+          return memo;
+        }, expectedOutput);
+      }
+
+      const comment = createComment('foobar', 'foobar', body);
+      ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
+    }
+
     context('troy oz', () => {
       it('should convert oz to troy oz in precious metal sub', () => {
-        const comment = createComment("Pmsforsale", "post title", "5 ounces of gold");
-        const expectedOutput = [ 
-          { 
-            "imperial": 
-            { 
-              "numbers" : ["5"], 
-              "unit" : " troy ounces"
-            } 
-          } 
+        const comment = createComment('Pmsforsale', 'post title', '5 ounces of gold');
+        const expectedOutput = [
+          {
+            imperial:
+            {
+              numbers: ['5'],
+              unit: ' troy ounces',
+            },
+          },
         ];
         ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
       });
 
       it('should convert keep oz as-is in a regular subreddit', () => {
-        const comment = createComment("regularSubreddit", "post title", "5 ounces of gold");
-        const expectedOutput = [ 
-          { 
-            "imperial": 
-            { 
-              "numbers" : ["5"], 
-              "unit" : " oz"
-            } 
-          } 
+        const comment = createComment('regularSubreddit', 'post title', '5 ounces of gold');
+        const expectedOutput = [
+          {
+            imperial:
+            {
+              numbers: ['5'],
+              unit: ' oz',
+            },
+          },
         ];
         ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
       });
@@ -75,16 +126,16 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1lb",
-            "2lbs",
-            "3 lb",
-            "4 lbs",
-            "5-lb",
-            "6-lbs"
+            '1lb',
+            '2lbs',
+            '3 lb',
+            '4 lbs',
+            '5-lb',
+            '6-lbs',
           ],
           [[1], [2], [3], [4], [5], [6]],
-          " lb",
-          undefined
+          ' lb',
+          undefined,
         );
       });
 
@@ -92,18 +143,18 @@ describe('conversion_helper', () => {
         it('should convert those with less confidence', () => {
           verifyPotentialConversions(
             [
-              "1lb",
+              '1lb',
               // Less confident:
-              "2pound",
-              "3pounds",
-              "4 pound",
-              "5 pounds",
-              "6-pound",
-              "7-pounds"
+              '2pound',
+              '3pounds',
+              '4 pound',
+              '5 pounds',
+              '6-pound',
+              '7-pounds',
             ],
             [[1], [2], [3], [4], [5], [6], [7]],
-            " lb",
-            undefined
+            ' lb',
+            undefined,
           );
         });
       });
@@ -112,13 +163,13 @@ describe('conversion_helper', () => {
         it('should convert', () => {
           verifyPotentialConversions(
             [
-              "1 lb 16oz",
-              "2 pound 8 oz",
-              "3 pound 20 oz"
+              '1 lb 16oz',
+              '2 pound 8 oz',
+              '3 pound 20 oz',
             ],
-            [["2.00"], ["2.50"]],
-            " lb",
-            undefined
+            [['2.00'], ['2.50']],
+            ' lb',
+            undefined,
           );
         });
       });
@@ -128,17 +179,17 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1feet",
-            "2foot",
-            "3 feet",
-            "4 foot",
-            "5-ft",
-            "6-feet",
-            "7-foot"
+            '1feet',
+            '2foot',
+            '3 feet',
+            '4 foot',
+            '5-ft',
+            '6-feet',
+            '7-foot',
           ],
           [[1], [2], [3], [4], [5], [6], [7]],
-          " feet",
-          undefined
+          ' feet',
+          undefined,
         );
       });
 
@@ -146,12 +197,12 @@ describe('conversion_helper', () => {
         it('should convert those with less confidence', () => {
           verifyPotentialConversions(
             [
-              "1feet",
+              '1feet',
               "2'",
             ],
             [[1], [2]],
-            " feet",
-            undefined
+            ' feet',
+            undefined,
           );
         });
       });
@@ -161,18 +212,18 @@ describe('conversion_helper', () => {
           verifyPotentialConversions(
             [
               "1'2\"",
-              "3 foot 4 inches",
-              "5ft6in",
-              "7-feet-8-in",
+              '3 foot 4 inches',
+              '5ft6in',
+              '7-feet-8-in',
               "9' 10.5\"",
               "11'12\"",
               "4,000'0\"",
               "12'000",
-              "2004-'05"
+              "2004-'05",
             ],
-            [["1.17"], ["3.33"], ["5.50"], ["7.67"], ["9.88"], ["12.00"], ["4000.00"]],
-            " feet",
-            undefined
+            [['1.17'], ['3.33'], ['5.50'], ['7.67'], ['9.88'], ['12.00'], ['4000.00']],
+            ' feet',
+            undefined,
           );
         });
 
@@ -186,16 +237,16 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1footpound",
-            "2pound-foot",
-            "3ftlb",
-            "4lb·ft",
-            "5-foot-pounds",
-            "6 lb-ft"
+            '1footpound',
+            '2pound-foot',
+            '3ftlb',
+            '4lb·ft',
+            '5-foot-pounds',
+            '6 lb-ft',
           ],
           [[1], [2], [3], [4], [5], [6]],
-          " ft·lbf",
-          undefined
+          ' ft·lbf',
+          undefined,
         );
       });
     });
@@ -204,15 +255,15 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1inch",
-            "2inches",
-            "3 inch",
-            "4 inches",
-            "5-inch"
+            '1inch',
+            '2inches',
+            '3 inch',
+            '4 inches',
+            '5-inch',
           ],
           [[1], [2], [3], [4], [5]],
-          " inches",
-          undefined
+          ' inches',
+          undefined,
         );
       });
 
@@ -220,14 +271,14 @@ describe('conversion_helper', () => {
         it('should convert those with less confidence', () => {
           verifyPotentialConversions(
             [
-              "1inch",
-              "2\"",
-              "3 in",
-              "4-in",
+              '1inch',
+              '2"',
+              '3 in',
+              '4-in',
             ],
             [[1], [2], [3], [4]],
-            " inches",
-            undefined
+            ' inches',
+            undefined,
           );
         });
       });
@@ -237,19 +288,19 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1mi",
-            "2mile",
-            "3miles",
-            "4 mi",
-            "5 mile",
-            "6 miles",
-            "7-mi",
-            "8-mile",
-            "9-miles"
+            '1mi',
+            '2mile',
+            '3miles',
+            '4 mi',
+            '5 mile',
+            '6 miles',
+            '7-mi',
+            '8-mile',
+            '9-miles',
           ],
           [[1], [2], [3], [4], [5], [6], [7], [8], [9]],
-          " miles",
-          undefined
+          ' miles',
+          undefined,
         );
       });
     });
@@ -258,17 +309,17 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1mph",
-            "2miles per hour",
-            "3miles an hour",
-            "4 mph",
-            "5 miles per hour",
-            "6 miles an hour",
-            "7-mph"
+            '1mph',
+            '2miles per hour',
+            '3miles an hour',
+            '4 mph',
+            '5 miles per hour',
+            '6 miles an hour',
+            '7-mph',
           ],
           [[1], [2], [3], [4], [5], [6], [7]],
-          " mph",
-          undefined
+          ' mph',
+          undefined,
         );
       });
     });
@@ -277,17 +328,17 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1mpg",
-            "2miles per gal",
-            "3miles per gallon",
-            "4 mpg",
-            "5 miles per gal",
-            "6 miles per gallon",
-            "7-mpg"
+            '1mpg',
+            '2miles per gal',
+            '3miles per gallon',
+            '4 mpg',
+            '5 miles per gal',
+            '6 miles per gallon',
+            '7-mpg',
           ],
           [[1], [2], [3], [4], [5], [6], [7]],
-          " mpg (US)",
-          undefined
+          ' mpg (US)',
+          undefined,
         );
       });
     });
@@ -296,29 +347,30 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1°f",
-            "2°fahrenheit",
-            "3degree fahrenheit",
-            "4degree f",
-            "5degrees fahrenheit",
-            "6degrees f",
-            "7fahrenheit",
-            "8 °f",
-            "9 °fahrenheit",
-            "10 degree fahrenheit",
-            "11 degree f",
-            "12 degrees fahrenheit",
-            "13 degrees f",
-            "14 fahrenheit",
-            "15-degree fahrenheit",
-            "16-degree f",
-            "17-degrees fahrenheit",
-            "18-degrees f",
-            "19-fahrenheit"
+            '1°f',
+            '2°fahrenheit',
+            '3degree fahrenheit',
+            '4degree f',
+            '5degrees fahrenheit',
+            '6degrees f',
+            '7fahrenheit',
+            '8 °f',
+            '9 °fahrenheit',
+            '10 degree fahrenheit',
+            '11 degree f',
+            '12 degrees fahrenheit',
+            '13 degrees f',
+            '14 fahrenheit',
+            '15-degree fahrenheit',
+            '16-degree f',
+            '17-degrees fahrenheit',
+            '18-degrees f',
+            '19-fahrenheit',
           ],
-          [[1], [2], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19]],
-          "°F",
-          undefined
+          [[1], [2], [3], [4], [5], [6], [7], [8], [9], [10],
+            [11], [12], [13], [14], [15], [16], [17], [18], [19]],
+          '°F',
+          undefined,
         );
       });
 
@@ -327,19 +379,19 @@ describe('conversion_helper', () => {
         it('should convert those with less confidence', () => {
           verifyPotentialConversions(
             [
-              "1°f",
-              "2F",
-              "3degree",
-              "4degrees",
-              "5 F",
-              "6 degree",
-              "7 degrees",
-              "8-degree",
-              "9-degrees"
+              '1°f',
+              '2F',
+              '3degree',
+              '4degrees',
+              '5 F',
+              '6 degree',
+              '7 degrees',
+              '8-degree',
+              '9-degrees',
             ],
             [[1], [2], [3], [4], [5], [6], [7], [8], [9]],
-            "°F",
-            undefined
+            '°F',
+            undefined,
           );
         });
       });
@@ -349,12 +401,12 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1°F",
-            "2°f"
+            '1°F',
+            '2°f',
           ],
           [[1], [2]],
-          "°F",
-          undefined
+          '°F',
+          undefined,
         );
       });
     });
@@ -362,10 +414,10 @@ describe('conversion_helper', () => {
     context('negative numbers should be found', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
-          "-1°F",
+          '-1°F',
           [[-1]],
-          "°F",
-          undefined
+          '°F',
+          undefined,
         );
       });
     });
@@ -374,12 +426,12 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1,000°F",
-            "1,000,000°F"
+            '1,000°F',
+            '1,000,000°F',
           ],
           [[1000], [1000000]],
-          "°F",
-          undefined
+          '°F',
+          undefined,
         );
       });
     });
@@ -388,14 +440,14 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1.1°F",
-            "-2.22°F",
-            "3,333.333°F",
-            "-44,444.4444°F"
+            '1.1°F',
+            '-2.22°F',
+            '3,333.333°F',
+            '-44,444.4444°F',
           ],
           [[1.1], [-2.22], [3333.333], [-44444.4444]],
-          "°F",
-          undefined
+          '°F',
+          undefined,
         );
       });
     });
@@ -404,13 +456,13 @@ describe('conversion_helper', () => {
       it('should find conversions', () => {
         verifyPotentialConversions(
           [
-            "1-2°F 1-2°F",
-            "-3 to -4°F",
-            "-10-20°F"
+            '1-2°F 1-2°F',
+            '-3 to -4°F',
+            '-10-20°F',
           ],
           [[1, 2], [-3, -4], [-10, 20]],
-          "°F",
-          ["-", "to", "-"]
+          '°F',
+          ['-', 'to', '-'],
         );
       });
     });
@@ -419,207 +471,24 @@ describe('conversion_helper', () => {
       it('should not convert', () => {
         verifyPotentialConversions(
           [
-            "size 11 feet",
-            "he plays basketball 32 mpg every day",
-            "7°F",
-            "some°C"
+            'size 11 feet',
+            'he plays basketball 32 mpg every day',
+            '7°F',
+            'some°C',
           ],
-          undefined
+          undefined,
         );
       });
 
       context('contains non-ignored conversion', () => {
         it('should convert non-ignored conversion', () => {
-          verifyPotentialConversions(["size 5 lbs and 11 feet"], [[5]], " lb", undefined);
+          verifyPotentialConversions(['size 5 lbs and 11 feet'], [[5]], ' lb', undefined);
         });
       });
     });
-
-    function verifyPotentialConversions(input, numbers, unit, joiners) {
-      if (Array.isArray(input)) {
-        input = " " + input.join("  ") + " ";
-      }
-      let expectedOutput = [];
-      if (Array.isArray(numbers)) {
-        expectedOutput = numbers.reduce((memo, el, currentIndex) => {
-          let inputNumber = [];
-          el.forEach(function(item) {
-            inputNumber.push(item.toString());
-          });
-          const inputUnit = unit;
-
-          let expectedMap = createImperialMap(inputNumber, inputUnit);
-          if(joiners) {
-            expectedMap['imperial']['joiner'] = joiners[currentIndex];
-          }
-
-          memo.push(expectedMap);
-          return memo;
-        }, expectedOutput);
-      }
-
-      const comment = createComment("foobar", "foobar", input);
-      ch.findPotentialConversions(comment).should.deep.equal(expectedOutput);
-    }
   });
 
   describe('#filterConversions()', () => {
-    context('lbs', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[1], [2], [3]], " lb", [[1], [2], [3]]);
-      });
-
-      it('should allow ranges', () => {
-        verifyFilterConversions([[1, 2], [2, 10], [5, 7]], " lb", [[1, 2], [2, 10], [5, 7]]);
-      });
-
-      it('should not allow ranges with one bad number', () => {
-        verifyFilterConversions([[-1, 2]], " lb", undefined);
-      });
-
-      it('should not allow zero or negative values', () => {
-        verifyFilterConversions([[0], [-10]], " lb", undefined);
-      });
-
-      it('should not allow when values are likely hyperbole', () => {
-        verifyFilterConversions([[100], [1000], [100000000000000000000000]], " lb", undefined);
-      });
-    });
-
-    context('feet', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[3], [5], [7]], " feet", [[3], [5], [7]]);
-      });
-
-      it('should not allow zero or negative values', () => {
-        verifyFilterConversions([[0], [-10]], " feet", undefined);
-      });
-
-      it('should not allow when values are likely hyperbole', () => {
-        verifyFilterConversions([[100], [1000], [10000]], " feet", undefined);
-      });
-
-      it('should not allow common values', () => {
-        verifyFilterConversions([[1], [2], [4], [6]], " feet", undefined);
-      });
-    });
-
-    context('inches', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[1], [2], [3]], " inches", [[1], [2], [3]]);
-      });
-
-      it('should not allow zero or negative values', () => {
-        verifyFilterConversions([[0], [-10]], " inches", undefined);
-      });
-
-      it('should not allow when values are likely hyperbole', () => {
-        verifyFilterConversions([[100], [1000], [10000]], " inches", undefined);
-      });
-    });
-
-    context('miles', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[1], [2], [3]], " miles", [[1], [2], [3]]);
-      });
-
-      it('should not allow zero or negative values', () => {
-        verifyFilterConversions([[0], [-10]], " miles", undefined);
-      });
-
-      it('should not allow when values are likely hyperbole', () => {
-        verifyFilterConversions([[100], [1000], [10000]], " miles", undefined);
-      });
-
-      it('should not allow common values', () => {
-        verifyFilterConversions([[8]], " miles", undefined);
-      });
-    });
-
-    context('mph', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[1], [2], [3]], " mph", [[1], [2], [3]]);
-      });
-
-      it('should not allow zero or negative values', () => {
-        verifyFilterConversions([[0], [-10]], " mph", undefined);
-      });
-
-      it('should not allow when values are likely hyperbole', () => {
-        verifyFilterConversions([[100], [1000], [10000]], " mph", undefined);
-      });
-
-      it('should not allow common values', () => {
-        verifyFilterConversions([[60], [88]], " mph", undefined);
-      });
-    });
-
-    context('mpg', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[1], [2], [3]], " mpg (US)", [[1], [2], [3]]);
-      });
-
-      it('should not allow zero or negative values', () => {
-        verifyFilterConversions([[0], [-10]], " mpg (US)", undefined);
-      });
-
-      it('should not allow when values are likely hyperbole', () => {
-        verifyFilterConversions([[100], [1000], [10000]], " mpg (US)", undefined);
-      });
-    });
-    
-    context('cups', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[1], [2], [3]], " cups (US)", [[1], [2], [3]]);
-      });
-
-      it('should not allow when values are too big', () => {
-        verifyFilterConversions([[101], [987]], " cups (US)", undefined);
-      });
-    });
-
-    context('°F', () => {
-      it('should allow normal numbers', () => {
-        verifyFilterConversions([[1], [2], [3]], "°F", [[1], [2], [3]]);
-      });
-
-      it('should not allow when values are too big', () => {
-        verifyFilterConversions([[1001], [78639]], "°F", undefined);
-      });
-    });
-
-    context('Mix of invalid and weak conversions', () => {
-      it('should not convert', () => {
-        const potentialConversions = [
-          createImperialMap(["-10"], " lb"),
-          createImperialMap(["10000"], " lb"),
-          createImperialMap(["2"], " feet"),
-        ];
-
-        ch.filterConversions(potentialConversions).should.deep.equal([]);
-
-      });
-    });
-
-    context('Mix of invalid, weak, and strong conversions', () => {
-      it('should allow weak and strong conversions', () => {
-        const potentialConversions = [
-          createImperialMap(["3"], " lb"),
-          createImperialMap(["-10"], " lb"),
-          createImperialMap(["10000"], " lb"),
-          createImperialMap(["2"], " feet"),
-        ];
-
-        const expectedConversions = [
-          createImperialMap(["3"], " lb"),
-          createImperialMap(["10000"], " lb"),
-          createImperialMap(["2"], " feet"),
-        ];
-
-        ch.filterConversions(potentialConversions).should.deep.equal(expectedConversions);
-      });
-    });
-
     function verifyFilterConversions(values, unit, expectedValues = []) {
       const potentialConversions = values.reduce((memo, value) => {
         memo.push(createImperialMap(value, unit));
@@ -633,25 +502,189 @@ describe('conversion_helper', () => {
 
       ch.filterConversions(potentialConversions).should.deep.equal(expectedConversions);
     }
+
+    context('lbs', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], ' lb', [[1], [2], [3]]);
+      });
+
+      it('should allow ranges', () => {
+        verifyFilterConversions([[1, 2], [2, 10], [5, 7]], ' lb', [[1, 2], [2, 10], [5, 7]]);
+      });
+
+      it('should not allow ranges with one bad number', () => {
+        verifyFilterConversions([[-1, 2]], ' lb', undefined);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([[0], [-10]], ' lb', undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([[100], [1000], [100000000000000000000000]], ' lb', undefined);
+      });
+    });
+
+    context('feet', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[3], [5], [7]], ' feet', [[3], [5], [7]]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([[0], [-10]], ' feet', undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([[100], [1000], [10000]], ' feet', undefined);
+      });
+
+      it('should not allow common values', () => {
+        verifyFilterConversions([[1], [2], [4], [6]], ' feet', undefined);
+      });
+    });
+
+    context('inches', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], ' inches', [[1], [2], [3]]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([[0], [-10]], ' inches', undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([[100], [1000], [10000]], ' inches', undefined);
+      });
+    });
+
+    context('miles', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], ' miles', [[1], [2], [3]]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([[0], [-10]], ' miles', undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([[100], [1000], [10000]], ' miles', undefined);
+      });
+
+      it('should not allow common values', () => {
+        verifyFilterConversions([[8]], ' miles', undefined);
+      });
+    });
+
+    context('mph', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], ' mph', [[1], [2], [3]]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([[0], [-10]], ' mph', undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([[100], [1000], [10000]], ' mph', undefined);
+      });
+
+      it('should not allow common values', () => {
+        verifyFilterConversions([[60], [88]], ' mph', undefined);
+      });
+    });
+
+    context('mpg', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], ' mpg (US)', [[1], [2], [3]]);
+      });
+
+      it('should not allow zero or negative values', () => {
+        verifyFilterConversions([[0], [-10]], ' mpg (US)', undefined);
+      });
+
+      it('should not allow when values are likely hyperbole', () => {
+        verifyFilterConversions([[100], [1000], [10000]], ' mpg (US)', undefined);
+      });
+    });
+
+    context('cups', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], ' cups (US)', [[1], [2], [3]]);
+      });
+
+      it('should not allow when values are too big', () => {
+        verifyFilterConversions([[101], [987]], ' cups (US)', undefined);
+      });
+    });
+
+    context('°F', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], '°F', [[1], [2], [3]]);
+      });
+
+      it('should not allow when values are too big', () => {
+        verifyFilterConversions([[1001], [78639]], '°F', undefined);
+      });
+    });
+
+    context('Mix of invalid and weak conversions', () => {
+      it('should not convert', () => {
+        const potentialConversions = [
+          createImperialMap(['-10'], ' lb'),
+          createImperialMap(['10000'], ' lb'),
+          createImperialMap(['2'], ' feet'),
+        ];
+
+        ch.filterConversions(potentialConversions).should.deep.equal([]);
+      });
+    });
+
+    context('Mix of invalid, weak, and strong conversions', () => {
+      it('should allow weak and strong conversions', () => {
+        const potentialConversions = [
+          createImperialMap(['3'], ' lb'),
+          createImperialMap(['-10'], ' lb'),
+          createImperialMap(['10000'], ' lb'),
+          createImperialMap(['2'], ' feet'),
+        ];
+
+        const expectedConversions = [
+          createImperialMap(['3'], ' lb'),
+          createImperialMap(['10000'], ' lb'),
+          createImperialMap(['2'], ' feet'),
+        ];
+
+        ch.filterConversions(potentialConversions).should.deep.equal(expectedConversions);
+      });
+    });
   });
 
   describe('#calculateMetric()', () => {
+    function verifyConversion(imperialNumber, imperialUnit, metricNumber, metricUnit) {
+      const imperialMap = createImperialMap(imperialNumber, imperialUnit);
+
+      const expectedOutput = Object.assign({}, imperialMap);
+      expectedOutput.metric = { numbers: metricNumber, unit: metricUnit };
+
+      ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+    }
+
     context('lbs', () => {
       context('under 1 kg', () => {
         it('should convert to g', () => {
-          verifyConversion(["1"], " lb", ["453.592"], " g");
+          verifyConversion(['1'], ' lb', ['453.592'], ' g');
         });
       });
 
       context('under 1,000 kg', () => {
         it('should convert to kg', () => {
-          verifyConversion(["3"], " lb", ["1.3607759999999998"], " kg");
+          verifyConversion(['3'], ' lb', ['1.3607759999999998'], ' kg');
         });
       });
 
       context('over 1,000 kg', () => {
         it('should convert to g', () => {
-          verifyConversion(["2222"], " lb", ["1.007881424"], " metric tons");
+          verifyConversion(['2222'], ' lb', ['1.007881424'], ' metric tons');
         });
       });
     });
@@ -659,70 +692,70 @@ describe('conversion_helper', () => {
     context('psi', () => {
       context('under 1 kPa', () => {
         it('should convert to Pa', () => {
-          verifyConversion(["0.05"], " psi", ["344.73800000000006"], " Pa");
-        })
-      })
+          verifyConversion(['0.05'], ' psi', ['344.73800000000006'], ' Pa');
+        });
+      });
 
       context('over 1kPa', () => {
         it('should convert to kPa', () => {
-          verifyConversion(["0.5"], " psi", ["3.44738"], " kPa")
-        })
-      })
+          verifyConversion(['0.5'], ' psi', ['3.44738'], ' kPa');
+        });
+      });
     });
 
     context('feet', () => {
       it('should convert', () => {
-        verifyConversion(["1"], " feet", ["30.48"], " cm");
-        verifyConversion(["4"], " feet", ["1.2192"], " metres");
+        verifyConversion(['1'], ' feet', ['30.48'], ' cm');
+        verifyConversion(['4'], ' feet', ['1.2192'], ' metres');
       });
     });
 
     context('foot-pounds', () => {
       it('should convert', () => {
-        verifyConversion(["1"], " ft·lbf", ["1.355818"], " Nm");
+        verifyConversion(['1'], ' ft·lbf', ['1.355818'], ' Nm');
       });
     });
 
     context('lbs/inch', () => {
       it('should convert', () => {
-          const imperialMap = createImperialMap([1], " lbs/inch");
-          const expectedOutput = Object.assign({}, imperialMap);
+        const imperialMap = createImperialMap([1], ' lbs/inch');
+        const expectedOutput = Object.assign({}, imperialMap);
 
-          expectedOutput['metric'] = [
-            { "numbers" : ["0.017858"], "unit" : " kg/mm"},
-            { "numbers" : ["175.126835"], "unit" : " N/m" }
-          ];
+        expectedOutput.metric = [
+          { numbers: ['0.017858'], unit: ' kg/mm' },
+          { numbers: ['175.126835'], unit: ' N/m' },
+        ];
 
-          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+        ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
       });
     });
-	
+
     context('inches', () => {
       it('should convert in cm', () => {
-        verifyConversion(["1"], " inches", ["2.54"], " cm");
+        verifyConversion(['1'], ' inches', ['2.54'], ' cm');
       });
 
       context('less than 1 cm', () => {
         it('should convert in mm', () => {
-          verifyConversion(["0.38"], " inches", ["9.652"], " mm");
+          verifyConversion(['0.38'], ' inches', ['9.652'], ' mm');
         });
       });
     });
 
     context('miles', () => {
       it('should convert to km', () => {
-        verifyConversion(["1"], " miles", ["1.609344"], " km");
+        verifyConversion(['1'], ' miles', ['1.609344'], ' km');
       });
 
       context('greater than 0.01 light-year', () => {
         it('should convert to light-years', () => {
-          verifyConversion(["58786253732"], " miles", ["0.010000000000027884"], " light-years");
+          verifyConversion(['58786253732'], ' miles', ['0.010000000000027884'], ' light-years');
         });
       });
 
       context('greater than or equal to 1 light-second', () => {
         it('should convert to light-seconds', () => {
-            verifyConversion(["3725650"], " miles", ["20.00001105297986"], " light-seconds");
+          verifyConversion(['3725650'], ' miles', ['20.00001105297986'], ' light-seconds');
         });
       });
     });
@@ -730,19 +763,19 @@ describe('conversion_helper', () => {
     context('mph', () => {
       context('input < 200', () => {
         it('should convert km/h', () => {
-          verifyConversion(["1"], " mph", ["1.609344"], " km/h");
-          verifyConversion(["199"], " mph", ["320.259456"], " km/h");
+          verifyConversion(['1'], ' mph', ['1.609344'], ' km/h');
+          verifyConversion(['199'], ' mph', ['320.259456'], ' km/h');
         });
       });
 
       context('input >= 200', () => {
         it('should convert km/h and m/s', () => {
-          const imperialMap = createImperialMap(["200"], " mph");
+          const imperialMap = createImperialMap(['200'], ' mph');
           const expectedOutput = Object.assign({}, imperialMap);
 
-          expectedOutput['metric'] = [
-            { "numbers" : ["321.8688"], "unit" : " km/h"},
-            { "numbers" : ["89.408"], "unit" : " metres/s" }
+          expectedOutput.metric = [
+            { numbers: ['321.8688'], unit: ' km/h' },
+            { numbers: ['89.408'], unit: ' metres/s' },
           ];
 
           ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
@@ -751,25 +784,25 @@ describe('conversion_helper', () => {
 
       context('input >= 0.01 speed of light', () => {
         it('should convert c', () => {
-          verifyConversion(["80470000"], " mph", ["0.1199940420115572"], "c");
+          verifyConversion(['80470000'], ' mph', ['0.1199940420115572'], 'c');
         });
       });
     });
 
     context('ft/sec', () => {
       it('should convert m/s', () => {
-        verifyConversion(["42"], " ft/sec", ["46.08576"], " km/h");
+        verifyConversion(['42'], ' ft/sec', ['46.08576'], ' km/h');
       });
     });
 
     context('mpg', () => {
       it('should convert with L/100km', () => {
-        const imperialMap = createImperialMap(["15"], " mpg (US)");
+        const imperialMap = createImperialMap(['15'], ' mpg (US)');
         const expectedOutput = Object.assign({}, imperialMap);
 
-        expectedOutput['metric'] = [
-          { "numbers" : ["6.37716"], "unit" : " km/L"},
-          { "numbers" : ["15.681000000000001"], "unit" : " L/100km" }
+        expectedOutput.metric = [
+          { numbers: ['6.37716'], unit: ' km/L' },
+          { numbers: ['15.681000000000001'], unit: ' L/100km' },
         ];
 
         ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
@@ -779,12 +812,12 @@ describe('conversion_helper', () => {
     context('°F', () => {
       context('input between 0 and 32', () => {
         it('should convert with delta', () => {
-          const imperialMap = createImperialMap(["10"], "°F");
+          const imperialMap = createImperialMap(['10'], '°F');
           const expectedOutput = Object.assign({}, imperialMap);
 
-          expectedOutput['metric'] = [
-            { "numbers" : ["-12.222222222222221"], "unit" : "°C"},
-            { "numbers" : ["5.555555555555555"], "unit" : " change in °C" }
+          expectedOutput.metric = [
+            { numbers: ['-12.222222222222221'], unit: '°C' },
+            { numbers: ['5.555555555555555'], unit: ' change in °C' },
           ];
 
           ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
@@ -793,9 +826,9 @@ describe('conversion_helper', () => {
 
       context('input not between 0 and 32', () => {
         it('should convert without delta', () => {
-          verifyConversion(["32"], "°F", ["0"], "°C");
-          verifyConversion(["0"], "°F", ["-17.77777777777778"], "°C");
-          verifyConversion(["-40"], "°F", ["-40"], "°C");
+          verifyConversion(['32'], '°F', ['0'], '°C');
+          verifyConversion(['0'], '°F', ['-17.77777777777778'], '°C');
+          verifyConversion(['-40'], '°F', ['-40'], '°C');
         });
       });
     });
@@ -803,154 +836,124 @@ describe('conversion_helper', () => {
     context('volumetric units', () => {
       context('under 1 L', () => {
         it('should convert to mL', () => {
-          verifyConversion(["1"], " fl. oz.", ["29.5735295625"], " mL");
+          verifyConversion(['1'], ' fl. oz.', ['29.5735295625'], ' mL');
         });
       });
 
       context('under 1,000 L', () => {
         it('should convert to L', () => {
-          verifyConversion(["200"], " fl. oz.", ["5.9147059125"], " L");
+          verifyConversion(['200'], ' fl. oz.', ['5.9147059125'], ' L');
         });
       });
 
       context('over 1,000 L', () => {
         it('should convert to m^3', () => {
-          verifyConversion(["2222"], " gal (US)", ["8.41118102"], " m^3");
+          verifyConversion(['2222'], ' gal (US)', ['8.41118102'], ' m^3');
         });
       });
 
       context('over 1,000000000000 L', () => {
         it('should convert to km^3', () => {
-          verifyConversion(["987654321012"], " gal (US)", ["3.7386765433020352"], " km^3");
+          verifyConversion(['987654321012'], ' gal (US)', ['3.7386765433020352'], ' km^3');
         });
       });
     });
 
-    //Ranges checking
+    // Ranges checking
     context('miles', () => {
       it('should convert to km', () => {
-        verifyConversion(["0.1", "1"], " miles", ["0.1609344", "1.609344"], " km");
+        verifyConversion(['0.1', '1'], ' miles', ['0.1609344', '1.609344'], ' km');
       });
 
       it('should convert to metres', () => {
-        verifyConversion(["0.1", "0.2"], " miles", ["160.9344", "321.8688"], " metres");
+        verifyConversion(['0.1', '0.2'], ' miles', ['160.9344', '321.8688'], ' metres');
       });
     });
 
     context('lbs', () => {
       context('under 1 kg', () => {
         it('should convert to g', () => {
-          verifyConversion(["1", "2"], " lb", ["453.592", "907.184"], " g");
+          verifyConversion(['1', '2'], ' lb', ['453.592', '907.184'], ' g');
         });
       });
-      
+
       context('under 1,000 kg', () => {
         it('should convert to kg', () => {
-          verifyConversion(["1", "3"], " lb", ["0.453592", "1.3607759999999998"], " kg");
+          verifyConversion(['1', '3'], ' lb', ['0.453592', '1.3607759999999998'], ' kg');
         });
       });
 
       context('over 1,000 kg', () => {
         it('should convert to g', () => {
-          verifyConversion(["500", "2222"], " lb", ["0.226796", "1.007881424"], " metric tons");
+          verifyConversion(['500', '2222'], ' lb', ['0.226796', '1.007881424'], ' metric tons');
         });
       });
     });
-
-    function verifyConversion(imperialNumber, imperialUnit, metricNumber, metricUnit) {
-      const imperialMap = createImperialMap(imperialNumber, imperialUnit);
-
-      const expectedOutput = Object.assign({}, imperialMap);
-      expectedOutput['metric'] = { "numbers" : metricNumber, "unit" : metricUnit };
-
-      ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput])
-    }
   });
 
   describe('#roundConversions()', () => {
-    context('has decimal places', () => {
-      it('should convert with output decimal places', () => {
-        verifyRounding(["6.66"], ["1.2345678"], ["1.23"]);
-        verifyRounding(["6.6"], ["-1.99872"], ["-2.0"]);
-      });
-    });
-
-    //Ranges
-    context('has decimal places', () => {
-      it('should convert with output decimal places', () => {
-        verifyRounding(["6.66", "7.8"], ["1.2345678", "2.39333"], ["1.23", "2.4"]);
-        verifyRounding(["6.6", "1.707"], ["-1.99872", "-0.509"], ["-2.0", "-0.509"]);
-      });
-    });
-
-    context('whole input', () => {
-      context('input not ending in 0', () => {
-        it('should round to 3%', () => {
-          verifyRounding(["3"], ["96.888"], ["97"]);
-          verifyRounding(["3"], ["-98.88"], ["-100"]);
-        });
-      });
-
-      context('input ending in 0', () => {
-        context('smaller than 100', () => {
-          it('should round to 3%', () => {
-            verifyRounding(["20"], ["96.888"], ["97"]);
-            verifyRounding(["20"], ["-98.88"], ["-100"]);
-          });        
-        });
-
-        context('greater than 100', () => {
-          it('should round to 5%', () => {
-            verifyRounding(["200"], ["96.888"], ["100"]);
-            verifyRounding(["200"], ["-94.88"], ["-95"]);
-          });        
-        });
-      });
-    });
-
     function verifyRounding(imperial, metric, expected) {
       const input = {
-        'imperial' : createMap(imperial, 'foo'),
-        'metric' : createMap(metric, 'bar')
-      }
-      const expectedOut = Object.assign({}, input, {'rounded' : createMap(expected, 'bar')});
+        imperial: createMap(imperial, 'foo'),
+        metric: createMap(metric, 'bar'),
+      };
+      const expectedOut = Object.assign({}, input, { rounded: createMap(expected, 'bar') });
 
       ch.roundConversions([input])[0]
         .should
         .deep
         .equal(expectedOut);
     }
+
+    context('has decimal places', () => {
+      it('should convert with output decimal places', () => {
+        verifyRounding(['6.66'], ['1.2345678'], ['1.23']);
+        verifyRounding(['6.6'], ['-1.99872'], ['-2.0']);
+      });
+    });
+
+    // Ranges
+    context('has decimal places', () => {
+      it('should convert with output decimal places', () => {
+        verifyRounding(['6.66', '7.8'], ['1.2345678', '2.39333'], ['1.23', '2.4']);
+        verifyRounding(['6.6', '1.707'], ['-1.99872', '-0.509'], ['-2.0', '-0.509']);
+      });
+    });
+
+    context('whole input', () => {
+      context('input not ending in 0', () => {
+        it('should round to 3%', () => {
+          verifyRounding(['3'], ['96.888'], ['97']);
+          verifyRounding(['3'], ['-98.88'], ['-100']);
+        });
+      });
+
+      context('input ending in 0', () => {
+        context('smaller than 100', () => {
+          it('should round to 3%', () => {
+            verifyRounding(['20'], ['96.888'], ['97']);
+            verifyRounding(['20'], ['-98.88'], ['-100']);
+          });
+        });
+
+        context('greater than 100', () => {
+          it('should round to 5%', () => {
+            verifyRounding(['200'], ['96.888'], ['100']);
+            verifyRounding(['200'], ['-94.88'], ['-95']);
+          });
+        });
+      });
+    });
   });
 
   describe('#formatConversion()', () => {
-    context('number under 1,000', () => {
-      it('should not change', () => {
-        verifyUserFacing(["999"], ["999"]);
-      });
-    });
-
-    context('number over 1,000', () => {
-      it('should add commas', () => {
-        verifyUserFacing(["1000"], ["1,000"]);
-        verifyUserFacing(["1000.00"], ["1,000.00"]);
-        verifyUserFacing(["1000000"], ["1,000,000"]);
-      });
-    });
-
-    context('Ranges with numbers over 1,000', () => {
-      it('should add commas', () => {
-        verifyUserFacing(["1000", "2000"], ["1,000", "2,000"]);
-        verifyUserFacing(["1000.00", "1000000"], ["1,000.00", "1,000,000"]);
-      });
-    });
-
     function verifyUserFacing(rounded, expected) {
       const input = {
-        'imperial' : createMap(["1"], ' miles'),
-        'metric' : createMap(["1"], 'bar'),
-        'rounded' : createMap(rounded, 'bar')
-      }
-      const expectedOut = Object.assign({}, input, {'formatted' : createMap(expected, 'bar')});
+        imperial: createMap(['1'], ' miles'),
+        metric: createMap(['1'], 'bar'),
+        rounded: createMap(rounded, 'bar'),
+      };
+      const expectedOut = Object.assign({}, input, { formatted: createMap(expected, 'bar') });
 
       ch.formatConversion([input])[0]
         .should
@@ -958,21 +961,42 @@ describe('conversion_helper', () => {
         .equal(expectedOut);
     }
 
+    context('number under 1,000', () => {
+      it('should not change', () => {
+        verifyUserFacing(['999'], ['999']);
+      });
+    });
+
+    context('number over 1,000', () => {
+      it('should add commas', () => {
+        verifyUserFacing(['1000'], ['1,000']);
+        verifyUserFacing(['1000.00'], ['1,000.00']);
+        verifyUserFacing(['1000000'], ['1,000,000']);
+      });
+    });
+
+    context('Ranges with numbers over 1,000', () => {
+      it('should add commas', () => {
+        verifyUserFacing(['1000', '2000'], ['1,000', '2,000']);
+        verifyUserFacing(['1000.00', '1000000'], ['1,000.00', '1,000,000']);
+      });
+    });
+
     context('feet', () => {
       context('decimal', () => {
         it('should convert', () => {
           const actual = ch.formatConversion([{
-            'imperial' : createMap(["1000.25"], " feet"),
-            'metric' : createMap(["2"], " metres"),
-            'rounded' : createMap(["2"], " metres")
+            imperial: createMap(['1000.25'], ' feet'),
+            metric: createMap(['2'], ' metres'),
+            rounded: createMap(['2'], ' metres'),
           }])[0];
 
           const expected = {
-            'imperial' : createMap(["1,000'3\""], ""),
-            'metric' : createMap(["2"], " metres"),
-            'rounded' : createMap(["2"], " metres"),
-            'formatted' : createMap(["2"], " metres")
-          }
+            imperial: createMap(["1,000'3\""], ''),
+            metric: createMap(['2'], ' metres'),
+            rounded: createMap(['2'], ' metres'),
+            formatted: createMap(['2'], ' metres'),
+          };
 
 
           actual.should.deep.equal(expected);
@@ -982,37 +1006,37 @@ describe('conversion_helper', () => {
       context('whole', () => {
         it('should convert', () => {
           const actual = ch.formatConversion([{
-            'imperial' : createMap(["5"], " feet"),
-            'metric' : createMap(["2"], " metres"),
-            'rounded' : createMap(["2"], " metres")
+            imperial: createMap(['5'], ' feet'),
+            metric: createMap(['2'], ' metres'),
+            rounded: createMap(['2'], ' metres'),
           }])[0];
 
           const expected = {
-            'imperial' : createMap(["5 feet"], ""),
-            'metric' : createMap(["2"], " metres"),
-            'rounded' : createMap(["2"], " metres"),
-            'formatted' : createMap(["2"], " metres")
-          }
+            imperial: createMap(['5 feet'], ''),
+            metric: createMap(['2'], ' metres'),
+            rounded: createMap(['2'], ' metres'),
+            formatted: createMap(['2'], ' metres'),
+          };
 
           actual.should.deep.equal(expected);
         });
       });
 
-      //Ranges
+      // Ranges
       context('whole', () => {
         it('should convert', () => {
           const actual = ch.formatConversion([{
-            'imperial' : createMap(["5", "8"], " feet"),
-            'metric' : createMap(["2", "3"], " metres"),
-            'rounded' : createMap(["2", "3"], " metres")
+            imperial: createMap(['5', '8'], ' feet'),
+            metric: createMap(['2', '3'], ' metres'),
+            rounded: createMap(['2', '3'], ' metres'),
           }])[0];
 
           const expected = {
-            'imperial' : createMap(["5", "8 feet"], ""),
-            'metric' : createMap(["2", "3"], " metres"),
-            'rounded' : createMap(["2", "3"], " metres"),
-            'formatted' : createMap(["2", "3"], " metres")
-          }
+            imperial: createMap(['5', '8 feet'], ''),
+            metric: createMap(['2', '3'], ' metres'),
+            rounded: createMap(['2', '3'], ' metres'),
+            formatted: createMap(['2', '3'], ' metres'),
+          };
 
           actual.should.deep.equal(expected);
         });
@@ -1020,22 +1044,3 @@ describe('conversion_helper', () => {
     });
   });
 });
-
-function createImperialMap(value, unit) {
-  return { "imperial" : createMap(value, unit) };
-}
-
-function createMap(value, unit) {
-  return {
-    "numbers" : value,
-    "unit" : unit
-  };
-}
-
-function createComment(subreddit, title, text) {
-  return {
-    "subreddit" : subreddit,
-    "postTitle" : title,
-    "body" : text
-  }
-}
