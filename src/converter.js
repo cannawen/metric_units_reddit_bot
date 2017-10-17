@@ -14,6 +14,7 @@ function conversions(comment) {
   const formattedConversions = ch.formatConversion(roundedConversions);
 
   return formattedConversions.reduce((memo, conversion) => {
+    const inputMemo = memo;
     let joiner = '';
     if ('joiner' in conversion.imperial) {
       joiner = ` ${conversion.imperial.joiner} `;
@@ -28,8 +29,8 @@ function conversions(comment) {
       value = formatted.numbers.join(joiner) + formatted.unit;
     }
 
-    memo[key] = value;
-    return memo;
+    inputMemo[key] = value;
+    return inputMemo;
   }, {});
 }
 

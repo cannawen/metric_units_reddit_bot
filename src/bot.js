@@ -1,7 +1,4 @@
 const fs = require('fs');
-const https = require('https');
-const path = require('path');
-const request = require('request');
 const yaml = require('js-yaml');
 
 const analytics = require('./analytics');
@@ -25,12 +22,6 @@ try {
 process.on('uncaughtException', (err) => {
   helper.logError(err);
 });
-
-network.refreshToken()
-  .then(() => {
-    helper.setIntervalSafely(postConversions, 1);
-    helper.setIntervalSafely(replyToMessages, 60);
-  });
 
 function replyToMessages() {
   function filterCommentReplies(messages) {
@@ -85,13 +76,19 @@ function replyToMessages() {
         if (message.subreddit.match(/^totallynotrobots$/i)) {
           const humanReply = personality.humanReply(message);
           if (humanReply) {
-            analytics.trackPersonality([message.timestamp, message.link, message.body, reply, true]);
+            analytics.trackPersonality([
+              message.timestamp,
+              message.link,
+              message.body,
+              reply,
+              true,
+            ]);
             network.postComment(message.id, humanReply);
           }
           return;
         }
 
-        const postTitle = message.postTitle;
+        const { postTitle } = message;
 
         // Always replies if no personality in post within the last 24h
         // Replies are 50% less likely for each reply within 24 hours
@@ -111,7 +108,13 @@ function replyToMessages() {
           });
         }
 
-        analytics.trackPersonality([message.timestamp, message.link, message.body, reply, shouldReply]);
+        analytics.trackPersonality([
+          message.timestamp,
+          message.link,
+          message.body,
+          reply,
+          shouldReply,
+        ]);
 
         if (shouldReply) {
           network.postComment(message.id, reply);
@@ -136,17 +139,18 @@ function replyToMessages() {
             if (!comment) {
               return;
             }
+            const inputComment = comment;
 
-            network.getCommentReplies(comment.link_id, commentId)
+            network.getCommentReplies(inputComment.link_id, commentId)
               .then((commentReplies) => {
-                const botReply = commentReplies.find(reply => reply.data.author.toLowerCase() == environment['reddit-username'].toLowerCase());
+                const botReply = commentReplies.find(reply => reply.data.author.toLowerCase() === environment['reddit-username'].toLowerCase());
 
                 if (!botReply) {
                   return;
                 }
 
-                const conversions = converter.conversions(comment);
-                let reply = replier.formatReply(comment, conversions);
+                const conversions = converter.conversions(inputComment);
+                let reply = replier.formatReply(inputComment, conversions);
 
                 if (Object.keys(conversions).length === 0) {
                   reply = personality.robotReply({ body: '_time_waster', username: comment.author });
@@ -154,11 +158,11 @@ function replyToMessages() {
 
                 network.editComment(`t1_${botReply.data.id}`, `Edit: ${reply}`);
 
-                if (!comment.link_id) {
-                  comment.link_id = 't3_value';
+                if (!inputComment.link_id) {
+                  inputComment.link_id = 't3_value';
                 }
 
-                analytics.trackEdit([message.timestamp, `https://reddit.com/comments/${comment.link_id.replace(/t3_/g, '')}//${commentId}`, comment.body, conversions]);
+                analytics.trackEdit([message.timestamp, `https://reddit.com/comments/${inputComment.link_id.replace(/t3_/g, '')}//${commentId}`, inputComment.body, conversions]);
               });
           });
       });
@@ -167,11 +171,12 @@ function replyToMessages() {
     replyMetadata = Object
       .keys(replyMetadata)
       .reduce((memo, key) => {
-        const lessThan24hAgo = replyMetadata[key].timestamp > now - 24 * 60 * 60 * 1000;
+        const inputMemo = memo;
+        const lessThan24hAgo = replyMetadata[key].timestamp > now - (24 * 60 * 60 * 1000);
         if (lessThan24hAgo) {
-          memo[key] = replyMetadata[key];
+          inputMemo[key] = replyMetadata[key];
         }
-        return memo;
+        return inputMemo;
       }, {});
   }));
 }
@@ -202,8 +207,7 @@ function postConversions() {
   }
 
   function filterIfAlreadyReplied(map) {
-    const postTitle = map.comment.postTitle;
-    const conversions = map.conversions;
+    const { postTitle, conversions } = map.comment;
 
     const newConversions = new Set(Object.keys(conversions));
 
@@ -269,8 +273,7 @@ function postConversions() {
         .map(filterIfAlreadyReplied)
         .filter(hasConversions)
         .forEach((map) => {
-          const comment = map.comment;
-          const conversions = map.conversions;
+          const { comment, conversions } = map;
 
           const reply = replier.formatReply(comment, conversions);
 
@@ -281,3 +284,9 @@ function postConversions() {
       analytics.trackError(error);
     });
 }
+
+network.refreshToken()
+  .then(() => {
+    helper.setIntervalSafely(postConversions, 1);
+    helper.setIntervalSafely(replyToMessages, 60);
+  });

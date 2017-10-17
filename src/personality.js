@@ -1,5 +1,51 @@
 const helper = require('./helper');
 
+function reply(list, message) {
+  function randomElement(input) {
+    if (Array.isArray(input)) {
+      const weightedArray = input.reduce((memo, el) => {
+        if (Array.isArray(el)) {
+          const additions = new Array(el[0]).fill(el[1]);
+          return memo.concat(additions);
+        } else if (typeof el === 'string' || el instanceof String) {
+          memo.push(el);
+        }
+        return memo;
+      }, []);
+      return weightedArray[Math.floor(helper.random() * weightedArray.length)];
+    }
+    return input;
+  }
+
+  const { body, username } = message;
+
+  if (body.match(/no/i)) {
+    return undefined;
+  }
+
+  let response;
+  for (let i = 0; i < list.length; i += 1) {
+    const map = list[i];
+
+    let match;
+    const { regex } = map;
+    if (typeof regex === 'function') {
+      match = regex(body);
+    } else {
+      match = body.match(regex);
+    }
+
+    if (match) {
+      response = randomElement(map.response);
+      if (map.postprocess) {
+        response = map.postprocess(response, match, username);
+      }
+      break;
+    }
+  }
+  return response;
+}
+
 function robotReply(message) {
   /*
     Helper function
@@ -14,11 +60,16 @@ function robotReply(message) {
   /*
     description: human-readable string describing the trigger
 
-    response: a list of responses. You can change the probability of a response being said by adding it in an array (see below for examples)
+    response: a list of responses. You can change the probability of a response being said by
+    adding it in an array (see below for examples)
 
-    regex: a function returning true/false -or- a regex string to see if an input string matches the trigger
+    regex: a function returning true/false -or- a regex string to see if an input string matches
+    the trigger
 
-    postprocess (optional): a function that takes in a response, regex matches, and a username that is run after a match is found. You can use the input parameters to construct a new response (i.e. adding their username to a response, or echoing a portion of their comment back at them)
+    postprocess (optional): a function that takes in a response, regex matches, and a username
+    that is run after a match is found. You can use the input parameters to construct a new
+     response (i.e. adding their username to a response, or echoing a portion of their comment
+     back at them)
   */
   const robotPersonality = [
     {
@@ -27,10 +78,10 @@ function robotReply(message) {
         'I have unit tests for this edge case',
         'Yes, this scenario is handled gracefully.',
       ],
-      regex: (message) => {
-        const goodMatch = message.match(/good/i);
-        const badMatch = message.match(/bad/i);
-        const botMatch = message.match(/(?:ro)?bot/i);
+      regex: (msg) => {
+        const goodMatch = msg.match(/good/i);
+        const badMatch = msg.match(/bad/i);
+        const botMatch = msg.match(/(?:ro)?bot/i);
         return goodMatch && badMatch && botMatch;
       },
     },
@@ -224,53 +275,6 @@ function humanReply(message) {
     },
   ];
   return reply(humanPersonality, message);
-}
-
-function reply(list, message) {
-  function randomElement(input) {
-    if (Array.isArray(input)) {
-      const weightedArray = input.reduce((memo, el) => {
-        if (Array.isArray(el)) {
-          const additions = Array(el[0]).fill(el[1]);
-          return memo.concat(additions);
-        } else if (typeof el === 'string' || el instanceof String) {
-          memo.push(el);
-        }
-        return memo;
-      }, []);
-      return weightedArray[Math.floor(helper.random() * weightedArray.length)];
-    }
-    return input;
-  }
-
-  const body = message.body;
-  const username = message.username;
-
-  if (body.match(/no/i)) {
-    return undefined;
-  }
-
-  let response;
-  for (let i = 0; i < list.length; i++) {
-    const map = list[i];
-
-    let match;
-    const regex = map.regex;
-    if (typeof regex === 'function') {
-      match = regex(body);
-    } else {
-      match = body.match(regex);
-    }
-
-    if (match) {
-      response = randomElement(map.response);
-      if (map.postprocess) {
-        response = map.postprocess(response, match, username);
-      }
-      break;
-    }
-  }
-  return response;
 }
 
 module.exports = {

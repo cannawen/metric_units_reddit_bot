@@ -29,14 +29,15 @@ function formatReply(comment, conversions) {
   ];
 
   const footer = items.map((item) => {
-    item.value = transform(item.value);
-    item.value = `^${item.value.replace(/ /g, ' ^')}`;
+    const inputItem = item;
+    inputItem.value = transform(inputItem.value);
+    inputItem.value = `^${inputItem.value.replace(/ /g, ' ^')}`;
 
-    if (item.type === 'link') {
-      item.value = `[${item.value}](${item.href})`;
+    if (inputItem.type === 'link') {
+      inputItem.value = `[${inputItem.value}](${inputItem.href})`;
     }
 
-    return item.value;
+    return inputItem.value;
   }).join(' ^| ');
 
   return `${Object.keys(conversions)
