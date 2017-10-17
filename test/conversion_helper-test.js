@@ -21,14 +21,13 @@ function createComment(subreddit, title, text) {
 
 describe('conversion_helper', () => {
   describe('#shouldConvertComment()', () => {
+    /* eslint-disable no-unused-expressions */
     context('comment contains quote', () => {
       it('should not convert', () => {
         const comment = createComment('foo', 'bar', '\n&gt; About 202 miles away');
-        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, []).should.be.false;
 
         const comment2 = createComment('foo', 'bar', '>1.5lbs');
-        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment2, []).should.be.false;
       });
     });
@@ -36,7 +35,6 @@ describe('conversion_helper', () => {
     it('should convert if ignored keywords do not match', () => {
       const ignoredKeywords = ['foo', 'bar'];
       const comment = createComment('hello', 'foobar', 'foobar');
-      // eslint-disable-next-line no-unused-expressions
       ch.shouldConvertComment(comment, ignoredKeywords).should.be.true;
     });
 
@@ -44,24 +42,22 @@ describe('conversion_helper', () => {
       it('should not convert if subreddit matches', () => {
         const ignoredKeywords = ['foo', 'bar'];
         const comment = createComment('foobar', 'hello', 'hello');
-        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
       });
 
       it('should not convert if post title matches', () => {
         const ignoredKeywords = ['foo', 'bar'];
         const comment = createComment('hello', 'This the bar stuff', 'hello');
-        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
       });
 
       it('should not convert if body matches', () => {
         const ignoredKeywords = ['foo', 'bar'];
         const comment = createComment('hello', 'hello', 'foo');
-        // eslint-disable-next-line no-unused-expressions
         ch.shouldConvertComment(comment, ignoredKeywords).should.be.false;
       });
     });
+    /* eslint-enable no-unused-expressions */
   });
 
   describe('#findPotentialConversions()', () => {

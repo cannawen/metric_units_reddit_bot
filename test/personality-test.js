@@ -1,13 +1,23 @@
-const assert = require('assert');
+require('assert');
 const should = require('chai').should();
 const proxyquire = require('proxyquire');
 
 const helperStub = {};
 let personality;
 
+function verify(message, expectedResponse) {
+  const actualResponse = personality.robotReply({ body: message, username: 'foobar' });
+  should.equal(actualResponse, expectedResponse);
+}
+
+function verifyHuman(message, expectedResponse) {
+  const actualResponse = personality.humanReply({ body: message, username: 'foobar' });
+  should.equal(actualResponse, expectedResponse);
+}
+
 describe('Personality', () => {
   beforeEach(() => {
-    helperStub.random = function () { return 0; };
+    helperStub.random = () => 0;
     personality = proxyquire('../src/personality', { './helper': helperStub });
   });
 
@@ -115,7 +125,7 @@ describe('Personality', () => {
       });
 
       it('should substitute username if needed', () => {
-        helperStub.random = function () { return 0.99; };
+        helperStub.random = () => 0.99;
         verify('who is a potato bot', 'Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?');
       });
     });
@@ -184,14 +194,3 @@ describe('Personality', () => {
     });
   });
 });
-
-function verify(message, expectedResponse) {
-  const actualResponse = personality.robotReply({ body: message, username: 'foobar' });
-  should.equal(actualResponse, expectedResponse);
-}
-
-function verifyHuman(message, expectedResponse) {
-  const actualResponse = personality.humanReply({ body: message, username: 'foobar' });
-  should.equal(actualResponse, expectedResponse);
-}
-

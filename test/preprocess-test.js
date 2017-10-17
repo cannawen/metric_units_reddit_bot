@@ -1,4 +1,4 @@
-const should = require('chai').should();
+require('chai');
 const pp = require('../src/preprocess');
 
 function createComment(subreddit, title, body) {

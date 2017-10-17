@@ -1,5 +1,5 @@
-const assert = require('assert');
-const should = require('chai').should();
+require('assert');
+require('chai');
 
 const replier = require('../src/reply_maker');
 

@@ -7,6 +7,7 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/converter-test.js" afterPath="$PROJECT_DIR$/test/converter-test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/network-test.js" afterPath="$PROJECT_DIR$/test/network-test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/personality-test.js" afterPath="$PROJECT_DIR$/test/personality-test.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/preprocess-test.js" afterPath="$PROJECT_DIR$/test/preprocess-test.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/reply_maker-test.js" afterPath="$PROJECT_DIR$/test/reply_maker-test.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,21 +19,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="450">
-      <file leaf-file-name="network-test.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test/network-test.js">
+      <file leaf-file-name="converter-test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/converter-test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+            <state relative-caret-position="601">
+              <caret line="444" column="14" lean-forward="false" selection-start-line="444" selection-start-column="14" selection-end-line="444" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="converter-test.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/test/converter-test.js">
+      <file leaf-file-name="network-test.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test/network-test.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="conversion_helper-test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/conversion_helper-test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="10360">
+              <caret line="370" column="9" lean-forward="true" selection-start-line="370" selection-start-column="9" selection-end-line="370" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -45,10 +56,11 @@
       <find>isZeroOrNegative</find>
       <find>this.files = [];</find>
       <find>this.files</find>
-      <find>&lt;&lt;&lt;</find>
       <find>should</find>
       <find>&quot;</find>
       <find>inputUnit</find>
+      <find>&lt;&lt;&lt;</find>
+      <find>&lt;&lt;&lt;&lt;</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -69,9 +81,9 @@
         <option value="$PROJECT_DIR$/src/network.js" />
         <option value="$PROJECT_DIR$/src/bot.js" />
         <option value="$PROJECT_DIR$/src/conversion_helper.js" />
-        <option value="$PROJECT_DIR$/test/network-test.js" />
         <option value="$PROJECT_DIR$/test/converter-test.js" />
         <option value="$PROJECT_DIR$/test/conversion_helper-test.js" />
+        <option value="$PROJECT_DIR$/test/network-test.js" />
       </list>
     </option>
   </component>
@@ -190,12 +202,12 @@
       <workItem from="1508307644396" duration="150000" />
       <workItem from="1508595883344" duration="1278000" />
       <workItem from="1509199061548" duration="611000" />
-      <workItem from="1509201647204" duration="5825000" />
+      <workItem from="1509201647204" duration="6011000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9612000" />
+    <option name="totallyTimeSpent" value="9798000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="-11" width="3862" height="2122" extended-state="6" />
@@ -519,26 +531,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/network-test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="2" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/conversion_helper-test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2408">
-          <caret line="86" column="22" lean-forward="true" selection-start-line="86" selection-start-column="22" selection-end-line="86" selection-end-column="22" />
+        <state relative-caret-position="10360">
+          <caret line="370" column="9" lean-forward="true" selection-start-line="370" selection-start-column="9" selection-end-line="370" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/converter-test.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="601">
+          <caret line="444" column="14" lean-forward="false" selection-start-line="444" selection-start-column="14" selection-end-line="444" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/network-test.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="0" column="15" lean-forward="false" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
           <folding />
         </state>
       </provider>
