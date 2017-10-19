@@ -429,7 +429,7 @@ const unitLookupList = [
     "imperialUnits" : [/cups?/],
     "standardInputUnit" : " cups (US)",
     "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => i > 100,
+    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i > 100,
     "conversionFunction" : (i) => volumeMap(i.map((j) => j * 0.24)),
     "ignoredUnits" : metricVolumeUnits,
     "ignoredKeywords" : ["bra", "band", "sizes?", "clio"]
