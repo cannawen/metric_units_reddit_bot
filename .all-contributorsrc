@@ -199,7 +199,7 @@
       "avatar_url": "https://avatars2.githubusercontent.com/u/22687814?v=4",
       "profile": "https://github.com/cmd-kvn",
       "contributions": [
-        "code", 
+        "code",
         "bug"
       ]
     },
@@ -208,6 +208,16 @@
       "name": "Andrew Terranova",
       "avatar_url": "https://avatars1.githubusercontent.com/u/12698411?v=4",
       "profile": "https://github.com/aterranova-bv",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "jacobScottAllen",
+      "name": "Jacob Allen",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/22511710?v=4",
+      "profile": "https://github.com/jacobScottAllen",
       "contributions": [
         "code",
         "test"
