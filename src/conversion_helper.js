@@ -100,7 +100,7 @@ const metricDistanceUnits = [/km/, /light-?years?/,
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
-const liquidKeywords = ['liquids?', 'water', 'teas?', 'beers?', 'sodas?', 'pops?', 'colas?', 'ciders?', 'juices?', 'coffees?', 'liquors?', 'milk', 'bottles?', 'spirits?', 'rums?', 'vodkas?', 'tequilas?', 'wines?', 'oils?', "cups?", "cans?", "tall boys?", "brews?", "breastfeeding", "breastfee?d"];
+const liquidKeywords = ['liquids?', 'water', 'teas?', 'beers?', 'sodas?', 'pops?', 'colas?', 'ciders?', 'juices?', 'coffees?', 'liquors?', 'milk', 'bottles?', 'spirits?', 'rums?', 'vodkas?', 'tequilas?', 'wines?', 'oils?', "cups?", "cans?", "tall boys?", "brews?", "breastfeeding", "breastfee?d", "pints?", "bartends?", "bartending", "flow", "paint", "retarder", "thinner", "primer", "wash", "acrylic", "paste"];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
@@ -376,15 +376,6 @@ const unitLookupList = [
     }
   },
   {
-    "imperialUnits" : [/oz/, /ounces?/],
-    "standardInputUnit" : " oz",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => weightMap(i.map((j) => j * 28.3495)),
-    "ignoredUnits" : ["oz t", "ozt"].concat(metricWeightUnits),
-    "ignoredKeywords" : ["leather"].concat(ukSubreddits)
-  },
-  {
     "imperialUnits" : [/ozt/, /oz t/, /troy ounces?/],
     "standardInputUnit" : " troy ounces",
     "isInvalidInput" : isZeroOrNegative,
@@ -408,6 +399,15 @@ const unitLookupList = [
       }
       return input;
     }
+  },
+  {
+    "imperialUnits" : [/oz/, /ounces?/],
+    "standardInputUnit" : " oz",
+    "isInvalidInput" : isZeroOrNegative,
+    "isWeaklyInvalidInput" : isHyperbole,
+    "conversionFunction" : (i) => weightMap(i.map((j) => j * 28.3495)),
+    "ignoredUnits" : ["oz t", "ozt"].concat(metricWeightUnits),
+    "ignoredKeywords" : ["leather", "rawdenim"].concat(ukSubreddits)
   },
   {
     "imperialUnits" : [/teaspoons?/, /tsp/],
