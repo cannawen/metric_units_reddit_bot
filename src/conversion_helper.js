@@ -502,14 +502,14 @@ const unitLookupList = [
       /km[^]2/
     ]
   },
-  {
-    "imperialUnits" : [/bushels?/],
-    "standardInputUnit" : " bushels",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => weightMap(i.map((j) => j * 35239.07040000007)),
-    "ignoredUnits" : metricWeightUnits
-  },
+  // {
+  //   "imperialUnits" : [/bushels?/],
+  //   "standardInputUnit" : " bushels",
+  //   "isInvalidInput" : isZeroOrNegative,
+  //   "isWeaklyInvalidInput" : isHyperbole,
+  //   "conversionFunction" : (i) => weightMap(i.map((j) => j * 35239.07040000007)),
+  //   "ignoredUnits" : metricWeightUnits
+  // },
   {
     "imperialUnits" : [/nmi/, /nautical\smiles?/],
     "standardInputUnit" : " nmi",
