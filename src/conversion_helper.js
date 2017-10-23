@@ -140,16 +140,10 @@ const unitLookupList = [
     "isInvalidInput" : isZeroOrNegative,
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => {
-      const kmPerL = createMap(i.map((j) => j * 0.425144), " km/L");
-      const unitDecider = Math.max(...i);
-      if (unitDecider < 15) {
-        return kmPerL;
-      } else {
-        return [
-          kmPerL,
-          createMap(i.map((j) => 235.215 / j), " L/100km")
-        ]
-      }
+      return [
+        createMap(i.map((j) => j * 0.425144), " km/L"),
+        createMap(i.map((j) => 235.215 / j), " L/100km")
+      ]
     },
     "ignoredUnits" : ["L/100km", "km/L"],
     "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",

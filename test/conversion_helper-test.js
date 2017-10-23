@@ -763,24 +763,16 @@ describe('conversion_helper', () => {
     });
 
     context('mpg', () => {
-      context('input < 15', () => {
-        it('should convert only with delta', () => {
-          verifyConversion(["14"], " mpg (US)", ["5.952016"], " km/L");
-        });
-      });
+      it('should convert with L/100km', () => {
+        const imperialMap = createImperialMap(["15"], " mpg (US)");
+        const expectedOutput = Object.assign({}, imperialMap);
 
-      context('input >= 15', () => {
-        it('should convert with L/100km', () => {
-          const imperialMap = createImperialMap(["15"], " mpg (US)");
-          const expectedOutput = Object.assign({}, imperialMap);
+        expectedOutput['metric'] = [
+          { "numbers" : ["6.37716"], "unit" : " km/L"},
+          { "numbers" : ["15.681000000000001"], "unit" : " L/100km" }
+        ];
 
-          expectedOutput['metric'] = [
-            { "numbers" : ["6.37716"], "unit" : " km/L"},
-            { "numbers" : ["15.681000000000001"], "unit" : " L/100km" }
-          ];
-
-          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
-        });
+        ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
       });
     });
 
