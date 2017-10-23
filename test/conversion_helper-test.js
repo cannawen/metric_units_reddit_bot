@@ -567,6 +567,16 @@ describe('conversion_helper', () => {
         verifyFilterConversions([[100], [1000], [10000]], " mpg (US)", undefined);
       });
     });
+    
+    context('cups', () => {
+      it('should allow normal numbers', () => {
+        verifyFilterConversions([[1], [2], [3]], " cups (US)", [[1], [2], [3]]);
+      });
+
+      it('should not allow when values are too big', () => {
+        verifyFilterConversions([[101], [987]], " cups (US)", undefined);
+      });
+    });
 
     context('°F', () => {
       it('should allow normal numbers', () => {
