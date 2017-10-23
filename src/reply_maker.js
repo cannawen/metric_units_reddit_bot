@@ -1,6 +1,6 @@
 const environment = require('./helper').environment();
 
-const stopMessage = "Please click 'block user' below and you will not see any more conversions from this bot.\n\nSo long, and thanks for all the fish";
+const stopMessage = "Please send this message with the subject 'stop' to block this bot.\n\nSo long, and thanks for all the fish";
 
 function formatReply(comment, conversions) {
   let species = "bot"
