@@ -1,6 +1,6 @@
 const environment = require('./helper').environment();
 
-const stopMessage = "Please send this message with the subject 'stop' to block this bot.\n\nSo long, and thanks for all the fish";
+const stopMessage = "Please click 'block user' below and you will not see any more conversions from this bot. This bot will also block you, so it will not convert anything you post.\n\nSo long, and thanks for all the fish";
 
 function formatReply(comment, conversions) {
   let species = "bot"
@@ -23,7 +23,7 @@ function formatReply(comment, conversions) {
     {"type" : "link", "value" : "feedback", "href" : "https://redd.it/73edn2" },
     {"type" : "link", "value" : "source", "href" : "https://github.com/cannawen/metric_units_reddit_bot" },
     {"type" : "link", "value" : "hacktoberfest", "href" : "https://redd.it/73ef7e" },
-    {"type" : "link", "value" : "block", "href" : formatRedditComposeLink(environment['reddit-username'], 'block', stopMessage) },
+    {"type" : "link", "value" : "block", "href" : formatRedditComposeLink(environment['reddit-username'], 'stop', 'Please send this private message with the subject \'stop\' to block this bot') },
     {"type" : "link", "value" : "refresh conversion", "href" : formatRedditComposeLink(environment['reddit-username'], 'refresh ' + commentId, "Please click 'send' below and I will update my comment to convert any new or updated values in your comment.") },
     {"value" : version }
   ];
