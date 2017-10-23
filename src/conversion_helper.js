@@ -394,7 +394,7 @@ const unitLookupList = [
     "preprocess" : (comment) => {
       const input = comment['body'];
       const specialSubredditsRegex = new RegExp(
-          rh.regexJoinToString([/silverbugs/, /pmsforsale/]),'gi');
+          rh.regexJoinToString([/silverbugs/, /pmsforsale/, /coins/]),'gi');
       const unitRegex = new RegExp(( rh.startRegex
             + rh.numberRegex
             + "[- ]?"
