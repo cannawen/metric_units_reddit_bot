@@ -100,7 +100,6 @@ function replyToMessages() {
 
           // Always replies if no personality in post within the last 24h
           // Replies are 50% less likely for each reply within 24 hours
-          // Possible refactor candidate, story #150342011
           let shouldReply = false;
 
           if (replyMetadata[postTitle] === undefined) {
@@ -292,5 +291,7 @@ function postConversions() {
           analytics.trackConversion([comment['timestamp'], comment['link'], comment['body'], conversions]);
           network.postComment(comment['id'], reply);
         })
+    }).catch((error) => {
+      analytics.trackError(error)
     });
 };

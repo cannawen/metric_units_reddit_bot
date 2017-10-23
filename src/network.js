@@ -19,7 +19,7 @@ function get(url) {
   }
 
   return requestPromise
-    .then(json => { return json.data.children; });
+    .then(json => json.data.children)
 }
 
 function post(urlPath, form) {
@@ -207,7 +207,7 @@ function getRedditComments(subreddit) {
             }
         });
 
-      lastProcessedCommentId = comments[0]['data']['name'];
+      lastProcessedCommentId = comments[0] ? comments[0]['data']['name'] : lastProcessedCommentId;
       return unprocessedComments;
     });
 }
