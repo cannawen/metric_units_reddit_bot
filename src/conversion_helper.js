@@ -1,8 +1,6 @@
 const rh = require('./regex_helper');
 const fsh = require('./file_system_helper');
 
-const metricForceUnits = [/newtons?/, /dynes?/];
-
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
 /*
@@ -35,31 +33,6 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
   postprocess (optional) - A function that runs after all conversions have been done that takes the imperial input (6.5 feet) and converts it to a better format (6'6")
 */
 let unitLookupList = [
-  {
-    "imperialUnits" : [/pounds?[ -]?(?:force)/, /lbf/, /lbs?[ -]?(?:force)/],
-    "standardInputUnit" : " lbf",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => createMap(i.map((j) => j * 4.44822), " N"),
-    "ignoredUnits" : metricForceUnits
-  },
-  {
-    "imperialUnits" : [/(?:°|degrees?) ?(?:f|fahrenheit)/, /fahrenheit/],
-    "weakImperialUnits" : ["f", "degrees?"],
-    "standardInputUnit" : "°F",
-    "isInvalidInput" : (i) => false,
-    "isWeaklyInvalidInput" : (i) => i > 1000,
-    "conversionFunction" : (i) => {
-      const temperatureMap = createMap(i.map((j) => (j - 32) * 5/9), "°C");
-      const unitDecider = Math.max(...i);
-      if (unitDecider > 0 && unitDecider < 32) {
-        return [temperatureMap, createMap(i.map((j) => j * 5/9), " change in °C")];
-      } else {
-        return temperatureMap;
-      }
-    },
-    "ignoredUnits" : [/° ?C/, "degrees? c", "celsius", "kelvin"]
-  }
 ];
 
 const units = fsh.getAllPaths(__dirname + '/conversion').map(require);
