@@ -679,7 +679,7 @@ describe('conversion_helper', () => {
 
     context('foot-pounds', () => {
       it('should convert', () => {
-        verifyConversion(["1"], " ft·lbf", ["1.355818"], " Nm");
+        verifyConversion(["1"], " ft·lbf", ["1.355818"], " Joules");
       });
     });
 

@@ -36,14 +36,6 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
 */
 let unitLookupList = [
   {
-    "imperialUnits" : [/(?:foot|ft)[ -·]?(?:pounds?|lbf?|lbs?)/, /(?:pounds?|lbs?)[ -·]?(?:foot|fts?)/],
-    "standardInputUnit" : " ft·lbf",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i === 8,
-    "conversionFunction" : (i) => createMap(i.map((j) => j * 1.355818), " Nm"),
-    "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
-  },
-  {
     "imperialUnits" : [/pounds?[ -]?(?:force)/, /lbf/, /lbs?[ -]?(?:force)/],
     "standardInputUnit" : " lbf",
     "isInvalidInput" : isZeroOrNegative,

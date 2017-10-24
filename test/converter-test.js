@@ -134,7 +134,7 @@ describe('Converter', () => {
             "5 foot-pounds"
           ],
           {
-            "5 ft·lbf" : "6.8 Nm"
+            "5 ft·lbf" : "6.8 Joules"
           }
         );
       });
