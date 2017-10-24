@@ -5,6 +5,11 @@ function createMap(values, transform, unit) {
   };
 }
 
+function roundToDecimalPlaces(number, places) {
+  const multiplier = Math.pow(10, places);
+  return (Math.round(number * multiplier)/multiplier).toFixed(places);
+}
+
 function isZeroOrNegative(i) {
   return i <= 0;
 }
@@ -19,6 +24,7 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
 
 module.exports = {
   "createMap" : createMap,
+  "roundToDecimalPlaces" : roundToDecimalPlaces,
 
   "isZeroOrNegative" : isZeroOrNegative,
   "isHyperbole" : isHyperbole,

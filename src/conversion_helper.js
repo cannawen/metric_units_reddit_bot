@@ -197,57 +197,7 @@ const unitLookupList = [
     "conversionFunction" : (i) => createMap(i.map((j) => j * 1.355818), " Nm"),
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
   },
-  {
-    "imperialUnits" : [/feet/, /ft/, /foot/],
-    "weakImperialUnits" : [/[']/],
-    "standardInputUnit" : " feet",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [1, 2, 4, 6].indexOf(i) !== -1,
-    "conversionFunction" : (i) => distanceMap(i.map((j) => j * 0.3048)),
-    "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["size", "pole"],
-    "preprocess" : (comment) => {
-      const input = comment['body'];
-      const feetAndInchesRegex = 
-        new RegExp(( rh.startRegex 
-          + rh.numberRegex
-          + "[- ]?"
-          + rh.regexJoinToString(["[\']", "ft", /feet/, /foot/])
-          + "[- ]?"
-          + rh.numberRegex
-          + "[- ]?"
-          + rh.regexJoinToString([/["]/, /in/, /inch/, /inches/])
-        ),'gi');
-      return input.replace(feetAndInchesRegex, (match, feet, inches, offset, string) => {
-        const inchesLessThan12 = inches <= 12;
-        const inchesLessThan3CharactersBeforeDecimal = inches
-            .toString()
-            .split('.')[0]
-            .replace(/[^\d\.]/,'')
-            .length <= 2
-        if (inchesLessThan12 && inchesLessThan3CharactersBeforeDecimal) {
-          const feetNumeral = roundToDecimalPlaces(Number(feet.replace(/[^\d-\.]/g, '')) + Number(inches)/12, 2);
-          return " " + feetNumeral + " feet ";
-        } else {
-          return "  ";
-        }
-      });
-    },
-    "postprocessInput" : (numbers) => {
-      if (numbers.every((input) => input.toString().indexOf('.') == -1)) {
-        return numbers.map(function(input, index) {
-          if(index == numbers.length-1) {
-            return rh.addCommas(input) + " feet"
-          } else {
-            return rh.addCommas(input);
-          }
-        });
-      } else {
-        return numbers.map((input) => rh.addCommas(Math.floor(input).toString()) + "'" 
-                + roundToDecimalPlaces(input%1 * 12, 0) + "\"");
-      }
-    },
-  },
+  require('./conversion/distance/foot'),
   {
     "imperialUnits" : [/yards?/],
     "standardInputUnit" : " yards",
