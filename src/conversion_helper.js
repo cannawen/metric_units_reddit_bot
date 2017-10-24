@@ -1,19 +1,6 @@
 const rh = require('./regex_helper');
 const fsh = require('./file_system_helper');
 
-function areaMap(m2) {
-  const unitDecider = Math.max(...m2);
-  if (unitDecider >= 1000000) {
-    return createMap(m2.map((i) => i / 1000000), " km^2");
-
-  } else if (unitDecider >= 10000) {
-    return createMap(m2.map((i) => i / 10000), " hectares");
-
-  } else {
-    return createMap(m2, " m^2");
-  }
-}
-
 function pressureMap(pa) {
   const unitDecider = Math.max(...pa);
   if (unitDecider < 1000) {
@@ -185,19 +172,6 @@ let unitLookupList = [
       }
     },
     "ignoredUnits" : [/° ?C/, "degrees? c", "celsius", "kelvin"]
-  },
-  {
-    "imperialUnits" : [/acres?/],
-    "standardInputUnit" : " acres",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => areaMap(i.map((j) => j * 4046.8564)),
-    "ignoredUnits" : [
-      /square kilometers?/,
-      /sq.? km/,
-      /sq.? kilometers?/,
-      /km[^]2/
-    ]
   }
 ];
 
