@@ -1,27 +1,27 @@
 const shared = require('../shared');
 
-function weightMap(imperialInputs, transformToGrams) {
-  const grams = imperialInputs.map(transformToGrams);
+function weightMap(imperialInputs, metricTransform) {
+  const grams = imperialInputs.map(metricTransform);
 
   const unitDecider = Math.max(...grams);
 
-  let gramToUnitTransform = undefined;
+  let unitTransform = undefined;
   let unit = undefined;
 
   if (unitDecider < 1000) {
-    gramToUnitTransform = g => g;
+    unitTransform = g => g;
     unit = " g";
 
   } else if (unitDecider < 1000000) {
-    gramToUnitTransform = g => g / 1000;
+    unitTransform = g => g / 1000;
     unit = " kg";
 
   } else {
-    gramToUnitTransform = g => g / 1000000;
+    unitTransform = g => g / 1000000;
     unit = " metric tons";
   }
 
-  return shared.createMap(grams, gramToUnitTransform, unit);
+  return shared.createMap(grams, unitTransform, unit);
 }
 
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
