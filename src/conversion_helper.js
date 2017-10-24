@@ -200,15 +200,7 @@ const unitLookupList = [
   require('./conversion/distance/foot'),
   require('./conversion/distance/yard'),
   require('./conversion/distance/inch'),
-  {
-    "imperialUnits" : [/furlongs?/],
-    "weakImperialUnits" : [/fur/],
-    "standardInputUnit" : " furlongs",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => distanceMap(i.map((j) => j * 201.168)),
-    "ignoredUnits" : metricDistanceUnits
-  },
+  require('./conversion/distance/furlong'),
   {
     "imperialUnits" : [/pounds?[ -]?(?:force)/, /lbf/, /lbs?[ -]?(?:force)/],
     "standardInputUnit" : " lbf",
