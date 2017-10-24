@@ -25,10 +25,12 @@ describe('Converter', () => {
       it('should convert', () => {
         testConvert(
           [
-            "1001 lb"
+            "1001 lb",
+            "1000 - 2000 lbs"
           ],
           {
-            "1,001 lb" : "450 kg"
+            "1,001 lb" : "450 kg",
+            "1,000 - 2,000 lb" : "450 - 900 kg"
           }
         );
       });
@@ -91,10 +93,14 @@ describe('Converter', () => {
             [
               "3 feet",
               "5 feet",
+              "5 to 10 feet",
+              "5.3 - 7 feet"
             ],
             {
               "3 feet" : "90 cm",
-              "5 feet" : "1.5 metres"
+              "5 feet" : "1.5 metres",
+              "5 to 10 feet": "1.5 to 3 metres",
+              "5\'4\" - 7\'0\"": "1.6 - 2.1 metres"
             }
           );
       });
