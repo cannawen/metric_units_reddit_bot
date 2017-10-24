@@ -200,7 +200,7 @@ function robotReply(message) {
       "description":"The user wasted metric_unit's time",
       "response":[
         "Conversions don't grow on trees!",
-        "A bot never forgets! Now where are those values I'm suppose to convert...",    
+        "A bot never forgets! Now where are those values I'm supposed to convert...",    
         "I'll never get those bytes back. They were my favourite bytes.",
         "I wasted 100 cpu cycles converting your values and now they're gone!\n\n100 cpu cycles ≈ 1 human hour."
       ],
