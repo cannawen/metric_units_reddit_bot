@@ -769,7 +769,7 @@ describe('conversion_helper', () => {
 
         expectedOutput['metric'] = [
           { "numbers" : ["6.37716"], "unit" : " km/L"},
-          { "numbers" : ["15.681000000000001"], "unit" : " L/100km" }
+          { "numbers" : ["15.680961431107264"], "unit" : " L/100km" }
         ];
 
         ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);

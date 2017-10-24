@@ -36,27 +36,6 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
 */
 let unitLookupList = [
   {
-    "imperialUnits" : [/mpg/, /miles per gal(?:lon)?/],
-    "standardInputUnit" : " mpg (US)",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => {
-      return [
-        createMap(i.map((j) => j * 0.425144), " km/L"),
-        createMap(i.map((j) => 235.215 / j), " L/100km")
-      ]
-    },
-    "ignoredUnits" : ["L/100km", "km/L"],
-    "ignoredKeywords" : ["basketball", "hockey", "soccer", "football", "rugby", "lacrosse", "cricket", "volleyball", "polo",
-                         "nba", "nhl", "nfl", "sport",
-                         "play", "game",
-                         "mavericks", "denvernuggets", "warriors", "rockets", "laclippers", "lakers", "memphisgrizzlies", 
-                         "timberwolves", "nolapelicans", "thunders", "suns", "ripcity", "kings", "nbaspurs", "utahjazz", 
-                         "atlantahawks", "bostonceltics", "gonets", "charlottehornets", "chicagobulls", "clevelandcavs", 
-                         "detroitpistons", "pacers", "heat", "mkebucks", "nyknicks", "orlandomagic", "sixers", 
-                         "torontoraptors", "washingtonwizards"].concat(ukSubreddits)
-  },
-  {
     "imperialUnits" : [/(?:pounds?|lbs?)\/(?:inch|in)/] ,
     "standardInputUnit" : " lbs/inch",
     "isInvalidInput" : isZeroOrNegative,
