@@ -1,45 +1,6 @@
 const rh = require('./regex_helper');
 const fsh = require('./file_system_helper');
 
-function velocityMap(mPerS) {
-  function distanceMap(m) {
-    const unitDecider = Math.max(...m);
-    if (unitDecider < 0.01) {
-      return createMap(m.map((i) => i * 1000), " mm");
-
-    } else if (unitDecider < 1) {
-      return createMap(m.map((i) => i * 100), " cm");
-
-    } else if (unitDecider > 94607304725808) {
-      return createMap(m.map((i) => i/9460730472580800), " light-years");
-
-
-    } else if (unitDecider >= 3218688000) {
-      return createMap(m.map((i) => i/299792458), " light-seconds");
-
-    } else if (unitDecider >= 1000) {
-      return createMap(m.map((i) => i/1000), " km");
-
-    } else {
-      return createMap(m, " metres");
-    }
-  }
-
-  const unitDecider = Math.max(...mPerS);
-  if (unitDecider < 89.408) {
-    return createMap(mPerS.map((i) => i * 3.6), " km/h");
-
-  } else if (unitDecider >= 2997924.58) {
-    return createMap(mPerS.map((i) => i / 299792458), "c");
-
-  } else {
-    let perSMap = distanceMap(mPerS, ((i) => i));
-    perSMap['unit'] += "/s";
-
-    return [createMap(mPerS.map((i) => i * 3.6), " km/h"), perSMap];
-  }
-}
-
 const metricForceUnits = [/newtons?/, /dynes?/];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
@@ -96,22 +57,6 @@ let unitLookupList = [
                          "torontoraptors", "washingtonwizards"].concat(ukSubreddits)
   },
   {
-    "imperialUnits" : [/mph/, /miles (?:an|per) hour/],
-    "standardInputUnit" : " mph",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || [60, 88].indexOf(i) !== -1,
-    "conversionFunction" : (i) => velocityMap(i.map((j) => j * 0.44704)), // 1 mph = 0.44704 m/s
-    "ignoredUnits" : ["km/hr?", "kmh", "kph", "kilometers? ?(?:per|an|/) ?hour", "m/s"],
-    "ignoredKeywords" : ukSubreddits
-  },
-  {
-    "imperialUnits" : [/f(?:oo|ee)?t (?:\/|per) s(?:ec(?:ond)?)?/],
-    "standardInputUnit" : " ft/sec",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => velocityMap(i.map((j) => j * 0.3048)) // 1 ft/s = 0.3048 m/s
-  },
-  {
     "imperialUnits" : [/(?:pounds?|lbs?)\/(?:inch|in)/] ,
     "standardInputUnit" : " lbs/inch",
     "isInvalidInput" : isZeroOrNegative,
@@ -156,6 +101,23 @@ let unitLookupList = [
 
 const units = fsh.getAllPaths(__dirname + '/conversion').map(require);
 unitLookupList = unitLookupList.concat(units);
+unitLookupList.sort((a, b) => {
+  function maxLength(list) {
+    return list.reduce((memo, value) => {
+      let stringValue;
+      if (value instanceof RegExp) {
+        stringValue = value.source;
+      } else {
+        stringValue = value;
+      }
+
+      const currentLength = stringValue.length;
+      return currentLength > memo ? currentLength : memo;
+    }, 0);
+  }
+  return maxLength(b.imperialUnits) - maxLength(a.imperialUnits);
+});
+
 
 const unitLookupMap = unitLookupList.reduce((memo, map) => {
   memo[map['standardInputUnit']] = map;

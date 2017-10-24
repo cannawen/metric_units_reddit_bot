@@ -3,7 +3,7 @@ const weight = require('./_weight');
 const rh = require('../../regex_helper');
 
 module.exports = {
-  "imperialUnits" : "lbs?",
+  "imperialUnits" : ["lbs?"],
   "weakImperialUnits" : [/pounds?/],
   "standardInputUnit" : " lb",
   "isInvalidInput" : shared.isZeroOrNegative,
