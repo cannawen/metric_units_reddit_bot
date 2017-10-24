@@ -199,20 +199,7 @@ const unitLookupList = [
   },
   require('./conversion/distance/foot'),
   require('./conversion/distance/yard'),
-  {
-    "imperialUnits" : [/inch/, /inches/],
-    "weakImperialUnits" : [/["]/, /''/, /in/],
-    "standardInputUnit" : " inches",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => distanceMap(i.map((j) => j * 0.0254)),
-    "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["monitor", "monitors", "screen", "tv", "tvs",
-                        "ipad", "iphone", "phone", "tablet", "tablets",
-                        "apple", "windows", "linux", "android", "ios",
-                        "macbook", "laptop", "laptops", "computer", "computers", "notebook", "imac", "pc", "dell", "thinkpad", "lenovo",
-                        "rgb", "hz"]
-  },
+  require('./conversion/distance/inch'),
   {
     "imperialUnits" : [/furlongs?/],
     "weakImperialUnits" : [/fur/],
