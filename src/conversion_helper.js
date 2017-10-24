@@ -1,22 +1,6 @@
 const rh = require('./regex_helper');
 const fsh = require('./file_system_helper');
 
-function volumeMap(l) {
-  const unitDecider = Math.max(...l);
-  if (unitDecider < 1) {
-    return createMap(l.map((i) => i * 1000), " mL");
-
-  } else if (unitDecider > 1000000000000) {
-    return createMap(l.map((i) => i / 1000000000000), " km^3");
-
-  } else if (unitDecider > 1000) {
-    return createMap(l.map((i) => i / 1000), " m^3");
-
-  } else {
-    return createMap(l, " L");
-  }
-}
-
 function areaMap(m2) {
   const unitDecider = Math.max(...m2);
   if (unitDecider >= 1000000) {
@@ -81,9 +65,7 @@ function velocityMap(mPerS) {
   }
 }
 
-const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
-const liquidKeywords = ['liquids?', 'water', 'teas?', 'beers?', 'sodas?', 'pops?', 'colas?', 'ciders?', 'juices?', 'coffees?', 'liquors?', 'milk', 'bottles?', 'spirits?', 'rums?', 'vodkas?', 'tequilas?', 'wines?', 'oils?', "cups?", "cans?", "tall boys?", "brews?", "breastfeeding", "breastfee?d", "pints?", "bartends?", "bartending", "flow", "paint", "retarder", "thinner", "primer", "wash", "acrylic", "paste"];
 
 const ukSubreddits = ["britain", "british", "england", "english", "scotland", "scottish", "wales", "welsh", "ireland", "irish", "london", "uk"];
 
@@ -186,105 +168,6 @@ let unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => createMap(i.map((j) => j * 4.44822), " N"),
     "ignoredUnits" : metricForceUnits
-  },
-  {
-    "imperialUnits" : [/(?:liquid|fluid|fl\.?)[ -]?(?:oz|ounces?)/,
-                       /(?:oz\.?|ounces?)[ -]?(?:liquid|fluid|fl)/],
-    "standardInputUnit" : " fl. oz.",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 0.0295735295625)),
-    "ignoredUnits" : metricVolumeUnits,
-    "ignoredKeywords" : ukSubreddits,
-    "preprocess" : (comment) => {
-      const input = comment['body'];
-      const ozRegex = new RegExp(( rh.startRegex 
-          + rh.numberRegex
-          + "[- ]?"
-          + rh.regexJoinToString([/oz/, /ounces?/])
-        ),'gi');
-      const ozAndLiquidRegex = new RegExp(( ozRegex.source
-          + ".+?\\b"
-          + rh.regexJoinToString(liquidKeywords)
-        ),'i');
-
-      if (!ozAndLiquidRegex.test(input)) {
-        return input;
-      }
-
-      return input.replace(ozRegex, (oz, offset, string) => {
-        return " " + oz + " fl. oz";
-      });
-    }
-  },
-  {
-    "imperialUnits" : [/teaspoons?/, /tsp/],
-    "standardInputUnit" : " tsp",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 0.00492892)),
-    "ignoredUnits" : metricVolumeUnits
-  },
-  {
-    "imperialUnits" : [/tablespoons?/, /tbsp/, /tbl/],
-    "standardInputUnit" : " Tbsp",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 0.0147868)),
-    "ignoredUnits" : metricVolumeUnits
-  },
-  {
-    "imperialUnits" : [/cups?/],
-    "standardInputUnit" : " cups (US)",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i > 100,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 0.24)),
-    "ignoredUnits" : metricVolumeUnits,
-    "ignoredKeywords" : ["bra", "band", "sizes?", "clio", "clashofclans", "coc", "clashroyale"]
-  },
-  {
-    "imperialUnits" : [/pints?/],
-    "standardInputUnit" : " pints",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 0.473176)),
-    "ignoredUnits" : metricVolumeUnits,
-    "ignoredKeywords" : ukSubreddits
-  },
-  {
-    "imperialUnits" : [/quarts?/],
-    "standardInputUnit" : " quarts",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 0.946353)),
-    "ignoredUnits" : metricVolumeUnits
-  },
-  {
-    "imperialUnits" : [/\(?(?:uk|imp(?:erial)?)\)? gal(?:lons?)?/, 
-                       /gal(?:lons?)? \(?(?:uk|imp(?:erial)?\)?)/],
-    "standardInputUnit" : " gal (imp)",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 4.54609)),
-    "ignoredUnits" : metricVolumeUnits
-  },
-  {
-    "imperialUnits" : [/gal(?:lons?)?/],
-    "standardInputUnit" : " gal (US)",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 3.78541)),
-    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits),
-    "ignoredKeywords" : ukSubreddits
-  },
-  {
-    "imperialUnits" : [/pecks?/],
-    "standardInputUnit" : " pecks (US)",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => volumeMap(i.map((j) => j * 8.80977)),
-    "ignoredUnits" : ["imperial"].concat(metricVolumeUnits),
-    "ignoredKeywords" : ukSubreddits
   },
   {
     "imperialUnits" : [/(?:°|degrees?) ?(?:f|fahrenheit)/, /fahrenheit/],

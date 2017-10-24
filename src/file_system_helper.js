@@ -13,7 +13,7 @@ function getDirectories(source) {
 
 function getFilesNotStartingWithUnderscore(source) {
   return fs.readdirSync(source)
-    .filter(name => !name.startsWith('_'))
+    .filter(name => !name.startsWith('_') && !name.startsWith('.'))
     .map(name => path.join(source, name))
     .filter(i => !isDirectory(i));
 }
