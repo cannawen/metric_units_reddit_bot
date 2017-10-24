@@ -1,18 +1,6 @@
 const rh = require('./regex_helper');
 const fsh = require('./file_system_helper');
 
-function pressureMap(pa) {
-  const unitDecider = Math.max(...pa);
-  if (unitDecider < 1000) {
-    return createMap(pa, " Pa");
-
-  } else {
-    const kPa = pa.map((i) => i / 1000);
-
-    return createMap(kPa, " kPa");
-  }
-}
-
 function velocityMap(mPerS) {
   function distanceMap(m) {
     const unitDecider = Math.max(...m);
@@ -130,15 +118,6 @@ let unitLookupList = [
     "isWeaklyInvalidInput" : isHyperbole,
     "conversionFunction" : (i) => {return [createMap(i.map((j) => j * 0.017858), " kg/mm"), createMap(i.map((j) => j * 175.126835), " N/m")]},  // 1 lbs/inch = 0.017858 kg/mm
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/]
-  },
-  {
-    "imperialUnits" : [/psi/, /pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
-    "standardInputUnit" : " psi",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => pressureMap(i.map((j) => j * 6894.76)),
-    "ignoredUnits" : [/pascals?/],
-    "ignoredKeywords" : ["homebrewing"]
   },
   {
     "imperialUnits" : [/(?:foot|ft)[ -·]?(?:pounds?|lbf?|lbs?)/, /(?:pounds?|lbs?)[ -·]?(?:foot|fts?)/],
