@@ -179,17 +179,7 @@ const unitLookupList = [
     "conversionFunction" : (i) => {return [createMap(i.map((j) => j * 0.017858), " kg/mm"), createMap(i.map((j) => j * 175.126835), " N/m")]},  // 1 lbs/inch = 0.017858 kg/mm
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/]
   },
-  {
-    "imperialUnits" : [/mi/, /miles?/],
-    "standardInputUnit" : " miles",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : (i) => isHyperbole(i) || i === 8,
-    "conversionFunction" : (i) => distanceMap(i.map((j) => j * 1609.344)),
-    "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords" : ["churn", "credit card", "visa", "mastercard", "awardtravel",
-                         "air miles", "aeroplan", "points",
-                         "italy", "italian", "croatia", "brasil", "brazil", "turkey", "mexico"].concat(ukSubreddits)
-  },
+  require('./conversion/distance/mile'),
   {
     "imperialUnits" : [/psi/, /pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
     "standardInputUnit" : " psi",
