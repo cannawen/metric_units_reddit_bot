@@ -243,12 +243,18 @@ const unitLookupList = [
         }
       });
     },
-    "postprocessInput" : (input) => {
-      if (input.toString().indexOf('.') == -1) {
-        return rh.addCommas(input) + " feet";
+    "postprocessInput" : (numbers) => {
+      if (numbers.every((input) => input.toString().indexOf('.') == -1)) {
+        return numbers.map(function(input, index) {
+          if(index == numbers.length-1) {
+            return rh.addCommas(input) + " feet"
+          } else {
+            return rh.addCommas(input);
+          }
+        });
       } else {
-        return rh.addCommas(Math.floor(input).toString()) + "'" 
-               + roundToDecimalPlaces(input%1 * 12, 0) + "\"";
+        return numbers.map((input) => rh.addCommas(Math.floor(input).toString()) + "'" 
+                + roundToDecimalPlaces(input%1 * 12, 0) + "\"");
       }
     },
   },
@@ -330,12 +336,18 @@ const unitLookupList = [
         }
       });
     },
-    "postprocessInput" : (input) => {
-      if (input.toString().indexOf('.') == -1) {
-        return rh.addCommas(input) + " lb";
+    "postprocessInput" : (numbers) => {
+      if (numbers.every((input) => input.toString().indexOf('.') == -1)) {
+        return numbers.map(function(input, index) {
+          if(index == numbers.length-1) {
+            return rh.addCommas(input) + " lb"
+          } else {
+            return rh.addCommas(input);
+          }
+        });
       } else {
-        return rh.addCommas(Math.floor(input).toString()) + " lb " 
-               + roundToDecimalPlaces(input%1 * 16, 0) + " oz";
+        return numbers.map((input) => rh.addCommas(Math.floor(input).toString()) + " lb " 
+               + roundToDecimalPlaces(input%1 * 16, 0) + " oz");
       }
     }
   },
@@ -953,13 +965,17 @@ function formatConversion(conversions) {
 
     const imperialUnit = conversion['imperial']['unit'];
     const imperialNumbers = conversion['imperial']['numbers'];
+    const imperialJoiner = conversion['imperial']['joiner'];
 
     const postprocessInput = unitLookupMap[imperialUnit]['postprocessInput'];
     if (postprocessInput) {
       conversion['imperial'] = {
-        'numbers':imperialNumbers.map(postprocessInput),
+        'numbers': postprocessInput(imperialNumbers),
         'unit': ""
       };
+      if(imperialJoiner) {
+        conversion['imperial']['joiner'] = imperialJoiner;
+      }
     } else {
       conversion['imperial']['numbers'] = imperialNumbers.map(rh.addCommas);
     }

@@ -1008,7 +1008,7 @@ describe('conversion_helper', () => {
           }])[0];
 
           const expected = {
-            'imperial' : createMap(["5 feet", "8 feet"], ""),
+            'imperial' : createMap(["5", "8 feet"], ""),
             'metric' : createMap(["2", "3"], " metres"),
             'rounded' : createMap(["2", "3"], " metres"),
             'formatted' : createMap(["2", "3"], " metres")
