@@ -426,14 +426,7 @@ const unitLookupList = [
   //   "conversionFunction" : (i) => weightMap(i.map((j) => j * 35239.07040000007)),
   //   "ignoredUnits" : metricWeightUnits
   // },
-  {
-    "imperialUnits" : [/nmi/, /nautical\smiles?/],
-    "standardInputUnit" : " nmi",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput": isHyperbole,
-    "conversionFunction" : (i) => distanceMap(i.map((j) => j * 1852)),
-    "ignoredUnits" : metricDistanceUnits
-  }
+  require('./conversion/distance/nautical_mile'),
 ];
 
 const unitLookupMap = unitLookupList.reduce((memo, map) => {
