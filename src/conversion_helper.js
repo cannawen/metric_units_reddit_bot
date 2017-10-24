@@ -198,22 +198,7 @@ const unitLookupList = [
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
   },
   require('./conversion/distance/foot'),
-  {
-    "imperialUnits" : [/yards?/],
-    "standardInputUnit" : " yards",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => distanceMap(i.map((j) => j * 0.9144)),
-    "ignoredUnits" : metricDistanceUnits,
-    "ignoredKeywords": ["football", "golf", "(?:touch)?down", "cfl", "nfl", "wow",
-                        "denverbroncos", "kansascitychiefs", "chargers", "oaklandraiders",
-                        "texans", "colts", "jaguars", "tennesseetitans", "ravens",
-                        "bengals", "browns", "steelers", "buffalobills", "miamidolphins",
-                        "patriots", "nyjets", "cowboys", "nygiants", "eagles", "redskins",
-                        "chibears", "detroitlions", "greenbaypackers", "minnesotavikings",
-                        "falcons", "panthers", "saints", "buccaneers", "azcardinals",
-                        "losangelesrams", "49ers", "seahawks"]
-  },
+  require('./conversion/distance/yard'),
   {
     "imperialUnits" : [/inch/, /inches/],
     "weakImperialUnits" : [/["]/, /''/, /in/],
