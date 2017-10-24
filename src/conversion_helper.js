@@ -1,27 +1,5 @@
 const rh = require('./regex_helper');
-
-function distanceMap(m) {
-  const unitDecider = Math.max(...m);
-  if (unitDecider < 0.01) {
-    return createMap(m.map((i) => i * 1000), " mm");
-
-  } else if (unitDecider < 1) {
-    return createMap(m.map((i) => i * 100), " cm");
-
-  } else if (unitDecider > 94607304725808) {
-    return createMap(m.map((i) => i/9460730472580800), " light-years");
-
-
-  } else if (unitDecider >= 3218688000) {
-    return createMap(m.map((i) => i/299792458), " light-seconds");
-
-  } else if (unitDecider >= 1000) {
-    return createMap(m.map((i) => i/1000), " km");
-
-  } else {
-    return createMap(m, " metres");
-  }
-}
+const fs = require('fs');
 
 function weightMap(g) {
   const kg = g.map((i) => i / 1000);
@@ -80,6 +58,29 @@ function pressureMap(pa) {
 }
 
 function velocityMap(mPerS) {
+  function distanceMap(m) {
+    const unitDecider = Math.max(...m);
+    if (unitDecider < 0.01) {
+      return createMap(m.map((i) => i * 1000), " mm");
+
+    } else if (unitDecider < 1) {
+      return createMap(m.map((i) => i * 100), " cm");
+
+    } else if (unitDecider > 94607304725808) {
+      return createMap(m.map((i) => i/9460730472580800), " light-years");
+
+
+    } else if (unitDecider >= 3218688000) {
+      return createMap(m.map((i) => i/299792458), " light-seconds");
+
+    } else if (unitDecider >= 1000) {
+      return createMap(m.map((i) => i/1000), " km");
+
+    } else {
+      return createMap(m, " metres");
+    }
+  }
+
   const unitDecider = Math.max(...mPerS);
   if (unitDecider < 89.408) {
     return createMap(mPerS.map((i) => i * 3.6), " km/h");
@@ -95,8 +96,6 @@ function velocityMap(mPerS) {
   }
 }
 
-const metricDistanceUnits = [/km/, /light-?years?/,
-                             /(?:milli|centi|deca|kilo)?met(?:re|er)s?/];
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
@@ -133,7 +132,7 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
 
   postprocess (optional) - A function that runs after all conversions have been done that takes the imperial input (6.5 feet) and converts it to a better format (6'6")
 */
-const unitLookupList = [
+let unitLookupList = [
   {
     "imperialUnits" : [/mpg/, /miles per gal(?:lon)?/],
     "standardInputUnit" : " mpg (US)",
@@ -179,7 +178,6 @@ const unitLookupList = [
     "conversionFunction" : (i) => {return [createMap(i.map((j) => j * 0.017858), " kg/mm"), createMap(i.map((j) => j * 175.126835), " N/m")]},  // 1 lbs/inch = 0.017858 kg/mm
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/]
   },
-  require('./conversion/distance/mile'),
   {
     "imperialUnits" : [/psi/, /pounds?[ -]?(?:force)?[- ]?(?:per|an?[/])[- ]?squared? inch/],
     "standardInputUnit" : " psi",
@@ -197,10 +195,6 @@ const unitLookupList = [
     "conversionFunction" : (i) => createMap(i.map((j) => j * 1.355818), " Nm"),
     "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /joule/]
   },
-  require('./conversion/distance/foot'),
-  require('./conversion/distance/yard'),
-  require('./conversion/distance/inch'),
-  require('./conversion/distance/furlong'),
   {
     "imperialUnits" : [/pounds?[ -]?(?:force)/, /lbf/, /lbs?[ -]?(?:force)/],
     "standardInputUnit" : " lbf",
@@ -426,8 +420,21 @@ const unitLookupList = [
   //   "conversionFunction" : (i) => weightMap(i.map((j) => j * 35239.07040000007)),
   //   "ignoredUnits" : metricWeightUnits
   // },
-  require('./conversion/distance/nautical_mile'),
 ];
+
+const files = fs.readdirSync('./src/conversion/distance/');
+const maps = files.reduce((memo, file) => {
+  if (file.startsWith('_')) {
+    return memo;
+  }
+
+  const map = require('./conversion/distance/' + file)
+  memo.push(map);
+  return memo;
+}, []);
+
+unitLookupList = unitLookupList.concat(maps);
+
 
 const unitLookupMap = unitLookupList.reduce((memo, map) => {
   memo[map['standardInputUnit']] = map;

@@ -1,5 +1,5 @@
 const shared = require('../shared');
-const distance = require('./distance');
+const distance = require('./_distance');
 
 module.exports = {
   "imperialUnits" : [/furlongs?/],

@@ -9,27 +9,27 @@ function distanceMap(imperialInputs, transformToMetres) {
   let unit = undefined;
 
   if (unitDecider < 0.01) {
-    metresToUnitTransform = i => i * 1000;
+    metresToUnitTransform = m => m * 1000;
     unit = " mm";
 
   } else if (unitDecider < 1) {
-    metresToUnitTransform = i => i * 100;
+    metresToUnitTransform = m => m * 100;
     unit = " cm";
 
   } else if (unitDecider > 94607304725808) {
-    metresToUnitTransform = i => i/9460730472580800;
+    metresToUnitTransform = m => m / 9460730472580800;
     unit = " light-years";
 
   } else if (unitDecider >= 3218688000) {
-    metresToUnitTransform = i => i/299792458;
+    metresToUnitTransform = m => m / 299792458;
     unit = " light-seconds";
 
   } else if (unitDecider >= 1000) {
-    metresToUnitTransform = i => i/1000;
+    metresToUnitTransform = m => m / 1000;
     unit = " km";
 
   } else {
-    metresToUnitTransform = i => i;
+    metresToUnitTransform = m => m;
     unit = " metres";
   }
 

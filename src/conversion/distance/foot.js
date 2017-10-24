@@ -1,5 +1,5 @@
 const shared = require('../shared');
-const distance = require('./distance');
+const distance = require('./_distance');
 const rh = require('../../regex_helper');
 
 module.exports = {
