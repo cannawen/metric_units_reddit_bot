@@ -683,17 +683,9 @@ describe('conversion_helper', () => {
       });
     });
 
-    context('lbs/inch', () => {
+    context('lbs-inch', () => {
       it('should convert', () => {
-          const imperialMap = createImperialMap([1], " lbs/inch");
-          const expectedOutput = Object.assign({}, imperialMap);
-
-          expectedOutput['metric'] = [
-            { "numbers" : ["0.017858"], "unit" : " kg/mm"},
-            { "numbers" : ["175.126835"], "unit" : " N/m" }
-          ];
-
-          ch.calculateMetric([imperialMap]).should.deep.equal([expectedOutput]);
+        verifyConversion(["1"], " lb⋅in", ["175.126835"], " N⋅m");
       });
     });
 	

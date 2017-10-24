@@ -36,14 +36,6 @@ const ukSubreddits = ["britain", "british", "england", "english", "scotland", "s
 */
 let unitLookupList = [
   {
-    "imperialUnits" : [/(?:pounds?|lbs?)\/(?:inch|in)/] ,
-    "standardInputUnit" : " lbs/inch",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => {return [createMap(i.map((j) => j * 0.017858), " kg/mm"), createMap(i.map((j) => j * 175.126835), " N/m")]},  // 1 lbs/inch = 0.017858 kg/mm
-    "ignoredUnits" : [/newton[ -]?met(?:er|re)s?/, /Nm/, /kg\/mm/]
-  },
-  {
     "imperialUnits" : [/(?:foot|ft)[ -·]?(?:pounds?|lbf?|lbs?)/, /(?:pounds?|lbs?)[ -·]?(?:foot|fts?)/],
     "standardInputUnit" : " ft·lbf",
     "isInvalidInput" : isZeroOrNegative,
