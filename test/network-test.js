@@ -62,14 +62,14 @@ describe('network', () => {
 
   describe('#getCommentReplies()', () => {
     it('should succeed', () => {
-      const testObj = { data: { children: { json: { data: { things: 99 }}}}};
+      const testObj = { json: { data: { things: [1, 2, 3] }}};
       response.body = JSON.stringify(testObj);
-      return network.getCommentReplies('link', 'comment').should.eventually.deep.equal(testObj.data.children.json.data.things);
+      return network.getCommentReplies('link', 'comment').should.eventually.deep.equal([1, 2, 3]);
     });
 
     it('should return empty array when no replies', () => {
-      response.body = JSON.stringify({ data: { children: []}});
-      return network.getCommentReplies('link', 'comment').should.eventually.deep.equal([]);
+      response.body = JSON.stringify({ json: { data: { things: []}}});
+      return network.getCommentReplies('link', 'comment').should.eventually.deep.equal([])
     });
   });
 

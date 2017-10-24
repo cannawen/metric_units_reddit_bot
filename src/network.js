@@ -18,8 +18,7 @@ function get(url) {
     requestPromise = networkRequest({ url: 'https://oauth.reddit.com' + url }, true);
   }
 
-  return requestPromise
-    .then(json => json.data.children)
+  return requestPromise;
 }
 
 function post(urlPath, form) {
@@ -135,7 +134,8 @@ function printBannedSubreddits() {
 
     return new Promise((resolve, reject) => {
       get(endpoint)
-        .then((messages) => {
+        .then(json => json.data.children)
+        .then(messages => {
           if (messages.length > 0) {
             // This call returned messages, add them to the list.
             messagesList = messagesList.concat(messages);
@@ -181,6 +181,7 @@ function printBannedSubreddits() {
 
 function getRedditComments(subreddit) {
   return get("https://www.reddit.com/r/" + subreddit + "/comments.json?limit=100&raw_json=1")
+    .then(json => json.data.children)
     .then((comments) => {
       if (!comments) {
         return;
@@ -218,7 +219,8 @@ function postComment(parentId, markdownBody) {
 
 function getComment(commentId) {
   return get('https://www.reddit.com/api/info.json?id=' + commentId)
-    .then((comment) => {
+    .then(json => json.data.children)
+    .then(comment => {
       if (comment.length == 0) {
         return;
       }
@@ -242,18 +244,18 @@ function editComment(commentId, markdownBody) {
 }
 
 function getCommentReplies(linkId, commentId) {
-  return get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId.replace(/t1_/g, ''))
+  return get('https://www.reddit.com/api/morechildren.json?api_type=json&link_id=' + linkId + '&children=' + commentId.replace(/t1_/g, '') + '&depth=1')
     .then((replies) => {
       if (replies.length === 0) {
         return [];
       }
-
       return replies['json']['data']['things'];
     });
 }
 
 function getUnreadMessages() {
-  return get("/message/unread?limit=100");
+  return get("/message/unread?limit=100")
+    .then(json => json.data.children);
 }
 
 function markAllMessagesAsRead() {

@@ -160,7 +160,7 @@ function replyToMessages() {
                     return;
                   }
 
-                  network.editComment('t1_' + botReply['data']['id'], reply);
+                  network.editComment('t1_' + botReply['data']['id'], "Edit: " + reply);
 
                   if (! comment['link_id']) {
                     comment['link_id'] = 't3_value';
