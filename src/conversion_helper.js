@@ -1,20 +1,5 @@
 const rh = require('./regex_helper');
-const fs = require('fs');
-
-function weightMap(g) {
-  const kg = g.map((i) => i / 1000);
-  const unitDecider = Math.max(...g);
-  const unitDeciderKg = unitDecider/1000;
-  if (unitDecider < 1000) {
-    return createMap(g, " g");
-
-  } else if (unitDeciderKg < 1000) {
-    return createMap(kg, " kg");
-
-  } else {
-    return createMap(kg.map((i) => i / 1000), " metric tons");
-  }
-}
+const fsh = require('./file_system_helper');
 
 function volumeMap(l) {
   const unitDecider = Math.max(...l);
@@ -96,7 +81,6 @@ function velocityMap(mPerS) {
   }
 }
 
-const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];
 const metricForceUnits = [/newtons?/, /dynes?/];
 const liquidKeywords = ['liquids?', 'water', 'teas?', 'beers?', 'sodas?', 'pops?', 'colas?', 'ciders?', 'juices?', 'coffees?', 'liquors?', 'milk', 'bottles?', 'spirits?', 'rums?', 'vodkas?', 'tequilas?', 'wines?', 'oils?', "cups?", "cans?", "tall boys?", "brews?", "breastfeeding", "breastfee?d", "pints?", "bartends?", "bartending", "flow", "paint", "retarder", "thinner", "primer", "wash", "acrylic", "paste"];
@@ -204,52 +188,6 @@ let unitLookupList = [
     "ignoredUnits" : metricForceUnits
   },
   {
-    "imperialUnits" : "lbs?",
-    "weakImperialUnits" : [/pounds?/],
-    "standardInputUnit" : " lb",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => weightMap(i.map((j) => j * 453.592)),
-    "ignoredUnits" : metricWeightUnits,
-    "ignoredKeywords" : ["football", "soccer", "fifa", "bowling"],
-    "preprocess" : (comment) => {
-      const input = comment['body']
-      const lbAndOz = 
-        new RegExp(( rh.startRegex 
-          + rh.numberRegex
-          + "[- ]?"
-          + rh.regexJoinToString([/lbs?/, /pounds?/])
-          + "[- ]?"
-          + rh.numberRegex
-          + "[- ]?"
-          + rh.regexJoinToString([/oz/, /ounces?/])
-        ),'gi');
-      return input.replace(lbAndOz, (match, lb, oz, offset, string) => {
-        const ozLessThan16 = Number(oz) <= 16;
-        if (ozLessThan16) {
-          const lbNumeral = roundToDecimalPlaces(Number(lb.replace(/[^\d-\.]/g, '')) + Number(oz)/16, 2);
-          return " " + lbNumeral + " lb ";
-        } else {
-          return "  ";
-        }
-      });
-    },
-    "postprocessInput" : (numbers) => {
-      if (numbers.every((input) => input.toString().indexOf('.') == -1)) {
-        return numbers.map(function(input, index) {
-          if(index == numbers.length-1) {
-            return rh.addCommas(input) + " lb"
-          } else {
-            return rh.addCommas(input);
-          }
-        });
-      } else {
-        return numbers.map((input) => rh.addCommas(Math.floor(input).toString()) + " lb " 
-               + roundToDecimalPlaces(input%1 * 16, 0) + " oz");
-      }
-    }
-  },
-  {
     "imperialUnits" : [/(?:liquid|fluid|fl\.?)[ -]?(?:oz|ounces?)/,
                        /(?:oz\.?|ounces?)[ -]?(?:liquid|fluid|fl)/],
     "standardInputUnit" : " fl. oz.",
@@ -278,40 +216,6 @@ let unitLookupList = [
         return " " + oz + " fl. oz";
       });
     }
-  },
-  {
-    "imperialUnits" : [/ozt/, /oz t/, /troy ounces?/],
-    "standardInputUnit" : " troy ounces",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => weightMap(i.map((j) => j * 31.1034768)),
-    "ignoredUnits" : metricWeightUnits,
-    "preprocess" : (comment) => {
-      const input = comment['body'];
-      const specialSubredditsRegex = new RegExp(
-          rh.regexJoinToString([/silverbugs/, /pmsforsale/, /coins/]),'gi');
-      const unitRegex = new RegExp(( rh.startRegex
-            + rh.numberRegex
-            + "[- ]?"
-            + rh.regexJoinToString([/oz/, /ounces?/])
-            ),'gi');
-
-      if (specialSubredditsRegex.test(comment['subreddit'])) {
-        return input.replace(unitRegex, (match, oz, offset, string) => {
-          return " " + oz + " troy ounces ";
-        });
-      }
-      return input;
-    }
-  },
-  {
-    "imperialUnits" : [/oz/, /ounces?/],
-    "standardInputUnit" : " oz",
-    "isInvalidInput" : isZeroOrNegative,
-    "isWeaklyInvalidInput" : isHyperbole,
-    "conversionFunction" : (i) => weightMap(i.map((j) => j * 28.3495)),
-    "ignoredUnits" : ["oz t", "ozt"].concat(metricWeightUnits),
-    "ignoredKeywords" : ["leather", "rawdenim"].concat(ukSubreddits)
   },
   {
     "imperialUnits" : [/teaspoons?/, /tsp/],
@@ -411,30 +315,11 @@ let unitLookupList = [
       /sq.? kilometers?/,
       /km[^]2/
     ]
-  },
-  // {
-  //   "imperialUnits" : [/bushels?/],
-  //   "standardInputUnit" : " bushels",
-  //   "isInvalidInput" : isZeroOrNegative,
-  //   "isWeaklyInvalidInput" : isHyperbole,
-  //   "conversionFunction" : (i) => weightMap(i.map((j) => j * 35239.07040000007)),
-  //   "ignoredUnits" : metricWeightUnits
-  // },
+  }
 ];
 
-const files = fs.readdirSync('./src/conversion/distance/');
-const maps = files.reduce((memo, file) => {
-  if (file.startsWith('_')) {
-    return memo;
-  }
-
-  const map = require('./conversion/distance/' + file)
-  memo.push(map);
-  return memo;
-}, []);
-
-unitLookupList = unitLookupList.concat(maps);
-
+const units = fsh.getAllPaths(__dirname + '/conversion').map(require);
+unitLookupList = unitLookupList.concat(units);
 
 const unitLookupMap = unitLookupList.reduce((memo, map) => {
   memo[map['standardInputUnit']] = map;

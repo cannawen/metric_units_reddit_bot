@@ -49,7 +49,7 @@ module.exports = {
       });
     } else {
       return numbers.map((input) => rh.addCommas(Math.floor(input).toString()) + "'" 
-              + roundToDecimalPlaces(input%1 * 12, 0) + "\"");
+              + shared.roundToDecimalPlaces(input%1 * 12, 0) + "\"");
     }
   },
 }
