@@ -15,7 +15,7 @@ function isZeroOrNegative(i) {
 }
 
 function isHyperbole(i) {
-  const isOneFollowedByZeros = i.toString().match(/^100+(?:\.0+)?$/) !== null;
+  const isOneFollowedByZeros = i.toString().match(/^-? ?100+(?:\.0+)?$/) !== null;
   const isOneFollowedByExponentTerm = i.toString().match(/1e(?:\d)*/) !== null;
   return isOneFollowedByZeros || isOneFollowedByExponentTerm;
 }
