@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 
 function pressureMap(imperialInputs, metricTransform) {
   const pascals = imperialInputs.map(metricTransform);

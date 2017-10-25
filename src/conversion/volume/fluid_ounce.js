@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 const volume = require('./_volume');
 const rh = require('../../regex_helper');
 

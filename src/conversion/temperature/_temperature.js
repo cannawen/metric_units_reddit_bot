@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 
 function temperatureMap(imperialInputs, metricTransform) {
   const degreesC = imperialInputs.map(metricTransform);

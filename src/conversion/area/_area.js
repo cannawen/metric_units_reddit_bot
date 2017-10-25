@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 
 function areaMap(imperialInputs, metricTransform) {
   const metresSquared = imperialInputs.map(metricTransform);

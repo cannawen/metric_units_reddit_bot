@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 const energy = require('./_energy');
 
 module.exports = {

@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 
 function distanceMap(imperialInputs, metricTransform) {
   const metres = imperialInputs.map(metricTransform);

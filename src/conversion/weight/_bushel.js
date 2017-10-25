@@ -1,6 +1,6 @@
 //Temporarily disabled because of _ in name of file
 
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 const weight = require('./_weight');
 
 module.exports = {

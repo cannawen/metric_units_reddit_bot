@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 
 function torqueMap(imperialInputs, metricTransform) {
   const Nm = imperialInputs.map(metricTransform);

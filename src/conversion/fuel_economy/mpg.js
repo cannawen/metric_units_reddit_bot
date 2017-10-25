@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 const fuel_economy = require('./_fuel_economy');
 
 module.exports = {

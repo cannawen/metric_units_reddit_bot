@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 
 function velocityMap(imperialInputs, metricTransform) {
   const mPerS = imperialInputs.map(metricTransform);

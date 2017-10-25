@@ -1,4 +1,4 @@
-const shared = require('../shared');
+const shared = require('../shared_conversion_functions');
 
 function weightMap(imperialInputs, metricTransform) {
   const grams = imperialInputs.map(metricTransform);
