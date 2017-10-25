@@ -18,7 +18,7 @@ function pressureMap(imperialInputs, metricTransform) {
 
   }
   
-  return shared.createMap(pascals, unitTransform, unit);
+  return shared.createMap(pascals, unit, unitTransform);
 }
 
 const metricPressureUnits = [/pascals?/];

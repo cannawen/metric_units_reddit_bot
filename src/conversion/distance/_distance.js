@@ -33,7 +33,7 @@ function distanceMap(imperialInputs, metricTransform) {
     unit = " metres";
   }
 
-  return shared.createMap(metres, unitTransform, unit);
+  return shared.createMap(metres, unit, unitTransform);
 }
 
 const metricDistanceUnits = [/km/, /light-?years?/,

@@ -21,7 +21,7 @@ function weightMap(imperialInputs, metricTransform) {
     unit = " metric tons";
   }
 
-  return shared.createMap(grams, unitTransform, unit);
+  return shared.createMap(grams, unit, unitTransform);
 }
 
 const metricWeightUnits = [/kgs?/, /grams?/, /kilograms?/];

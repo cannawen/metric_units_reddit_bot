@@ -1,4 +1,4 @@
-function createMap(values, transform, unit) {
+function createMap(values, unit, transform = i => i) {
   return {
     "numbers" : values.map((i) => transform(i).toString()),
     "unit" : unit

@@ -25,7 +25,7 @@ function volumeMap(imperialInputs, metricTransform) {
     unit = " L";
   }
 
-  return shared.createMap(litres, unitTransform, unit);
+  return shared.createMap(litres, unit, unitTransform);
 }
 
 const metricVolumeUnits = [/(?:milli|centi|deca|kilo)?lit(?:er|re)s?/, /(?:deca|kilo)?m(?:eters?)?(?:\^3| cubed?)/];

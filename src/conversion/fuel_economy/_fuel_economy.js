@@ -4,8 +4,8 @@ function fuelEconomyMap(imperialInputs, metricTransform) {
   const kmL = imperialInputs.map(metricTransform);
 
   return [
-    shared.createMap(kmL, kmL => kmL, " km/L"),
-    shared.createMap(kmL, kmL => 100 / kmL, " L/100km")
+    shared.createMap(kmL, " km/L"),
+    shared.createMap(kmL, " L/100km", kmL => 100 / kmL)
   ];
 }
 

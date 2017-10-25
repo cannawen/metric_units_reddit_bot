@@ -21,7 +21,7 @@ function areaMap(imperialInputs, metricTransform) {
     unit = " m^2";
   }
 
-  return shared.createMap(metresSquared, unitTransform, unit);
+  return shared.createMap(metresSquared, unit, unitTransform);
 }
 
 const metricAreaUnits = [

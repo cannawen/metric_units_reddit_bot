@@ -7,11 +7,11 @@ function temperatureMap(imperialInputs, metricTransform) {
 
   if (unitDeciderF > 0 && unitDeciderF < 32) {
     return [
-      shared.createMap(degreesC, c => c, "°C"),
-      shared.createMap(imperialInputs, f => f * 5/9, " change in °C")
+      shared.createMap(degreesC, "°C"),
+      shared.createMap(imperialInputs, " change in °C", f => f * 5/9)
     ];
   } else {
-    return shared.createMap(degreesC, c => c, "°C");  
+    return shared.createMap(degreesC, "°C");  
   }
 }
 
