@@ -3,7 +3,9 @@ const shared = require('../shared_conversion_functions');
 function temperatureMap(imperialInputs, metricTransform) {
   const degreesC = imperialInputs.map(metricTransform);
 
-  if (degreesC > -17.76 && degreesC < 0) {
+  const unitDeciderF = Math.max(...imperialInputs);
+
+  if (unitDeciderF > 0 && unitDeciderF < 32) {
     return [
       shared.createMap(degreesC, c => c, "°C"),
       shared.createMap(imperialInputs, f => f * 5/9, " change in °C")
