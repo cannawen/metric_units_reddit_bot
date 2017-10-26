@@ -201,7 +201,7 @@ function robotReply(message) {
       "response":[
         "Oh great, now the numbers are gone. Conversions don't grow on trees!",
         "A bot never forgets! Now where are those values I'm supposed to convert...",
-        "Where did the measurement go? I swear they were here just a second ago...",
+        "Where did the measurements go? I swear they were here just a moment ago...",
         "I'll never get those bytes back. They were my favourite bytes.",
         "I wasted 100 cpu cycles converting your values and now they're gone!\n\n100 cpu cycles ≈ 1 human hour."
       ],
