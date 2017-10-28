@@ -1,15 +1,16 @@
 // NPM imports.
-const assert = require('assert');
 const chai = require('chai');
-const should = chai.should();
-const chaiAsPromised = require("chai-as-promised");
+
+const chaiAsPromised = require('chai-as-promised');
+
 chai.use(chaiAsPromised);
-const proxyquire =  require('proxyquire');
+const proxyquire = require('proxyquire');
 
 // Members / Local imports.
-let error, response;
+let error;
+let response;
 const network = proxyquire('../src/network', {
-  'request': (options, callback) => {
+  request: (options, callback) => {
     callback(error, response);
   },
 });
@@ -41,9 +42,7 @@ describe('network', () => {
       return network.refreshToken().should.be.fulfilled;
     });
 
-    it('should resolve when token is still valid', () => {
-      return network.refreshToken().should.be.fulfilled;
-    });
+    it('should resolve when token is still valid', () => network.refreshToken().should.be.fulfilled);
   });
 
   describe('#getUnreadMessages()', () => {
@@ -51,9 +50,9 @@ describe('network', () => {
       const testObj = {
         data: {
           children: {
-            unit: 'test'
-          }
-        }
+            unit: 'test',
+          },
+        },
       };
       response.body = JSON.stringify(testObj);
       return network.getUnreadMessages().should.eventually.deep.equal(testObj.data.children);
@@ -62,29 +61,33 @@ describe('network', () => {
 
   describe('#getCommentReplies()', () => {
     it('should succeed', () => {
-      const testObj = { json: { data: { things: [1, 2, 3] }}};
+      const testObj = { json: { data: { things: [1, 2, 3] } } };
       response.body = JSON.stringify(testObj);
       return network.getCommentReplies('link', 'comment').should.eventually.deep.equal([1, 2, 3]);
     });
 
     it('should return empty array when no replies', () => {
-      response.body = JSON.stringify({ json: { data: { things: []}}});
-      return network.getCommentReplies('link', 'comment').should.eventually.deep.equal([])
+      response.body = JSON.stringify({ json: { data: { things: [] } } });
+      return network.getCommentReplies('link', 'comment').should.eventually.deep.equal([]);
     });
   });
 
   describe('#getComment()', () => {
     it('should succeed', () => {
-      const test = { data: { children: [{
+      const test = {
         data: {
-          body: 'body',
-          author: 'author',
-          name: 'name',
-          link_id: 'link_id',
-          subreddit: 'subreddit',
-          created_utc: 'created_utc',
-        }
-      }]}};
+          children: [{
+            data: {
+              body: 'body',
+              author: 'author',
+              name: 'name',
+              link_id: 'link_id',
+              subreddit: 'subreddit',
+              created_utc: 'created_utc',
+            },
+          }],
+        },
+      };
       response.body = JSON.stringify(test);
       return network.getComment('test').should.eventually.deep.equal({
         body: 'body',
@@ -98,7 +101,7 @@ describe('network', () => {
     });
 
     it('should succeed when no results', () => {
-      const test = { data: { children: []}};
+      const test = { data: { children: [] } };
       response.body = JSON.stringify(test);
       return network.getComment('test').should.eventually.deep.equal(undefined);
     });
@@ -106,24 +109,28 @@ describe('network', () => {
 
   describe('#getRedditComments()', () => {
     it('should succeed when no results', () => {
-      const test = { data: { children: null }};
+      const test = { data: { children: null } };
       response.body = JSON.stringify(test);
       return network.getRedditComments('test').should.eventually.deep.equal(undefined);
     });
 
     it('should suceed', () => {
-      const test = { data: { children: [{
+      const test = {
         data: {
-          body: 'body',
-          author: 'author',
-          name: 'name',
-          link_title: 'link_title',
-          link_permalink: 'link_permalink',
-          id: 'id',
-          subreddit: 'subreddit',
-          created_utc: 'created_utc',
-        }
-      }]}};
+          children: [{
+            data: {
+              body: 'body',
+              author: 'author',
+              name: 'name',
+              link_title: 'link_title',
+              link_permalink: 'link_permalink',
+              id: 'id',
+              subreddit: 'subreddit',
+              created_utc: 'created_utc',
+            },
+          }],
+        },
+      };
       response.body = JSON.stringify(test);
       return network.getRedditComments('test').should.eventually.deep.equal([{
         body: 'body',
@@ -137,22 +144,26 @@ describe('network', () => {
     });
 
     it('should not process previously processed comments', () => {
-      const first = { data: { children: [{ data: { name: 'c' }}]}};
+      const first = { data: { children: [{ data: { name: 'c' } }] } };
       response.body = JSON.stringify(first);
       return network.getRedditComments('test')
         .then(() => {
           // We don't actually care about the results from the first call,
           // we're just using it to set lastProcessedCommentId.
           // We want to test that that one gets skipped on subsequent calls.
-          const second = { data: { children: [
-            {
-              data: { name: 'a' }
-            }, {
-              data: { name: 'b' }
-            }, {
-              data: { name: 'c' }
-            }
-          ]}};
+          const second = {
+            data: {
+              children: [
+                {
+                  data: { name: 'a' },
+                }, {
+                  data: { name: 'b' },
+                }, {
+                  data: { name: 'c' },
+                },
+              ],
+            },
+          };
           response.body = JSON.stringify(second);
           return network.getRedditComments('test').should.eventually.have.length(2);
         });
@@ -164,26 +175,18 @@ describe('network', () => {
    * You can visually inspect the call params in the console.
    */
   describe('#postComment()', () => {
-    it('should succeed', () => {
-      return network.postComment('id', 'body').should.eventually.equal(undefined);
-    });
+    it('should succeed', () => network.postComment('id', 'body').should.eventually.equal(undefined));
   });
 
   describe('#editComment()', () => {
-    it('should succeed', () => {
-      return network.editComment('id', 'body').should.eventually.equal(undefined);
-    });
+    it('should succeed', () => network.editComment('id', 'body').should.eventually.equal(undefined));
   });
 
   describe('#markAllMessagesAsRead()', () => {
-    it('should succeed', () => {
-      return network.markAllMessagesAsRead().should.eventually.equal(undefined);
-    });
+    it('should succeed', () => network.markAllMessagesAsRead().should.eventually.equal(undefined));
   });
 
   describe('#blockAuthorOfMessageWithId()', () => {
-    it('should succeed', () => {
-      return network.blockAuthorOfMessageWithId('id').should.eventually.equal(undefined);
-    });
+    it('should succeed', () => network.blockAuthorOfMessageWithId('id').should.eventually.equal(undefined));
   });
 });
