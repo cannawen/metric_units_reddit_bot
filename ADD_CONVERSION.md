@@ -29,4 +29,4 @@
 
 - Each conversion is organized by unit, and `conversion_helper.js` will parse each conversion file. 
 - Files starting with _ are ignored from the unit conversions. 
-= Modules with the longest regex in the "imperialUnits" array will take precedence over shorter ones (so "miles per hour" takes precedence over "miles")
+- Modules with the longest regex in the "imperialUnits" array will take precedence over shorter ones (so "miles per hour" takes precedence over "miles")

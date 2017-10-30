@@ -47,7 +47,7 @@ Welcome! We aim to be a newbie-friendly community, so we have reserved `first ti
 
 - Find a [`help wanted`](https://github.com/cannawen/metric_units_reddit_bot/issues?utf8=%E2%9C%93&q=is%3Aissue%20is%3Aopen%20label%3A%22maintainer%20approved%22%20label%3A%22help%20wanted%22%20) issue and leave a comment saying you would like to work on it
 - A maintainer will confirm the issue has been assigned to you, and change the tag to `in progress`
-- If there are no open issues, you can come up with your own issue
+- If there are no open issues, you can come up with your own issue, or look in the [backlog](https://www.pivotaltracker.com/n/projects/2091572) for something that interests you
 - If you are working on something that you would like to submit back to the community, it **must be associated with a "maintainer approved" issue**. This is necessary for transparency, so no efforts are duplicated and there are no crazy merge conflicts
 - Issues tagged `first timers only` are reserved for those who have never made a PR to an open source community
 

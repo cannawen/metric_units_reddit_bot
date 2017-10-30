@@ -7,10 +7,9 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](./LICENSE.txt)
 
 # Vision
-- To create a [friendly community](./CONTRIBUTING.md) of metric/reddit/programming enthusiasts
 - To [encourage newbies to participate in open source](./NEW-TO-OSS.md)
 - To [convert imperial units into metric](./test/converter-test.js)
-- To surprise and delight with [unexpected sassy responses](./test/personality-test.js)
+- To surprise unsuspecting redditors with [unexpected sassy responses](./test/personality-test.js)
 
 # How does the code work?
 
