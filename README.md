@@ -7,7 +7,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](./LICENSE.txt)
 
 # Vision
-- To [encourage newbies to participate in open source](./NEW-TO-OSS.md)
+- To [encourage newbies to participate in open source](./docs/NEW-TO-OSS.md)
 - To [convert imperial units into metric](./test/converter-test.js)
 - To surprise unsuspecting redditors with [unexpected sassy responses](./test/personality-test.js)
 
@@ -17,7 +17,7 @@ This is a javascript app built with [Node.js](https://nodejs.org/en/), and all o
 
 The app starts in [bot.js](./src/bot.js), and it polls the Reddit servers in an infinite loop. The app has two major components:
 
-[converter.js](./src/converter.js) and [conversion_helper.js](./src/conversion_helper.js) are responsible for converting imperial units to metric units. [See documentation to add a conversion](./ADD_CONVERSION.md)
+[converter.js](./src/converter.js) and [conversion_helper.js](./src/conversion_helper.js) are responsible for converting imperial units to metric units. [See documentation to add a conversion](./docs/ADD_CONVERSION.md)
 
 [personality.js](./src/personality.js) create sassy responses to certain trigger words
 
@@ -56,10 +56,10 @@ Feel free to [drop by the subreddit](https://www.reddit.com/r/metric_units/) or 
 
 # Contribute
 
-See [Contributing Guideline](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md)
+See [Contributing Guideline](./.github/CONTRIBUTING.md) and [Code of Conduct](./docs/CODE_OF_CONDUCT.md)
 
 First time getting involved in Open Source Software? Welcome, and we hope you stick around!
-See [New to OSS guide](./NEW-TO-OSS.md)
+See [New to OSS guide](./docs/NEW-TO-OSS.md)
 
 Thanks goes to these wonderful people who have contributed ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 

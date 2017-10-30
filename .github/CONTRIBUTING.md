@@ -13,7 +13,7 @@ This document serves as a guideline for how to do these things
 
 This community will not tolerate unkind behaviour.  
 
-[Contributor Covenant Code of Conduct](./CODE_OF_CONDUCT.md) (tl;dr - don't be a [m/s^3](https://en.wikipedia.org/wiki/Jerk_(physics)))
+[Contributor Covenant Code of Conduct](../docs/CODE_OF_CONDUCT.md) (tl;dr - don't be a [m/s^3](https://en.wikipedia.org/wiki/Jerk_(physics)))
 
 # Etiquette
 
@@ -35,13 +35,13 @@ Say hello over at the [Contributor Introductions](https://www.reddit.com/r/metri
 
 # Contribute Code
 
-It's most satifying if you contribute to an Open Source project that you care about! Please read our [vision statement](./README.md) to see if this project resonates with you.
+It's most satifying if you contribute to an Open Source project that you care about! Please read our [vision statement](../README.md) to see if this project resonates with you.
 
 ## New to Open Source Software
 
 Welcome! We aim to be a newbie-friendly community, so we have reserved `first timers only` issues for first-time OSS contributors.
 
-[Click here to learn more](./NEW-TO-OSS.md).
+[Click here to learn more](../docs/NEW-TO-OSS.md).
 
 ## Find something to work on
 
@@ -77,7 +77,7 @@ If you are not finished an issue but would like feedback, you can make a PR aski
 
 # Add yourself to the contributors list
 
-Do you want to be included in the awesome table at the bottom of the [README](./README.md)?
+Do you want to be included in the awesome table at the bottom of the [README](../README.md)?
 
 - Run `npm install` if you haven't yet
 - Run the following command: `npm run all-contributors add your-github-username tag1,tag2` (tags can be: code, test, doc, [and others](https://www.npmjs.com/package/all-contributors-cli))
