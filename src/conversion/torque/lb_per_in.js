@@ -2,7 +2,8 @@ const shared = require('../shared_conversion_functions');
 const torque = require('./_torque');
 
 module.exports = {
-  "imperialUnits" : [/(?:pounds?|lbs?)[ -⋅]?(?:inch|in)/],
+  "imperialUnits" : [/(?:pounds?|lbs?)[ -⋅]?(?:inch|in)/, 
+                     /(?:inch|in)[ -⋅]?(?:pounds?|lbs?)/],
   "standardInputUnit" : " lb⋅in",
   "isInvalidInput" : shared.isZeroOrNegative,
   "isWeaklyInvalidInput" : shared.isHyperbole,
