@@ -4,22 +4,23 @@
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](./LICENSE.txt)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](./docs/LICENSE.txt)
 
 # Vision
-- To [encourage newbies to participate in open source](./NEW-TO-OSS.md)
-- To [convert imperial units into metric](./test/converter-test.js)
-- To surprise unsuspecting redditors with [unexpected sassy responses](./test/personality-test.js)
+- To [encourage newbies to participate in open source](./docs/NEW-TO-OSS.md)
+- To [convert imperial units into metric](./docs/test/converter-test.js)
+- To surprise unsuspecting redditors with [unexpected sassy responses](./docs/test/personality-test.js)
 
 # How does the code work?
 
-This is a javascript app built with [Node.js](https://nodejs.org/en/), and all of the app code is in the [src](./src) directory.
+This is a javascript app built with [Node.js](https://nodejs.org/en/), and all of the app code is in the [src](./docs/src) directory.
 
-The app starts in [bot.js](./src/bot.js), and it polls the Reddit servers in an infinite loop. The app has two major components:
+The app starts in [bot.js](./docs/src/bot.js), and it polls the Reddit servers in an infinite loop. The app has two major components:
 
-[converter.js](./src/converter.js) and [conversion_helper.js](./src/conversion_helper.js) are responsible for converting imperial units to metric units. [See documentation to add a conversion](./ADD_CONVERSION.md)
+[converter.js](./docs/src/converter.js) and [conversion_helper.js](./docs/src/conversion_helper.js) are responsible for converting imperial units to metric units. [See documentation to add a conversion](./docs/ADD_CONVERSION.md)
 
-[personality.js](./src/personality.js) create sassy responses to certain trigger words
+[personality.js](./docs/src/personality.js) create sassy responses to certain trigger words
+
 
 
 # Running the code
@@ -31,10 +32,10 @@ But if you want to see the bot hitting the Reddit servers:
 2. Create a reddit `script` app through [your reddit preferences](https://www.reddit.com/prefs/apps). (Use `http://localhost` as your redirect url, we don't need it.)
 3. Get your OAuth username (random characters below "personal use script") and secret
 4. Fork the main github repo and download the bot's code from your own repo
-5. Create a file `./private/environment.yaml` that looks like [sample-environment.yaml](./sample-environment.yaml)
+5. Create a file `./docs/private/environment.yaml` that looks like [sample-environment.yaml](./docs/sample-environment.yaml)
 6. ensure your `node --version` is >= v6.2.1
 7. run `npm install`
-8. run `node ./src/bot.js`
+8. run `node ./docs/src/bot.js`
 9. You should have the bot up and running!
 
 Note: You can run the bot in development mode (which won't POST requests to reddit servers) by changing the `dev-mode` environment variable to `true`
@@ -42,7 +43,7 @@ Note: You can run the bot in development mode (which won't POST requests to redd
 
 # Running the tests
 
-You do not need to create a reddit app to run the tests, you can use the [sample-environment.yaml](./sample-environment.yaml) default values.
+You do not need to create a reddit app to run the tests, you can use the [sample-environment.yaml](./docs/sample-environment.yaml) default values.
 
 run `npm test`
 
@@ -56,10 +57,10 @@ Feel free to [drop by the subreddit](https://www.reddit.com/r/metric_units/) or 
 
 # Contribute
 
-See [Contributing Guideline](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md)
+See [Contributing Guideline](./.github/CONTRIBUTING.md) and [Code of Conduct](./docs/CODE_OF_CONDUCT.md)
 
 First time getting involved in Open Source Software? Welcome, and we hope you stick around!
-See [New to OSS guide](./NEW-TO-OSS.md)
+See [New to OSS guide](./docs/NEW-TO-OSS.md)
 
 Thanks goes to these wonderful people who have contributed ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
@@ -80,4 +81,4 @@ This project follows the [all-contributors](https://github.com/kentcdodds/all-co
 
 # License
 
-This source is distributed under [GNU GPLv3](./LICENSE.txt)
+This source is distributed under [GNU GPLv3](./docs/LICENSE.txt)
