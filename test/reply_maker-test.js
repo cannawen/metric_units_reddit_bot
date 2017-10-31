@@ -44,7 +44,7 @@ describe('reply_maker', () => {
     it('should include footer links', () => {
       replier.formatReply({ 'subreddit': 'all', 'id' : '101' }, {"foo" : "bar"} )
       .should
-      .include("[^feedback](https://redd.it/73edn2)")
+      .include("[^feedback](https://www.reddit.com/r/metric_units/comments/73edn2/constructive_feedback_thread)")
       .and
       .include("[^source](https://github.com/cannawen/metric_units_reddit_bot)")
       .and

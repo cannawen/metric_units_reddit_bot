@@ -20,9 +20,8 @@ function formatReply(comment, conversions) {
 
   const items = [
     {"value" : "metric units " + species },
-    {"type" : "link", "value" : "feedback", "href" : "https://redd.it/73edn2" },
+    {"type" : "link", "value" : "feedback", "href" : "https://www.reddit.com/r/metric_units/comments/73edn2/constructive_feedback_thread" },
     {"type" : "link", "value" : "source", "href" : "https://github.com/cannawen/metric_units_reddit_bot" },
-    {"type" : "link", "value" : "hacktoberfest", "href" : "https://redd.it/73ef7e" },
     {"type" : "link", "value" : "block", "href" : formatRedditComposeLink(environment['reddit-username'], 'stop', 'Please send this private message with the subject \'stop\' to block this bot') },
     {"type" : "link", "value" : "refresh conversion", "href" : formatRedditComposeLink(environment['reddit-username'], 'refresh ' + commentId, "Please click 'send' below and I will update my comment to convert any new or updated values in your comment.") },
     {"value" : version }
