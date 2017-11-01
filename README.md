@@ -3,11 +3,11 @@
 
 [![first-timers-only](http://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](./LICENSE.txt)
 
 # Vision
-- To [encourage newbies to participate in open source](./NEW-TO-OSS.md)
+- To [encourage newbies to participate in open source](./docs/NEW-TO-OSS.md)
 - To [convert imperial units into metric](./test/converter-test.js)
 - To surprise unsuspecting redditors with [unexpected sassy responses](./test/personality-test.js)
 
@@ -17,7 +17,7 @@ This is a javascript app built with [Node.js](https://nodejs.org/en/), and all o
 
 The app starts in [bot.js](./src/bot.js), and it polls the Reddit servers in an infinite loop. The app has two major components:
 
-[converter.js](./src/converter.js) and [conversion_helper.js](./src/conversion_helper.js) are responsible for converting imperial units to metric units. [See documentation to add a conversion](./ADD_CONVERSION.md)
+[converter.js](./src/converter.js) and [conversion_helper.js](./src/conversion_helper.js) are responsible for converting imperial units to metric units. [See documentation to add a conversion](./docs/ADD_CONVERSION.md)
 
 [personality.js](./src/personality.js) create sassy responses to certain trigger words
 
@@ -56,10 +56,10 @@ Feel free to [drop by the subreddit](https://www.reddit.com/r/metric_units/) or 
 
 # Contribute
 
-See [Contributing Guideline](./CONTRIBUTING.md) and [Code of Conduct](./CODE_OF_CONDUCT.md)
+See [Contributing Guideline](./.github/CONTRIBUTING.md) and [Code of Conduct](./docs/CODE_OF_CONDUCT.md)
 
 First time getting involved in Open Source Software? Welcome, and we hope you stick around!
-See [New to OSS guide](./NEW-TO-OSS.md)
+See [New to OSS guide](./docs/NEW-TO-OSS.md)
 
 Thanks goes to these wonderful people who have contributed ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
@@ -68,7 +68,7 @@ Thanks goes to these wonderful people who have contributed ([emoji key](https://
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | [<img src="https://avatars1.githubusercontent.com/u/3136972?v=4" width="100px;"/><br /><sub>Charles</sub>](http://charleslabas.com/)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=chazzlabs "Code") [💬](#question-chazzlabs "Answering Questions") [🤔](#ideas-chazzlabs "Ideas, Planning, & Feedback") | [<img src="https://avatars2.githubusercontent.com/u/9531780?v=4" width="100px;"/><br /><sub>Hasan</sub>](https://github.com/JuanPotato)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=JuanPotato "Code") | [<img src="https://avatars1.githubusercontent.com/u/20388195?v=4" width="100px;"/><br /><sub>Marc Fogleman</sub>](http://www.MFogleman.com)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=MFogleman "Code") | [<img src="https://avatars2.githubusercontent.com/u/5065375?v=4" width="100px;"/><br /><sub>Eliot Wong</sub>](https://github.com/eliotw)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=eliotw "Code") | [<img src="https://avatars0.githubusercontent.com/u/12798396?v=4" width="100px;"/><br /><sub>Doomki</sub>](https://github.com/Doomki)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=Doomki "Code") | [<img src="https://avatars1.githubusercontent.com/u/381258?v=4" width="100px;"/><br /><sub>Wing Lian</sub>](https://twitter.com/winglian)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=winglian "Code") | [<img src="https://avatars1.githubusercontent.com/u/19378450?v=4" width="100px;"/><br /><sub>NFerraro</sub>](https://github.com/nicoferraro96)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=nicoferraro96 "Code") |
 | [<img src="https://avatars3.githubusercontent.com/u/6984346?v=4" width="100px;"/><br /><sub>Nalin Bhardwaj</sub>](http://nibnalin.me)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=nalinbhardwaj "Code") [💬](#question-nalinbhardwaj "Answering Questions") | [<img src="https://avatars3.githubusercontent.com/u/20612753?v=4" width="100px;"/><br /><sub>thepassenger-hub</sub>](https://github.com/thepassenger-hub)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=thepassenger-hub "Code") | [<img src="https://avatars0.githubusercontent.com/u/132009?v=4" width="100px;"/><br /><sub>Sean Grimes</sub>](https://github.com/munumafia)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=munumafia "Code") | [<img src="https://avatars2.githubusercontent.com/u/89664?v=4" width="100px;"/><br /><sub>Rafal Dittwald</sub>](http://rafal.dittwald.com)<br />[📖](https://github.com/cannawen/metric_units_reddit_bot/commits?author=rafd "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/31323328?v=4" width="100px;"/><br /><sub>namantw</sub>](https://github.com/namantw)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=namantw "Code") | [<img src="https://avatars0.githubusercontent.com/u/20829776?v=4" width="100px;"/><br /><sub>Dan C</sub>](https://github.com/Skuhoo)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=Skuhoo "Code") | [<img src="https://avatars2.githubusercontent.com/u/22687814?v=4" width="100px;"/><br /><sub>cmd-kvn</sub>](https://github.com/cmd-kvn)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=cmd-kvn "Code") [🐛](https://github.com/cannawen/metric_units_reddit_bot/issues?q=author%3Acmd-kvn "Bug reports") |
-| [<img src="https://avatars1.githubusercontent.com/u/12698411?v=4" width="100px;"/><br /><sub>Andrew Terranova</sub>](https://github.com/aterranova-bv)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=aterranova-bv "Code") [⚠️](https://github.com/cannawen/metric_units_reddit_bot/commits?author=aterranova-bv "Tests") | [<img src="https://avatars0.githubusercontent.com/u/22511710?v=4" width="100px;"/><br /><sub>Jacob Allen</sub>](https://github.com/jacobScottAllen)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=jacobScottAllen "Code") [⚠️](https://github.com/cannawen/metric_units_reddit_bot/commits?author=jacobScottAllen "Tests") |
+| [<img src="https://avatars1.githubusercontent.com/u/12698411?v=4" width="100px;"/><br /><sub>Andrew Terranova</sub>](https://github.com/aterranova-bv)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=aterranova-bv "Code") [⚠️](https://github.com/cannawen/metric_units_reddit_bot/commits?author=aterranova-bv "Tests") | [<img src="https://avatars0.githubusercontent.com/u/22511710?v=4" width="100px;"/><br /><sub>Jacob Allen</sub>](https://github.com/jacobScottAllen)<br />[💻](https://github.com/cannawen/metric_units_reddit_bot/commits?author=jacobScottAllen "Code") [⚠️](https://github.com/cannawen/metric_units_reddit_bot/commits?author=jacobScottAllen "Tests") | [<img src="https://avatars1.githubusercontent.com/u/7796175?v=4" width="100px;"/><br /><sub>darthpool</sub>](https://github.com/mayankagarwal2402)<br />[📖](https://github.com/cannawen/metric_units_reddit_bot/commits?author=mayankagarwal2402 "Documentation") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 See the [Contributor Introductions thread](https://www.reddit.com/r/metric_units/comments/750nuf/contributor_introductions/) to learn more about the people who help make this project happen!
