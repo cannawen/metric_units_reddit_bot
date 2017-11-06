@@ -9,6 +9,7 @@
   "dependencies": {
     "deasync": "^0.1.10",
     "js-yaml": "^3.9.1",
+    "lint-staged": "^4.2.3",
     "lodash.foreach": "^4.5.0",
     "request": "^2.81.0"
   },
