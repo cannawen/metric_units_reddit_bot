@@ -70,7 +70,7 @@ function createPostprocessMap(match, username) {
   return Object.assign(
     { username: username },
     match !== undefined && { adjective: match.toLowerCase() },
-    match !== undefined && { ADJECTIVE: match.toLowerCase() }
+    match !== undefined && { ADJECTIVE: match.toUpperCase() }
   );
 }
 

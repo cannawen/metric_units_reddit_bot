@@ -11,7 +11,7 @@ function setHelperStub() {
 }
 
 function unsetHelperStub() {
-  helperStub.random = function () { return Math.random() };
+  helperStub.random = function () { return 0.99 };
 }
 
 describe('Personality', () => {
@@ -234,7 +234,7 @@ describe('Personality', () => {
       });
 
       it('should substitute username if needed', () => {
-        helperStub.random = function () { return 0.99 };
+        unsetHelperStub();
         verify("who is a potato bot", "Oh, oh, I know this one!! Is it /u/foobar?? Is /u/foobar a potato bot?");
       });
     });

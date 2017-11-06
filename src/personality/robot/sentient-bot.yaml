@@ -1,5 +1,5 @@
 description: Responds to "sentient/sentience/self-aware/alive/skynet/roko's basilisk/evolving/elon/musk"
-regex: "/sentient|sentience|self[- ]?aware|alive|skynet|roko'?s basilisk|evolving|elon | musk /i"
+regex: "/sentient|sentience|self[- ]?aware|alive|skynet|roko'?s basilisk|evolving| elon | musk /i"
 responses:
     - weight: 3
       response: Yes, /u/{{username}}
