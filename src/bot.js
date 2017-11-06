@@ -29,10 +29,10 @@ process.on('uncaughtException', function (err) {
 
 personality.initializeDictionaries();
 network.refreshToken()
-.then(() => {
-  helper.setIntervalSafely(postConversions, 1);
-  helper.setIntervalSafely(replyToMessages, 60);
-});
+  .then(() => {
+    helper.setIntervalSafely(postConversions, 1);
+    helper.setIntervalSafely(replyToMessages, 60);
+  });
 
 function replyToMessages() {
   function filterCommentReplies(messages) {
