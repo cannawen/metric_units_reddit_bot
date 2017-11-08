@@ -1,5 +1,5 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
 
 function isDirectory(source) {
   return fs.lstatSync(source).isDirectory();
@@ -20,10 +20,10 @@ function getFilesNotStartingWithUnderscore(source) {
 
 function getAllPaths(dirpath) {
   return getDirectories(dirpath) // Array of directories
-  .map(getFilesNotStartingWithUnderscore) // Array of file arrays
-  .reduce((memo, value) => memo.concat(value), []) // Flatten into array of files
+    .map(getFilesNotStartingWithUnderscore) // Array of file arrays
+    .reduce((memo, value) => memo.concat(value), []); // Flatten into array of files
 }
 
 module.exports = {
-  "getAllPaths" : getAllPaths
-}
+  getAllPaths,
+};
