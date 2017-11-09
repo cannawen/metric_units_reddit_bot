@@ -1,0 +1,5 @@
+description: Responds to "☞"
+regex: "/☞/i"
+responses:
+    - "☜(ﾟヮﾟ☜)"
+
