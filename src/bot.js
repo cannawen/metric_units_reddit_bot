@@ -26,6 +26,8 @@ process.on('uncaughtException', function (err) {
   helper.logError(err);
 });
 
+
+personality.initializeDictionaries();
 network.refreshToken()
   .then(() => {
     helper.setIntervalSafely(postConversions, 1);

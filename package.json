@@ -11,6 +11,7 @@
     "husky": "^0.14.3",
     "js-yaml": "^3.9.1",
     "lint-staged": "^4.2.3",
+    "lodash.foreach": "^4.5.0",
     "request": "^2.81.0"
   },
   "devDependencies": {
@@ -27,7 +28,7 @@
     "proxyquire": "^1.8.0"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --recursive",
     "lint": "eslint **/*.js",
     "cover": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
     "all-contributors": "all-contributors",

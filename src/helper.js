@@ -10,6 +10,14 @@ function now() {
   return Date.now();
 }
 
+function isString(value) {
+  return typeof value === 'string' || value instanceof String;
+}
+
+function isObject(value) {
+  return typeof value === 'object' || value instanceof Object;
+}
+
 function environment() {
   const environmentString = fs.readFileSync("./private/environment.yaml", "utf8")
   return yaml.safeLoad(environmentString);
@@ -33,10 +41,12 @@ function setIntervalSafely(f, seconds) {
 }
 
 module.exports = {
-  "random" : random,
-  "now" : now,
-  "environment" : environment,
-  "log" : console.log,
-  "logError":logError,
-  "setIntervalSafely" : setIntervalSafely
+  random: random,
+  now: now,
+  isString: isString,
+  isObject: isObject,
+  environment : environment,
+  log: console.log,
+  logError:logError,
+  setIntervalSafely : setIntervalSafely
 }
