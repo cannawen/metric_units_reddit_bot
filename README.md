@@ -19,7 +19,7 @@ The app starts in [bot.js](./src/bot.js), and it polls the Reddit servers in an 
 
 [converter.js](./src/converter.js) and [conversion_helper.js](./src/conversion_helper.js) are responsible for converting imperial units to metric units. [See documentation to add a conversion](./docs/ADD_CONVERSION.md)
 
-[personality.js](./src/personality.js) create sassy responses to certain trigger words
+[personality/index.js](./src/personality/index.js) create sassy responses to certain trigger words.
 
 
 # Running the code
